@@ -43,7 +43,7 @@ npm run build
 src/
 ├── assets/               # Static files like images
 ├── components/           # Reusable components
-│   ├── Custom/           # Custom components (buttons, inputs, etc.)
+│   ├── Custom/           # Custom components (buttons, inputs, toast, etc.)
 │   └── ui/               # shadcn/ui components (pre-styled components)
 ├── layouts/              # Layout components
 ├── pages/                # Page components
@@ -80,7 +80,7 @@ const useProfileStore = create<UserState>()(
 		}),
 		{
 			name: "profile-storage",
-			storage: createJSONStorage(() => sessionStorage), // change to localStorage if persistent across sessions
+			storage: createJSONStorage(() => sessionStorage),
 		}
 	)
 );
@@ -126,8 +126,8 @@ export const loginService = async (
 -   **TypeScript types** should be placed in `src/types/`.
 -   **Reusable utilities** belong in `src/utils/`.
 -   **Assets** (images, icons, etc.) go inside `src/assets/`.
--   **Toast notifications** are set up in the `toast/` folder.
 -   **Shadcn UI components** are in `src/components/ui/`.
+-   **Toast notifications** are set up in the `toast/` folder.
 -   Zustand stores should be persisted when needed and properly named to match file names.
 
 ---
