@@ -21,7 +21,7 @@ const inputVariants = cva(
 
 const persianRegex = /^[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\u200C]/;
 
-const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const onChangeExtra = (e: React.ChangeEvent<HTMLInputElement>) => {
 	let value = e.currentTarget.value;
 	if (value.match(persianRegex) || value === "") {
 		e.currentTarget.dir = "rtl";
@@ -36,13 +36,16 @@ export interface InputProps
 	asChild?: boolean;
 }
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-	({ className, type, shadow, ...props }, ref) => {
+	({ className, onChange, type, shadow, ...props }, ref) => {
 		return (
 			<input
 				dir="rtl"
 				type={type}
 				className={cn(inputVariants({ shadow, className }), customStyles.input)}
-				onChange={onChange}
+				onChange={(e) => {
+					onChangeExtra(e);
+					onChange?.(e);
+				}}
 				ref={ref}
 				{...props}
 			/>
