@@ -1,3 +1,4 @@
+import convertToPersianDigits from "@/utils/convertToPersianDigits";
 import React from "react";
 interface Props {
   fullName?: string;
@@ -7,9 +8,9 @@ interface Props {
 }
 function formatNumber(num: number): string {
   if (num >= 1_000_000) {
-    return (num / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+    return (num / 1_000_000).toFixed(1).replace(/\,0$/, "") + "M";
   } else if (num >= 10_000) {
-    return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
+    return (num / 1_000).toFixed(1).replace(/\,0$/, "") + "K";
   } else {
     const number = String(num);
     return (
@@ -38,7 +39,7 @@ const FollowBar = ({
         <div>
           <p className="text-sm text-black-500">موفقیت‌ها</p>
           <p className="text-sm font-bold text-black-800">
-            {formatNumber(doneChallengesCount)}
+            {convertToPersianDigits(formatNumber(doneChallengesCount))}
           </p>
         </div>
 
@@ -49,7 +50,7 @@ const FollowBar = ({
         <div>
           <p className="text-sm text-black-500">دنبال‌کنیا</p>
           <p className="text-sm font-bold text-black-800">
-            {formatNumber(followersCount)}
+            {convertToPersianDigits(formatNumber(followersCount))}
           </p>
         </div>
 
@@ -60,7 +61,7 @@ const FollowBar = ({
         <div>
           <p className="text-sm text-black-500">من‌دنبالشونم</p>
           <p className="text-sm font-bold text-black-800">
-            {formatNumber(followingCount)}
+            {convertToPersianDigits(formatNumber(followingCount))}
           </p>
         </div>
       </div>

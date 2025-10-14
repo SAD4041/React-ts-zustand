@@ -1,4 +1,82 @@
 @import "tailwindcss";
+/* src/index.css */
+/* === Peyda Font Faces === */
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/Peyda-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/peyda-extralight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/Peyda-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/Peyda-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/Peyda-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/Peyda-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/Peyda-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/Peyda-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Peyda';
+  src: url('/fonts/Peyda-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* === Tailwind base imports === */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer utilities {
 	.rtl {
@@ -64,6 +142,12 @@
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
 	--radius-xl: calc(var(--radius) + 4px);
+	
+	--color-blue-main: #3B71DD;
+	--color-blue-side: #A0BBEF;
+	--color-red-main: #EF4444;
+	--color-orange-main: #FF7700;
+	
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);
@@ -136,3 +220,6 @@
 		@apply border-border outline-ring/50;
 	}
 }
+ *{
+	font-family: 'Peyda';
+ }

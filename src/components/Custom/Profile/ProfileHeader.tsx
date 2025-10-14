@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import "../Profile/ProfileHeader.css";
 import { Button } from "@/components/ui/button";
 import { EllipsisIcon } from "@/components/ui/icons/lucide-ellipsis";
+import FollowBar from "./FollowBar";
+import OwnerButton from "./OwnerButton";
+import ViewButton from "./ViewButton";
 function getUserInitials(fullName: string):string {
   if (!fullName) {
     return "";
@@ -26,13 +29,15 @@ function getUserInitials(fullName: string):string {
 interface Props {
   fullName: string;
   personalColor?: string;
-  followersCount?: number;
-  followingCount?: number;
-  doneChallengesCount?: number;
+  // followersCount?: number;
+  // followingCount?: number;
+  // doneChallengesCount?: number;
+  isOwner? : boolean
 }
 const ProfileHeader = ({
   fullName,
   personalColor = "bg-blue-500 text-white",
+  isOwner
 }: Props) => {
   const initials = getUserInitials(fullName);
   return (
@@ -63,6 +68,10 @@ const ProfileHeader = ({
           <img src="/badge.png" alt="badge" className="badge badge-left"></img>
         </div>
       </div>
+      <FollowBar></FollowBar>
+      {/* BUTTON */}
+      {isOwner && <OwnerButton></OwnerButton>}
+      {!isOwner && <ViewButton></ViewButton>}
     </>
   );
 };
