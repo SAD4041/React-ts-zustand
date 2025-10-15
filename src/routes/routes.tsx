@@ -3,8 +3,8 @@ import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Landing from "@/pages/Landing";
 import Temp from "@/pages/Temp";
 import PrivateLayout from "@/layouts/PrivateLayout/PrivateLayout";
-import DashBoard from "@/components/Custom/Profile/DashBoard";
-import FollowBar from "@/components/Custom/Profile/FollowBar";
+import DashBoard from "@/components/Profile/DashBoard";
+import FollowBar from "@/components/Profile/FollowBar";
 
 export const router = createBrowserRouter([
 	{

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
+import CustomButton from "../Custom/CustomButton";
 interface Props {
   isFollowing?: boolean;
 }
@@ -7,13 +8,13 @@ const ViewButton = ({ isFollowing = false }: Props) => {
   return (
     <div className="flex justify-center mt-5">
       {isFollowing ? (
-        <Button className="w-60 h-8.5 rounded-[12.5px] bg-[var(--color-red-main)] text-white font-bold shadow-[0_5px_0px_0px_rgba(0,0,0,1)] border-2 border-black ">
+        <CustomButton backgroundColor="bg-[var(--color-red-main)]" width="w-60">
           لغو دنبال
-        </Button>
+        </CustomButton>
       ) : (
-        <Button className="w-60 h-8.5 rounded-[12.5px] bg-[var(--color-blue-main)] text-white font-bold shadow-[0_5px_0px_0px_rgba(0,0,0,1)] border-2 border-black ">
+        <CustomButton backgroundColor="bg-[var(--color-blue-main)]" width="w-60">
           بزن دنبالش
-        </Button>
+        </CustomButton>
       )}
     </div>
   );

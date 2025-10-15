@@ -96,7 +96,7 @@
 	font-weight: 400;
 
 	color-scheme: light dark;
-	background-color: rgba(255, 255, 255, 0.87);
+	background-color: rgb(255, 255, 255);
 	color: #242424;
 
 	font-synthesis: none;
@@ -104,7 +104,7 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	--radius: 0.625rem;
-	--background: oklch(1 0 0);
+	--background: oklch(100% 0.00011 271.152);
 	--foreground: oklch(0.145 0 0);
 	--card: oklch(1 0 0);
 	--card-foreground: oklch(0.145 0 0);
@@ -147,7 +147,8 @@
 	--color-blue-side: #A0BBEF;
 	--color-red-main: #EF4444;
 	--color-orange-main: #FF7700;
-	
+	--color-gray-main : #B1B1B1;
+
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);
@@ -223,3 +224,4 @@
  *{
 	font-family: 'Peyda';
  }
+

@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../Profile/ProfileHeader.css";
 import { Button } from "@/components/ui/button";
 import { EllipsisIcon } from "@/components/ui/icons/lucide-ellipsis";
 import FollowBar from "./FollowBar";
 import OwnerButton from "./OwnerButton";
 import ViewButton from "./ViewButton";
-function getUserInitials(fullName: string):string {
+import ProfileSideSheet from "./ProfileSideSheet";
+function getUserInitials(fullName: string): string {
   if (!fullName) {
     return "";
   }
@@ -32,22 +33,39 @@ interface Props {
   // followersCount?: number;
   // followingCount?: number;
   // doneChallengesCount?: number;
-  isOwner? : boolean
+  isOwner?: boolean;
 }
 const ProfileHeader = ({
   fullName,
   personalColor = "bg-blue-500 text-white",
-  isOwner
+  isOwner,
 }: Props) => {
+  
   const initials = getUserInitials(fullName);
+
   return (
     <>
-      <Button variant="ghost">
-        <EllipsisIcon className="absolute top-5 right-5 w-6 h-6 rotate-90"></EllipsisIcon>
-      </Button>
-      <div className="flex justify-center mt-2.5">
+      {/* <div className="relative w-full h-12">
+        <Button
+          className="absolute top-5 right-2"
+          variant="ghost"
+          onClick={() => console.log("open settings")}
+        >
+          <EllipsisIcon
+            className="rotate-90"
+            style={{ width: "1.5rem", height: "1.5rem" }}
+          ></EllipsisIcon>
+        </Button>
+      </div> */}
+      
+      <ProfileSideSheet></ProfileSideSheet>
+      
+      <div
+        onClick={() => console.log("show the badges!")}
+        className="flex justify-center mt-2.5"
+      >
         <div className="relative">
-          <Avatar className="w-24 h-24 shadow-lg">
+          <Avatar className="w-24 h-24 shadow-lg avatar">
             <AvatarImage
               alt={fullName}
               src="https://samanskh.github.io/assets/images/bio-photo.jpg"
@@ -72,6 +90,7 @@ const ProfileHeader = ({
       {/* BUTTON */}
       {isOwner && <OwnerButton></OwnerButton>}
       {!isOwner && <ViewButton></ViewButton>}
+      {/* button selector */}
     </>
   );
 };
