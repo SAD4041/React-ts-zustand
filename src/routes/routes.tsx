@@ -4,6 +4,7 @@ import Landing from "@/pages/Landing";
 import Temp from "@/pages/Temp";
 import CustomBtn from "@/components/Custom/CustomBtn";
 import Login from "@/pages/LogIn";
+// import Login from "@/pages/LogIn";
 
 export const router = createBrowserRouter([
   {

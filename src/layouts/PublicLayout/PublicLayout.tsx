@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 const PublicLayout = () => {
   return (
-    <>
+    <div className="text-[Peyda]">
       <Toaster
         position="bottom-right"
         richColors={true}
@@ -15,7 +15,7 @@ const PublicLayout = () => {
         // }}
       />
       <Outlet />
-    </>
+    </div>
   );
 };
 
