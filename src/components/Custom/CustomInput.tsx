@@ -1,34 +1,29 @@
 import { Input } from "@/components/ui/input";
 import type { InputHTMLAttributes, ReactNode } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Field, type FieldProps } from "formik";
 
 type CustomInputProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
   name: string;
-  icon_1?: ReactNode;
-  icon_2?: ReactNode;
-  toggleOnClick?: boolean;
+  icon?: ReactNode;
+  onIconClick?: () => void;
 };
 
 export default function CustomInput({
   label = "متن",
   name,
-  icon_1 = null,
-  icon_2 = null,
-  toggleOnClick = true,
+  icon = null,
+  onIconClick,
   type = "text",
   ...props
 }: CustomInputProps) {
   const [isFocused, setIsFocused] = useState(false);
-  const [isToggled, setIsToggled] = useState(false);
+  const [isRTL, setIsRTL] = useState(true);
 
-  const inputType =
-    type === "password" ? (isToggled ? "text" : "password") : type;
+  const inputType = type;
 
-  const handleToggle = () => {
-    if (toggleOnClick) setIsToggled((prev) => !prev);
-  };
+  const detectRTL = (text: string) => /[\u0600-\u06FF]/.test(text);
 
   return (
     <Field name={name}>
@@ -36,6 +31,12 @@ export default function CustomInput({
         const hasValue = field.value?.length > 0;
         const isFloating = isFocused || hasValue;
         const hasError = meta.touched && meta.error;
+
+        useEffect(() => {
+          if (field.value !== undefined && field.value !== null) {
+            setIsRTL(detectRTL(field.value));
+          }
+        }, [field.value]);
 
         const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
           setIsFocused(true);
@@ -57,28 +58,17 @@ export default function CustomInput({
                 type={inputType}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                dir="rtl"
+                dir={isRTL ? "rtl" : "ltr"}
                 className={`
                   border !border-[var(--borderDefault)]
                   shadow-[0px_1px_0px_var(--borderDefault)]
-
-
                   focus:!border-[var(--borderFoucus)]
                   focus:!shadow-[0px_1px_0px_var(--borderFoucusShadow)]
-                  focus:!ring-0
-                  focus-visible:!ring-0
-
-                  p-0
-
-                  rounded-xl
-                  h-10
-                  w-full
-                  text-right
-                  pr-4
-                  ${icon_1 || icon_2 ? "pl-12" : ""}
-                  transition-all
-                  duration-200
-                  ease-in-out
+                  focus:!ring-0 focus-visible:!ring-0
+                  p-0 rounded-xl h-10 w-full
+                  ${isRTL ? "text-right pr-4" : "text-left pl-4"}
+                  ${icon ? (isRTL ? "pl-12" : "pr-12") : ""}
+                  transition-all duration-200 ease-in-out
                   ${
                     hasError
                       ? "!border-[var(--borderInvalid)] shadow-[0px_1px_0px_var(--borderInvalidShadow)]"
@@ -88,23 +78,22 @@ export default function CustomInput({
                 `}
               />
 
-              {(icon_1 || icon_2) && (
+              {icon && (
                 <div
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
-                  onClick={handleToggle}
+                  className={`
+                    absolute top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer
+                    ${isRTL ? "left-4" : "right-4"}
+                  `}
+                  onClick={onIconClick}
                 >
-                  {isToggled ? icon_2 || icon_1 : icon_1}
+                  {icon}
                 </div>
               )}
 
               <label
                 className={`
-                  absolute
-                  right-4
-                  pointer-events-none
-                  transition-all
-                  duration-200
-                  ease-in-out
+                  absolute pointer-events-none transition-all duration-200 ease-in-out
+                  ${isRTL ? "right-4" : "left-4"}
                   ${
                     isFloating
                       ? "top-[-10px] text-xs bg-white px-1 text-black"
@@ -117,8 +106,12 @@ export default function CustomInput({
             </div>
 
             {hasError && (
-              <div className="mt-1 pr-4 text-right">
-                <p className="text-red-500 text-xs">{meta.error}</p>
+              <div
+                className={`mt-1 text-xs ${
+                  isRTL ? "pr-4 text-right" : "pl-4 text-left"
+                }`}
+              >
+                <p className="text-red-500">{meta.error}</p>
               </div>
             )}
           </div>
