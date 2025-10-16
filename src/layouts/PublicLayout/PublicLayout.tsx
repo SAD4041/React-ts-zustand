@@ -1,4 +1,4 @@
-import { GlobalProviders } from "@/components/Custom/GlobalProviders/GlobalProviders";
+import { GlobalProviders } from "@/providers/GlobalProviders";
 import { Toaster } from "@/components/ui/sonner";
 import { Outlet } from "react-router-dom";
 
