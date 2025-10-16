@@ -3,14 +3,13 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { Input as ShadCnInput } from "@/components/ui/input";
 import customStyles from "./Input.module.css";
 import { Eye, EyeOff, OctagonAlert } from "lucide-react";
-import { useField, type FieldHelperProps } from "formik";
+import { useField } from "formik";
 
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { useDesktop, useTabletMobile } from "@/hooks/ResponsiveHooks";
 import { useState } from "react";
 
@@ -30,10 +29,18 @@ const inputVariants = cva(
 );
 
 export interface InputProps
-	extends React.InputHTMLAttributes<HTMLInputElement>,
+	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "className">,
 		VariantProps<typeof inputVariants> {
 	asChild?: boolean;
 	width?: number;
+	classes?: InputClass;
+	onChangeWrappers?: ((
+		handler: (event: React.ChangeEvent<HTMLInputElement>) => void,
+	) => (event: React.ChangeEvent<HTMLInputElement>) => void)[];
+}
+
+export interface InputClass {
+	className?: string;
 	errorClassName?: string;
 	onChangeWrapper?: (
 		handler: (event: React.ChangeEvent<HTMLInputElement>) => void,
@@ -41,9 +48,8 @@ export interface InputProps
 }
 
 function Input({
-	className,
-	errorClassName,
-	onChangeWrapper,
+	classes,
+	onChangeWrappers,
 	type,
 	name,
 	shadow,
@@ -62,17 +68,27 @@ function Input({
 	function eyeOffOnClick() {
 		setShowPassword(false);
 	}
+	function combineWrappers(
+		wrappers: ((
+			handler: (e: React.ChangeEvent<HTMLInputElement>) => void,
+		) => (e: React.ChangeEvent<HTMLInputElement>) => void)[],
+	): (
+		handler: (e: React.ChangeEvent<HTMLInputElement>) => void,
+	) => (e: React.ChangeEvent<HTMLInputElement>) => void {
+		return (handler) =>
+			wrappers.reduceRight((acc, wrapper) => wrapper(acc), handler);
+	}
+
 	return (
 		<div
 			className={cn(
-				"relative flex gap-3 flex-col items-center justify-center w-full",
-				className,
+				"relative flex gap-3 flex-col items-center justify-center w-full h-full",
 			)}
 		>
 			<div
 				className={cn(
-					"relative flex gap-3 flex-col items-center justify-center w-full",
-					className,
+					"relative flex gap-3 flex-col items-center justify-center w-full h-full",
+					classes?.className,
 				)}
 			>
 				<ShadCnInput
@@ -80,13 +96,16 @@ function Input({
 					value={value}
 					type={showPassword ? "text" : type}
 					onChange={
-						onChangeWrapper ? onChangeWrapper(field.onChange) : field.onChange
+						onChangeWrappers?.length
+							? combineWrappers(onChangeWrappers)(field.onChange)
+							: field.onChange
 					}
 					dir="rtl"
 					id={name}
 					name={name}
 					className={cn(
-						inputVariants({ shadow, className }),
+						inputVariants({ shadow }),
+						"h-full",
 						customStyles.input,
 						hasError ? "border-red-500 text-red-500 drop-shadow-red-500" : "",
 						hasError && isDesktop ? "pr-10.5" : "",
@@ -97,16 +116,14 @@ function Input({
 
 				{isDesktop && hasError && (
 					<>
-						<TooltipProvider delayDuration={0} skipDelayDuration={0}>
-							<Tooltip>
-								<TooltipTrigger asChild>
-									<OctagonAlert className="absolute right-3.5 text-red-500" />
-								</TooltipTrigger>
-								<TooltipContent className="bg-red-500 font-[Alibaba]">
-									<p>{meta.error}</p>
-								</TooltipContent>
-							</Tooltip>
-						</TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<OctagonAlert className="absolute right-3.5 text-red-500" />
+							</TooltipTrigger>
+							<TooltipContent className="bg-red-500 font-[Alibaba]">
+								<p>{meta.error}</p>
+							</TooltipContent>
+						</Tooltip>
 					</>
 				)}
 				{type == "password" && !showPassword && (
@@ -127,7 +144,7 @@ function Input({
 					dir="rtl"
 					className={cn(
 						"font-[Alibaba] w-full text-red-500 break-words",
-						errorClassName,
+						classes?.errorClassName,
 					)}
 				>
 					{meta.error}

@@ -1,3 +1,4 @@
+import { GlobalProviders } from "@/components/Custom/GlobalProviders/GlobalProviders";
 import { Toaster } from "@/components/ui/sonner";
 import { Outlet } from "react-router-dom";
 
@@ -14,7 +15,9 @@ const PublicLayout = () => {
 				// 	},
 				// }}
 			/>
-			<Outlet />
+			<GlobalProviders>
+				<Outlet />
+			</GlobalProviders>
 		</>
 	);
 };

@@ -2,38 +2,46 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 import customStyles from "./Checkbox.module.css";
+import { useField } from "formik";
 
 export interface InputProps
-	extends React.InputHTMLAttributes<HTMLInputElement> {
+	extends Omit<
+		React.InputHTMLAttributes<HTMLInputElement>,
+		"className" | "size"
+	> {
 	text?: string;
 	checkboxSize?: string;
+	classes?: CheckboxClass;
+	size?: string;
+}
+
+export interface CheckboxClass {
+	className?: string;
 	textClassName?: string;
 	backGroundClassName?: string;
 	checkboxClassName?: string;
-	size?: string;
 }
-function Checkbox({
-	className,
-	size,
-	textClassName,
-	backGroundClassName,
-	checkboxClassName,
-	text,
-	...props
-}: InputProps) {
+function Checkbox({ classes, name, size, text, ...props }: InputProps) {
+	const [field, meta] = useField(name);
 	return (
-		<div className={cn("flex gap-1 items-center", className)}>
-			<label className={cn("font-[Alibaba] h-auto", textClassName)}>
+		<div className={cn("flex gap-1 items-center", classes?.className)}>
+			<label className={cn("font-[Alibaba] h-auto", classes?.textClassName)}>
 				{text}
 			</label>
 			<label className={cn(customStyles["ios-checkbox"], customStyles.red)}>
-				<input type="checkbox" data-slot="input" {...props} />
+				<input {...field} type="checkbox" data-slot="input" {...props} />
 				<div
-					className={cn(customStyles["checkbox-wrapper"], checkboxClassName)}
+					className={cn(
+						customStyles["checkbox-wrapper"],
+						classes?.checkboxClassName,
+					)}
 					style={{ width: size, height: size }}
 				>
 					<div
-						className={cn(customStyles["checkbox-bg"], backGroundClassName)}
+						className={cn(
+							customStyles["checkbox-bg"],
+							classes?.backGroundClassName,
+						)}
 					></div>
 					<svg
 						fill="none"
