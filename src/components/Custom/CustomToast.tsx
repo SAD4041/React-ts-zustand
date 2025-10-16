@@ -6,7 +6,7 @@ export default function CustomToast(
 ) {
 	function ToastMessage(msg: string) {
 		return (
-			<div>
+			<div className="font-[alibaba]">
 				<p>{msg}</p>
 			</div>
 		);
