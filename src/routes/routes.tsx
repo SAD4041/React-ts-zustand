@@ -5,6 +5,7 @@ import Temp from "@/pages/Temp";
 import PrivateLayout from "@/layouts/PrivateLayout/PrivateLayout";
 import DashBoard from "@/components/Profile/DashBoard";
 import FollowBar from "@/components/Profile/FollowBar";
+import SignUp from "@/pages/SignUp";
 
 export const router = createBrowserRouter([
 	{
@@ -22,11 +23,11 @@ export const router = createBrowserRouter([
 				path: "/temp",
 				element: <Temp />,
 			},
-			// {
-			// 	path: "/AboutUs",
-			// 	element: <AboutUs />,
-			// },
-			// {
+			{
+				path: "/signup",
+				element: <SignUp />,
+			},
+			
 		],
 	},
 	{
