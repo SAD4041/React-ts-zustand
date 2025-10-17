@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 const PublicLayout = () => {
   return (
-    <div className="text-[Peyda]">
+    <div style={{ fontFamily: "Peyda" }}>
       <Toaster
         position="bottom-right"
         richColors={true}

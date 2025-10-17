@@ -1,19 +1,21 @@
-import { Field, Form, Formik } from "formik";
+import { Form, Formik, type FormikHelpers } from "formik";
 
 import walkingMan from "@/assets/Img/Walking-man-2.png";
 import CustomInput from "@/components/Custom/CustomInput";
 import CustomBtn from "@/components/Custom/CustomBtn";
+import { basicSchema } from "@/schemas";
 
 export default function Login() {
-  // const form = useForm({
-  //   defaultValues: {
-  //     email: "",
-  //     password: "",
-  //   },
-  // });
-  // bg-[url(@/assets/Img/Desktop-background.png)]
-
-  const onSubmit = (data: any) => console.log(data);
+  interface FormValues {
+    email: string;
+    password: string;
+  }
+  const onSubmit = async (
+    values: FormValues,
+    actions: FormikHelpers<FormValues>
+  ): Promise<void> => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  };
 
   return (
     <div className=" w-screen h-screen bg-[url(@/assets/Img/Desktop-background-2.png)] flex justify-center items-center ">
@@ -28,15 +30,23 @@ export default function Login() {
           </h1>
           <Formik
             initialValues={{ password: "", email: "" }}
+            validationSchema={basicSchema}
             onSubmit={onSubmit}
           >
-            {(props) => (
+            {({ isSubmitting }) => (
               <Form>
                 <div className="w-80 space-y-8  mx-auto">
-                  <CustomInput name="email" placeholder="Email" />
-                  <CustomInput name="password" placeholder="password" />
+                  <CustomInput name="email" label="ایمیل" />
+
+                  <CustomInput
+                    name="password"
+                    type="password"
+                    label="رمز ورود"
+                  />
                   <CustomBtn
-                    lassName="w-full bg-[#ff7700] text-[#000] mt-auto"
+                    disabled={isSubmitting}
+                    color="#fff"
+                    lassName="w-72 bg-[#ff7700] text-[#000] mt-auto"
                     type="submit"
                   >
                     ورود

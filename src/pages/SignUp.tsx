@@ -2,12 +2,8 @@ import CustomInput from "@/components/Custom/CustomInput";
 import { Button } from "@/components/ui/button";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-<<<<<<< HEAD
-import { Eye, EyeClosed, icons } from "lucide-react";
-=======
 import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
->>>>>>> develop
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -43,20 +39,8 @@ function SignUp() {
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
-<<<<<<< HEAD
-          <Form className="flex items-center gap-2">
-            <CustomInput
-              name="username"
-              label="نام کاربری"
-              icon_1=<Eye />
-              icon_2=<EyeClosed />
-            />
-=======
           <Form className="flex flex-col items-center gap-3 w-72">
-            <CustomInput
-              name="username"
-              label="نام کاربری"
-            />
+            <CustomInput name="username" label="نام کاربری" />
 
             <CustomInput
               name="password"
@@ -66,7 +50,6 @@ function SignUp() {
               onIconClick={() => setShowPassword((prev) => !prev)}
             />
 
->>>>>>> develop
             <Button type="submit" disabled={isSubmitting}>
               Submit
             </Button>

@@ -50,7 +50,7 @@ export default function CustomInput({
         };
 
         return (
-          <div className="flex flex-col w-72">
+          <div className="flex flex-col">
             <div className="relative">
               <Input
                 {...field}
