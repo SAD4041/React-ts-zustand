@@ -2,6 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Landing from "@/pages/Landing";
 import Temp from "@/pages/Temp";
+import Test from "@/pages/Test";
+import AboutUs from "@/pages/AboutUs";
 
 export const router = createBrowserRouter([
 	{
@@ -19,11 +21,15 @@ export const router = createBrowserRouter([
 				path: "/temp",
 				element: <Temp />,
 			},
-			// {
-			// 	path: "/AboutUs",
-			// 	element: <AboutUs />,
-			// },
-			// {
+			{
+				path: "/test",
+				element: <Test />,
+			},
+			{
+				path: "/AboutUs",
+				element: <AboutUs />,
+			},
+			
 		],
 	},
 	// {
