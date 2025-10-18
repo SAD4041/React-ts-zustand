@@ -9,7 +9,7 @@ export function useDesktop() {
 export function useTablet() {
     return useMediaQuery({
         minWidth: 640,
-        maxWidth: 1023,
+        maxWidth: 1023, 
     });
 }
 

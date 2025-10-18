@@ -75,7 +75,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #FDF4F1;
   --second-background: #fdf3ec;
   --footer-background: #424C20;
 
