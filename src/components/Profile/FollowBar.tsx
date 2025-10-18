@@ -1,4 +1,5 @@
 import convertToPersianDigits from "@/utils/convertToPersianDigits";
+import formatFollowBarNumber from "@/utils/formatFollowBarNumber";
 import React from "react";
 interface Props {
   fullName?: string;
@@ -7,20 +8,7 @@ interface Props {
   followingCount?: number;
   doneChallengesCount?: number;
 }
-function formatNumber(num: number): string {
-  if (num >= 1_000_000) {
-    return (num / 1_000_000).toFixed(1).replace(/\,0$/, "") + "M";
-  } else if (num >= 10_000) {
-    return (num / 1_000).toFixed(1).replace(/\,0$/, "") + "K";
-  } else {
-    const number = String(num);
-    return (
-      number.substring(0, number.length - 3) +
-      "," +
-      number.substring(number.length - 3, number.length)
-    );
-  }
-}
+
 const FollowBar = ({
   fullName = "saman khajeamiri",
   bio = "سلااام صبحت بخیررر",
@@ -45,7 +33,7 @@ const FollowBar = ({
         <div onClick={() => console.log("done challenges")} tabIndex={0} className="active:bg-[var(--color-gray-main)] transition-all duration-200">
           <p className="text-sm text-black-500">موفقیت‌ها</p>
           <p className="text-sm font-bold text-black-800">
-            {convertToPersianDigits(formatNumber(doneChallengesCount))}
+            {convertToPersianDigits(formatFollowBarNumber(doneChallengesCount))}
           </p>
         </div>
 
@@ -56,7 +44,7 @@ const FollowBar = ({
         <div onClick={() => console.log("followers")} tabIndex={0} className="active:bg-[var(--color-gray-main)] transition-all duration-200" >
           <p className="text-sm text-black-500">دنبال‌کنیا</p>
           <p className="text-sm font-bold text-black-800">
-            {convertToPersianDigits(formatNumber(followersCount))}
+            {convertToPersianDigits(formatFollowBarNumber(followersCount))}
           </p>
         </div>
 
@@ -67,7 +55,7 @@ const FollowBar = ({
         <div onClick={() => console.log("following")} tabIndex={0} className="active:bg-[var(--color-gray-main)] transition-all duration-200">
           <p className="text-sm text-black-500">من‌دنبالشونم</p>
           <p className="text-sm font-bold text-black-800">
-            {convertToPersianDigits(formatNumber(followingCount))}
+            {convertToPersianDigits(formatFollowBarNumber(followingCount))}
           </p>
         </div>
       </div>

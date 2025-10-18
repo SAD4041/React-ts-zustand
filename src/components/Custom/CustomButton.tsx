@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 //onClick={() => handleClickEdit()} className={`w-40 h-8.5 rounded-[12.5px] bg-[var(--color-blue-side)] text-white font-bold ${pressedEdit ? "shadow-none translate-y-[3px]" : "shadow-[0_3px_0px_0px_rgba(0,0,0,1)]"} transition-all duration-200 border-2 border-black `
 
 interface Props {
-  children: string;
+  children: React.ReactNode;
   backgroundColor?: string;
   pageAddress?: string;
   width?: string;
@@ -14,7 +14,7 @@ interface Props {
 
 const CustomButton = ({
   children,
-  backgroundColor,
+  backgroundColor = "bg-[var(--color-gray-side)]",
   pageAddress,
   width = "w-40",
   onClick,
@@ -28,12 +28,12 @@ const CustomButton = ({
       if (pageAddress){
       navigate(pageAddress);
       }
-    }, 350);
+    }, 200);
   };
   return (
     <Button
       onClick={handleClick}
-      className={`${width} h-8.5 rounded-[12.5px] text-white font-bold ${backgroundColor} active:shadow-none active:translate-y-[3px] shadow-[0_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-50 border-2 border-black `}
+      className={`${width} hover:${backgroundColor} cursor-pointer h-8.5 rounded-[12.5px] text-white font-bold ${backgroundColor} active:shadow-none active:translate-y-[3px] shadow-[0_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-25 border-2 border-black `}
     >
       {children}
     </Button>

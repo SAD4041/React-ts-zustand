@@ -1,22 +1,22 @@
-import React, { useState } from 'react'
-import ProfileHeader from './ProfileHeader'
-import FollowBar from './FollowBar'
+import React, { useState } from "react";
+import ProfileHeader from "./ProfileHeader/ProfileHeader";
+import FollowBar from "./FollowBar";
 import { useParams } from "react-router-dom";
-import ProfileBody from './ProfileBody';
+import ProfileBody from "./ProfileBody";
 
 const DashBoard = () => {
   // const {username} = useParams(); //should be passed to the dashboard
   // const loggedUser = "saman";
   // const isOwner = loggedUser === username; //should be passed
 
-  const [selectedPage , setSelectedPage] = useState("post");
+  const [selectedPage, setSelectedPage] = useState("post");
 
   return (
     <>
-    <ProfileHeader fullName='saman khajeamiri' isOwner = {true}/>
-    <ProfileBody></ProfileBody>
+      <ProfileHeader fullName="saman khajeamiri" isOwner={true} />
+      <ProfileBody></ProfileBody>
     </>
-  )
-}
+  );
+};
 
-export default DashBoard
+export default DashBoard;

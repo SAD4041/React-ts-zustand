@@ -5,18 +5,18 @@
 
 }
 
-.badge-center {
+.badgeCenter {
   bottom: -12.5px;
     left: 50%;
   transform: translateX(-50%);
 }
 
-.badge-right {
+.badgeRight {
   bottom: -0.5px;
   right: -4.5px;
 }
 
-.badge-left {
+.badgeLeft {
   bottom: -0.5px;
   left: -4.5px;
 }

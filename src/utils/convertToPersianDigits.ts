@@ -13,5 +13,5 @@ function convertToPersianDigits(input: string): string {
 
   return output;
 }
-
+//also do the , and . conversion
 export default convertToPersianDigits;

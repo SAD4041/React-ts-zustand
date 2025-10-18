@@ -2,13 +2,15 @@ import React, { useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Link, useNavigate } from "react-router-dom";
-import "../Profile/ProfileHeader.css";
+
+import styles from "./ProfileHeader.module.css";
+
 import { Button } from "@/components/ui/button";
 import { EllipsisIcon } from "@/components/ui/icons/lucide-ellipsis";
-import FollowBar from "./FollowBar";
-import OwnerButton from "./OwnerButton";
-import ViewButton from "./ViewButton";
-import ProfileSideSheet from "./ProfileSideSheet";
+import FollowBar from "../FollowBar";
+import OwnerButton from "../OwnerButton";
+import ViewButton from "../ViewButton";
+import ProfileSideSheet from "../ProfileSideSheet";
 function getUserInitials(fullName: string): string {
   if (!fullName) {
     return "";
@@ -40,7 +42,6 @@ const ProfileHeader = ({
   personalColor = "bg-blue-500 text-white",
   isOwner,
 }: Props) => {
-  
   const initials = getUserInitials(fullName);
 
   return (
@@ -57,9 +58,9 @@ const ProfileHeader = ({
           ></EllipsisIcon>
         </Button>
       </div> */}
-      
+
       <ProfileSideSheet></ProfileSideSheet>
-      
+
       <div
         onClick={() => console.log("show the badges!")}
         className="flex justify-center mt-2.5"
@@ -80,10 +81,18 @@ const ProfileHeader = ({
           <img
             src="/badge.png"
             alt="badge"
-            className="badge badge-center"
+            className={`${styles.badge} ${styles.badgeCenter}`}
           ></img>
-          <img src="/badge.png" alt="badge" className="badge badge-right"></img>
-          <img src="/badge.png" alt="badge" className="badge badge-left"></img>
+          <img
+            src="/badge.png"
+            alt="badge"
+            className={`${styles.badge} ${styles.badgeRight}`}
+          ></img>
+          <img
+            src="/badge.png"
+            alt="badge"
+            className={`${styles.badge} ${styles.badgeLeft}`}
+          ></img>
         </div>
       </div>
       <FollowBar></FollowBar>

@@ -3,7 +3,7 @@
 /* === Peyda Font Faces === */
 @font-face {
   font-family: 'Peyda';
-  src: url('/fonts/Peyda-Thin.ttf') format('truetype');
+  src: url('./assets/fonts/Peyda-Thin.ttf') format('truetype');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -11,7 +11,7 @@
 
 @font-face {
   font-family: 'Peyda';
-  src: url('/fonts/peyda-extralight.ttf') format('truetype');
+  src: url('./assets/fonts/peyda-extralight.ttf') format('truetype');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -19,7 +19,7 @@
 
 @font-face {
   font-family: 'Peyda';
-  src: url('/fonts/Peyda-Light.ttf') format('truetype');
+  src: url('./assets/fonts/Peyda-Light.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -27,7 +27,7 @@
 
 @font-face {
   font-family: 'Peyda';
-  src: url('/fonts/Peyda-Regular.ttf') format('truetype');
+  src: url('./assets/fonts/Peyda-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -35,7 +35,7 @@
 
 @font-face {
   font-family: 'Peyda';
-  src: url('/fonts/Peyda-Medium.ttf') format('truetype');
+  src: url('./assets/fonts/Peyda-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -43,7 +43,7 @@
 
 @font-face {
   font-family: 'Peyda';
-  src: url('/fonts/Peyda-SemiBold.ttf') format('truetype');
+  src: url('./assets/fonts/Peyda-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -51,7 +51,7 @@
 
 @font-face {
   font-family: 'Peyda';
-  src: url('/fonts/Peyda-Bold.ttf') format('truetype');
+  src: url('./assets/fonts/Peyda-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -59,7 +59,7 @@
 
 @font-face {
   font-family: 'Peyda';
-  src: url('/fonts/Peyda-ExtraBold.ttf') format('truetype');
+  src: url('./assets/fonts/Peyda-ExtraBold.ttf') format('truetype');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -67,7 +67,7 @@
 
 @font-face {
   font-family: 'Peyda';
-  src: url('/fonts/Peyda-Black.ttf') format('truetype');
+  src: url('./assets/fonts/Peyda-Black.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -152,6 +152,8 @@
 	--color-red-main: #EF4444;
 	--color-orange-main: #FF7700;
 	--color-gray-main : #B1B1B1;
+	--color-gray-side : #f1f1f1;
+	--color-skin-main : #FFEAD9;
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);
