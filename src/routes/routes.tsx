@@ -5,6 +5,7 @@ import Temp from "@/pages/Temp";
 import Test from "@/pages/Test";
 import Login from "@/pages/Login";
 import AboutUs from "@/pages/AboutUs";
+import Signup from "@/pages/Signup";
 
 export const router = createBrowserRouter([
 	{
@@ -28,18 +29,21 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: "/login",
-				element : <Login />,
+				element: <Login />,
+			},
+			{
+				path: "/signup",
+				element: <Signup />,
 			},
 			// {
 			// 	path: "/AboutUs",
 			// 	element: <AboutUs />,
 			// },
 			// {
-      {
+			{
 				path: "/AboutUs",
 				element: <AboutUs />,
 			},
-			
 		],
 	},
 	// {
