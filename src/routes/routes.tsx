@@ -6,6 +6,7 @@ import PrivateLayout from "@/layouts/PrivateLayout/PrivateLayout";
 import DashBoard from "@/components/Profile/DashBoard";
 import FollowBar from "@/components/Profile/FollowBar";
 import SignUp from "@/pages/SignUp";
+import Login from "@/pages/LogIn";
 
 export const router = createBrowserRouter([
 	{
