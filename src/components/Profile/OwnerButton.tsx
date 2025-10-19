@@ -12,7 +12,7 @@ import {
 const OwnerButton = () => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="flex justify-around mr-5 ml-5 mt-5">
+    <div className="flex justify-center gap-x-8 sm:gap-x-15 md:gap-x-26 mt-5">
       <div>
         <CustomButton backgroundColor="bg-[var(--color-blue-side)]">
           ویرایش پروفایل

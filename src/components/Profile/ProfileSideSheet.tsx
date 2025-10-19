@@ -28,7 +28,7 @@ const ProfileSideSheet = () => {
             onClick={() => console.log("open settings")}
           >
             <EllipsisIcon
-              className="rotate-90"
+              className="rotate-90" 
               style={{ width: "1.5rem", height: "1.5rem" }}
             ></EllipsisIcon>
           </Button>

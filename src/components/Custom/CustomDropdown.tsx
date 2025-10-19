@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import CustomButton from "./CustomButton";
+import DropdownButton from "./DropdownButton";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
@@ -30,6 +31,7 @@ const DropdownMenuCheckboxes = ({
   ]
 }: Props) => {
   const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>({});
+  const [open , setOpen] = useState(false);
 
   const toggleChecked = (id: number) => {
     setCheckedItems((prev) => ({
@@ -38,10 +40,10 @@ const DropdownMenuCheckboxes = ({
     }));
   };
 
-  return (
-    <DropdownMenu>
+return (
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <CustomButton backgroundColor="bg-[var(--color-blue-main)]">
+        <DropdownButton className={open ? "shadow-none translate-y-[3px]" : ""} backgroundColor="bg-[var(--color-blue-main)]">
             فیلتر{" "}
             <svg
               className="w-2.5 h-2.5 ms-3"
@@ -58,7 +60,7 @@ const DropdownMenuCheckboxes = ({
                 d="m1 1 4 4 4-4"
               />
             </svg>
-            </CustomButton>
+            </DropdownButton>
           {/* </button> */}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end">

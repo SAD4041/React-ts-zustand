@@ -66,7 +66,7 @@ const ProfileHeader = ({
         className="flex justify-center mt-2.5"
       >
         <div className="relative">
-          <Avatar className="w-24 h-24 shadow-lg avatar">
+          <Avatar className="w-26 h-26 sm:w-34 sm:h-34 md:w-44 md:h-44 shadow-lg avatar">
             <AvatarImage
               alt={fullName}
               src="https://samanskh.github.io/assets/images/bio-photo.jpg"
