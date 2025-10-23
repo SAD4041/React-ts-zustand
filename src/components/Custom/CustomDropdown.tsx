@@ -44,7 +44,7 @@ const DropdownMenuCheckboxes = ({
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <DropdownButton
-          className={open ? "shadow-none translate-y-[3px]" : ""}
+          className={open ? "shadow-none translate-y-[3px] w-full" : "w-full"}
           backgroundColor="bg-[var(--color-blue-main)]"
         >
           فیلتر{" "}
