@@ -8,7 +8,6 @@ interface Props {
   followingCount?: number;
   doneChallengesCount?: number;
 }
-
 const FollowBar = ({
   fullName = "saman khajeamiri",
   bio = "سلااام صبحت بخیررر",

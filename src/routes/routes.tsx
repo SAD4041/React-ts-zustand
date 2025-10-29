@@ -6,6 +6,8 @@ import PrivateLayout from "@/layouts/PrivateLayout/PrivateLayout";
 import DashBoard from "@/components/Profile/DashBoard";
 import FollowBar from "@/components/Profile/FollowBar";
 import SignUp from "@/pages/SignUp";
+import Login from "@/pages/LogIn";
+// import { LogIn } from "lucide-react";
 
 export const router = createBrowserRouter([
 	{

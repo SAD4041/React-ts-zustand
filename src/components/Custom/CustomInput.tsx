@@ -94,7 +94,7 @@ export default function CustomInput({
 
               <label
                 className={`
-                  absolute pointer-events-none transition-all duration-200 ease-in-out
+                  absolute pointer-events-none transition-all duration-200 ease-in-out font-bold
                   ${isRTL ? "right-4" : "left-4"}
                   ${
                     isFloating
@@ -110,7 +110,7 @@ export default function CustomInput({
             {hasError && (
               <div
                 className={`mt-1 text-xs ${
-                  isRTL ? "pr-4 text-right" : "pl-4 text-left"
+                   "pr-4 text-right"
                 }`}
               >
                 <p className="text-red-500">{meta.error}</p>
