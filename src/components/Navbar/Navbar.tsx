@@ -1,28 +1,19 @@
-import React, { useState } from "react";
 import {
   CircleAlert,
-  Divide,
   HandHeart,
   Heart,
   Home,
   LogOut,
-  Menu,
   NotebookPen,
   PawPrint,
   Scale,
-  Undo2,
 } from "lucide-react";
 import NavbarItem from "./NavbarItem";
 import { Button } from "../Custom/Button/Button";
 import { useMobile } from "@/hooks/ResponsiveHooks";
-import navbarImage from "@/assets/images/mobile-navbar-background.png";
-import navbarLoginImage from "@/assets/images/mobile-navbar-background-login.png";
 
 import logoImage from "@/assets/images/Logo.svg";
 import NavbarProfileDropdonwMenu from "./NavbarProfile";
-import { href } from "react-router-dom";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import sadraUrl from "@/assets/about_us/teamMember/sadra.webp";
 import MobileSidebar from "../Custom/MobileSidebar/MobileSidebar";
 import { Link } from "react-router-dom";
 import type { NavbarProps } from "@/types/navbarTypes";

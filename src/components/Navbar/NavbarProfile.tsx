@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import React from "react";
 import { ChevronDown, CircleUser, Heart, LogOut, PawPrint } from "lucide-react";
 
 import {
@@ -8,15 +7,10 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
+
   DropdownMenuTrigger,
 } from "@/components/Custom/Dropdonw-Menu/DropdownMenu";
-import { Button } from "@/components/ui/button";
 
 export default function NavbarProfile() {
   const userImage = "";

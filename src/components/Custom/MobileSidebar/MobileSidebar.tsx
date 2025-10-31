@@ -1,16 +1,11 @@
 import {
-  CircleAlert,
-  HandHeart,
-  Heart,
-  Home,
+
   LogOut,
   Menu,
-  NotebookPen,
-  PawPrint,
-  Scale,
+
   Undo2,
 } from "lucide-react";
-import React, { useState, type JSX } from "react";
+import  { useState} from "react";
 import navbarImage from "@/assets/images/mobile-navbar-background.png";
 import navbarLoginImage from "@/assets/images/mobile-navbar-background-login.png";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
