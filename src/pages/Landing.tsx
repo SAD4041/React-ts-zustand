@@ -1,5 +1,4 @@
 import ProductCard from "@/components/Product/ProductCard";
-import "@fontsource/vazirmatn";
 
 function Landing() {
 

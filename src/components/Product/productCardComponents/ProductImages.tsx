@@ -1,8 +1,10 @@
 import React from 'react';
 import { productData } from '@/data/data';
+import { toPersianDigits } from "../../../utils/PersianDigits.tsx";
+
 interface ProductImageProps {
   imageUrl: string;
-  discount?: number;
+  discount: number;
 }
 
 const ProductImage: React.FC<ProductImageProps> = ({ imageUrl, discount }) => {
@@ -12,7 +14,7 @@ const ProductImage: React.FC<ProductImageProps> = ({ imageUrl, discount }) => {
       {productData.hasDiscount && (
         <div 
           className="absolute bg-[#FE621F] top-2 left-2 text-white text-xs font-bold px-2 py-1 rounded-lg z-10">
-          {discount}%
+          {toPersianDigits(discount.toString())}%
         </div>
       )}
       <img

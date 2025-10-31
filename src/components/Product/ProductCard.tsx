@@ -1,8 +1,10 @@
 import { images, productData } from '../../data/data.ts';
-import ProductImage from './ProductImages';
-import ProductDetails from './ProductDetails';
-import SizeSelector from './SizeSelector';
-import ColorSelector from './ColorSelector';
+import ProductImage from './productCardComponents/ProductImages.tsx';
+import ProductDetails from './productCardComponents/ProductDetails.tsx';
+import SizeSelector from './productCardComponents/SizeSelector.tsx';
+import ColorSelector from './productCardComponents/ColorSelector.tsx';
+import { toPersianDigits } from "../../utils/PersianDigits.tsx";
+
 
 const ProductCard: React.FC = () => {
   return (
@@ -24,7 +26,7 @@ const ProductCard: React.FC = () => {
       <div className="mt-3 flex items-center justify-between">
               {productData.stock < 10 && (
       <p className="text-[#FE621F] text-xs font-medium mt-1">
-      تنها {productData.stock} عدد باقی مانده ⚠️
+      تنها {toPersianDigits(productData.stock.toString())} عدد باقی مانده ⚠️
       </p>
         )}
   

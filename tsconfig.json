@@ -11,6 +11,7 @@
 		},
 		"types": ["node"],
 		"noUnusedLocals": false,
-		"noUnusedParameters": false
+		"noUnusedParameters": false,
+		
 	}
 }

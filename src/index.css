@@ -1,5 +1,9 @@
 @import "tailwindcss";
-@tailwind utilities;
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  font-feature-settings: "tnum";
+}
 
 @layer utilities {
 	.rtl {
@@ -9,12 +13,13 @@
 		direction: ltr;
 	}
 	.vazir {
-		font-family: "Vazir", sans-serif;
+		font-family: 'Vazirmatn', sans-serif;
+  		font-feature-settings: "tnum";
 	}
 }
 
 :root {
-	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	font-family: 'Vazirmatn', sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
 

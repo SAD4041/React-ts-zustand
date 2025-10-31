@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 
+
 const config: Config = {
 	content: [
 		"./index.html",
@@ -11,17 +12,14 @@ const config: Config = {
       raw: "bg-orangey",
     }
 	],
-
-    
-
 	darkMode: "class",
 	theme: {
     extend: {
         colors: {
         orangey: '#FE621F',
       },
-      fontFamily: {
-        vazirmatn: ["Vazirmatn", "Roboto"],
+        fontFamily: {
+      sans: ['Vazirmatn', 'sans-serif'],
       },
       borderRadius: {
         sm: "calc(var(--radius) - 4px)",
@@ -54,7 +52,17 @@ const config: Config = {
   },
 
 
-	plugins: [tailwindcssAnimate],
+	plugins: [
+    tailwindcssAnimate,
+
+  function ({ addUtilities }: any) {
+    addUtilities({
+    '.tight-digits': {
+    'font-family': 'Vazirmatn, sans-serif',
+    'letter-spacing': '-0.025em',
+    }});
+  },
+  ],
 };
 
 export default config;
