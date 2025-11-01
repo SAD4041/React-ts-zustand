@@ -17,7 +17,7 @@ export default function CustomInput({
   icon = null,
   onIconClick,
   type = "text",
-  width = "w-72",
+  width = "",
   ...props
 }: CustomInputProps) {
   const [isFocused, setIsFocused] = useState(false);
@@ -95,7 +95,7 @@ export default function CustomInput({
               <label
                 className={`
                   absolute pointer-events-none transition-all duration-200 ease-in-out font-bold
-                  ${isRTL ? "right-4" : "left-4"}
+                  ${"right-4" }
                   ${
                     isFloating
                       ? "top-[-10px] text-xs bg-white px-1 text-black"

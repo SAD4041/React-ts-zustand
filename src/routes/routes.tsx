@@ -8,6 +8,7 @@ import FollowBar from "@/components/Profile/FollowBar";
 import SignUp from "@/pages/SignUp";
 import Login from "@/pages/LogIn";
 import Test from "@/pages/test";
+import Edit from "@/pages/EditProfile";
 
 // import { LogIn } from "lucide-react";
 
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: "/test",
         element: <Test />,
+      },
+      {
+        path: "/editprofile",
+        element: <Edit fullName=""/>,
       },
     ],
   },

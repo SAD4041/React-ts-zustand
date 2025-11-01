@@ -1,131 +1,46 @@
-import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Lock, ThumbsUp } from "lucide-react";
+import ChallengeCard from "@/components/Custom/ChallangeCard";
 
-interface Profile {
-  id: number;
-  image: string;
-  fallback: string;
-}
+export default function ExamplePage() {
+  const profiles1 = [
+    { id: 1, image: "https://i.pravatar.cc/150?img=1", fallback: "ش" },
+    { id: 2, image: "https://i.pravatar.cc/150?img=2", fallback: "م" },
+    { id: 3, image: "https://i.pravatar.cc/150?img=3", fallback: "ح" },
+    { id: 4, image: "https://i.pravatar.cc/150?img=4", fallback: "ع" },
+  ];
 
-interface ChallengeCardProps {
-  title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  profiles: Profile[];
-  initialLikes?: number;
-  coverImage?: string;
-  isPrivate?: boolean;
-}
-
-export default function ChallengeCard({
-  title,
-  description,
-  startDate,
-  endDate,
-  profiles,
-  initialLikes = 0,
-  coverImage = "/images/sample-cover.jpg",
-  isPrivate = false,
-}: ChallengeCardProps) {
-  const [likes, setLikes] = useState(initialLikes);
-  const [isLiked, setIsLiked] = useState(false);
-
-  const handleLike = () => {
-    setLikes((prev) => prev + (isLiked ? -1 : 1));
-    setIsLiked(!isLiked);
-  };
-
-  // ✨ کوتاه کردن توضیحات در صورت طولانی بودن
-  const shortDescription =
-    description.length > 100 ? description.slice(0, 100) + "..." : description;
+  const profiles2 = [
+    { id: 4, image: "https://i.pravatar.cc/150?img=4", fallback: "ع" },
+    { id: 5, image: "https://i.pravatar.cc/150?img=5", fallback: "س" },
+  ];
 
   return (
-    <Card className="w-full max-w-lg mx-auto rounded-3xl overflow-hidden shadow-lg border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white">
-      {/* تصویر بالا */}
-      <div className="relative h-52 sm:h-64">
-        <img
-          src={coverImage}
-          alt="Challenge Cover"
-          className="w-full h-full object-cover"
+    <div className="min-h-screen flex flex-col items-center justify-start gap-8 p-4 sm:p-8 bg-gray-100">
+      {/* کارت اول */}
+      <div className="w-full max-w-md sm:max-w-2xl">
+        <ChallengeCard
+          title="چالش الگوریتم ۱"
+          description="در این چالش شما باید بهترین راه‌حل الگوریتمی را برای مسئله داده‌شده ارائه دهید."
+          startDate="۱۴۰۴/۱۰/۲۱ - ۲۳:۵۹"
+          endDate="۱۴۰۴/۱۱/۲۲ - ۲۳:۵۹"
+          profiles={profiles1}
+          initialLikes={120}
+          coverImage="https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80"
+          isPrivate = {true}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-transparent"></div>
-
-        {/* آواتارها */}
-        <div className="absolute bottom-3 right-4 flex -space-x-3" dir="rtl">
-          {profiles.slice(0, 3).map((profile, index) => (
-            <Avatar
-              key={profile.id}
-              className="relative h-10 w-10 border-2 border-white shadow-sm hover:scale-110 transition-transform duration-200"
-              style={{ zIndex: profiles.length - index }}
-            >
-              <AvatarImage src={profile.image} />
-              <AvatarFallback className="bg-gray-200 text-gray-700 text-sm">
-                {profile.fallback}
-              </AvatarFallback>
-            </Avatar>
-          ))}
-          {profiles.length > 3 && (
-            <Avatar className="h-10 w-10 border-2 border-white bg-gray-100 text-gray-600 text-sm flex items-center justify-center cursor-default">
-              +{profiles.length - 3}
-            </Avatar>
-          )}
-        </div>
-
-        {/* 🔒 فقط اگه isPrivate = true باشه */}
-        {isPrivate && (
-          <div className="absolute top-4 left-4 bg-white/70 backdrop-blur-md rounded-full p-2">
-            <Lock className="h-5 w-5 text-gray-800" />
-          </div>
-        )}
       </div>
 
-      {/* محتوای پایین */}
-      <CardHeader className="pt-3 px-6" dir="rtl">
-        <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900">
-          {title}
-        </CardTitle>
-        <p className="text-sm text-gray-500 mt-1">{shortDescription}</p>
-      </CardHeader>
-
-      <CardContent className="px-6 pb-5">
-        <div className="flex items-center justify-between mt-4 text-gray-700 text-sm sm:text-base">
-          {/* دکمه لایک */}
-          <button
-            onClick={handleLike}
-            className={`flex items-center gap-2 transition-transform duration-300 hover:scale-105 ${
-              isLiked ? "scale-110" : ""
-            }`}
-          >
-            <ThumbsUp
-              className={`h-5 w-5 transition-colors duration-300 ${
-                isLiked ? "fill-blue-500 text-blue-500" : "text-gray-700"
-              }`}
-            />
-            <span
-              className={`font-semibold ${
-                isLiked ? "text-blue-500" : "text-gray-800"
-              }`}
-            >
-              {likes}
-            </span>
-          </button>
-
-          {/* تاریخ‌ها */}
-          <div className="flex flex-col items-end text-xs sm:text-sm">
-            <div className="flex gap-2">
-              <span className="text-gray-800 font-semibold">{startDate}</span>
-              <span className="text-gray-500">شروع</span>
-            </div>
-            <div className="flex gap-2">
-              <span className="text-gray-800 font-semibold">{endDate}</span>
-              <span className="text-gray-500">پایان</span>
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      {/* کارت دوم */}
+      <div className="w-full max-w-md sm:max-w-2xl">
+        <ChallengeCard
+          title="چالش الگوریتم ۲"
+          description="چالش دوم شامل مسائل پیچیده‌تر و چندمرحله‌ای است."
+          startDate="۱۴۰۴/۱۱/۲۵ - ۱۰:۰۰"
+          endDate="۱۴۰۴/۱۲/۰۵ - ۱۸:۰۰"
+          profiles={profiles2}
+          initialLikes={85}
+          coverImage="https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80"
+        />
+      </div>
+    </div>
   );
 }

@@ -63,7 +63,9 @@ const ProfileHeader = ({
 
       <div
         onClick={() => console.log("show the badges!")}
-        className={`cursor-pointer flex justify-center ${isOwner ? "mt-2.5" : "mt-14.5"}`}
+        className={`cursor-pointer flex justify-center ${
+          isOwner ? "mt-2.5" : "mt-14.5"
+        }`}
       >
         <div className="relative">
           <Avatar className="w-26 h-26 sm:w-34 sm:h-34 md:w-44 md:h-44 shadow-lg avatar">
