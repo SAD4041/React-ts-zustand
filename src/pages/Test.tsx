@@ -8,6 +8,17 @@ import adjustInputDirection from "@/utils/adjustInputDirection";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/Custom/Select/Select";
+import DatePicker from "@/components/Custom/DatePicker/DatePicker";
+import { PetDatePicker } from "@/components/Custom/PetDatePicker/PetDatePicker";
+
 const validationSchema = Yup.object({
 	email: Yup.string()
 		.email("ایمیل معتبر نمی باشد")
@@ -25,7 +36,6 @@ function Test() {
 		<div className="flex flex-col items-center">
 			<Formik
 				initialValues={{ email: "", password: "niceone", love: false }}
-				validationSchema={validationSchema}
 				onSubmit={(values) => {
 					console.log("Form values:", values);
 				}}
@@ -41,10 +51,12 @@ function Test() {
 									inputClassName: "!text-[20px]",
 									errorClassName: "px-5",
 								}}
-								onChangeWrappers={[adjustInputDirection]}
 								type="email"
 								placeholder="ایمیل"
 							/>
+						</div>
+						<div className="w-35">
+							<DatePicker className="h-15 !text-[35px]" name="akhoond2" />
 						</div>
 
 						<div className="mt-5 w-50">
@@ -52,14 +64,24 @@ function Test() {
 								name="password"
 								shadow={true}
 								classes={{
-									className: "h-10",
+									className: "h-20",
 									errorClassName: "px-5",
+									inputClassName: "!text-[45px]",
 								}}
 								onChangeWrappers={[adjustInputDirection]}
 								type="password"
 								placeholder="ایمیل"
 							/>
 						</div>
+						<PetDatePicker
+							from={10}
+							to={8}
+							relative={true}
+							name="niceone"
+							smallFontSize="20px"
+							bigFontSize="30px"
+						/>
+
 						<Checkbox
 							name="love"
 							classes={{ textClassName: "text-[17px]" }}
@@ -91,6 +113,24 @@ function Test() {
 							size="15px"
 							text={"آقا عشق"}
 						/>
+
+						<Select name="akhoond" value="2">
+							<SelectTrigger className="w-30">
+								<SelectValue placeholder="روز" />
+							</SelectTrigger>
+							<SelectContent className="">
+								<SelectGroup>
+									<SelectItem value={"1"}>1</SelectItem>
+									<SelectItem value={"2"}>2</SelectItem>
+									<SelectItem value={"3"}>3</SelectItem>
+									<SelectItem value={"4"}>4</SelectItem>
+									<SelectItem value={"5"}>5</SelectItem>
+									<SelectItem value={"6"}>6</SelectItem>
+									<SelectItem value={"7"}>7</SelectItem>
+								</SelectGroup>
+							</SelectContent>
+						</Select>
+
 						<Button
 							type="submit"
 							size={"giant"}

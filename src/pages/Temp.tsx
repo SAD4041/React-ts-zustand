@@ -1,4 +1,12 @@
 import CustomToast from "@/components/Custom/CustomToast";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/Custom/Select/Select";
 import { loginService } from "@/services/authService";
 import useUserStore from "@/store/userStore/userStore";
 import { translateNumber } from "@/utils/translateNumber";
@@ -46,6 +54,23 @@ export default function Temp() {
 					{loading ? <p>Logging in....</p> : <p>Login</p>}
 				</button>
 			</div>
+
+			<Select name="akhoond">
+				<SelectTrigger className="w-45">
+					<SelectValue placeholder="روز" />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectGroup>
+						<SelectItem value={"1"}>1</SelectItem>
+						<SelectItem value={"2"}>2</SelectItem>
+						<SelectItem value={"3"}>3</SelectItem>
+						<SelectItem value={"4"}>4</SelectItem>
+						<SelectItem value={"5"}>5</SelectItem>
+						<SelectItem value={"6"}>6</SelectItem>
+						<SelectItem value={"7"}>7</SelectItem>
+					</SelectGroup>
+				</SelectContent>
+			</Select>
 			<div className="bg-neutral-400 w-fit p-4 rounded-md flex flex-col place-self-center gap-4">
 				<input
 					value={email}

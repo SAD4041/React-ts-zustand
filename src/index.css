@@ -19,7 +19,11 @@
 	font-style: normal;
 	font-weight: 900;
 	src: url("./assets/fonts/eot/Alibaba-Black.eot");
-	src: url("./assets/fonts/eot/Alibaba-Black.eot?#iefix") format("embedded-opentype"), url("./assets/fonts/woff2/Alibaba-Black.woff2") format("woff2"), url("./assets/fonts/woff/Alibaba-Black.woff") format("woff"), url("./assets/fonts/ttf/Alibaba-Black.ttf") format("truetype");
+	src: url("./assets/fonts/eot/Alibaba-Black.eot?#iefix")
+		format("embedded-opentype"), url("./assets/fonts/woff2/Alibaba-Black.woff2")
+		format("woff2"), url("./assets/fonts/woff/Alibaba-Black.woff")
+		format("woff"), url("./assets/fonts/ttf/Alibaba-Black.ttf")
+		format("truetype");
 }
 
 @font-face {
@@ -27,7 +31,9 @@
 	font-style: normal;
 	font-weight: bold;
 	src: url("./assets/fonts/eot/Alibaba-Bold.eot");
-	src: url("./assets/fonts/eot/Alibaba-Bold.eot?#iefix") format("embedded-opentype"), url("./assets/fonts/woff2/Alibaba-Bold.woff2") format("woff2"), url("./assets/fonts/woff/Alibaba-Bold.woff") format("woff"),
+	src: url("./assets/fonts/eot/Alibaba-Bold.eot?#iefix")
+		format("embedded-opentype"), url("./assets/fonts/woff2/Alibaba-Bold.woff2")
+		format("woff2"), url("./assets/fonts/woff/Alibaba-Bold.woff") format("woff"),
 		url("./assets/fonts/ttf/Alibaba-Bold.ttf") format("truetype");
 }
 
@@ -36,7 +42,11 @@
 	font-style: normal;
 	font-weight: 300;
 	src: url("./assets/fonts/eot/Alibaba-Light.eot");
-	src: url("./assets/fonts/eot/Alibaba-Light.eot?#iefix") format("embedded-opentype"), url("./assets/fonts/woff2/Alibaba-Light.woff2") format("woff2"), url("./assets/fonts/woff/Alibaba-Light.woff") format("woff"), url("./assets/fonts/ttf/Alibaba-Light.ttf") format("truetype");
+	src: url("./assets/fonts/eot/Alibaba-Light.eot?#iefix")
+		format("embedded-opentype"), url("./assets/fonts/woff2/Alibaba-Light.woff2")
+		format("woff2"), url("./assets/fonts/woff/Alibaba-Light.woff")
+		format("woff"), url("./assets/fonts/ttf/Alibaba-Light.ttf")
+		format("truetype");
 }
 
 @font-face {
@@ -44,10 +54,30 @@
 	font-style: normal;
 	font-weight: normal;
 	src: url("./assets/fonts/eot/Alibaba-Regular.eot");
-	src: url("./assets/fonts/eot/Alibaba-Regular.eot?#iefix") format("embedded-opentype"),
+	src: url("./assets/fonts/eot/Alibaba-Regular.eot?#iefix")
+		format("embedded-opentype"),
 		url("./assets/fonts/woff2/Alibaba-Regular.woff2") format("woff2"),
 		url("./assets/fonts/woff/Alibaba-Regular.woff") format("woff"),
 		url("./assets/fonts/ttf/Alibaba-Regular.ttf") format("truetype");
+}
+
+[data-radix-popper-content-wrapper] {
+	width: calc(var(--radix-popper-anchor-width)) !important;
+	min-width: 0px !important;
+}
+
+[data-radix-select-viewport] {
+	width: calc(var(--radix-popper-anchor-width)) !important;
+	min-width: 0px !important;
+}
+
+[data-radix-popper-content-wrapper] div {
+	width: calc(var(--radix-popper-anchor-width)) !important;
+	min-width: 0px !important;
+}
+
+html body[data-scroll-locked] {
+	margin-right: 0px !important;
 }
 
 .shadow-lg {
@@ -172,9 +202,13 @@
 	--color-secondary-foreground: var(--secondary-foreground);
 	--color-placeholder: var(--placeholder);
 	--color-input-autocomplete: var(--input-autocomplete);
-	--color-stage-header-inactive-background: var(--stage-header-inactive-background);
+	--color-stage-header-inactive-background: var(
+		--stage-header-inactive-background
+	);
 	--color-stage-header-inactive-border: var(--stage-header-inactive-border);
-	--color-stage-header-inactive-foreground: var(--stage-header-inactive-foreground);
+	--color-stage-header-inactive-foreground: var(
+		--stage-header-inactive-foreground
+	);
 	--color-stage-body-border: var(--stage-body-border);
 	--color-muted: var(--muted);
 	--color-muted-foreground: var(--muted-foreground);
@@ -266,13 +300,13 @@
 }
 
 @layer base {
-
 	html,
 	body,
 	#root {
 		font-family: Alibaba, system-ui, Avenir, Helvetica, Arial, sans-serif;
 		line-height: 1.7;
 		overflow-x: hidden;
+		min-width: max-content;
 	}
 }
 
