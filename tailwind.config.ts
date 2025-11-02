@@ -10,9 +10,9 @@ const config: Config = {
 	darkMode: "class",
 	theme: {
 		extend: {
-			fontFamily: {
-				vazirmatn: ["Vazirmatn", "Roboto"],
-			},
+        fontFamily: {
+      sans: ['Vazirmatn', 'sans-serif'],
+      },
 
 			colors: {
 				background: "hsl(var(--background))",
