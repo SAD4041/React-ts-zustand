@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { verifyCode, checkPhone } from '../services/api';
+import { verifyCode, checkPhone } from '../services/apiCall';
 import logo from '../assets/logo.png';
 import buck from '../assets/buck.png';
 import successCat from '../assets/success.png';
