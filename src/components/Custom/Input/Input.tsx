@@ -128,7 +128,7 @@ function Input({
 				<p
 					dir="rtl"
 					className={cn(
-						"font-[Alibaba] w-full text-red-500 break-words",
+						"font-[Alibaba] w-full text-right text-red-500 break-words",
 						classes?.errorClassName,
 					)}
 				>

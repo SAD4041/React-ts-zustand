@@ -2,10 +2,6 @@
 	color: var(--placeholder);
 }
 
-.input {
-	text-align: inherit;
-}
-
 /* Chrome, Safari, Edge, Opera */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {

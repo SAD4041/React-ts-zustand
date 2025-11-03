@@ -36,14 +36,19 @@ function Test() {
 	return (
 		<div className="flex flex-col items-center">
 			<Formik
-				initialValues={{ email: "", password: "niceone", love: false }}
+				initialValues={{
+					email: "",
+					akhoond: "2",
+					password: "he",
+					love: false,
+				}}
 				onSubmit={(values) => {
 					console.log("Form values:", values);
 				}}
 			>
 				{({ isSubmitting }) => (
 					<Form className="mt-6 border rounded flex flex-col gap-4 items-center w-200">
-						<Select name="akhoond" value="2">
+						<Select name="akhoond">
 							<SelectTrigger className="w-30">
 								<SelectValue placeholder="روز" />
 							</SelectTrigger>

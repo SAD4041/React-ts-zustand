@@ -25,11 +25,13 @@ const SelectRoot: React.FC<SelectPrimitive.SelectProps> = ({
 	value,
 	...props
 }) => {
-	const [, , helpers] = useField(name);
-	const [selfValue, setSelfValue] = React.useState(value);
+	const [field, , helpers] = useField(name);
+	const [selfValue, setSelfValue] = React.useState(field.value);
 
 	React.useEffect(() => {
-		helpers.setValue(value);
+		if (field.value === undefined) {
+			helpers.setValue(value);
+		}
 	}, []);
 	return (
 		<SelectPrimitive.Root
