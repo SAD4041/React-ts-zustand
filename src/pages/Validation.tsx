@@ -1,138 +1,196 @@
-import { useNavigate, Link, useLocation } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useState, useEffect, useRef } from 'react'
-import { verifyCode } from '../services/api'
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { verifyCode, checkPhone } from '../services/api';
 import logo from '../assets/logo.png';
 import buck from '../assets/buck.png';
+import successCat from '../assets/success.png';
+import errorCat from '../assets/error.png';
+import CustomModal from '../components/Custom/modal';
+import { validationSchema } from '../schemas/ValidationSchemas';
+
+type FormValues = {
+  code: string;
+};
 
 export const Validation: React.FC = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [loading, setLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
-  const [phone, setPhone] = useState('09123456789')
-  const [otp, setOtp] = useState(['', '', '', '', '', ''])
-  const inputRefs = useRef([])
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [loading, setLoading] = useState(false);
+  const [phone, setPhone] = useState('09123456789');
+  const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
+  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    buttonText: '',
+    onButtonClick: () => {},
+    imageSrc: ''
+  });
 
   useEffect(() => {
-    if (location.state?.phone) {
-      setPhone(location.state.phone)
+    if ((location as any).state?.phone) {
+      setPhone((location as any).state.phone);
     }
-    // شرط navigate رو موقتاً کامنت کردم
-    // else {
-    //     navigate('/login')
-    // }
-  }, [location])
+    // else navigate('/login')
+  }, [location]);
 
-  const schema = yup.object().shape({
-    code: yup.string()
-      .required("کد تایید اجباری است.")
-      .matches(/^[0-9]{6}$/, "کد تایید باید 6 رقم باشد.")
-  })
+  const { handleSubmit, setValue, formState: { errors } } = useForm<FormValues>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: { code: '' },
+  });
 
-  const { handleSubmit, setValue, formState: { errors } } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: { code: '' }
-  })
+  const handleChange = (index: number, value: string) => {
+    if (value && isNaN(Number(value))) return;
 
-  const handleChange = (index, value) => {
-    if (isNaN(value)) return
-
-    const newOtp = [...otp]
-    newOtp[index] = value.slice(-1)
-
-    setOtp(newOtp)
-    setValue('code', newOtp.join(''))
+    const newOtp = [...otp];
+    newOtp[index] = value.slice(-1);
+    setOtp(newOtp);
+    setValue('code', newOtp.join(''));
 
     if (value && index < 5) {
-      inputRefs.current[index + 1]?.focus()
+      inputRefs.current[index + 1]?.focus();
     }
-  }
+  };
 
-  const handleKeyDown = (index, e) => {
-    if (e.key === 'Backspace') {
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    const key = e.key;
+    if (key === 'Backspace') {
       if (!otp[index] && index > 0) {
-        inputRefs.current[index - 1]?.focus()
+        inputRefs.current[index - 1]?.focus();
+      } else {
+        const newOtp = [...otp];
+        newOtp[index] = '';
+        setOtp(newOtp);
+        setValue('code', newOtp.join(''));
       }
-    } else if (e.key === 'ArrowLeft' && index > 0) {
-      inputRefs.current[index - 1]?.focus()
-    } else if (e.key === 'ArrowRight' && index < 5) {
-      inputRefs.current[index + 1]?.focus()
+    } else if (key === 'ArrowLeft' && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    } else if (key === 'ArrowRight' && index < 5) {
+      inputRefs.current[index + 1]?.focus();
     }
-  }
+  };
 
-  const handlePaste = (e) => {
-    e.preventDefault()
-    const pastedData = e.clipboardData.getData('text').slice(0, 6)
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text').slice(0, 6);
+    if (!/^\d+$/.test(pastedData)) return;
 
-    if (!/^\d+$/.test(pastedData)) return
-
-    const newOtp = [...otp]
+    const newOtp = [...otp];
     pastedData.split('').forEach((char, idx) => {
-      if (idx < 6) newOtp[idx] = char
-    })
+      if (idx < 6) newOtp[idx] = char;
+    });
 
-    setOtp(newOtp)
-    setValue('code', newOtp.join(''))
+    setOtp(newOtp);
+    setValue('code', newOtp.join(''));
 
-    const lastFilledIndex = Math.min(pastedData.length, 5)
-    inputRefs.current[lastFilledIndex]?.focus()
-  }
+    const lastFilledIndex = Math.min(pastedData.length - 1, 5);
+    inputRefs.current[lastFilledIndex]?.focus();
+  };
 
-  const onFormSubmit = async (data) => {
-    setLoading(true)
-    setErrorMessage('')
+  const onFormSubmit = async (data: FormValues) => {
+    setLoading(true);
 
     try {
-      const result = await verifyCode(phone, data.code)
+      const result = await verifyCode(phone, data.code);
 
       if (result.success) {
         if (result.data.valid === true) {
-          console.log('کد تایید صحیح است - ورود موفق')
-
-          if (result.data.token) {
-            localStorage.setItem('authToken', result.data.token)
-          }
-
-          navigate("/")
+          setModalConfig({
+            isOpen: true,
+            title: 'ورود موفق',
+            message: 'کد تأیید صحیح است. خوش آمدید!',
+            buttonText: 'ادامه',
+            onButtonClick: () => {
+              setModalConfig(prev => ({ ...prev, isOpen: false }));
+              if (result.data.token) {
+                localStorage.setItem('authToken', result.data.token);
+              }
+              navigate('/');
+            },
+            imageSrc: successCat
+          });
         } else {
-          setErrorMessage('کد تایید نامعتبر است. لطفاً دوباره تلاش کنید.')
-          setOtp(['', '', '', '', '', ''])
-          inputRefs.current[0]?.focus()
+          setModalConfig({
+            isOpen: true,
+            title: 'کد نامعتبر',
+            message: 'کد تایید وارد شده نامعتبر است. لطفاً دوباره تلاش کنید.',
+            buttonText: 'تلاش مجدد',
+            onButtonClick: () => {
+              setModalConfig(prev => ({ ...prev, isOpen: false }));
+              setOtp(['', '', '', '', '', '']);
+              inputRefs.current[0]?.focus();
+            },
+            imageSrc: errorCat
+          });
         }
       } else {
-        setErrorMessage(result.message)
+        setModalConfig({
+          isOpen: true,
+          title: 'خطا',
+          message: result.message || 'خطای سرور. لطفاً دوباره تلاش کنید.',
+          buttonText: 'باشه',
+          onButtonClick: () => setModalConfig(prev => ({ ...prev, isOpen: false })),
+          imageSrc: errorCat
+        });
       }
-    } catch (error) {
-      console.error('خطا در تایید کد:', error)
-      setErrorMessage('خطای غیرمنتظره رخ داد. لطفاً دوباره تلاش کنید.')
+    } catch (err) {
+      console.error('خطا در تایید کد:', err);
+      setModalConfig({
+        isOpen: true,
+        title: 'خطا',
+        message: 'خطای غیرمنتظره رخ داد. لطفاً دوباره تلاش کنید.',
+        buttonText: 'باشه',
+        onButtonClick: () => setModalConfig(prev => ({ ...prev, isOpen: false })),
+        imageSrc: errorCat
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleResendCode = async () => {
-    setErrorMessage('')
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const { checkPhone } = await import('../services/api')
-      const result = await checkPhone(phone)
+      const result = await checkPhone(phone);
 
       if (result.success) {
-        setErrorMessage('')
-        alert('کد تایید مجدداً ارسال شد.')
+        setModalConfig({
+          isOpen: true,
+          title: 'ارسال مجدد',
+          message: 'کد تأیید مجدداً ارسال شد.',
+          buttonText: 'باشه',
+          onButtonClick: () => setModalConfig(prev => ({ ...prev, isOpen: false })),
+          imageSrc: successCat
+        });
       } else {
-        setErrorMessage(result.message)
+        setModalConfig({
+          isOpen: true,
+          title: 'خطا',
+          message: result.message || 'ارسال مجدد با خطا مواجه شد.',
+          buttonText: 'باشه',
+          onButtonClick: () => setModalConfig(prev => ({ ...prev, isOpen: false })),
+          imageSrc: errorCat
+        });
       }
-    } catch (error) {
-      setErrorMessage('خطا در ارسال مجدد کد')
+    } catch (err) {
+      console.error('خطا در ارسال مجدد:', err);
+      setModalConfig({
+        isOpen: true,
+        title: 'خطا',
+        message: 'خطا در ارسال مجدد کد. لطفاً بعداً تلاش کنید.',
+        buttonText: 'باشه',
+        onButtonClick: () => setModalConfig(prev => ({ ...prev, isOpen: false })),
+        imageSrc: errorCat
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen bg-white" dir="rtl">
@@ -149,11 +207,7 @@ export const Validation: React.FC = () => {
           </a>
 
           <div className="text-center mb-8">
-            <img
-              src= {logo}
-              alt="CB Buck Gallery"
-              className="mx-auto w-32 h-auto"
-            />
+            <img src={logo} alt="CB Buck Gallery" className="mx-auto w-32 h-auto" />
             <h2 className="text-3xl font-bold text-slate-800">عضویت/ورود</h2>
             {phone && (
               <p className="text-sm text-slate-600 mt-4">
@@ -163,13 +217,7 @@ export const Validation: React.FC = () => {
           </div>
 
           <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6 px-6">
-            {errorMessage && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                <p className="text-sm">{errorMessage}</p>
-              </div>
-            )}
-
-            <div className='pt-4'>
+            <div className="pt-4">
               <div className="flex justify-center gap-3 mb-4" dir="ltr">
                 {otp.map((digit, index) => (
                   <input
@@ -203,10 +251,10 @@ export const Validation: React.FC = () => {
               )}
             </div>
 
-            <div className='flex justify-center'>
+            <div className="flex justify-center">
               <button
                 type="submit"
-                disabled={loading || otp.join("").length !== 6}
+                disabled={loading || otp.join('').length !== 6}
                 className="w-[320px] h-10 bg-black text-white py-3 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium shadow-md hover:shadow-lg disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
@@ -217,24 +265,13 @@ export const Validation: React.FC = () => {
                       fill="none"
                       viewBox="0 0 24 24"
                     >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                     در حال بررسی...
                   </>
                 ) : (
-                  "ورود"
+                  'ورود'
                 )}
               </button>
             </div>
@@ -253,15 +290,21 @@ export const Validation: React.FC = () => {
           </form>
 
           <div className="absolute bottom-0 left-1 w-48 h-55 opacity-80 pointer-events-none">
-            <img
-              src={buck}
-              alt="Hand Illustration"
-              className="w-full h-full object-contain"
-            />
+            <img src={buck} alt="Hand Illustration" className="w-full h-full object-contain" />
           </div>
 
         </div>
       </div>
+
+      <CustomModal
+        isOpen={modalConfig.isOpen}
+        onClose={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        buttonText={modalConfig.buttonText}
+        onButtonClick={modalConfig.onButtonClick}
+        imageSrc={modalConfig.imageSrc}
+      />
     </div>
-  )
-}
+  );
+};

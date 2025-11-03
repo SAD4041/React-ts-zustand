@@ -8,7 +8,7 @@ import buck from '../assets/buck.png';
 interface SignupFormValues {
   username: string;
   email: string;
-  age: string; 
+  age: string;
   password: string;
   confirmPass: string;
 }
@@ -53,7 +53,6 @@ export const SignupForm: React.FC = () => {
           >
             {({ isSubmitting }) => (
               <Form className="space-y-5">
-                {/* username */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">نام کاربری</label>
                   <Field
@@ -74,7 +73,6 @@ export const SignupForm: React.FC = () => {
                   </ErrorMessage>
                 </div>
 
-                {/* age */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">سن</label>
                   <Field
@@ -95,7 +93,6 @@ export const SignupForm: React.FC = () => {
                   </ErrorMessage>
                 </div>
 
-                {/* email */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">ایمیل</label>
                   <Field
@@ -116,7 +113,6 @@ export const SignupForm: React.FC = () => {
                   </ErrorMessage>
                 </div>
 
-                {/* password */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">رمز عبور</label>
                   <div className="relative">
@@ -145,7 +141,6 @@ export const SignupForm: React.FC = () => {
                   </ErrorMessage>
                 </div>
 
-                {/* confirm password */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">تکرار رمز عبور</label>
                   <div className="relative">
@@ -174,11 +169,7 @@ export const SignupForm: React.FC = () => {
                   </ErrorMessage>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-customBlack text-white py-3 px-4 rounded-lg hover:bg-customGray transition-colors duration-200 font-medium shadow-md hover:shadow-lg"
-                >
+                <button type="submit" class="w-full bg-black text-white py-3 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium shadow-md hover:shadow-lg">
                   ثبت نام
                 </button>
 
