@@ -17,7 +17,7 @@ export default function CustomInput({
   icon = null,
   onIconClick,
   type = "text",
-  width = "w-72",
+  width = "", 
   ...props
 }: CustomInputProps) {
   const [isFocused, setIsFocused] = useState(false);
@@ -52,7 +52,7 @@ export default function CustomInput({
         };
 
         return (
-          <div className={"flex flex-col" + " " + width}>
+          <div className={"flex flex-col " + width}>
             <div className="relative">
               <Input
                 {...field}
@@ -69,23 +69,19 @@ export default function CustomInput({
                   focus:!ring-0 focus-visible:!ring-0
                   p-0 rounded-xl h-10 w-full
                   ${isRTL ? "text-right pr-4" : "text-left pl-4"}
-                  ${icon ? (isRTL ? "pl-12" : "pr-12") : ""}
+                  ${icon ? (isRTL ? "pl-12" : "pr-12") : ""} 
                   transition-all duration-200 ease-in-out
-                  ${
-                    hasError
-                      ? "!border-[var(--borderInvalid)] shadow-[0px_1px_0px_var(--borderInvalidShadow)]"
-                      : ""
-                  }
+                  ${hasError
+                    ? "!border-[var(--borderInvalid)] shadow-[0px_1px_0px_var(--borderInvalidShadow)]"
+                    : ""}
                   ${props.className ?? ""}
                 `}
               />
 
               {icon && (
                 <div
-                  className={`
-                    absolute top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer
-                    ${isRTL ? "left-4" : "right-4"}
-                  `}
+                  className={`absolute top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer
+                    ${isRTL ? "left-4" : "right-4"}`} 
                   onClick={onIconClick}
                 >
                   {icon}
@@ -93,14 +89,11 @@ export default function CustomInput({
               )}
 
               <label
-                className={`
-                  absolute pointer-events-none transition-all duration-200 ease-in-out font-bold
+                className={`absolute pointer-events-none transition-all duration-200 ease-in-out font-bold
                   ${isRTL ? "right-4" : "left-4"}
-                  ${
-                    isFloating
-                      ? "top-[-10px] text-xs bg-white px-1 text-black"
-                      : "top-1/2 -translate-y-1/2 text-sm text-gray-500"
-                  }
+                  ${isFloating
+                    ? "top-[-10px] text-xs bg-white px-1 text-black"
+                    : "top-1/2 -translate-y-1/2 text-sm text-gray-500"}
                 `}
               >
                 {label}
@@ -109,9 +102,7 @@ export default function CustomInput({
 
             {hasError && (
               <div
-                className={`mt-1 text-xs ${
-                   "pr-4 text-right"
-                }`}
+                className={`mt-1 text-xs ${"pr-4 text-right"}`}
               >
                 <p className="text-red-500">{meta.error}</p>
               </div>

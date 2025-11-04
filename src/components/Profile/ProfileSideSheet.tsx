@@ -47,14 +47,14 @@ const ProfileSideSheet = () => {
           <div className="grid flex-1 auto-rows-min gap-6 px-1 mt-6 justify-center">
             <CustomButton
               pageAddress="/temp"
-              backgroundColor="bg-[var(--color-gray-main)]"
+              backgroundColor="bg-gray-500 hover:bg-gray-500"
             >
               شخصی‌سازی
             </CustomButton>
 
             <CustomButton
               pageAddress="/temp"
-              backgroundColor="bg-[var(--color-gray-main)]"
+              backgroundColor="bg-gray-500 hover:bg-gray-500"
             >
               ذخیره شده‌ها
             </CustomButton>
@@ -63,14 +63,14 @@ const ProfileSideSheet = () => {
 
             <CustomButton
               pageAddress="/temp"
-              backgroundColor="bg-[var(--color-red-main)]"
+              backgroundColor="bg-red-500 hover:bg-red-500"
             >
               خروج از حساب
             </CustomButton>
 
             <CustomButton
               pageAddress="/temp"
-              backgroundColor="bg-[var(--color-red-main)]"
+              backgroundColor="bg-red-500 hover:bg-red-500"
             >
               حذف حساب کاربری
             </CustomButton>
