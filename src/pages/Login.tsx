@@ -104,7 +104,7 @@ const LoginForm: React.FC = () => {
                     <Field
                       name="phone"
                       type="text"
-                      placeholder="09123456789"
+                      placeholder="۰۹۱۲۳۴۵۶۷۸۹"
                       disabled={loading || isSubmitting}
                       className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none disabled:bg-slate-100 disabled:cursor-not-allowed text-center text-sm"
                     />

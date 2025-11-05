@@ -18,7 +18,7 @@ export const Validation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const [phone, setPhone] = useState('09123456789');
+  const [phone, setPhone] = useState('۰۹۱۲۳۴۵۶۷۸۹');
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
