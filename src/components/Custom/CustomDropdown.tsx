@@ -46,7 +46,7 @@ const CustomDropdown = ({
       <DropdownMenuTrigger asChild>
         <DropdownButton
           className={open ? "shadow-none translate-y-[3px] w-full" : "w-full"}
-          backgroundColor="bg-[var(--color-blue-main)]"
+          backgroundColor="bg-secondary"
         >
           فیلتر{" "}
           <svg
@@ -69,7 +69,7 @@ const CustomDropdown = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end">
         <DropdownMenuLabel
-          className="text-[var(--color-orange-main)]"
+          className="text-primary"
           dir="rtl"
         >
           دسته‌بندی
@@ -83,14 +83,14 @@ const CustomDropdown = ({
               event.preventDefault(); // Prevents close on item click
               toggleChecked(item.id);
             }}
-            className="flex items-center justify-between cursor-pointer hover:outline-none hover:bg-[var(--color-gray-side)]"
+            className="flex items-center justify-between cursor-pointer hover:outline-none hover:bg-gray-400"
           >
             <span>{item.name}</span>
             <CustomCheckbox name={item.id.toString()} viewOnly={{ isViewOnly: true, checked: !!checkedCategories[item.id] }} />
           </DropdownMenuItem>
         ))}
         <DropdownMenuItem
-          className="flex justify-center text-[var(--color-red-main)] cursor-pointer hover:outline-none hover:bg-[var(--color-gray-side)]"
+          className="flex justify-center text-[var(--color-red-main)] cursor-pointer hover:outline-none hover:bg-gray-400"
           dir="rtl"
           onSelect={(event) => {
             event.preventDefault(); // Prevents close on clear filter click

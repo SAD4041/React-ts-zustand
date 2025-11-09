@@ -7,7 +7,7 @@ function formatFollowBarNumber(num: number): string {
     const number = String(num);
     return (
       number.substring(0, number.length - 3) +
-      "," +
+      // "," +
       number.substring(number.length - 3, number.length)
     );
   }

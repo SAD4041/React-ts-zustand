@@ -210,13 +210,12 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: #ff7700;
   --primary-hover: #ff983d;
-  --secondry: #3871dd;
-  --secondry-hover: #6c96e6;
+  --secondary: #3871dd;
+  --secondary-hover: #6c96e6;
   --error: #c30025;
   --success: #009262;
   --disable: #b1b1b1;
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);

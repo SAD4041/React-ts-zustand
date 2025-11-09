@@ -3,6 +3,7 @@
 import type { LoginPayload, LoginResponse } from "../types/authTypes";
 import { postData } from "./services";
 
+
 // Login function
 export const loginService = async (
 	credentials: LoginPayload
@@ -12,3 +13,7 @@ export const loginService = async (
 		data: credentials,
 	});
 };
+
+
+
+

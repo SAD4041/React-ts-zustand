@@ -10,29 +10,7 @@ import {
   Bookmark,
 } from "lucide-react";
 import CustomBtn from "@/components/Custom/CustomBtn";
-
-interface Profile {
-  id: number;
-  image: string;
-  fallback: string;
-}
-
-interface ChallengeCardProps {
-  title: string;
-  description?: string;
-  startDate: string;
-  endDate: string;
-  profiles: Profile[];
-  initialLikes?: number;
-  initialComments?: number;
-  coverImage?: string;
-  isPrivate?: boolean;
-  isJoined?: boolean;
-  creator?: {
-    name: string;
-    avatar: string;
-  };
-}
+import type { ChallengeCardProps } from "@/types/challengeCardTypes";
 
 export default function ChallengeCard({
   title,
@@ -82,7 +60,7 @@ export default function ChallengeCard({
       <div className="px-4 pt-4 pb-3 border-b border-gray-100 bg-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10 border-2 border-[var(--primary)]">
+            <Avatar className="h-10 w-10 border-2 border-primary">
               <AvatarImage src={creator?.avatar} />
               <AvatarFallback className="bg-gray-100 text-gray-600">
                 {creator?.name?.charAt(0) || "U"}
@@ -101,15 +79,15 @@ export default function ChallengeCard({
               onClick={handleSave}
               className={`p-2 rounded-full transition-all duration-200 border  ${
                 isSaved
-                  ? "bg-amber-100 text-amber-600 border-[var(--primary)] "
-                  : "bg-gray-100 text-gray-500 hover:bg-gray-200 border-[var(--secondry)]"
+                  ? "bg-amber-100 text-amber-600 border-primary "
+                  : "bg-gray-100 text-gray-500 hover:bg-gray-200 border-secondry"
               }`}
             >
               <Bookmark
                 className={`h-4 w-4 ${
                   isSaved
-                    ? "fill-amber-600 stroke-[var(--primary)]"
-                    : "stroke-[var(--secondry)]"
+                    ? "fill-amber-600 stroke-primary"
+                    : "stroke-secondry"
                 }
                 `}
               />
@@ -124,7 +102,7 @@ export default function ChallengeCard({
         <div className="relative h-72 bg-gray-100 overflow-hidden">
           {/* اسکلت بارگذاری */}
           {!imageLoaded && (
-            <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+            <div className="absolute inset-0 bg-primary animate-pulse"></div>
           )}
 
           {/* تصویر اصلی */}
@@ -178,7 +156,7 @@ export default function ChallengeCard({
               {profiles.slice(0, 3).map((profile, index) => (
                 <Avatar
                   key={profile.id}
-                  className="relative h-8 w-8 border-1 border-[var(--secondry)] shadow-sm transition-transform hover:scale-110"
+                  className="relative h-8 w-8 border-1 border-secondry shadow-sm transition-transform hover:scale-110"
                   style={{ zIndex: profiles.length - index }}
                 >
                   <AvatarImage src={profile.image} />
@@ -188,7 +166,7 @@ export default function ChallengeCard({
                 </Avatar>
               ))}
               {profiles.length > 3 && (
-                <Avatar className="relative h-8 w-8 border-1 border-[var(--secondry)] bg-gray-100 text-black text-xs flex items-center justify-center shadow-sm">
+                <Avatar className="relative h-8 w-8 border-1 border-secondry bg-gray-100 text-black text-xs flex items-center justify-center shadow-sm">
                   +{profiles.length - 3}
                 </Avatar>
               )}
@@ -196,7 +174,7 @@ export default function ChallengeCard({
 
             {/* تعداد کل نفرات فقط اگر 3 یا کمتر باشد */}
             {profiles.length > 0 && (
-              <span className="text-xs text-white bg-[var(--secondry)] px-2 py-1 rounded-full border border-black">
+              <span className="text-xs text-white bg-secondry px-2 py-1 rounded-full border border-black">
                 {profiles.length} نفر
               </span>
             )}
@@ -256,7 +234,7 @@ export default function ChallengeCard({
               }`}
             >
               <ThumbsUp
-                className={`h-4 w-4 ${isLiked ? "fill-[var(--secondry)]" : ""}`}
+                className={`h-4 w-4 ${isLiked ? "fill-secondry" : ""}`}
               />
             </button>
 
@@ -271,11 +249,7 @@ export default function ChallengeCard({
 
         {/* دکمه عضویت اصلی */}
         <div>
-          <CustomBtn
-            children={
-              isJoined ? "مشاهده پیشرفت" : "عضویت در چالش"
-            }
-          />
+          <CustomBtn children={isJoined ? "مشاهده پیشرفت" : "عضویت در چالش"} />
         </div>
       </div>
     </Card>
