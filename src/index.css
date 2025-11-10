@@ -209,11 +209,13 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: #ff7700;
-  --primary-hover: #ff983d;
+  --primary-hover: #ffca9b;
   --secondary: #3871dd;
   --secondary-hover: #6c96e6;
   --error: #c30025;
   --success: #009262;
+  --neutral-gray : #9d9d9d;
+  --neutral-gray-bold : #666666;
   --disable: #b1b1b1;
   --primary-foreground: oklch(0.985 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -303,7 +305,9 @@
   --color-secondry-hover: var(--secondry-hover);
   --color-error: var(--error);
   --color-success: var(--success);
-  --color--disable: var(--disable);
+  --color-disable: var(--disable);
+  --color-neutral-gray: var(--neutral-gray);
+  --color-neutral-gray-bold :var(--neutral-gray-bold);
   --shadow-button: var(--shadow-button);
   --shadow-button-active: var(--shadow-button-active);
   --text-title: var(--title-size);
@@ -348,11 +352,9 @@
     @apply border-border outline-ring/50;
   }
 }
- *{
-	font-family: 'Peyda';
- }
-
-
+* {
+  font-family: "Peyda";
+}
 
 /* animation for the side sheet */
 

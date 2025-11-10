@@ -15,7 +15,7 @@ interface Props {
 
 const CustomButton = ({
   children,
-  backgroundColor = "bg-[var(--color-gray-side)]",
+  backgroundColor = "bg-neutral-gray",
   pageAddress,
   width = "w-40 sm:w-50 md:w-60",
   className= "",

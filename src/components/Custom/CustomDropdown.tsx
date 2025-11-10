@@ -83,14 +83,14 @@ const CustomDropdown = ({
               event.preventDefault(); // Prevents close on item click
               toggleChecked(item.id);
             }}
-            className="flex items-center justify-between cursor-pointer hover:outline-none hover:bg-gray-400"
+            className="flex items-center justify-between cursor-pointer hover:outline-none hover:bg-neutral-gray"
           >
             <span>{item.name}</span>
             <CustomCheckbox name={item.id.toString()} viewOnly={{ isViewOnly: true, checked: !!checkedCategories[item.id] }} />
           </DropdownMenuItem>
         ))}
         <DropdownMenuItem
-          className="flex justify-center text-[var(--color-red-main)] cursor-pointer hover:outline-none hover:bg-gray-400"
+          className="flex justify-center text-red-500 cursor-pointer hover:outline-none hover:bg-neutral-gray"
           dir="rtl"
           onSelect={(event) => {
             event.preventDefault(); // Prevents close on clear filter click

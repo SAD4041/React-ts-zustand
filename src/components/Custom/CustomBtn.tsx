@@ -12,10 +12,10 @@ export default function CustomBtn({
       <Button
         {...props}
         className="
-        h-[40px] border-[2px] border-[#000] rounded-[15px] shadow-button active:shadow-button-active
+        h-[40px] border-[2px] border-black rounded-[15px] shadow-button active:shadow-button-active
         font-bold cursor-pointer transition-all duration-30 active:translate-y-[3px]
-        w-full bg-[#3871DD] mb-[20px] py-[3px] px-[39px] text-[20px]
-        hover:bg-[#3871DD]
+        w-full bg-secondary mb-[20px] py-[3px] px-[39px] text-[20px]
+        hover:bg-secondary-hover
         disabled:opacity-50 disabled:cursor-not-allowed 
       "
         style={{ color }}

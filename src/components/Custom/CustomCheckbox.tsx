@@ -1,11 +1,11 @@
-import React from 'react';
-import { Checkbox } from '@/components/ui/checkbox';
+import React from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Field, type FieldProps } from "formik";
 
 interface CustomCheckboxProps {
   name: string;
   labelText?: string;
-  textTransparentOnChecked?: boolean; 
+  textTransparentOnChecked?: boolean;
   classNames?: {
     label?: string;
     checkbox?: string;
@@ -18,8 +18,8 @@ interface CustomCheckboxProps {
 
 const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
   name,
-  labelText = 'متن',
-  textTransparentOnChecked = false,  
+  labelText = "متن",
+  textTransparentOnChecked = false,
   classNames = {},
   viewOnly = { isViewOnly: false, checked: false },
 }) => {
@@ -29,18 +29,21 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
       {({ field, form, meta }: FieldProps) => {
         const hasError = meta.touched && meta.error;
         const isChecked = field.value || false;
-        
+
         const handleChange = (checked: boolean) => {
           form.setFieldValue(name, checked);
         };
-        
-        
+
         return (
-          <div className="w-full">
+          <div className="w-full flex justify-end">
             <label className="flex items-center cursor-pointer">
               <span
                 className={`text-lg text-black mr-2 
-                          ${textTransparentOnChecked && isChecked && 'opacity-30'}
+                          ${
+                            textTransparentOnChecked &&
+                            isChecked &&
+                            "opacity-30"
+                          }
                            ${classNames?.label}`}
               >
                 {labelText}
