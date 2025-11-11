@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { loginSchema } from '../schemas/LoginSchemas';
-import { checkPhone } from '../services/apiCall';
+import { checkPhone } from '../services/apiLogin';
 import CustomModal from '../components/Custom/modal';
 import logo from '../assets/logo.png';
 import buck from '../assets/buck.png';

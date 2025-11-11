@@ -5,11 +5,12 @@ import Temp from "@/pages/Temp";
 import LoginForm from "@/pages/Login";
 import { Validation } from "@/pages/Validation";
 import { SignupForm } from "@/pages/SignUp";
+import Home from "@/pages/Home";
 
 export const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <PublicLayout />,
+		element: <Home />,
 		// errorElement: (
 		// 	<Error404 />
 		// ),

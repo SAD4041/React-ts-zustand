@@ -1,23 +1,6 @@
-// src/services/api.ts
 import { postData } from './services';
+import { ApiResponse, CheckPhonePayload, VerifyCodePayload } from '@/types/apiTypes';
 
-interface CheckPhonePayload {
-    phone: string;
-}
-
-interface VerifyCodePayload {
-    phone: string;
-    code: string;
-}
-
-interface ApiResponse<T = any> {
-    success: boolean;
-    data?: T;
-    message?: string;
-    error?: any;
-}
-
-// Check phone number
 export const checkPhone = async (phone: string): Promise<ApiResponse> => {
     try {
         const data = await postData({
@@ -37,7 +20,6 @@ export const checkPhone = async (phone: string): Promise<ApiResponse> => {
     }
 };
 
-// Verify code
 export const verifyCode = async (phone: string, code: string): Promise<ApiResponse> => {
     try {
         const data = await postData({
