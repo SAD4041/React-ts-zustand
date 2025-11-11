@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 export const signupSchema = yup.object({
-  username: yup.string().required('فیلد نام اجباری است.'),
+  username: yup.string().required('نام اجباری است.'),
   email: yup.string().email('ایمیل نامعتبر است.').required('ایمیل اجباری است.'),
   age: yup
     .string()

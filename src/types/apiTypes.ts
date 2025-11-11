@@ -17,3 +17,19 @@ export type PutParams = PostParams;
 export interface DeleteParams extends BaseParams {
 	data?: any;
 }
+
+export interface CheckPhonePayload {
+	phone: string;
+}
+
+export interface VerifyCodePayload {
+	phone: string;
+	code: string;
+}
+
+export interface ApiResponse<T = any> {
+	success: boolean;
+	data?: T;
+	message?: string;
+	error?: any;
+}
