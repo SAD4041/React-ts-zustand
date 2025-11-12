@@ -82,7 +82,6 @@ function SignUp() {
                     label="شماره تلفن"
                     className="w-full px-4 py-3 rounded-lg"
                   />
-
                   <Button
                     type="submit"
                     disabled={isSubmitting}
