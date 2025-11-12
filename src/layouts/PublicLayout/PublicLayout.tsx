@@ -14,7 +14,13 @@ const PublicLayout = () => {
 				// 	},
 				// }}
 			/>
+<<<<<<< Updated upstream
 			<Outlet />
+=======
+			{/* <Header/> */}
+			<Outlet />
+			{/* <Footer/> */}
+>>>>>>> Stashed changes
 		</>
 	);
 };
