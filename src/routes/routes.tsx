@@ -11,8 +11,6 @@ import Login from "@/pages/LogIn";
 import Test from "@/pages/test";
 import Edit from "@/pages/EditProfile";
 
-// import { LogIn } from "lucide-react";
-
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -36,7 +34,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/editprofile",
-        element: <Edit fullName=""/>,
+        element: <Edit fullName="" />,
       },
     ],
   },
@@ -44,12 +42,12 @@ export const router = createBrowserRouter([
     element: <PrivateLayout />,
     children: [
       {
-        path: "/dashboard/:id",  // Dynamic route for user profile
+        path: "/dashboard/:userId",  // Dynamic route for user profile
         element: <DashBoard />,
       },
       {
-        path: "/follow",  // Updated route for Follower/Following page
-        element: <FollowerFollowing />,
+        path: "/follow/:userId",  // Route to the FollowBar or FollowerFollowing page
+        element: <FollowerFollowing />,  // Follower/Following page
       },
     ],
   },
