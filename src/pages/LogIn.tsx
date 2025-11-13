@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Label } from "@radix-ui/react-label";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import { Link } from "react-router-dom";
+import useUserStore from "@/store/userStore/userStore";
 
 export default function Login() {
   const {setUsername,setToken,setUserId} = useUserStore();

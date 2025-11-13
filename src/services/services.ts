@@ -25,7 +25,8 @@ const apiClient: AxiosInstance = axios.create({
 	},
 });
 
-const { token } = useUserStore();
+const token = useUserStore.getState().token; // ✅ این درسته و باید جایگزین بشه
+
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // const token = localStorage.getItem("token"); // get JWT from localStorage

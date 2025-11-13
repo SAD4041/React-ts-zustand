@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/editprofile",
-        element: <Edit fullName=""/>,
+        element: <Edit />,
       },
     ],
   },
