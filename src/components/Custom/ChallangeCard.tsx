@@ -249,8 +249,10 @@ export default function ChallengeCard({
 
         {/* دکمه عضویت اصلی */}
         <div>
-          <CustomBtn children={isJoined ? "مشاهده پیشرفت" : "عضویت در چالش"} />
-        </div>
+          <CustomBtn>
+            {isJoined ? "مشاهده پیشرفت" : "عضویت در چالش"}
+          </CustomBtn>
+        </div>  
       </div>
     </Card>
   );

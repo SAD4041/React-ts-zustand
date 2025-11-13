@@ -87,7 +87,7 @@ export default function CustomTextArea({
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 onChange={handleChange}
-                dir={isRTL ? "rtl" : "ltr"}
+                dir={"rtl" }
                 className={`
                   border !border-[var(--borderDefault)]
                   shadow-[0px_1px_0px_var(--borderDefault)]
@@ -96,7 +96,7 @@ export default function CustomTextArea({
                   focus:!ring-0 focus-visible:!ring-0
                   rounded-xl w-full resize-none overflow-hidden
                   p-3
-                  ${isRTL ? "text-right pr-4" : "text-left pl-4"}
+                  ${"text-right pr-4"}
                   ${icon ? (isRTL ? "pl-12" : "pr-12") : ""}
                   transition-all duration-200 ease-in-out
                   ${
@@ -124,7 +124,7 @@ export default function CustomTextArea({
               <label
                 className={`
                   absolute pointer-events-none transition-all duration-200 ease-in-out font-bold
-                  ${isRTL ? "right-4" : "left-4"}
+                  ${ "right-4" }
                   ${
                     isFloating
                       ? "top-[-10px] text-xs bg-white px-1 text-black"
@@ -150,7 +150,7 @@ export default function CustomTextArea({
             {/* شمارنده کاراکتر باقی مانده */}
             <div
               className={`mt-1 text-xs text-gray-400 ${
-                isRTL ? "pr-4 text-right" : "pl-4 text-left"
+                "pr-4 text-right"
               }`}
             >
               {remaining} کاراکتر باقی مانده

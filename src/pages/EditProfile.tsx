@@ -6,7 +6,8 @@ import CustomTextArea from "@/components/Custom/CustomTextArea";
 import CustomBtn from "@/components/Custom/CustomBtn";
 import { ArrowLeft, Pencil } from "lucide-react"; // ✅ اضافه شد
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ProfileSchema from "@/schemas/EditPtofileSchema";
+import ProfileSchema, { ProfileInitialValues } from "@/schemas/EditPtofileSchema";
+
 
 export default function ProfileInfo() {
   const [image, setImage] = useState<string | null>(null);
@@ -21,16 +22,16 @@ export default function ProfileInfo() {
   };
 
   return (
-    <div className="min-h-screen w-full px-6 py-10 bg-[var(--background)]" dir="ltr">
+    <div className="min-h-screen w-full px-6 py-10 bg-background" dir="ltr">
       {/* Header */}
       <div className="flex items-center mb-8 relative">
         <button
-          className="p-2 border-2 border-[var(--primary)] rounded-xl hover:bg-orange-50 transition"
+          className="p-2 border-2 border-primary rounded-xl hover:bg-orange-50 transition"
           onClick={() => window.history.back()}
         >
-          <ArrowLeft className="w-6 h-6 text-[var(--primary)]" />
+          <ArrowLeft className="w-6 h-6 text-primary" />
         </button>
-        <h1 className="text-2xl absolute left-1/2 -translate-x-[50%] font-extrabold text-[var(--primary)] text-center">
+        <h1 className="text-2xl absolute left-1/2 -translate-x-[50%] font-extrabold text-primary text-center">
           اطلاعات پروفایل
         </h1>
       </div>
@@ -48,7 +49,7 @@ export default function ProfileInfo() {
         {/* آیکون مداد برای آپلود عکس */}
         <label
           htmlFor="profilePic"
-          className="absolute bottom-1 right-[calc(50%-50px)] bg-white border border-[var(--primary)] text-[var(--primary)] rounded-full p-1.5 cursor-pointer hover:bg-orange-50 transition shadow-sm"
+          className="absolute bottom-1 right-[calc(50%-50px)] bg-white border border-primary text-primary rounded-full p-1.5 cursor-pointer hover:bg-orange-50 transition shadow-sm"
         >
           <Pencil className="w-4 h-4" /> {/* ✅ مداد جایگزین ضربدر */}
           <input
@@ -63,7 +64,7 @@ export default function ProfileInfo() {
 
       {/* Form */}
       <Formik
-        initialValues={{ firstName: "", lastName: "", bio: "" }}
+        initialValues={ProfileInitialValues}
         validationSchema={ProfileSchema}
         onSubmit={handleSubmit}
       >
@@ -76,7 +77,7 @@ export default function ProfileInfo() {
             <CustomBtn
               type="submit"
               disabled={isSubmitting || !isValid || !dirty}
-              className="w-full mt-2 bg-[var(--secondry)] hover:bg-[var(--secondry-hover)] text-white py-3 rounded-xl font-semibold border border-black shadow-[0px_1px_0px_var(--borderDefault)] transition-all duration-300"
+              className="w-full mt-2 bg-secondry hover:bg-secondry-hover text-white py-3 rounded-xl font-semibold border border-black shadow-[0px_1px_0px_borderDefault] transition-all duration-300"
             >
               ثبت
             </CustomBtn>

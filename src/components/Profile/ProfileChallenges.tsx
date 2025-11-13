@@ -149,7 +149,6 @@ const ProfileChallenges = () => {
                   }
                   name="challengeSearch"
                   label="جستجو"
-                  className="pr-10"
                 />
               </Form>
             )}

@@ -61,6 +61,8 @@ const ProfileHeader: React.FC<Props> = ({
       }
     }
 
+    console.log(followersCount)
+
 
     fetchUserData();
   }, [userId]);
@@ -104,7 +106,10 @@ const ProfileHeader: React.FC<Props> = ({
           />
         </div>
       </div>
-      <FollowBar fullName={fullName}></FollowBar>
+      <FollowBar fullName={fullName}
+      followersCount={followersCount}
+      followingCount={followingCount}
+      ></FollowBar>
       {/* BUTTON */}
       {isOwner && <OwnerButton></OwnerButton>}
       {!isOwner && <ViewButton></ViewButton>}
