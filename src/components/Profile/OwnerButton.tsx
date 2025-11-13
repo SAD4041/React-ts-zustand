@@ -9,19 +9,32 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
+import { useNavigate } from "react-router-dom";
 
 const OwnerButton = () => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleEditProfile = () => {
+    navigate("/editprofile");
+  };
+
   return (
-    <div className="flex justify-center gap-x-8 sm:gap-x-15 md:gap-x-26 mt-5">
+    <div className="flex justify-center gap-xa-8 sm:gap-x-15 md:gap-x-26 mt-5">
       <div>
-        <CustomButton backgroundColor="bg-secondary hover:bg-secondary">
+        <CustomButton
+          backgroundColor="bg-secondary hover:bg-secondary"
+          onClick={handleEditProfile}
+        >
           ویرایش پروفایل
         </CustomButton>
       </div>
 
       <div>
-        <CustomButton onClick={() => setOpen(true)} backgroundColor="bg-primary hover:bg-primary">
+        <CustomButton
+          onClick={() => setOpen(true)}
+          backgroundColor="bg-primary hover:bg-primary"
+        >
           بساز+
         </CustomButton>
       </div>
@@ -42,9 +55,19 @@ const OwnerButton = () => {
               </SheetDescription> */}
           </SheetHeader>
           <div className="grid flex-1 justify-center auto-rows-min gap-6 px-1 mt-6 ">
-                <CustomButton pageAddress="/temp" backgroundColor="bg-primary hover:bg-primary" >پست جدید</CustomButton>
+            <CustomButton
+              pageAddress="/temp"
+              backgroundColor="bg-primary hover:bg-primary"
+            >
+              پست جدید
+            </CustomButton>
 
-                <CustomButton pageAddress="/temp" backgroundColor="bg-secondary hover:bg-secondary" >چالش جدید</CustomButton>
+            <CustomButton
+              pageAddress="/temp"
+              backgroundColor="bg-secondary hover:bg-secondary"
+            >
+              چالش جدید
+            </CustomButton>
           </div>
         </SheetContent>
       </Sheet>

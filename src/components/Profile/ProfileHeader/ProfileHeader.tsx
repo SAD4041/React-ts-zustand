@@ -37,32 +37,45 @@ const ProfileHeader: React.FC<Props> = ({
   userId,
 }) => {
   const [fullName, setFullName] = useState("User");
+  const [profilePicture, setProfilePicture] = useState("");
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
 
   const initials = getUserInitials(fullName);
-
   useEffect(() => {
     if (!userId) return;
 
     async function fetchUserData() {
+      // اطلاعات پروفایل
       try {
-        // const userData = await getUserProfileService(userId);
-        // if (userData?.fullName) setFullName(userData.fullName);
-        // else if (userData?.username) setFullName(userData.username);
-
-        const followersRes = await getFollowersService(userId);
-        if (followersRes?.count !== undefined) setFollowersCount(followersRes.count);
-
-        const followingRes = await getFollowingService(userId);
-        if (followingRes?.count !== undefined) setFollowingCount(followingRes.count);
+        const userRes = await getUserProfileService(userId);
+        if (userRes) {
+          setFullName(userRes.username || "User");
+          setProfilePicture(userRes.profile_picture || "");
+        }
       } catch (err) {
-        console.error("Error fetching user data:", err);
+        console.error("Error fetching user profile:", err);
+      }
+
+      // تعداد فالوورها
+      try {
+        const followersRes = await getFollowersService(userId);
+        if (followersRes?.count !== undefined)
+          setFollowersCount(followersRes.count);
+          // console.log(followersCount)
+      } catch (err) {
+        console.error("Error fetching followers:", err);
+      }
+
+      // تعداد فالووینگ‌ها
+      try {
+        const followingRes = await getFollowingService(userId);
+        if (followingRes?.count !== undefined)
+          setFollowingCount(followingRes.count);
+      } catch (err) {
+        console.error("Error fetching following:", err);
       }
     }
-
-    console.log(followersCount)
-
 
     fetchUserData();
   }, [userId]);
@@ -79,13 +92,15 @@ const ProfileHeader: React.FC<Props> = ({
       >
         <div className="relative">
           <Avatar className="w-26 h-26 sm:w-34 sm:h-34 md:w-44 md:h-44 shadow-lg avatar">
-            <AvatarImage
-              alt={fullName}
-              src="https://samanskh.github.io/assets/images/bio-photo.jpg"
-            />
-            <AvatarFallback className={`text-2xl font-semibold ${personalColor}`}>
-              {initials}
-            </AvatarFallback>
+            {profilePicture ? (
+              <AvatarImage alt={fullName} src={profilePicture} />
+            ) : (
+              <AvatarFallback
+                className={`text-2xl font-semibold ${personalColor}`}
+              >
+                {initials}
+              </AvatarFallback>
+            )}
           </Avatar>
 
           {/* Badge decorations */}
@@ -106,14 +121,16 @@ const ProfileHeader: React.FC<Props> = ({
           />
         </div>
       </div>
-      <FollowBar fullName={fullName}
-      followersCount={followersCount}
-      followingCount={followingCount}
-      ></FollowBar>
+
+      <FollowBar
+        fullName={fullName}
+        followersCount={followersCount}
+        followingCount={followingCount}
+      />
+
       {/* BUTTON */}
-      {isOwner && <OwnerButton></OwnerButton>}
-      {!isOwner && <ViewButton></ViewButton>}
-      {/* button selector */}
+      {isOwner && <OwnerButton />}
+      {!isOwner && <ViewButton />}
     </>
   );
 };

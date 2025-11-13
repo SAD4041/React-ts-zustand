@@ -181,7 +181,7 @@ const FollowerFollowingPage: React.FC = () => {
                 <p className="font-semibold text-red-500 text-2xl">{error}</p>
               ) : (
                 <UserCardList 
-                  users={filteredUsers} // Display the filtered list of users
+                  users={filteredUsers || []} // Display the filtered list of users
                   onDelete={handleDeleteClick} 
                   isOwner={isOwner} 
                 />

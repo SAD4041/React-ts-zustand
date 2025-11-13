@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { EllipsisIcon } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import useUserStore from "@/store/userStore/userStore";
 
 import {
   Sheet,
@@ -18,6 +19,16 @@ import { Link } from "react-router-dom";
 import CustomButton from "../Custom/CustomButton";
 
 const ProfileSideSheet = () => {
+  const { userId, setToken, setUserId, setUsername } = useUserStore();
+
+  const handleLogout = () => {
+    setToken("");
+    setUserId(0);
+    setUsername("");
+    localStorage.removeItem("token"); // اگر JWT در localStorage هست
+    // navigate("/login");
+  };
+
   return (
     <div className="relative w-full h-12">
       <Sheet>
@@ -64,6 +75,7 @@ const ProfileSideSheet = () => {
             <CustomButton
               pageAddress="/temp"
               backgroundColor="bg-red-500 hover:bg-red-500"
+              onClick={handleLogout}
             >
               خروج از حساب
             </CustomButton>

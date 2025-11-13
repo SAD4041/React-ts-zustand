@@ -25,7 +25,7 @@ const apiClient: AxiosInstance = axios.create({
 	},
 });
 
-const token = useUserStore.getState().token; // ✅ این درسته و باید جایگزین بشه
+// const token = useUserStore.getState().token; // ✅ این درسته و باید جایگزین بشه
 
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {

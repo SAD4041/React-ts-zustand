@@ -1,20 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import ProfileHeader from "./ProfileHeader/ProfileHeader";
-import FollowBar from "./FollowBar";
-import { useParams } from "react-router-dom";
 import ProfileBody from "./ProfileBody";
+import useUserStore from "@/store/userStore/userStore";
 
-const DashBoard = () => {
-  // const {username} = useParams(); //should be passed to the dashboard
-  // const loggedUser = "saman";
-  // const isOwner = loggedUser === username; //should be passed
-
+const DashBoard: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState("post");
+  const { userId } = useUserStore(); // کاربر لاگین شده
+  const navigate = useNavigate();
+  const params = useParams<{ id: string }>();
+
+  const viewedUserId = params.id ? Number(params.id) : undefined;
+
+  useEffect(() => {
+    if (!userId) {
+      navigate("/login"); // ← اگر توکن یا userId نبود، برگرد به login
+    }
+  }, [userId, navigate]);
+
+  if (!userId) return <p>در حال بارگذاری...</p>;
+
+  console.log(viewedUserId)
+  console.log(userId)
+
+
+  const profileId = viewedUserId || userId;
+  const isOwner = profileId === userId;
 
   return (
     <>
-      <ProfileHeader userId= {4} isOwner={true} />
-      <ProfileBody></ProfileBody>
+      <ProfileHeader userId={profileId} isOwner={isOwner} />
+      <ProfileBody userId={profileId} />
     </>
   );
 };

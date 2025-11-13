@@ -5,7 +5,7 @@ import type { FollowStats, UserSummary } from "@/types/userTypes";
 export const getUserProfileService = async (userId: string | number) => {
   if (!userId) throw new Error("User ID is required");
   return await getData({
-    endPoint: `/v1/users/${userId}`,
+    endPoint: `/api/v1/users/${userId}`,
   });
 };
 
