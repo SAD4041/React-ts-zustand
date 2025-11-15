@@ -1,5 +1,26 @@
-import { getData } from "./services";
+import { getData, putData } from "./services";
 import type { FollowStats, UserSummary } from "@/types/userTypes";
+
+// گرفتن اطلاعات کلی کاربر (نام، عکس و ...)
+interface UpdateProfileRequest {
+  username?: string;
+  email?: string;
+  bio?: string;
+  profile_picture?: string;
+}
+
+export const putUserProfileService = async (
+  userId: string | number,
+  data: UpdateProfileRequest
+) => {
+  if (!userId) throw new Error("User ID is required");
+
+  return await putData({
+    endPoint: `/api/v1/users/profile`,
+    data, // باید به صورت key-value جدا باشه
+  });
+};
+
 
 // گرفتن اطلاعات کلی کاربر (نام، عکس و ...)
 export const getUserProfileService = async (userId: string | number) => {

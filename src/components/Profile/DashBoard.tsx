@@ -8,9 +8,9 @@ const DashBoard: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState("post");
   const { userId } = useUserStore(); // کاربر لاگین شده
   const navigate = useNavigate();
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ userId: string }>();
 
-  const viewedUserId = params.id ? Number(params.id) : undefined;
+  const viewedUserId = params.userId ? Number(params.userId) : undefined;
 
   useEffect(() => {
     if (!userId) {

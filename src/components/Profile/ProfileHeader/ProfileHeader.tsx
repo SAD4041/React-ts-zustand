@@ -37,6 +37,7 @@ const ProfileHeader: React.FC<Props> = ({
   userId,
 }) => {
   const [fullName, setFullName] = useState("User");
+  const [bio, setBio] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
@@ -52,6 +53,7 @@ const ProfileHeader: React.FC<Props> = ({
         if (userRes) {
           setFullName(userRes.username || "User");
           setProfilePicture(userRes.profile_picture || "");
+          setBio(userRes.bio || "null");
         }
       } catch (err) {
         console.error("Error fetching user profile:", err);
@@ -126,6 +128,7 @@ const ProfileHeader: React.FC<Props> = ({
         fullName={fullName}
         followersCount={followersCount}
         followingCount={followingCount}
+        bio={bio}
       />
 
       {/* BUTTON */}
