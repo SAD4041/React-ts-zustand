@@ -14,7 +14,9 @@ const PublicLayout = () => {
 				// 	},
 				// }}
 			/>
+
 			<Outlet />
+
 		</>
 	);
 };
