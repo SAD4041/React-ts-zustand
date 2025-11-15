@@ -1,5 +1,5 @@
-import React from 'react';
-import UserCard from '@/components/FollowerFollowing/UserCard';
+import React from "react";
+import UserCard from "@/components/FollowerFollowing/UserCard";
 
 interface UserCardListProps {
   users: { id: string; username: string; imagePath: string }[];
@@ -7,15 +7,19 @@ interface UserCardListProps {
   isOwner: boolean; // Add isOwner here
 }
 
-const UserCardList: React.FC<UserCardListProps> = ({ users, onDelete, isOwner }) => {
+const UserCardList: React.FC<UserCardListProps> = ({
+  users,
+  onDelete,
+  isOwner,
+}) => {
   return (
     <div className="w-full max-w-md flex justify-center">
       {users.length > 0 ? (
         <div
           className="overflow-auto max-h-96"
           style={{
-            scrollbarWidth: 'none',  // Firefox: make the scrollbar invisible
-            msOverflowStyle: 'none', // Internet Explorer: make scrollbar invisible
+            scrollbarWidth: "none", // Firefox: make the scrollbar invisible
+            msOverflowStyle: "none", // Internet Explorer: make scrollbar invisible
           }}
         >
           {/* Wrap the list with a div and apply overflow styles */}
@@ -31,7 +35,9 @@ const UserCardList: React.FC<UserCardListProps> = ({ users, onDelete, isOwner })
           ))}
         </div>
       ) : (
-        <p className="font-semibold m-10 text-primary text-5xl">!موردی یافت نشد</p>
+        <p className="font-semibold m-4 sm:m-6 md:m-10 text-primary text-3xl sm:text-4xl md:text-5xl">
+          !موردی یافت نشد
+        </p>
       )}
     </div>
   );
