@@ -1,6 +1,6 @@
 import image1 from '@/assets/image1.png';
 import type { Brand, ColorOption, SubCategory, Product } from '@/types/productListingTypes';
-import type { ProductData, ImageData } from '@/types/productCardTypes';
+import type { ProductData } from '@/types/productCardTypes';
 import shortTshirt from '@/assets/shortTshirt.jpg';
 import longTshirt from '@/assets/longTshirt.png';
 

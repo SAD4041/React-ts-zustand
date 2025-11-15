@@ -1,4 +1,3 @@
-// src/components/ProductListing.tsx
 import React, { useState } from 'react';
 import SubCategorySlider from './productListingComponents/SubCategorySilder';
 import Pagination from './productListingComponents/Pagination';

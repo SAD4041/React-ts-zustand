@@ -11,7 +11,7 @@ const config: Config = {
 	theme: {
 		extend: {
 			fontFamily: {
-				vazirmatn: ["Vazirmatn", "Roboto"],
+				vazirmatn: ["Vazirmatn", 'sans-serif'],
 			},
 
 			colors: {

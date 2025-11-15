@@ -1,4 +1,5 @@
 import React from 'react';
+import { toPersianDigits } from '@/utils/PersianDigits';
 
 interface PaginationProps {
   currentPage: number;
@@ -9,7 +10,7 @@ interface PaginationProps {
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
   if (totalPages <= 1) return null;
 
-  const pagesPerGroup = 5; 
+  const pagesPerGroup = 5;
   const currentGroup = Math.ceil(currentPage / pagesPerGroup);
   const totalGroups = Math.ceil(totalPages / pagesPerGroup);
 
@@ -18,9 +19,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   const nextGroupStart = currentGroupStart + pagesPerGroup;
 
   const isFirstPageInCurrentGroup = currentGroupStart === 1;
-  
   const isLastPageInCurrentGroup = currentGroupStart + pagesPerGroup - 1 >= totalPages;
-
 
   const isPrevGroupIncludesFirst = prevGroupStart === 1;
   const isNextGroupIncludesLast = nextGroupStart + pagesPerGroup - 1 >= totalPages;
@@ -38,22 +37,20 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
           onClick={() => onPageChange(1)}
           className="w-10 h-10 rounded-full text-gray-700 hover:bg-gray-100 transition cursor-pointer"
         >
-          1
+          {toPersianDigits(1)}
         </button>
       )}
-
 
       {currentGroup > 1 && !isFirstPageInCurrentGroup && !isPrevGroupIncludesFirst && (
         <span className="px-2">...</span>
       )}
-
 
       {prevGroupStart >= 1 && (
         <button
           onClick={() => onPageChange(prevGroupStart)}
           className="w-10 h-10 rounded-full text-gray-700 hover:bg-gray-100 transition cursor-pointer"
         >
-          {prevGroupStart}
+          {toPersianDigits(prevGroupStart)}
         </button>
       )}
 
@@ -72,7 +69,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
-              {page}
+              {toPersianDigits(page)}
             </button>
           );
         } else {
@@ -81,19 +78,18 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
               key={page}
               className="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 bg-gray-100"
             >
-              {page}
+              {toPersianDigits(page)}
             </span>
           );
         }
       })}
-
 
       {nextGroupStart <= totalPages && (
         <button
           onClick={() => onPageChange(nextGroupStart)}
           className="w-10 h-10 rounded-full text-gray-700 hover:bg-gray-100 transition cursor-pointer"
         >
-          {nextGroupStart}
+          {toPersianDigits(nextGroupStart)}
         </button>
       )}
 
@@ -106,7 +102,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
           onClick={() => onPageChange(totalPages)}
           className="w-10 h-10 rounded-full text-gray-700 hover:bg-gray-100 transition cursor-pointer"
         >
-          {totalPages}
+          {toPersianDigits(totalPages)}
         </button>
       )}
     </div>

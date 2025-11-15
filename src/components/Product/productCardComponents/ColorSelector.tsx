@@ -13,7 +13,7 @@ const ColorSelector: React.FC<ColorSelectorProps> = ({product}) => {
       {product.colors.map((color: Color) => (
         <button
           key={color.hex}
-          className='w-7 h-7 rounded-full border-2 transition duration-200 '
+          className='w-6.5 h-6.5 rounded-full border-2 transition duration-200 '
           style={{backgroundColor: color.hex,}}
         />
       ))}

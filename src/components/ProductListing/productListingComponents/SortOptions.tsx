@@ -1,4 +1,5 @@
 import React from 'react';
+import sortIcon from '@/assets/Listing Icon.png'
 
 export type SortOption = 'newest' | 'most-viewed' | 'cheapest' | 'expensive' | 'best-rated';
 
@@ -19,6 +20,11 @@ const SortOptions: React.FC<SortOptionsProps> = ({ currentSort, onSortChange }) 
 
   return (
     <div className="flex items-center space-x-4  text-sm mb-4">
+      <img 
+        src={sortIcon}
+        alt="Product Picture"
+        className="w-7 h-7 object-cover ml-2"
+      />
       <span className="font-medium">مرتب سازی:</span>
       {sorts.map(sort => {
 

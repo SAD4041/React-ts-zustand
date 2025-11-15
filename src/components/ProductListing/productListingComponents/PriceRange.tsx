@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { formatPrice } from '@/utils/FormatPrice';
+import {toPersianDigits} from '@/utils/PersianDigits';
 
 interface PriceRangeFilterProps {
   minPrice: number;
@@ -52,10 +53,10 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
 
       <div className="flex justify-between text-sm mt-2">
         <span className="bg-gray-100 px-2 py-1 rounded">
-          {formatPrice(localMax)}
+          {toPersianDigits(formatPrice(localMax))}
         </span>
         <span className="bg-gray-100 px-2 py-1 rounded">
-          {formatPrice(localMin)}
+          {toPersianDigits(formatPrice(localMin))}
         </span>
       </div>
     </div>
