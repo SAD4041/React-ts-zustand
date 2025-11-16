@@ -10,6 +10,9 @@ import SignUp from "@/pages/SignUp";
 import Login from "@/pages/LogIn";
 import Test from "@/pages/test";
 import Edit from "@/pages/EditProfile";
+import Challenge from "@/pages/ChallengeInfo";
+import ChallengeEdit from "@/pages/ChallengeEdit";
+import ChallengeCreate from "@/pages/ChallengeCreate";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +39,10 @@ export const router = createBrowserRouter([
         path: "/editprofile",
         element: <Edit fullName="" />,
       },
+      {
+        path: "/challenge",
+        element: <Challenge />,
+      },
     ],
   },
   {
@@ -49,6 +56,14 @@ export const router = createBrowserRouter([
         path: "/follow/:userId",  // Route to the FollowBar or FollowerFollowing page
         element: <FollowerFollowing />,  // Follower/Following page
       },
+      {
+        path: "/editChallenge",
+        element: <ChallengeEdit />,
+      },
+      {
+        path: "/createChallenge",
+        element: <ChallengeCreate />
+      }
     ],
   },
 ]);
