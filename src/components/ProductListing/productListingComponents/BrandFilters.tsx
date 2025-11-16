@@ -17,15 +17,15 @@ const BrandFilter: React.FC<BrandFilterProps> = ({ brands, selectedBrands, onTog
             <span
               onClick={(e) => {
                 e.stopPropagation();
-                onToggleBrand(brand.slug);
+                onToggleBrand(brand.name);
               }}
               className={`w-4 h-4 border rounded flex items-center justify-center mr-2 transition ${
-                selectedBrands.includes(brand.slug)
+                selectedBrands.includes(brand.name)
                   ? 'bg-[#FE621F] border-[#FE621F]'
                   : 'border-gray-300 hover:border-[#FE621F]'
               }`}
             >
-              {selectedBrands.includes(brand.slug) && (
+              {selectedBrands.includes(brand.name) && (
                 <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414l4 4a1 1 0 011.414 0l8-8a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>

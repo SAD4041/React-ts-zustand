@@ -3,15 +3,16 @@
 body {
   font-family: 'Vazirmatn', sans-serif;
   font-feature-settings: "tnum";
-}
-
-.hide-scrollbar {
+  .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+
+
 
 @layer utilities {
   .rtl {

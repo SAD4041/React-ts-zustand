@@ -15,6 +15,7 @@ export const productData: ProductData = {
   rating: 4.2,
   stock: 1,
   ratingCount: 502,
+  sales: 150,
   sizes: [
     { label: 'S' },
     { label: 'M' },
@@ -77,10 +78,10 @@ export const brands: Brand[] = [
   { id: 2, name: "ZARA", slug: "زارا" },
   { id: 3, name: "Dior", slug: "دیور" },
   { id: 4, name: "Loius Vuitton", slug: "لویی ویتون" },
-  { id: 5, name: "MANGO", slug: "منگو" },
-  { id: 6, name: "ADIDAS", slug: "آدیداس" },
-  { id: 7, name: "NIKE", slug: "نایک" },
-  { id: 8, name: "PUMA", slug: "پوما" }
+  { id: 5, name: "Mango", slug: "منگو" },
+  { id: 6, name: "Adidas", slug: "آدیداس" },
+  { id: 7, name: "Nike", slug: "نایک" },
+  { id: 8, name: "Puma", slug: "پوما" }
 ];
 
 export const sizes: string[] = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
@@ -88,8 +89,8 @@ export const sizes: string[] = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
 export const colors: ColorOption[] = [
   { name: "آبی", code: "#007BFF" },
   { name: "صورتی", code: "#FF6B6B" },
-  { name: "سبز", code: "#4ECDC4" },
-  { name: "مشکی", code: "#2E294E" },
+  { name: "سبز", code: "#228B22" },
+  { name: "مشکی", code: "#000000" },
   { name: "سفید", code: "#FFFFFF" },
   { name: "زرد", code: "#FFD700" },
   { name: "نارنجی", code: "#FF8C00" },
@@ -106,6 +107,7 @@ export const products: Product[] = [
     image: image1,
     name: 'تیشرت آستین بلند زنانه CATWAREHOUSE',
     model: 'CATWAREHOUSE',
+    sales: 200,
     colors: [
       { hex: '#FFB6C1', label: 'صورتی' },
       { hex: '#228B22', label: 'سبز' },
@@ -129,6 +131,7 @@ export const products: Product[] = [
     image: image1,
     name: 'تیشرت آستین بلند مردانه',
     model: 'ZARA',
+    sales: 450,
     price: 550000,
     discountedPrice: Math.floor(550000 * 0.8),
     stock: 12,
@@ -137,7 +140,6 @@ export const products: Product[] = [
       { hex: '#DC3545', label: 'قرمز' },
     ]
   },
-  // --- 40 new items ---
   {
     id: 4,
     ...productData,
@@ -145,6 +147,7 @@ export const products: Product[] = [
     name: 'هودی مردانه Nike Classic',
     model: 'Nike',
     price: 890000,
+    sales: 300,
     discountedPrice: Math.floor(890000 * 0.9),
     stock: 15,
     colors: [
@@ -187,6 +190,7 @@ export const products: Product[] = [
     name: 'دامن بلند زنانه Mango Elegant',
     model: 'Mango',
     price: 650000,
+    sales: 100,
     discountedPrice: Math.floor(650000 * 0.8),
     stock: 6,
     colors: [
@@ -215,6 +219,7 @@ export const products: Product[] = [
     name: 'پلیور زنانه Bershka SoftTouch',
     model: 'Bershka',
     price: 740000,
+    sales: 249,
     discountedPrice: Math.floor(740000 * 0.9),
     stock: 14,
     colors: [
@@ -243,6 +248,7 @@ export const products: Product[] = [
     name: 'کت مردانه Massimo Dutti Formal',
     model: 'Massimo Dutti',
     price: 1950000,
+    sales: 300,
     discountedPrice: Math.floor(1950000 * 0.9),
     stock: 5,
     colors: [
@@ -257,6 +263,7 @@ export const products: Product[] = [
     name: 'لباس مجلسی زنانه Mango Shine',
     model: 'Mango',
     price: 1250000,
+    sales: 410,
     discountedPrice: Math.floor(1250000 * 0.85),
     stock: 7,
     colors: [
@@ -271,6 +278,7 @@ export const products: Product[] = [
     name: 'شلوارک ورزشی مردانه Nike AirFlex',
     model: 'Nike',
     price: 430000,
+    sales: 560,
     discountedPrice: Math.floor(430000 * 0.9),
     stock: 20,
     colors: [
@@ -327,6 +335,7 @@ export const products: Product[] = [
     name: 'پیراهن مردانه Zara CasualFit',
     model: 'Zara',
     price: 770000,
+    sales: 650,
     discountedPrice: Math.floor(770000 * 0.9),
     stock: 11,
     colors: [
@@ -341,6 +350,7 @@ export const products: Product[] = [
     name: 'هودی زنانه H&M Cozy',
     model: 'H&M',
     price: 880000,
+    sales: 360,
     discountedPrice: Math.floor(880000 * 0.9),
     stock: 10,
     colors: [
@@ -383,6 +393,7 @@ export const products: Product[] = [
     name: 'شلوار مردانه Levi’s Regular',
     model: 'Levi’s',
     price: 970000,
+    sales: 90,
     discountedPrice: Math.floor(970000 * 0.8),
     stock: 10,
     colors: [
@@ -439,6 +450,7 @@ export const products: Product[] = [
     name: 'لباس راحتی زنانه H&M HomeFit',
     model: 'H&M',
     price: 540000,
+    sales: 20,
     discountedPrice: Math.floor(540000 * 0.9),
     stock: 20,
     colors: [
@@ -467,6 +479,7 @@ export const products: Product[] = [
     name: 'تیشرت مردانه Puma FitDry',
     model: 'Puma',
     price: 490000,
+    sales: 45,
     discountedPrice: Math.floor(490000 * 0.9),
     stock: 15,
     colors: [
@@ -509,6 +522,7 @@ export const products: Product[] = [
     name: 'پالتو زنانه ZARA WinterCozy',
     model: 'ZARA',
     price: 1900000,
+    sales: 2,
     discountedPrice: Math.floor(1900000 * 0.85),
     stock: 5,
     colors: [
@@ -537,6 +551,7 @@ export const products: Product[] = [
     name: 'هودی مردانه Adidas Urban',
     model: 'Adidas',
     price: 960000,
+    sales: 208,
     discountedPrice: Math.floor(960000 * 0.9),
     stock: 8,
     colors: [
@@ -621,6 +636,7 @@ export const products: Product[] = [
     name: 'بلوز زنانه Mango LightTouch',
     model: 'Mango',
     price: 670000,
+    sales: 350,
     discountedPrice: Math.floor(670000 * 0.9),
     stock: 12,
     colors: [
@@ -649,6 +665,7 @@ export const products: Product[] = [
     name: 'تاپ زنانه H&M SimpleFit',
     model: 'H&M',
     price: 440000,
+    sales: 845,
     discountedPrice: Math.floor(440000 * 0.9),
     stock: 15,
     colors: [
@@ -677,6 +694,7 @@ export const products: Product[] = [
     name: 'کاپشن مردانه Nike Shield',
     model: 'Nike',
     price: 1580000,
+    sales: 840,
     discountedPrice: Math.floor(1580000 * 0.85),
     stock: 8,
     colors: [
@@ -691,6 +709,7 @@ export const products: Product[] = [
     name: 'پلیور زنانه ZARA CozyFit',
     model: 'ZARA',
     price: 790000,
+    sales: 60,
     discountedPrice: Math.floor(790000 * 0.9),
     stock: 10,
     colors: [

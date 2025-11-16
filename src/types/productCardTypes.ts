@@ -21,6 +21,7 @@ export interface ProductData {
   rating: number;
   stock: number;
   ratingCount: number;
+  sales: number;
 }
 
 export interface ImageData {

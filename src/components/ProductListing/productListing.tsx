@@ -1,69 +1,121 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import SubCategorySlider from './productListingComponents/SubCategorySilder';
 import Pagination from './productListingComponents/Pagination';
 import FilterSidebar from './productListingComponents/FilterSidebar';
 import ProductGrid from './productListingComponents/ProductGrid';
 import SortOptions from './productListingComponents/SortOptions';
-import type {SortOption} from './productListingComponents/SortOptions'
+import type { SortOption } from './productListingComponents/SortOptions';
 import { products } from '@/data/data';
 
 const ProductListing: React.FC = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 10000000 });
-  const [currentSort, setCurrentSort] = useState<SortOption | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentSort, setCurrentSort] = useState<SortOption>('most-revelent');
+  const [currentGroup, setCurrentGroup] = useState(1);
 
-  const [filteredProductsCount, setFilteredProductsCount] = useState(products.length);
-
-  const productsPerPage = 2;
-  const totalPages = Math.ceil(products.length / productsPerPage);
-  const globalMaxPrice = Math.max(...products.map(p => p.price), 10000000);
+  const productsPerPage = 4;
+  const pagesPerGroup = 5;
+  const productsPerGroup = productsPerPage * pagesPerGroup;
   const currentCategory = "تیشرت زنانه";
 
-  const applyFiltersAndSort = () => {
-    console.log('فیلترها یا مرتب‌سازی تغییر کردند:', {
-      brands: selectedBrands,
-      sizes: selectedSizes,
-      colors: selectedColors,
-      price: priceRange,
-      sort: currentSort
-    });
+  const productsWithoutPriceFilter = useMemo(() => {
+    let result = [...products];
 
-    setFilteredProductsCount(products.length);
-  }; 
+    if (selectedBrands.length > 0) {
+      result = result.filter(p => selectedBrands.includes(p.model));
+    }
 
-  const handleBrandToggle = (slug: string) => {
-    setSelectedBrands(prev =>
-      prev.includes(slug) ? prev.filter(b => b !== slug) : [...prev, slug]
+    if (selectedSizes.length > 0) {
+      result = result.filter(p =>
+        p.sizes.some(sizeObj => selectedSizes.includes(sizeObj.label))
+      );
+    }
+
+    if (selectedColors.length > 0) {
+      result = result.filter(p =>
+        p.colors.some(colorObj => selectedColors.includes(colorObj.hex))
+      );
+    }
+
+    return result;
+  }, [selectedBrands, selectedSizes, selectedColors]);
+
+  const globalMaxPrice = useMemo(() => {
+    if (productsWithoutPriceFilter.length === 0) return 100000;
+    return Math.max(...productsWithoutPriceFilter.map(p => p.discountedPrice));
+  }, [productsWithoutPriceFilter]);
+
+  useEffect(() => {
+  if (priceRange.max === 10000000) {
+    setPriceRange({ min: 0, max: globalMaxPrice });
+  }
+}, [globalMaxPrice]);
+
+  const initialMaxPrice = Math.max(...products.map(p => p.discountedPrice), 100000);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: initialMaxPrice });
+
+  const filteredAndSortedProducts = useMemo(() => {
+    let result = [...productsWithoutPriceFilter];
+
+    result = result.filter(p =>
+      p.discountedPrice >= priceRange.min && p.discountedPrice <= priceRange.max
     );
-    applyFiltersAndSort(); 
+
+    if (currentSort) {
+      result.sort((a, b) => {
+        switch (currentSort) {
+          case 'newest':
+            return b.id - a.id;
+          case 'cheapest':
+            return a.discountedPrice - b.discountedPrice;
+          case 'expensive':
+            return b.discountedPrice - a.discountedPrice;
+          default:
+            return 0;
+        }
+      });
+    }
+
+    return result;
+  }, [productsWithoutPriceFilter, priceRange, currentSort]);
+
+  const filteredProductsCount = filteredAndSortedProducts.length;
+  const totalGroups = Math.max(1, Math.ceil(filteredAndSortedProducts.length / productsPerGroup));
+  const startIndex = (currentGroup - 1) * productsPerGroup;
+  const productsToDisplay = filteredAndSortedProducts.slice(startIndex, startIndex + productsPerGroup);
+
+  useEffect(() => {
+    if (currentGroup > totalGroups) {
+      setCurrentGroup(1);
+    }
+  }, [totalGroups, currentGroup]);
+
+
+  const handleBrandToggle = (name: string) => {
+    setSelectedBrands(prev =>
+      prev.includes(name) ? prev.filter(b => b !== name) : [...prev, name]
+    );
   };
 
   const handleSizeToggle = (size: string) => {
     setSelectedSizes(prev =>
       prev.includes(size) ? prev.filter(s => s !== size) : [...prev, size]
     );
-    applyFiltersAndSort();
   };
 
   const handleColorToggle = (code: string) => {
     setSelectedColors(prev =>
       prev.includes(code) ? prev.filter(c => c !== code) : [...prev, code]
     );
-    applyFiltersAndSort();
   };
 
   const handlePriceChange = (range: { min: number; max: number }) => {
     setPriceRange(range);
-    applyFiltersAndSort();
   };
 
   const handleSortChange = (sort: SortOption) => {
-    const newSort = currentSort === sort ? null : sort;
-    setCurrentSort(newSort);
-    applyFiltersAndSort();
+    setCurrentSort(sort);
   };
 
   const handleClearFilters = () => {
@@ -71,15 +123,13 @@ const ProductListing: React.FC = () => {
     setSelectedSizes([]);
     setSelectedColors([]);
     setPriceRange({ min: 0, max: globalMaxPrice });
-    setCurrentSort(null);
-    applyFiltersAndSort();
   };
 
   return (
     <div dir="rtl" className="container mx-auto px-4 py-6 font-vazir">
-    <div className="mb-0 mt-70">
-      <SubCategorySlider />
-    </div>
+      <div className="mb-0 mt-70">
+        <SubCategorySlider />
+      </div>
 
       <div className="flex gap-6 mt-6">
         <FilterSidebar
@@ -111,14 +161,15 @@ const ProductListing: React.FC = () => {
           <hr className="mb-4 border-gray-200" />
 
           <div className="h-[600px] overflow-y-auto border rounded-lg p-4 bg-white shadow-sm">
-            <ProductGrid />
+            <ProductGrid products={productsToDisplay} />
           </div>
 
           <div className="mt-4 flex justify-center">
             <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
+              currentGroup={currentGroup}
+              totalGroups={totalGroups}
+              onGroupChange={setCurrentGroup}
+              pagesPerGroup={pagesPerGroup}
             />
           </div>
         </div>

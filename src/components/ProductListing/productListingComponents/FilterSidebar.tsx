@@ -1,4 +1,3 @@
-// src/components/FilterSidebar.tsx
 import React from 'react';
 import { brands, sizes, colors } from '@/data/data';
 import BrandFilter from './BrandFilters';
@@ -65,7 +64,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
       <button
         onClick={onClearFilters}
-        className="w-full mt-2 py-1 text-xs bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
+        className="w-full mt-2 py-1 text-s bg-[#FE621F] text-white rounded hover:bg-orange-400 transition"
       >
         پاک کردن فیلترها
       </button>
