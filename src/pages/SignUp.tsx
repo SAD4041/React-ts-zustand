@@ -80,7 +80,7 @@ function SignUp() {
   }, [timeLeft]);
 
   // start connection
-  const [username, setUsername] = useState("");
+  const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [bio, setBio] = useState(
@@ -91,13 +91,13 @@ function SignUp() {
     try {
       const data = await signupService(values);
       console.log("Signup success! Token:", data.token);
-    } catch (err: any) {
+    } catch (err: any) {// eslint-disable-line @typescript-eslint/no-explicit-any
       console.log("Signup failed:", err.response?.data || err.message || err);
     }
   };
 
+  const { setToken , setUserId , setUsername } = useUserStore();
   const handleVerify = async (emailToVerify: string, codeToVerify: string) => {
-    const { setToken , setUserId , setUsername } = useUserStore();
     try {
       const data = await verifyEmailService({
         email: emailToVerify,
@@ -134,7 +134,7 @@ function SignUp() {
   }, [isPressedBack, isPressedNext]);
 
   const firstSubmit = (data: FieldValues) => {
-            setUsername(data.username);
+            setusername(data.username);
             setEmail(data.email);
             setIsPressedNext((prev) => !prev);
             console.log("Step1 values:", data);

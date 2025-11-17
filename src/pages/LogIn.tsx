@@ -43,7 +43,7 @@ export default function Login() {
       } else {
         setLoginStatus("ورود انجام نشد، دوباره تلاش کنید.");
       }
-    } catch (error: any) {
+    } catch (error: any) {// eslint-disable-line @typescript-eslint/no-explicit-any
       console.error("Login failed:", error);
       setLoginStatus(error?.response?.data?.message || "ورود انجام نشد!");
     } finally {
