@@ -21,5 +21,14 @@ export interface ProductData {
   rating: number;
   stock: number;
   ratingCount: number;
+  sales: number;
 }
 
+export interface ImageData {
+  title: string;
+  image: string;
+}
+
+export interface Product extends ProductData {
+  id: number;
+}

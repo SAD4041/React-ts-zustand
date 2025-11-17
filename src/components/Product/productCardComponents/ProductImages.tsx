@@ -1,6 +1,6 @@
 import React from 'react';
 import { productData } from '@/data/data';
-import { toPersianDigits } from "../../../utils/PersianDigits.tsx";
+import { toPersianDigits } from "@/utils/PersianDigits.tsx";
 
 interface ProductImageProps {
   imageUrl: string;

@@ -6,6 +6,7 @@ import Button from "@/components/ui/button";
 import ProductCard from "@/components/Product/ProductCard";
 import bannerFallback from "@/assets/banner.jpg";
 import adidasFallback from "@/assets/shortTshirt.jpg";
+import {products} from '@/data/data.ts'
 
 interface SliderItem {
   id: number;
@@ -103,7 +104,9 @@ export default function SliderSection({
                       </Link>
                     ) : (
                       <Link to={`/product/${item.id}`} className="block cursor-pointer">
-                        <ProductCard product={item} />
+                        {products.map(product => ( 
+                        <ProductCard product={product} key={product.id} />
+                        ))}
                       </Link>
                     )}
                   </div>

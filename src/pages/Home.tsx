@@ -6,6 +6,7 @@ import ProductCard from "@/components/Product/ProductCard";
 import { fetchHomePageData } from "@/services/homeService";
 import type { HomePageResponse } from "@/types/homeTypes";
 import SliderSection from "@/components/Home/SliderSection";
+import Header from "@/components/Header/Header";
 
 import bannerFallback from "@/assets/banner.jpg";
 import adidasFallback from "@/assets/shortTshirt.jpg";
@@ -21,16 +22,13 @@ import style3 from "@/assets/style3.jpg";
 import style4 from "@/assets/style4.jpg";
 
 export default function Home() {
-  // ✅ State برای داده‌های هوم‌پیج
   const [homeData, setHomeData] = useState<HomePageResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // State برای اسلایدرها
   const [amazingIndex, setAmazingIndex] = useState(0);
   const [bestIndex, setBestIndex] = useState(0);
 
-  // دریافت تعداد آیتم‌های قابل نمایش
   const getItemsPerView = (section: "amazing" | "best") => {
     if (typeof window === "undefined") return 1;
     const width = window.innerWidth;
@@ -62,7 +60,6 @@ export default function Home() {
     loadHomeData();
   }, []);
 
-  // مدیریت ریسایز
   useEffect(() => {
     const handleResize = () => {
       const newAmazing = getItemsPerView("amazing");
@@ -82,7 +79,6 @@ export default function Home() {
   }, [homeData]);
 
 
-  // ✅ حالت loading
   if (loading) {
     return (
       <div className="w-full min-h-screen flex items-center justify-center bg-white">
@@ -91,13 +87,10 @@ export default function Home() {
     );
   }
 
-  // ✅ حالت خطا (اختیاری: می‌تونی Toast نمایش بدی)
   if (error) {
-    // می‌تونی اینجا یک کامپوننت Error یا retry button بذاری
     console.warn("Home page error fallback activated");
   }
 
-  // ✅ داده‌های پیش‌فرض در صورت خطا — برای ادامه کار توسعه
   const data = homeData || {
     banner: { image_url: bannerFallback },
     categories: [
@@ -140,7 +133,8 @@ export default function Home() {
 
   return (
     <div className="w-full min-h-screen bg-white font-vazir">
-      {/* بنر اصلی */}
+      <Header/>
+
       <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] overflow-hidden">
         <div className="absolute inset-0 rounded-b-[50px] overflow-hidden">
           <img

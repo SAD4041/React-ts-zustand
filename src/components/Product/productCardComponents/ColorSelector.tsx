@@ -1,17 +1,19 @@
 import React from 'react';
-import { productData } from '../../../data/data.ts';
-import type { Color } from '../../../data/data.ts'
+import type { Color } from '@/types/productCardTypes.ts'
+import type { Product } from '@/types/productListingTypes.ts';
 
-interface ColorSelectorProps {}
+interface ColorSelectorProps {
+  product:Product
+}
 
-const ColorSelector: React.FC<ColorSelectorProps> = () => {
+const ColorSelector: React.FC<ColorSelectorProps> = ({product}) => {
 
   return (
     <div className="flex justify-end space-x-3">
-      {productData.colors.map((color: Color) => (
+      {product.colors.map((color: Color) => (
         <button
           key={color.hex}
-          className='w-7 h-7 rounded-full border-2 transition duration-200 '
+          className='w-6.5 h-6.5 rounded-full border-2 transition duration-200 '
           style={{backgroundColor: color.hex,}}
         />
       ))}
