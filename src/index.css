@@ -1,28 +1,21 @@
 @import "tailwindcss";
 
 body {
-  font-family: "Vazirmatn", sans-serif;
+  font-family: 'Vazirmatn', sans-serif;
   font-feature-settings: "tnum";
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 @layer utilities {
-  .rtl {
-    direction: rtl;
-  }
-  .ltr {
-    direction: ltr;
-  }
-  .vazir {
-    font-family: "Vazirmatn", sans-serif;
-    font-feature-settings: "tnum";
-  }
+	.rtl {
+		direction: rtl;
+	}
+	.ltr {
+		direction: ltr;
+	}
+	.vazir {
+		font-family: 'Vazirmatn', sans-serif;
+  		font-feature-settings: "tnum";
+	}
 }
 
 :root {
