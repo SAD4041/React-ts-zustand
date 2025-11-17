@@ -1,22 +1,15 @@
 import React from "react";
 import { Search } from "lucide-react";
 import CustomInput from "@/components/Custom/CustomInput";
-import CustomSelect from "@/components/ChallengeManagement/create/CustomDropList";
+import CustomSelect from "@/components/Custom/CustomDropList";
 import CustomCheckbox from "@/components/Custom/CustomCheckbox";
 import { Field } from "formik";
 import type { FieldProps } from "formik";
+import type { StepTwoProps } from "@/types/challengeCreateTypes";
 
-interface Props {
-  selectedCategories: string[];
-  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
-  categorySearch: string;
-  setCategorySearch: React.Dispatch<React.SetStateAction<string>>;
-  filteredCategories: string[];
-  values: any;
-  setFieldValue: (field: string, value: any) => void;
-}
 
-const Step2Details: React.FC<Props> = ({
+
+const Step2Details: React.FC<StepTwoProps> = ({
   selectedCategories,
   setSelectedCategories,
   categorySearch,

@@ -16,8 +16,8 @@ const DateAndLocationInput: React.FC<DateAndLocationInputProps> = ({
   return (
     <div className="space-y-4 mt-6 mb-4 text-right w-full max-w-xl">
       {/* Date Field */}
-      <div className="flex items-center text-sm text-gray-700 justify-end w-full">
-        <CustomButton className="w-min sm:w-min md:w-min max-w-xl mr-2 h-9.5 bg-secondary rounded-[8px]  text-md sm:text-md md:text-md hover:bg-secondary">
+      <div className="flex items-center text-sm text-gray-text justify-end w-full">
+        <CustomButton className="w-min sm:w-min md:w-min max-w-xl mr-2 h-9.5 bg-secondary rounded-primary-radius text-md sm:text-md md:text-md hover:bg-secondary">
           تغییر تاریخ
         </CustomButton>
         <Formik
@@ -39,7 +39,7 @@ const DateAndLocationInput: React.FC<DateAndLocationInputProps> = ({
                   }}
                   label="تاریخ"
                   width="w-full"
-                  className="rounded-[8px]"
+                  className="rounded-primary-radius"
                 />
               )}
             </Field>
@@ -48,7 +48,7 @@ const DateAndLocationInput: React.FC<DateAndLocationInputProps> = ({
       </div>
 
       {/* Location Field */}
-      <div className="flex items-center text-sm text-gray-700 justify-end w-full">
+      <div className="flex items-center text-sm text-gray-text justify-end w-full">
         <Formik
           initialValues={{ challengeLocation }}
           onSubmit={(values) => {
@@ -67,7 +67,7 @@ const DateAndLocationInput: React.FC<DateAndLocationInputProps> = ({
                   }}
                   label="مکان"
                   width="w-full"
-                  className="rounded-[8px]"
+                  className="rounded-primary-radius"
                 />
               )}
             </Field>

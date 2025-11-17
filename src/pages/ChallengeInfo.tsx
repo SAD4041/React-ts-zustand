@@ -12,6 +12,8 @@ import UserCardList from "@/components/ChallengeManagement/public/UserCardsList"
 import ChallengeSlideshow from "@/components/ChallengeManagement/info/SlideShow";
 import type { UserProfile } from "@/types/userTypes";
 import type { ChallengeData } from "@/types/challengeElementsTypes";
+import { mockUsers } from "@/data/mockUsers";
+import { mockChallenges } from "@/data/mockChallenges";
 
 const DEFAULT_CHALLENGE_IMG =
   "https://www.muchbetteradventures.com/magazine/content/images/size/w2000/2024/04/mount-everest-at-sunset.jpg";
@@ -29,78 +31,6 @@ const defaultChallenge: ChallengeData = {
   memberCount: "0",
   members: [],
 };
-
-const mockMembers: UserProfile[] = [
-  {
-    id: "1",
-    username: "Alice",
-    imagePath: "https://randomuser.me/api/portraits/women/1.jpg",
-    bio: "Passionate about climbing and adventure.",
-    followersCount: 120,
-    followingCount: 80,
-    doneChallengesCount: 5,
-  },
-  {
-    id: "4",
-    username: "Damon",
-    imagePath: "https://randomuser.me/api/portraits/men/3.jpg",
-    bio: "Passionate about climbing and adventure.",
-    followersCount: 120,
-    followingCount: 80,
-    doneChallengesCount: 5,
-  },
-  {
-    id: "5",
-    username: "ching chang chong",
-    imagePath: "https://randomuser.me/api/portraits/women/2.jpg",
-    bio: "Passionate about climbing and adventure.",
-    followersCount: 120,
-    followingCount: 80,
-    doneChallengesCount: 5,
-  },
-  {
-    id: "2",
-    username: "Bob",
-    imagePath: "https://randomuser.me/api/portraits/men/1.jpg",
-    bio: "Love hiking and nature.",
-    followersCount: 150,
-    followingCount: 100,
-    doneChallengesCount: 7,
-  },
-  {
-    id: "3",
-    username: "Charlie",
-    imagePath: "https://randomuser.me/api/portraits/men/2.jpg",
-    bio: "Fitness enthusiast and challenge seeker.",
-    followersCount: 180,
-    followingCount: 90,
-    doneChallengesCount: 6,
-  },
-];
-
-const mockChallenges = [
-  {
-    id: "1",
-    title: "Mountain Climb Challenge",
-    description: "Climb a mountain in under 12 hours.",
-    imageUrl:
-      "https://www.muchbetteradventures.com/magazine/content/images/size/w2000/2024/04/mount-everest-at-sunset.jpg",
-  },
-  {
-    id: "2",
-    title: "Desert Trek Challenge",
-    description: "Complete a 30km desert trek in a single day.",
-    imageUrl:
-      "https://www.travelandleisure.com/thmb/Desert-Dunes_Fancyview_gettyimages-1216349476-f180b973c62f4b74b10b87bb736d9e9d.jpg",
-  },
-  {
-    id: "3",
-    title: "Ocean Swim Challenge",
-    description: "Swim across an open water stretch of 2km.",
-    imageUrl:
-      "https://www.adventure-life.com/sites/default/files/styles/hero_mobile/public/hero_images/hero-the-coastline-of-new-zealand.jpg?itok=V6n33P__",
-  },
-];
 
 const ChallengeInfo: React.FC = () => {
   const location = useLocation();
@@ -120,8 +50,7 @@ const ChallengeInfo: React.FC = () => {
 
   const safeImageUrl = Img && Img.trim() !== "" ? Img : DEFAULT_CHALLENGE_IMG;
 
-  const participants =
-    incomingMembers.length > 0 ? incomingMembers : mockMembers;
+  const participants = incomingMembers.length > 0 ? incomingMembers : mockUsers;
 
   const [searchTerm, setSearchTerm] = useState("");
   const [likeCount, setLikeCount] = useState(10);

@@ -3,11 +3,8 @@ import React from 'react';
 import { Field, Form, Formik } from 'formik';
 import CustomInput from '@/components/Custom/CustomInput';
 import { Search } from 'lucide-react';
+import type { SearchBarProps } from '@/types/searchBarTypes';
 
-interface SearchBarProps {
-  searchTerm: string;
-  onSearchTermChange: (value: string) => void;
-}
 
 const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSearchTermChange }) => {
   return (

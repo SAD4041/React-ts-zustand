@@ -1,17 +1,10 @@
 import React from "react";
 import { Upload } from "lucide-react";
 import TitleAndDescription from "@/components/ChallengeManagement/create/TitleAndDescription";
+import type { StepOneProps } from "@/types/challengeCreateTypes";
 
-interface Props {
-  title: string;
-  description: string;
-  image: string | null;
-  onTitleChange: (v: string) => void;
-  onDescriptionChange: (v: string) => void;
-  onImageChange: (v: string | null) => void;
-}
 
-const Step1BasicInfo: React.FC<Props> = ({
+const Step1BasicInfo: React.FC<StepOneProps> = ({
   title,
   description,
   image,

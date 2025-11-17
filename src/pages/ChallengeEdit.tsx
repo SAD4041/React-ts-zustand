@@ -160,7 +160,7 @@ const ChallengeEdit: React.FC = () => {
 
       <div className="flex justify-center w-full mt-10">
         <CustomButton
-          className="w-full sm:w-full md:w-full max-w-xl bg-primary rounded-[8px] p-5 text-lg sm:text-lg md:text-lg hover:bg-primary"
+          className="w-full sm:w-full md:w-full max-w-xl bg-primary rounded-primary-radius p-5 text-lg sm:text-lg md:text-lg hover:bg-primary"
           onClick={handleFinishEditing}
         >
           اتمام ویرایش

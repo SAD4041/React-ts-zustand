@@ -71,3 +71,26 @@ export interface ChallengeData {
   memberCount: string;
   members: UserProfile[];
 }
+
+export interface UserCardListProps {
+  users: UserProfile[];
+  searchTerm: string;
+  onAddUser: (user: UserProfile) => void;
+  onDelete?: (id: string, username: string) => void;
+  disabled?: boolean; // NEW: disables all add buttons
+}
+
+
+export interface ChallengeUserCardProps {
+  id: string;
+  username: string;
+  imagePath: string;
+  bio: string;
+  followersCount: number;
+  followingCount: number;
+  doneChallengesCount: number;
+  onDelete: (id: string, username: string) => void;
+  onAdd?: () => void;                
+  isOwner: boolean;
+  className: string;
+}

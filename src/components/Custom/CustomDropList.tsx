@@ -2,25 +2,18 @@ import { Field, type FieldProps } from "formik";
 import { ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { create } from "zustand";
-
-type CustomSelectProps = {
-  label?: string;
-  name: string;
-  options: { value: string; label: string }[];
-  icon?: React.ReactNode;
-  onIconClick?: () => void;
-  width?: string;
-};
+import type { CustomSelectProps } from "@/types/dropListTypes";
 
 /* -------------------------------------------------------------------------- */
 /*  Close other dropdowns when one opens                                      */
 /* -------------------------------------------------------------------------- */
-const useDropdownStore = create<{ openName: string | null; setOpen: (name: string | null) => void }>(
-  (set) => ({
-    openName: null,
-    setOpen: (name) => set({ openName: name }),
-  })
-);
+const useDropdownStore = create<{
+  openName: string | null;
+  setOpen: (name: string | null) => void;
+}>((set) => ({
+  openName: null,
+  setOpen: (name) => set({ openName: name }),
+}));
 
 export default function CustomSelect({
   label = "نوع چالش",
@@ -44,7 +37,8 @@ export default function CustomSelect({
         const hasValue = field.value?.length > 0;
         const isFloating = isFocused || hasValue;
         const hasError = meta.touched && meta.error;
-        const selectedLabel = options.find((o) => o.value === field.value)?.label || "";
+        const selectedLabel =
+          options.find((o) => o.value === field.value)?.label || "";
 
         /* -------------------------- Detect RTL -------------------------- */
         useEffect(() => {
@@ -54,13 +48,18 @@ export default function CustomSelect({
         /* ----------------------- Click-outside close --------------------- */
         useEffect(() => {
           const handleClickOutside = (e: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+            if (
+              dropdownRef.current &&
+              !dropdownRef.current.contains(e.target as Node)
+            ) {
               setIsOpen(false);
               setOpen(null);
             }
           };
-          if (isOpen) document.addEventListener("mousedown", handleClickOutside);
-          return () => document.removeEventListener("mousedown", handleClickOutside);
+          if (isOpen)
+            document.addEventListener("mousedown", handleClickOutside);
+          return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
         }, [isOpen, setOpen]);
 
         const toggleOpen = () => {
@@ -80,7 +79,6 @@ export default function CustomSelect({
         return (
           <div className={`flex flex-col ${width}`} ref={dropdownRef}>
             <div className="relative">
-
               {/* ────────────────────── CLICKABLE TRIGGER ────────────────────── */}
               <div
                 onClick={toggleOpen}
@@ -94,12 +92,16 @@ export default function CustomSelect({
                   bg-white cursor-pointer
                   transition-all duration-200 ease-in-out
                   relative flex items-center
-                  ${hasError
-                    ? "!border-[var(--borderInvalid)] shadow-[0px_1px_0px_var(--borderInvalidShadow)]"
-                    : ""}
-                  ${isOpen || isFocused
-                    ? "!border-[var(--borderFoucus)] !shadow-[0px_1px_0px_var(--borderFoucusShadow)]"
-                    : ""}
+                  ${
+                    hasError
+                      ? "!border-[var(--borderInvalid)] shadow-[0px_1px_0px_var(--borderInvalidShadow)]"
+                      : ""
+                  }
+                  ${
+                    isOpen || isFocused
+                      ? "!border-[var(--borderFoucus)] !shadow-[0px_1px_0px_var(--borderFoucusShadow)]"
+                      : ""
+                  }
                 `}
               >
                 {/* TEXT – flush to the right, space for icon on left */}
@@ -135,9 +137,11 @@ export default function CustomSelect({
                 className={`
                   absolute pointer-events-none transition-all duration-200 ease-in-out font-bold
                   right-4
-                  ${isFloating
-                    ? "top-[-10px] text-xs bg-white px-1 text-black"
-                    : "top-1/2 -translate-y-1/2 text-sm text-gray-500"}
+                  ${
+                    isFloating
+                      ? "top-[-10px] text-xs bg-white px-1 text-black"
+                      : "top-1/2 -translate-y-1/2 text-sm text-gray-500"
+                  }
                 `}
               >
                 {label}

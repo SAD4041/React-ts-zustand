@@ -7,6 +7,7 @@ import CustomButton from "@/components/Custom/CustomButton";
 import Step1BasicInfo from "@/components/ChallengeManagement/create/CreationStepOne";
 import Step2Details from "@/components/ChallengeManagement/create/CreationStepTwo";
 import Step3Members from "@/components/ChallengeManagement/create/CreationStepThree";
+import { mockUsers } from "@/data/mockUsers";
 
 import type { UserProfile } from "@/types/userTypes";
 import type { ChallengeData } from "@/types/challengeElementsTypes";
@@ -29,54 +30,7 @@ const ChallengeCreate: React.FC = () => {
   const [selectedUsers, setSelectedUsers] = useState<UserProfile[]>([]);
   const [memberLimitError, setMemberLimitError] = useState(false);
 
-  const mockUsers: UserProfile[] = [
-    {
-      id: "1",
-      username: "Alice",
-      imagePath: "https://randomuser.me/api/portraits/women/1.jpg",
-      bio: "Passionate about climbing and adventure.",
-      followersCount: 120,
-      followingCount: 80,
-      doneChallengesCount: 5,
-    },
-    {
-      id: "4",
-      username: "Damon",
-      imagePath: "https://randomuser.me/api/portraits/men/3.jpg",
-      bio: "Passionate about climbing and adventure.",
-      followersCount: 120,
-      followingCount: 80,
-      doneChallengesCount: 5,
-    },
-    {
-      id: "5",
-      username: "ching chang chong",
-      imagePath: "https://randomuser.me/api/portraits/women/2.jpg",
-      bio: "Passionate about climbing and adventure.",
-      followersCount: 120,
-      followingCount: 80,
-      doneChallengesCount: 5,
-    },
-    {
-      id: "2",
-      username: "Bob",
-      imagePath: "https://randomuser.me/api/portraits/men/1.jpg",
-      bio: "Love hiking and nature.",
-      followersCount: 150,
-      followingCount: 100,
-      doneChallengesCount: 7,
-    },
-    {
-      id: "3",
-      username: "Charlie",
-      imagePath: "https://randomuser.me/api/portraits/men/2.jpg",
-      bio: "Fitness enthusiast and challenge seeker.",
-      followersCount: 180,
-      followingCount: 90,
-      doneChallengesCount: 6,
-    },
-  ];
-
+  
   const mockCategories = [
     "ورزش",
     "سلامت",
@@ -205,8 +159,8 @@ const ChallengeCreate: React.FC = () => {
                   onClick={currentStep < 3 ? handleNext : undefined}
                   className={
                     currentStep === 3
-                      ? "w-full sm:w-full md:w-full max-w-xl bg-primary rounded-[8px] p-5 text-lg hover:bg-primary"
-                      : "w-full sm:w-full md:w-full max-w-xl bg-secondary rounded-[8px] p-5 text-lg hover:bg-secondary"
+                      ? "w-full sm:w-full md:w-full max-w-xl bg-primary rounded-primary-radius p-5 text-lg hover:bg-primary"
+                      : "w-full sm:w-full md:w-full max-w-xl bg-secondary rounded-primary-radius p-5 text-lg hover:bg-secondary"
                   }
                 >
                   {currentStep === 3 ? "ثبت چالش" : "بعدی"}

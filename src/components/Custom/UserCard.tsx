@@ -1,19 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X } from "lucide-react";
+import type { UserCardProps } from '@/types/userCardListType';
 
-interface UserCardProps {
-  id: string;
-  username: string;
-  imagePath: string;
-  bio: string;
-  followersCount: number;
-  followingCount: number;
-  doneChallengesCount: number;
-  onDelete: (id: string, username: string) => void;
-  isOwner: boolean;
-  className: string;
-}
 
 const UserCard: React.FC<UserCardProps> = ({ 
   id, 

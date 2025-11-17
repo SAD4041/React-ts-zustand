@@ -216,6 +216,10 @@
   --success: #009262;
   --neutral-gray : #9d9d9d;
   --neutral-gray-bold : #666666;
+  --gray-text : #616161;
+  --gold-badge : #FFD700;
+  --silver-badge: #C0C0C0;
+  --bronze-badge: #CD7F32;
   --disable: #b1b1b1;
   --primary-foreground: oklch(0.985 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -259,6 +263,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: 15px;
+  --radius-primary-radius: 8px;
+  --radius-secondary-radius: 12.5px;
     /* saman's colors maping with the develop ones */
   --color-blue-main: var(--secondry);
   --color-blue-side: var(--secondry-hover);
@@ -303,6 +309,10 @@
   --color-primary-hover: var(--primary-hover);
   --color-secondry: var(--secondry);
   --color-secondry-hover: var(--secondry-hover);
+  --color-gray-text : var(--gray-text);
+  --color-gold-badge : var(--gold-badge);
+  --color-silver-badge : var(--silver-badge);
+  --color-bronze-badge : var(--bronze-badge);
   --color-error: var(--error);
   --color-success: var(--success);
   --color-disable: var(--disable);

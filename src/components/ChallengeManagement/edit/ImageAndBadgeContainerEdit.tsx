@@ -22,20 +22,20 @@ const ImageAndBadgeContainerEdit: React.FC<ChallengeImageProps> = ({
       {/* Badge container */}
       <div className="absolute h-11 bottom-[-10px] right-[-0px] bg-secondary border-1 border-black p-1 rounded-[8px] flex space-x-2 items-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
         <button className="w-10 h-10 flex items-center justify-center bg-secondary p-1 rounded-full">
-          <Hexagon className="w-full h-full text-yellow-500" />
+          <Hexagon className="w-full h-full text-gold-badge" />
         </button>
         <button className="w-10 h-10 flex items-center justify-center bg-secondary p-1 rounded-full">
-          <Hexagon className="w-full h-full text-orange-900" />
+          <Hexagon className="w-full h-full text-bronze-badge" />
         </button>
         <button className="w-10 h-10 flex items-center justify-center bg-secondary p-1 rounded-full">
-          <Hexagon className="w-full h-full text-gray-400" />
+          <Hexagon className="w-full h-full text-silver-badge" />
         </button>
       </div>
 
       {/* Custom button in the center to change the image */}
       <div className="absolute inset-0 flex justify-center items-center">
         <CustomButton
-          className="bg-secondary text-white hover:bg-secondary px-6 py-2 rounded-[8px] shadow-md"
+          className="bg-secondary text-white hover:bg-secondary px-6 py-2 rounded-primary-radius shadow-md"
           onClick={() => document.getElementById("imageUploadInput")?.click()}
         >
           تغییر تصویر

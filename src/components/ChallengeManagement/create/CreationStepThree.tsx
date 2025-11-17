@@ -5,20 +5,9 @@ import UserCardListToAdd from "@/components/ChallengeManagement/create/UserCardL
 import { Field } from "formik";
 import type { UserProfile } from "@/types/userTypes";
 import type { FieldProps } from "formik";
+import type { StepThreeProps } from "@/types/challengeCreateTypes";
 
-interface Props {
-  values: any;
-  userSearch: string;
-  setUserSearch: React.Dispatch<React.SetStateAction<string>>;
-  selectedUsers: UserProfile[];
-  removeUser: (id: string) => void;
-  availableUsers: UserProfile[];
-  addUser: (user: UserProfile) => void;
-  canAddMore: boolean;
-  memberLimitError: boolean;
-}
-
-const Step3Members: React.FC<Props> = ({
+const Step3Members: React.FC<StepThreeProps> = ({
   values,
   userSearch,
   setUserSearch,
@@ -72,8 +61,18 @@ const Step3Members: React.FC<Props> = ({
               onClick={() => removeUser(user.id)}
               className="hover:bg-orange-200 rounded-full p-0.5"
             >
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-3 h-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </span>
