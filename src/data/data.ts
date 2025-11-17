@@ -1,13 +1,6 @@
-<<<<<<< Updated upstream
-import image1 from '@/assets/image1.png';
-
-export interface ImageData {
-=======
-import dress from '@/assets/dress.png'
-import Tshirt from '@/assets/T-shirt.png' 
 import image1 from '@/assets/image1.png';
 import type { Brand, ColorOption, SubCategory, Product } from '@/types/productListingTypes';
-import type { ProductData } from '@/types/productCardTypes';
+import type { ProductData, ImageData } from '@/types/productCardTypes';
 import shortTshirt from '@/assets/shortTshirt.jpg';
 import longTshirt from '@/assets/longTshirt.png';
 
@@ -51,10 +44,13 @@ export type CategoryData = {
 };
 
 export type MenuItem = {
->>>>>>> Stashed changes
   title: string;
-  image: string;
-}
+  image?: string;
+  category?: {
+    categoryName: string;
+    itemsList: { name: string; image?: string }[];
+  };
+};
 
 export const images: ImageData[] = [
   {
@@ -63,115 +59,7 @@ export const images: ImageData[] = [
   }
 ];
 
-export interface Size {
-  label: string;
-}
 
-export interface Color {
-  hex: string;
-  label: string;
-}
-
-export interface ProductData {
-  discount: number;
-  hasDiscount: boolean;
-  model: string;
-  name: string;
-  price: number;
-  discountedPrice: number;
-  sizes: Size[];
-  colors: Color[];
-  rating: number;
-  stock: number;
-  ratingCount: number;
-}
-
-export const productData: ProductData = {
-  discount: 24,
-  hasDiscount: true,
-  model: 'CATWAREHOUSE',
-  name: 'Bussiness Not Boomin',
-  price: 699999,
-  discountedPrice: 0,
-  rating: 4.2,
-  stock: 1,
-  ratingCount: 502,
-  sizes: [
-    { label: 'S' },
-    { label: 'M' },
-    { label: 'L' },
-    { label: 'XL' },
-    { label: '2XL' },
-    { label: '3XL' },
-  ],
-  colors: [
-    { hex: '#FFB6C1', label: 'Pink' },
-    { hex: '#228B22', label: 'Green' },
-    { hex: '#000000', label: 'Black' },
-    { hex: '#FFFFFF', label: 'White' },
-  ],
-};
-
-<<<<<<< Updated upstream
-productData.discountedPrice = Math.floor(productData.price - (productData.price * productData.discount / 100));
-=======
-export const menuItems: MenuItem[] = [
-  {
-    title: 'زنانه',
-    image: dress,
-    category: {
-      categoryName: 'خرید لباس زنانه',
-      itemsList: [
-        { name: 'تیشرت', image: Tshirt },
-        { name: 'جوراب',  },
-        { name: 'تونیک',  },
-        { name: 'شومیز',  },
-        { name: 'بارانی' },
-        { name: 'شلوار' },
-        { name: 'دامن' },
-        { name: 'پالتو' }
-      ]
-    }
-  },
-  {
-    title: 'مردانه',
-    category: {
-      categoryName: 'خرید لباس مردانه',
-      itemsList: [
-        { name: 'پیراهن' },
-        { name: 'شلوار جین' },
-        { name: 'کت و شلوار' },
-        { name: 'تیشرت' },
-        { name: 'کفش' }
-      ]
-    }
-  },
-  {
-    title: 'بچه‌گانه',
-    category: {
-      categoryName: 'لباس بچه‌گانه',
-      itemsList: [
-        { name: 'لباس نوزاد' },
-        { name: 'کفش بچه' },
-        { name: 'عروسک' },
-        { name: 'اکسسوری' }
-      ]
-    }
-  },
-  {
-    title: 'برند ها',
-    category: {
-      categoryName: 'برندهای محبوب',
-      itemsList: [
-        { name: 'Nike' },
-        { name: 'Adidas' },
-        { name: 'Zara' },
-        { name: 'H&M' },
-        { name: 'Gucci' }
-      ]
-    }
-  }
-];
 
 
 //=========================================================
@@ -817,4 +705,4 @@ export const products: Product[] = [
     ]
   }
 ];
->>>>>>> Stashed changes
+
