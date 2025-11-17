@@ -2,14 +2,7 @@ import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import convertToPersianDigits from "@/utils/convertToPersianDigits";
 import formatFollowBarNumber from "@/utils/formatFollowBarNumber";
-
-interface Props {
-  fullName?: string;
-  bio?: string;
-  followersCount?: number;
-  followingCount?: number;
-  doneChallengesCount?: number;
-}
+import type { Props } from "@/types/followbarTypes";
 
 const FollowBar: React.FC<Props> = (props) => {
   const location = useLocation();

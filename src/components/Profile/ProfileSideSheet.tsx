@@ -25,7 +25,7 @@ const ProfileSideSheet = () => {
     setToken("");
     setUserId(0);
     setUsername("");
-    localStorage.removeItem("token"); // اگر JWT در localStorage هست
+    localStorage.removeItem("token");
     // navigate("/login");
   };
 

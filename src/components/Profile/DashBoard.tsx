@@ -18,7 +18,7 @@ const DashBoard: React.FC = () => {
     }
   }, [userId, navigate]);
 
-  if (!userId) return <p>در حال بارگذاری...</p>;
+  if (!userId) return <p dir="rtl">در حال بارگذاری...</p>;
 
   console.log(viewedUserId);
   console.log(userId);

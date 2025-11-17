@@ -6,25 +6,24 @@ import CustomTextArea from "@/components/Custom/CustomTextArea";
 import CustomBtn from "@/components/Custom/CustomBtn";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ProfileSchema, { ProfileInitialValues } from "@/schemas/EditPtofileSchema";
-import { getUserProfileService, putUserProfileService } from "@/services/userService";
+import ProfileSchema, {
+  ProfileInitialValues,
+} from "@/schemas/EditPtofileSchema";
+import {
+  getUserProfileService,
+  putUserProfileService,
+} from "@/services/userService";
 import useUserStore from "@/store/userStore/userStore";
-
-
-interface ProfileValues {
-  username: string;
-  email: string;
-  bio: string;
-}
+import type { ProfileValues } from "@/types/editprofileTypes";
 
 export default function ProfileInfo() {
   const [image, setImage] = useState<string | null>(null);
-  const [initialValues, setInitialValues] = useState<ProfileValues>(ProfileInitialValues);
+  const [initialValues, setInitialValues] =
+    useState<ProfileValues>(ProfileInitialValues);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const navigate = useNavigate(); // برای ریدایرکت
   const { userId } = useUserStore(); // کاربر لاگین شده
-
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -33,11 +32,14 @@ export default function ProfileInfo() {
 
   const handleSubmit = async (values: ProfileValues) => {
     try {
-      const updatedUser = await putUserProfileService(userId, {
-        username: values.username,
-        email: values.email,
-        bio: values.bio,
-        profile_picture: image || undefined,
+      const updatedUser = await putUserProfileService({
+        userId,
+        data: {
+          username: values.username,
+          email: values.email,
+          bio: values.bio,
+          profile_picture: image || undefined,
+        },
       });
 
       console.log("Profile updated successfully:", updatedUser);
@@ -93,7 +95,11 @@ export default function ProfileInfo() {
       {/* Avatar */}
       <div className="flex justify-center relative mb-8">
         <Avatar className="w-28 h-28 border border-gray-400">
-          {image ? <AvatarImage src={image} alt="Profile" /> : <AvatarFallback>?</AvatarFallback>}
+          {image ? (
+            <AvatarImage src={image} alt="Profile" />
+          ) : (
+            <AvatarFallback>?</AvatarFallback>
+          )}
         </Avatar>
 
         <label
@@ -113,7 +119,9 @@ export default function ProfileInfo() {
 
       {/* پیام موفقیت */}
       {successMessage && (
-        <div className="mb-4 text-center text-green-600 font-semibold">{successMessage}</div>
+        <div className="mb-4 text-center text-green-600 font-semibold">
+          {successMessage}
+        </div>
       )}
 
       {/* Form */}
