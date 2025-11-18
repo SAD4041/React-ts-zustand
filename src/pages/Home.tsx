@@ -7,6 +7,11 @@ import { fetchHomePageData } from "@/services/homeService";
 import type { HomePageResponse } from "@/types/homeTypes";
 import SliderSection from "@/components/Home/SliderSection";
 import Header from "@/components/Header/Header";
+import { products } from '@/data/data.ts'
+import Footer from "@/components/Footer/Footer";
+import SurpriseSection from "@/components/Home/SupriseSection";
+import BestSellersSection from "@/components/Home/BestSeller";
+import BrandSlider from "@/components/Home/BrandSlider";
 
 import bannerFallback from "@/assets/banner.jpg";
 import adidasFallback from "@/assets/shortTshirt.jpg";
@@ -20,6 +25,7 @@ import style1 from "@/assets/style1.jpg";
 import style2 from "@/assets/style2.jpg";
 import style3 from "@/assets/style3.jpg";
 import style4 from "@/assets/style4.jpg";
+import poshtibani from "@/assets/poshtibani.png"
 
 export default function Home() {
   const [homeData, setHomeData] = useState<HomePageResponse | null>(null);
@@ -94,7 +100,7 @@ export default function Home() {
   const data = homeData || {
     banner: { image_url: bannerFallback },
     categories: [
-      { id: 1, name: "اکسسوری", slug: "accessories", image_url: category1  },
+      { id: 1, name: "اکسسوری", slug: "accessories", image_url: category1 },
       { id: 2, name: "لباس گرم", slug: "winter-wear", image_url: category2 },
       { id: 3, name: "شلوار", slug: "pants", image_url: category3 },
       { id: 4, name: "لباس زنانه", slug: "women", image_url: category4 },
@@ -133,7 +139,7 @@ export default function Home() {
 
   return (
     <div className="w-full min-h-screen bg-white font-vazir">
-      <Header/>
+      <Header />
 
       <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] overflow-hidden">
         <div className="absolute inset-0 rounded-b-[50px] overflow-hidden">
@@ -165,14 +171,14 @@ export default function Home() {
               to={`/category/${cat.slug}`}
               className="flex flex-col items-center gap-2 group cursor-pointer"
             >
-              <div className="w-20 h-20 rounded-full bg-pink-200 p-2 flex items-center justify-center group-hover:bg-pink-300 transition-colors">
+              <div className="w-20 h-20 rounded-full p-2 flex items-center justify-center transition-colors">
                 <img
                   src={cat.image_url || bannerFallback}
                   alt={cat.name}
                   className="w-full h-full object-cover rounded-full"
                 />
               </div>
-              <span className="text-xs sm:text-sm text-gray-700 font-medium text-center group-hover:text-black transition-colors">
+              <span className="text-xs sm:text-sm text-[#C57265] font-medium text-center group-hover:text-black transition-colors">
                 {cat.name}
               </span>
             </Link>
@@ -181,7 +187,7 @@ export default function Home() {
       </div>
 
       {/* شگفت‌انگیز */}
-      <SliderSection
+      {/* <SliderSection
         title="شگفت‌انگیز"
         link="/products?category=amazing"
         items={amazing_products}
@@ -189,16 +195,18 @@ export default function Home() {
         setIndex={setAmazingIndex}
         itemsPerView={amazingPerView}
         isAmazing={true}
-      />
+      /> */}
+
+      <SurpriseSection />
 
       <div className="py-12 px-4 bg-white">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-2">استایل خود را، مجازی پرو کنید!</h2>
+          <h2 className="text-4xl font-bold mb-2">!استایل خود را، مجازی پرو کنید</h2>
           <p className="text-sm text-pink-600 mb-6">
-            تجربه‌ی خرید از آینده. لباس‌ها را قبل از خرید، آنلاین استایل کنید.
+            .تجربه‌ی خرید از آینده. لباس‌ها را قبل از خرید، آنلاین استایل کنید
           </p>
           <Link to="/style-pro">
-            <Button variant="primary" size="sm" className="bg-pink-600 hover:bg-pink-700 text-white">
+            <Button variant="primary" size="sm" className="bg-pink-600 hover:bg-pink-700 rounded-full text-white cursor-pointer">
               شروع استایل
             </Button>
           </Link>
@@ -206,7 +214,7 @@ export default function Home() {
       </div>
 
       {/* پرفروش‌ترین‌ها — برندها */}
-      <SliderSection
+      {/* <SliderSection
         title="پرفروش‌ترین‌ها"
         link="/brands"
         items={best_selling_brands}
@@ -214,93 +222,105 @@ export default function Home() {
         setIndex={setBestIndex}
         itemsPerView={bestPerView}
         isBrandSlider={true}
-      />
+      /> */}
+      <BestSellersSection />
 
-      {/* نوار لوگوهای برندها */}
-      <div className="py-6 bg-gray-100 border-t">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-xl font-bold text-center mb-4">پرفروش ترین های اخیر</h2>
-          <div className="flex gap-8 overflow-x-auto scrollbar-hide py-2">
-            {best_selling_brands.map((brand) => (
-              <Link
-                key={brand.id}
-                to={`/brand/${brand.slug}`}
-                className="flex-shrink-0 cursor-pointer flex justify-center items-center"
-              >
-                <img
-                  src={brand.logo_url || adidasFallback}
-                  alt={brand.name}
-                  className="h-10 object-contain opacity-70 hover:opacity-100 transition-opacity"
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
+      <BrandSlider />
 
-      {/* بخش "خرید بر اساس استایل" — بدون کادر و سایه، با هاور زوم و ارتفاع ثابت */}
       <div className="py-12 px-4 from-pink-50 to-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8">خرید بر اساس استایل</h2>
 
           {/* لایوت سفارشی بدون کادر */}
           <div className="flex flex-col md:flex-row gap-4">
+
             {/* ستون چپ - عکس بزرگ "کلاسیک" */}
-            <div className="md:w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
-              <Link to={`/style/classic`} className="block h-[400px]">
+            <div className="md:w-2/3 relative group cursor-pointer overflow-hidden rounded-xl">
+              <Link to={`/style/classic`} className="block aspect-square">
                 <img
                   src={style1}
                   alt="کلاسیک"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                 />
-                <p className="absolute bottom-4 left-4 text-white text-xl font-bold">کلاسیک</p>
+                <p className="absolute bottom-4 right-4 text-black text-xl font-bold">کلاسیک</p>
               </Link>
             </div>
 
             {/* ستون راست - شامل دو ردیف */}
             <div className="md:w-1/2 flex flex-col gap-4">
+
               {/* ردیف بالا: اسپرت + استریت */}
               <div className="flex gap-4">
                 {/* اسپرت */}
                 <div className="w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
-                  <Link to={`/style/sport`} className="block h-[140px]">
+                  <Link to={`/style/sport`} className="block aspect-square">
                     <img
                       src={style2}
                       alt="اسپرت"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                     />
-                    <p className="absolute bottom-4 left-4 text-white text-lg font-bold">اسپرت</p>
+                    <p className="absolute bottom-4 right-4 text-black text-lg font-bold">اسپرت</p>
                   </Link>
                 </div>
 
                 {/* استریت */}
                 <div className="w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
-                  <Link to={`/style/street`} className="block h-[140px]">
+                  <Link to={`/style/street`} className="block aspect-square">
                     <img
                       src={style3}
                       alt="استریت"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                     />
-                    <p className="absolute bottom-4 left-4 text-white text-lg font-bold">استریت</p>
+                    <p className="absolute bottom-4 right-4 text-black text-lg font-bold">استریت</p>
                   </Link>
                 </div>
               </div>
 
               {/* ردیف پایین: وینتیج */}
               <div className="relative group cursor-pointer overflow-hidden rounded-xl">
-                <Link to={`/style/vintage`} className="block h-[280px]">
+                <Link to={`/style/vintage`} className="block aspect-square">
                   <img
                     src={style4}
                     alt="وینتیج"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                   />
-                  <p className="absolute bottom-4 left-4 text-white text-xl font-bold">وینتیج</p>
+                  <p className="absolute bottom-4 right-4 text-black text-xl font-bold">وینتیج</p>
                 </Link>
               </div>
             </div>
+
           </div>
         </div>
       </div>
+
+
+      {/* <a
+        href="/support" // یا لینک واقعی پشتیبانی
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 flex items-center justify-center rounded-full border-2 border-gray-800 bg-white shadow-lg cursor-pointer hover:shadow-xl transition"
+        aria-label="پشتیبانی"
+      >
+        <img
+          src={poshtibani} // آیکون پشتیبانی — بعداً با آیکون واقعی عوضش کن
+          alt="پشتیبانی"
+          className="w-10 h-10 object-contain"
+        />
+      </a> */}
+      <div className="py-8 mx-6 flex justify-end">
+        <a
+          href="/support" // یا لینک واقعی پشتیبانی
+          className="w-16 h-16 flex items-center justify-center rounded-full border-2 border-gray-800 bg-white shadow-lg cursor-pointer hover:shadow-xl transition"
+          aria-label="پشتیبانی"
+        >
+          <img
+            src={poshtibani} // آیکون پشتیبانی — بعداً با آیکون واقعی عوضش کن
+            alt="پشتیبانی"
+            className="w-10 h-10 object-contain"
+          />
+        </a>
+      </div>
+
+      <Footer />
+
     </div>
   );
 }
