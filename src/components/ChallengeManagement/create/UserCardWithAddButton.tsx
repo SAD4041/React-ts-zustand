@@ -53,6 +53,7 @@ const UserCardWithAddButton: React.FC<ChallengeUserCardProps> = ({
         <button
           className="bg-white border-primary border-2 px-1 py-1 rounded-primary-radius text-primary text-sm font-medium hover:bg-primary-hover transition-colors"
           onClick={handleAddClick}
+          type="button"
         >
           اضافه کردن
         </button>
