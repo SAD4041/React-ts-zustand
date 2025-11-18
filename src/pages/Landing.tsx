@@ -27,7 +27,7 @@ import {
 import { Rating, RatingButton } from "@/components/Custom/Rating/Rating";
 import { Button } from "@/components/Custom/Button/Button";
 import FeatureCard from "@/components/Landing/FeatureCard";
-import { useDesktop, useTabletMobile } from "@/hooks/ResponsiveHooks";
+import { useDesktop } from "@/hooks/ResponsiveHooks";
 import FaqItem from "@/components/Landing/FaqItem";
 import { useState } from "react";
 
@@ -37,9 +37,8 @@ function Landing() {
 	const [faq1Open, setFaq1Open] = useState(true);
 	const [faq2Open, setFaq2Open] = useState(false);
 	const [faq3Open, setFaq3Open] = useState(false);
-	const [faq4Open, setFaq4Open] = useState(false);
 
-	const otherSetStates = [setFaq1Open, setFaq2Open, setFaq3Open, setFaq4Open];
+	const otherSetStates = [setFaq1Open, setFaq2Open, setFaq3Open];
 	return (
 		<div
 			className="w-full flex flex-col items-center justify-center mt-20"
@@ -222,7 +221,7 @@ function Landing() {
 								</div>
 								<p className="text-center lg:text-justify mt-5">
 									ما پلتفرمی هستیم که به تو کمک میکنه در کمترین زمان، به جامعهای
-									از پرستاران تأییدشده و عاشق حیوانات دسترسی پیدا کنی. پرستارانی
+									از پرستاران تأییدشده و عاشق حیوانات دسترسی پیدا کنی. پرستارانی
 									که پروفایل، سوابق و نظرات کاربران قبلیشون رو میبینی و میتونی
 									مستقیما باهاشون چت کنی تا درنهایت، با اعتماد کامل انتخاب کنی.
 									<br />
