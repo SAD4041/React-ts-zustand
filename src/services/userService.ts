@@ -1,12 +1,6 @@
 import { getData, putData } from "./services";
 import type { FollowStats, UserSummary } from "@/types/userTypes";
-import type { UpdateProfileRequest } from "@/types/updateProfileTypes";
-
-export interface PutUserProfileParams {
-  userId: string | number;
-  data: UpdateProfileRequest;
-}
-
+import type { PutUserProfileParams } from "@/types/putUserProfileTypes";
 
 export const putUserProfileService = async ({
   userId,

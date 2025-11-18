@@ -82,7 +82,7 @@ export default function ProfileInfo() {
       {/* Header */}
       <div className="flex items-center mb-8 relative">
         <button
-          className="p-2 border-2 border-primary rounded-xl hover:bg-orange-50 transition"
+          className="p-2 border-2 border-primary rounded-xl hover:bg-pirmary transition"
           onClick={() => window.history.back()}
         >
           <ArrowLeft className="w-6 h-6 text-primary" />
@@ -104,7 +104,7 @@ export default function ProfileInfo() {
 
         <label
           htmlFor="profilePic"
-          className="absolute bottom-1 right-[calc(50%-50px)] bg-white border border-primary text-primary rounded-full p-1.5 cursor-pointer hover:bg-orange-50 transition shadow-sm"
+          className="absolute bottom-1 right-[calc(50%-50px)] bg-white border border-primary text-primary rounded-full p-1.5 cursor-pointer hover:bg-primary transition shadow-sm"
         >
           <Pencil className="w-4 h-4" />
           <input
@@ -119,7 +119,7 @@ export default function ProfileInfo() {
 
       {/* پیام موفقیت */}
       {successMessage && (
-        <div className="mb-4 text-center text-green-600 font-semibold">
+        <div className="mb-4 text-center text-success font-semibold">
           {successMessage}
         </div>
       )}
