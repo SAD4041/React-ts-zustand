@@ -3,7 +3,6 @@ export interface SignupPayload {
 	lastname: string;
 	email: string;
 	password: string;
-	rememberMe: boolean;
 }
 
 export interface SignupResponse {
@@ -16,6 +15,14 @@ export interface SignupResponseErrors {
 	name: string;
 	email?: string;
 	password?: string;
+}
+
+export interface LoginPayload {
+	email: string;
+	password: string;
+	rememberMe: boolean;
+}
+
 export interface LoginResponse {
 	statusCode: number;
 	messages?: LoginResponseErrors;
