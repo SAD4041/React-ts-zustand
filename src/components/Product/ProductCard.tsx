@@ -5,7 +5,6 @@ import ColorSelector from './productCardComponents/ColorSelector.tsx';
 import { toPersianDigits } from "../../utils/PersianDigits.tsx";
 import type { Product } from '@/types/productListingTypes';
 
-
 interface ProductCardProps {
   product: Product;
 }

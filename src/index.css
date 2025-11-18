@@ -22,6 +22,34 @@ body {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  .hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+
+
+@layer utilities {
+  .rtl {
+    direction: rtl;
+  }
+  .ltr {
+    direction: ltr;
+  }
+  .vazir {
+    font-family: "Vazirmatn", sans-serif;
+    font-feature-settings: "tnum";
+  }
+}
+
+:root {
+	font-family: 'Vazirmatn', sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
 
   color-scheme: light dark;
   background-color: rgba(255, 255, 255, 0.87);
