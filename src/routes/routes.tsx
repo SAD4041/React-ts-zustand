@@ -1,19 +1,28 @@
 import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
-import Landing from "@/pages/Landing";
 import Home from "@/pages/Home";
+import Errors404 from "@/pages/Error404";
+import Errors500 from "@/pages/Error500";
 
 export const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Home />,
-		// errorElement: (
-		// 	<Error404 />
-		// ),
+		element: <PublicLayout />,
+		errorElement: (
+			<Errors404 />
+		),
 		children: [
+			// {
+			// 	path: "/temp",
+			// 	element: <Temp />,
+			// },
 			{
 				index: true,
-				element: <Landing />,
+				element: <Home />
+			},
+			{
+				path: "/error500",
+				element: <Errors500 />
 			},
 			// {
 			// 	path: "/AboutUs",

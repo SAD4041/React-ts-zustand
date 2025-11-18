@@ -139,7 +139,7 @@ export default function Home() {
 
   return (
     <div className="w-full min-h-screen bg-white font-vazir">
-      <Header />
+      {/* <Header /> */}
 
       <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] overflow-hidden">
         <div className="absolute inset-0 rounded-b-[50px] overflow-hidden">
@@ -319,7 +319,7 @@ export default function Home() {
         </a>
       </div>
 
-      <Footer />
+      {/* <Footer /> */}
 
     </div>
   );
