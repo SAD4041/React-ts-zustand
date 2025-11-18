@@ -29,7 +29,7 @@ export default function Errors500() {
         </p>
         
         <motion.button
-          onClick={() => navigate("/Home")}
+          onClick={() => navigate("/")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="bg-cyan-400 hover:bg-cyan-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 shadow-md"

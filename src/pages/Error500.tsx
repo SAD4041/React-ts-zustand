@@ -1,6 +1,6 @@
 import Errors500 from "@/components/error500/error500";
 
-function Error404() {
+function Error500() {
     
 
     return (
@@ -10,4 +10,4 @@ function Error404() {
     );
 }
 
-export default Error404;
+export default Error500;
