@@ -4,8 +4,8 @@ import { subCategories } from '@/data/data';
 
 const SubCategorySlider: React.FC = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false); // ✅ ابتدای صفحه: نمی‌تونیم چپ بریم
-  const [canScrollRight, setCanScrollRight] = useState(true); // ✅ می‌تونیم راست بریم
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true); 
 
   useEffect(() => {
     updateScrollButtons();

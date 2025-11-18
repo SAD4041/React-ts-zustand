@@ -1,4 +1,3 @@
-// Pagination.tsx
 import React from 'react';
 import { toPersianDigits } from '@/utils/PersianDigits';
 
@@ -39,38 +38,34 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const items: (number | 'dots')[] = [];
 
-  // 1. اولین گروه
+
   items.push(groupStarts[0]);
 
-  // 2. اگر جاری > 2: ... + قبلی
   if (currentGroup > 2) {
     items.push('dots');
     items.push(groupStarts[currentGroup - 2]);
   }
 
-  // 3. گروه جاری (اگر با اولی متفاوت است)
   if (currentGroup !== 1) {
     items.push(groupStarts[currentGroup - 1]);
   }
 
-  // 4. گروه بعدی (اگر وجود دارد و با آخری متفاوت است)
   if (currentGroup < totalGroups) {
     items.push(groupStarts[currentGroup]);
   }
 
-  // 5. اگر جاری < totalGroups - 1: ... + آخرین
+
   if (currentGroup < totalGroups - 1) {
     items.push('dots');
     items.push(groupStarts[totalGroups - 1]);
   }
 
-  // حذف تکرارهای متوالی از dots
+
   const cleaned = [];
   for (let i = 0; i < items.length; i++) {
     if (items[i] === 'dots' && cleaned.length > 0 && cleaned[cleaned.length - 1] === 'dots') {
       continue;
     }
-    // جلوگیری از تکرار عدد (برای اطمینان بیشتر)
     if (typeof items[i] === 'number') {
       if (cleaned.length === 0 || cleaned[cleaned.length - 1] !== items[i]) {
         cleaned.push(items[i]);

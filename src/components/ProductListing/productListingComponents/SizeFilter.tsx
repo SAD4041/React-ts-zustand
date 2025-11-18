@@ -1,4 +1,3 @@
-// src/components/SizeFilter.tsx
 import React from 'react';
 
 interface SizeFilterProps {
