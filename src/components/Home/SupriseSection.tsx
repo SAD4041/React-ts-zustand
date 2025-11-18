@@ -17,24 +17,21 @@ const SurpriseSection: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [timer, setTimer] = useState<Timer>({ days: 0, hours: 3, minutes: 14, seconds: 36 });
 
-  const itemsPerPage = 5; // تعداد محصولات نمایش داده شده در هر اسلاید
+  const itemsPerPage = 5;
   const totalItems = products.length;
 
-  // تابع برای اسکرول به سمت راست (یک محصول)
   const handleNext = () => {
     if (currentIndex < totalItems - itemsPerPage) {
       setCurrentIndex(prev => prev + 1);
     }
   };
 
-  // تابع برای اسکرول به سمت چپ (یک محصول)
   const handlePrev = () => {
     if (currentIndex > 0) {
       setCurrentIndex(prev => prev - 1);
     }
   };
 
-  // تابع برای ریست کردن تایمر
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer(prevTimer => {
@@ -63,10 +60,8 @@ const SurpriseSection: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // محصولات قابل نمایش در این اسلاید
   const visibleProducts = products.slice(currentIndex, currentIndex + itemsPerPage);
 
-  // انیمیشن برای لیست محصولات
   const listVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -92,17 +87,12 @@ const SurpriseSection: React.FC = () => {
 
   return (
     <div className="w-full py-6 px-4 md:px-8 bg-gradient-to-b from-[#FF6B6B] to-white rounded-xl shadow-sm">
-      {/* ساختار اصلی: یک flex-row */}
       <div className="flex flex-col md:flex-row items-start gap-4">
-
-        {/* بخش چپ: لیست محصولات */}
         <div className="flex-grow relative">
-          {/* هدر بخش (فقط برای responsive) */}
           <div className="md:hidden flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-red-700">شگفت انگیز</h2>
           </div>
 
-          {/* دکمه چپ */}
           <button
             onClick={handlePrev}
             disabled={currentIndex === 0}
@@ -117,7 +107,6 @@ const SurpriseSection: React.FC = () => {
             </svg>
           </button>
 
-          {/* لیست محصولات */}
           <div className="overflow-x-hidden px-4">
             <motion.div
               className="flex space-x-4"
@@ -144,7 +133,6 @@ const SurpriseSection: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* دکمه راست */}
           <button
             onClick={handleNext}
             disabled={currentIndex >= totalItems - itemsPerPage}
@@ -160,11 +148,10 @@ const SurpriseSection: React.FC = () => {
           </button>
         </div>
 
-        {/* بخش راست: تایمر */}
         <div className="flex flex-col items-center gap-4">
           <h2 className="text-xl font-bold text-red-700">شگفت انگیز</h2>
           <div className="flex flex-col items-center gap-1">
-            <span className="text-xs text-gray-500">تا پایان...</span>
+            <span className="text-xs text-gray-500">...تا پایان</span>
             <div className="flex flex-col items-center gap-1">
               <div className="bg-white px-3 py-1 rounded-md border border-red-300 text-red-600 font-mono text-lg font-bold">
                 {toPersianDigits(timer.hours.toString().padStart(2, '0'))}
@@ -181,10 +168,9 @@ const SurpriseSection: React.FC = () => {
 
       </div>
 
-      {/* دکمه مشاهده همه */}
       <div className="mt-4 text-center">
         <button
-          onClick={() => window.location.href = '/all-surprise-products'} // یا navigate از react-router
+          onClick={() => window.location.href = '/products-list'} 
           className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-700 border border-red-300 rounded-full hover:bg-red-50 transition cursor-pointer"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

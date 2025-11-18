@@ -12,18 +12,20 @@ const Header = () => {
   return (
     <>
       <header className="bg-white shadow-sm relative z-50">
-        <div 
+        <div
           className="py-2.5 px-4 md:px-6 lg:px-8"
           style={{ backgroundImage: `url(${headerBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
           <div className="container mx-auto flex items-center">
             <div className="flex items-center space-x-2 space-x-reverse mr-2 md:mr-3">
               <div className="w-11 h-11 md:w-13.5 md:h-13.5 bg-white/20 backdrop-blur-md rounded-full shadow-sm  flex items-center justify-center">
-                <img
-                  src={logo}
-                  alt="لوگو"
-                  className="w-10 h-10 md:w-12 md:h-12 object-contain"
-                />
+                <a href='/'>
+                  <img
+                    src={logo}
+                    alt="لوگو"
+                    className="w-10 h-10 md:w-12 md:h-12 object-contain"
+                  />
+                </a>
               </div>
             </div>
 
@@ -36,9 +38,9 @@ const Header = () => {
 
               <nav className="hidden lg:flex items-center space-x-2 md:space-x-3 lg:space-x-4 space-x-reverse flex-row-reverse">
                 {menuItems.map((item, index) => (
-                  <DropdownMenu item={item} key={index}/>
+                  <DropdownMenu item={item} key={index} />
                 ))}
-                 <button className="text-orange-600 text-xs md:text-sm font-medium hover:text-orange-800 whitespace-nowrap mr-5">
+                <button className="text-orange-600 text-xs md:text-sm font-medium hover:text-orange-800 whitespace-nowrap mr-5">
                   !حراج
                 </button>
               </nav>

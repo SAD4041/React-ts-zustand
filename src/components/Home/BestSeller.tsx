@@ -1,5 +1,3 @@
-// components/sections/BestSellersSection.tsx
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '@/components/Product/ProductCard';
@@ -8,27 +6,23 @@ import { products } from '@/data/data';
 const BestSellersSection: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const itemsPerPage = 4; // تعداد محصولات نمایش داده شده در هر اسلاید
+  const itemsPerPage = 4;
   const totalItems = products.length;
 
-  // تابع برای اسکرول به سمت راست (یک محصول)
   const handleNext = () => {
     if (currentIndex < totalItems - itemsPerPage) {
       setCurrentIndex(prev => prev + 1);
     }
   };
 
-  // تابع برای اسکرول به سمت چپ (یک محصول)
   const handlePrev = () => {
     if (currentIndex > 0) {
       setCurrentIndex(prev => prev - 1);
     }
   };
 
-  // محصولات قابل نمایش در این اسلاید
   const visibleProducts = products.slice(currentIndex, currentIndex + itemsPerPage);
 
-  // انیمیشن برای لیست محصولات
   const listVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -54,17 +48,12 @@ const BestSellersSection: React.FC = () => {
 
   return (
     <div className="w-full py-6 px-4 md:px-8 bg-white rounded-xl shadow-sm border border-gray-100">
-      {/* ساختار اصلی: یک flex-row */}
       <div className="flex flex-col md:flex-row items-start gap-4">
-
-        {/* بخش چپ: لیست محصولات */}
         <div className="flex-grow relative">
-          {/* هدر بخش (فقط برای responsive) */}
           <div className="md:hidden flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-gray-800">پرفروش‌ترین‌های اخیر</h2>
           </div>
 
-          {/* دکمه چپ */}
           <button
             onClick={handlePrev}
             disabled={currentIndex === 0}
@@ -79,7 +68,6 @@ const BestSellersSection: React.FC = () => {
             </svg>
           </button>
 
-          {/* لیست محصولات */}
           <div className="overflow-x-hidden px-4">
             <motion.div
               className="flex space-x-4"
@@ -106,7 +94,6 @@ const BestSellersSection: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* دکمه راست */}
           <button
             onClick={handleNext}
             disabled={currentIndex >= totalItems - itemsPerPage}
@@ -122,11 +109,10 @@ const BestSellersSection: React.FC = () => {
           </button>
         </div>
 
-        {/* بخش راست: عنوان و دکمه مشاهده همه */}
         <div className="flex flex-col items-center gap-4">
           <h2 className="text-xl font-bold text-gray-800 text-right">پرفروش‌ترین‌های اخیر</h2>
           <button
-            onClick={() => window.location.href = '/best-sellers'} // یا navigate از react-router
+            onClick={() => window.location.href = '/products-list'}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-700 border border-red-300 rounded-full hover:bg-red-50 transition cursor-pointer"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
