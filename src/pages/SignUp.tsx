@@ -105,7 +105,6 @@ function SignUp() {
       });
       console.log("Verification success! Token:", data.token);
       // localStorage.setItem("token", data.token); // Save JWT
-      
       //setting
       setToken(data.token);
       setUserId(data.userId);

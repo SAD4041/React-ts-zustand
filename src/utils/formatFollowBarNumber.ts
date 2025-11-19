@@ -1,8 +1,8 @@
 function formatFollowBarNumber(num: number): string {
   if (num >= 1_000_000) {
-    return (num / 1_000_000).toFixed(1).replace(/\,0$/, "") + "M";
+    return num % 1_000_000 === 0 ? (num / 1_000_000).toString().replace(/\,0$/, "") + "M" : (num / 1_000_000).toFixed(1).replace(/\,0$/, "") + "M";
   } else if (num >= 10_000) {
-    return (num / 1_000).toFixed(1).replace(/\,0$/, "") + "K";
+    return num % 1_000 === 0 ? (num / 1_000).toString().replace(/\,0$/, "") + "K" : (num / 1_000).toFixed(1).replace(/\,0$/, "") + "K";
   } else {
     const number = String(num);
     return (

@@ -14,7 +14,7 @@ import {
 
 import styles from "./ProfileHeader.module.css";
 
-function getUserInitials(fullName: string): string {
+export function getUserInitials(fullName: string): string {
   if (!fullName) return "";
   const nameParts = fullName.trim().split(" ");
   const first = nameParts[0]?.charAt(0).toUpperCase() || "";

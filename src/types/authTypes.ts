@@ -23,15 +23,16 @@ export interface LoginResponse {
 }
 
 export interface AuthResponse {
-	message : string;
-	user_response: {
-		id: number;
-		username: string;
-		email: string;
-		bio?: string;
-		token: string;
-	};
+  message: string;
+  user_response: {
+    id: number;
+    username: string;
+    email: string;
+    bio?: string;
+    token: string;
+  };
 }
+
 
 export interface VerifyEmailService {
 	email : string;
