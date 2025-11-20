@@ -6,6 +6,12 @@ import * as Yup from "yup";
 import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
 import BG from "@/assets/BG.png";
+import { registerService } from "@/services/authService";
+import type {
+  RegisterPayload,
+  RegisterErrorResponse,
+} from "@/types/authTypes";
+import { toast } from "sonner";
 
 // Validation schema با بهبود اعتبارسنجی
 const validationSchema = Yup.object({
@@ -35,36 +41,72 @@ const validationSchema = Yup.object({
   phone: Yup.string()
     .matches(/^09[0-9]{9}$/, "شماره موبایل باید با ۰۹ شروع شده و ۱۱ رقم باشد")
     .required("شماره موبایل الزامی است"),
+
+  password: Yup.string()
+      .min(8, "رمز عبور باید حداقل ۸ کاراکتر باشد")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        "رمز عبور باید شامل حروف کوچک، بزرگ و عدد باشد"
+      )
+      .required("رمز عبور الزامی است"),
 });
 
 function SignUp() {
   const navigate = useNavigate();
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = async (
+    values: SignUpFormValues,
+    {
+      setSubmitting,
+      setFieldError,
+      resetForm,
+    }: FormikHelpers<SignUpFormValues>
+  ) => {
     try {
-      // نرمال‌سازی داده‌ها
-      const normalizedData = {
-        name: values.name.trim(),
-        familyName: values.familyName.trim(),
+      const payload: RegisterPayload = {
+        first_name: values.name.trim(),
+        last_name: values.familyName.trim(),
         email: values.email.trim().toLowerCase(),
         phone: values.phone.trim(),
+        password: values.password.trim(),
       };
 
-      console.log("Form values:", normalizedData);
+      const res = await registerService(payload);
 
-      // اینجا می‌توانید API call انجام دهید
-      // مثال:
-      // await registerUser(normalizedData);
+      // tokens
 
-      // بعد از ثبت موفق، می‌توانید به صفحه دیگری هدایت کنید
-      // navigate("/dashboard");
+      const { access_token, refresh_token } = res.data;
 
-      // یا فرم را ریست کنید
-      // resetForm();
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
 
-      alert("اطلاعات با موفقیت ثبت شد!");
-    } catch (error) {
-      console.error("Error submitting form:", error);
+
+      toast.success("اطلاعات با موفقیت ثبت شد!");
+      navigate("/Dashboard")
+    } catch (error: any) {
+      console.error("Register error:", error);
+
+      const backend = error?.response?.data as
+        | RegisterErrorResponse
+        | undefined;
+
+      // خطای 409 از بک
+      if (backend?.status === 409 && backend.messages) {
+        if (backend.messages.phone) {
+          setFieldError("phone", "شماره موبایل قبلاً ثبت شده است.");
+          toast.error("شماره موبایل قبلاً ثبت شده است.");
+        }
+        if (backend.messages.email) {
+          setFieldError("email", "ایمیل قبلاً ثبت شده است.");
+          toast.error("ایمیل قبلاً ثبت شده است.");
+
+        }
+
+        
+        toast.error("خطا در ثبت اطلاعات. لطفا دوباره تلاش کنید.");
+        return;
+      }
+
       alert("خطا در ثبت اطلاعات. لطفا دوباره تلاش کنید.");
     } finally {
       setSubmitting(false);
@@ -92,6 +134,7 @@ function SignUp() {
             familyName: "",
             email: "",
             phone: "",
+            password: "",
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -133,6 +176,13 @@ function SignUp() {
                     className="w-full px-4 py-3 rounded-lg"
                     dir="ltr"
                     maxLength={11}
+                  />
+                  <CustomInput
+                    name="password"
+                    type="password"
+                    label="رمز عبور"
+                    className="w-full px-4 py-3 rounded-lg"
+                    dir="ltr"
                   />
 
                   <Button

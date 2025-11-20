@@ -7,6 +7,9 @@ import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
 import BG from "@/assets/BG.png";
 
+import { toast } from "sonner";
+import { loginService } from "@/services/authService";
+import type { LoginPayload, LoginErrorResponse, LoginSuccessResponse } from "@/types/authTypes";
 // Validation schema
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -26,30 +29,45 @@ const validationSchema = Yup.object({
     .required("رمز عبور الزامی است"),
 });
 
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
+
 function Login() {
   const navigate = useNavigate();
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = async (
+    values: LoginFormValues,
+    { setSubmitting }: FormikHelpers<LoginFormValues>
+  ) => {
     try {
-      // نرمال‌سازی داده‌ها
-      const normalizedData = {
+      const payload: LoginPayload = {
         email: values.email.trim().toLowerCase(),
-        password: values.password,
+        password: values.password.trim(),
       };
 
-      console.log("Login values:", normalizedData);
+      const res: LoginSuccessResponse = await loginService(payload);
 
-      // اینجا می‌توانید API call انجام دهید
-      // مثال:
-      // await loginUser(normalizedData);
+      const { access_token, refresh_token } = res.data;
 
-      // بعد از ورود موفق، هدایت به داشبورد
-      // navigate("/dashboard");
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
 
-      alert("ورود با موفقیت انجام شد!");
-    } catch (error) {
-      console.error("Error logging in:", error);
-      alert("خطا در ورود. لطفا دوباره تلاش کنید.");
+      toast.success("ورود با موفقیت انجام شد!");
+
+      navigate("/dashboard");
+    } catch (error: any) {
+      console.error("Login error:", error);
+
+      const backend = error?.response?.data as LoginErrorResponse | undefined;
+
+      if (backend?.status === 401) {
+        toast.error("ایمیل یا رمز عبور اشتباه است.");
+        return;
+      }
+
+      toast.error("خطا در ورود. لطفا دوباره تلاش کنید.");
     } finally {
       setSubmitting(false);
     }
