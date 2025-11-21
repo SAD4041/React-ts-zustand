@@ -3,7 +3,7 @@ import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Landing from "@/pages/Landing";
 import Temp from "@/pages/Temp";
 import SignUp from "@/pages/SignUp";
-import LogIn from "@/pages/Login";
+import LogIn from "@/pages/LogIn";
 import BuildTeam from "@/pages/BuildTeam";
 import Dashboard from "@/pages/Dashboard";
 import BootcampDetails from "@/pages/BootCamp";

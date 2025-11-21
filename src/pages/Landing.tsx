@@ -33,23 +33,23 @@ function ICPCLanding() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [particles, setParticles] = useState([]);
 
-  // useEffect(() => {
-  //   // تولید ذرات
-  //   const newParticles = [...Array(40)].map((_, i) => ({
-  //     id: i,
-  //     left: Math.random() * 100,
-  //     top: Math.random() * 100,
-  //     size: Math.random() * 6 + 2,
-  //     duration: Math.random() * 4 + 6,
-  //     delay: Math.random() * 3,
-  //     color: ["#FFD500", "#46BEF6", "#D7263D", "#ffffff"][
-  //       Math.floor(Math.random() * 4)
-  //     ],
-  //     opacity: Math.random() * 0.6 + 0.2,
-  //     speed: Math.random() * 50 + 30,
-  //   }));
-  //   setParticles(newParticles);
-  // }, []);
+  useEffect(() => {
+    // تولید ذرات
+    const newParticles = [...Array(40)].map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      size: Math.random() * 6 + 2,
+      duration: Math.random() * 4 + 6,
+      delay: Math.random() * 3,
+      color: ["#FFD500", "#46BEF6", "#D7263D", "#ffffff"][
+        Math.floor(Math.random() * 4)
+      ],
+      opacity: Math.random() * 0.6 + 0.2,
+      speed: Math.random() * 50 + 30,
+    }));
+    setParticles(newParticles);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
