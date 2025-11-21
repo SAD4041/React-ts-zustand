@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import CustomInput from "@/components/Custom/CustomInput";
 import { Button } from "@/components/ui/button";
-import { Formik, Form } from "formik";
+import { Formik, Form, type FormikHelpers } from "formik";
 import * as Yup from "yup";
 import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
@@ -12,11 +12,14 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { registerService } from "@/services/authService";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { registerService, verifyOtpSignupService } from "@/services/authService";
 import type {
   RegisterPayload,
   RegisterErrorResponse,
   RegisterSuccessResponse,
+  VerifyOtpSuccessResponse,
+  VerifyOtpErrorResponse,
 } from "@/types/authTypes";
 import { toast } from "sonner";
 
@@ -48,14 +51,14 @@ const validationSchema = Yup.object({
   phone: Yup.string()
     .matches(/^09[0-9]{9}$/, "شماره موبایل باید با ۰۹ شروع شده و ۱۱ رقم باشد")
     .required("شماره موبایل الزامی است"),
-});
 
-// Validation schema برای OTP
-const otpValidationSchema = Yup.object({
-  otp: Yup.string()
-    .length(6, "کد تایید باید ۶ رقم باشد")
-    .matches(/^[0-9]{6}$/, "کد تایید فقط می‌تواند عددی باشد")
-    .required("کد تایید الزامی است"),
+  tshirt_size: Yup.string()
+    .oneOf(["Medium", "Large", "X-Large", "XX-Large"], "سایز معتبر نیست")
+    .required("سایز تیشرت الزامی است"),
+
+  university: Yup.string()
+    .min(2, "نام دانشگاه باید حداقل ۲ حرف باشد")
+    .required("نام دانشگاه الزامی است"),
 });
 
 interface SignUpFormValues {
@@ -63,6 +66,8 @@ interface SignUpFormValues {
   familyName: string;
   email: string;
   phone: string;
+  tshirt_size: string;
+  university: string;
 }
 
 interface UserData {
@@ -70,43 +75,45 @@ interface UserData {
   familyName: string;
   email: string;
   phone: string;
+  tshirt_size: string;
+  university: string;
 }
 
 function SignUp() {
   const navigate = useNavigate();
-  const [step, setStep] = useState("form");
+  const [step, setStep] = useState<"form" | "otp">("form");
   const [userData, setUserData] = useState<UserData | null>(null);
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpValue, setOtpValue] = useState("");
-  const [fieldErrors, setFieldErrors] = useState({});
 
-  const handleSubmit = async (values: SignUpFormValues) => {
+  // مرحله ۱: ارسال فرم و درخواست OTP
+  const handleSubmit = async (
+    values: SignUpFormValues,
+    { setSubmitting, setFieldError }: FormikHelpers<SignUpFormValues>
+  ) => {
     try {
-      const normalizedData: SignUpFormValues = {
+      const normalizedData: UserData = {
         name: values.name.trim(),
         familyName: values.familyName.trim(),
         email: values.email.trim().toLowerCase(),
         phone: values.phone.trim(),
+        tshirt_size: values.tshirt_size.trim(),
+        university: values.university.trim(),
       };
 
       const payload: RegisterPayload = {
-        name: normalizedData.name,
-        familyName: normalizedData.familyName,
+        first_name: normalizedData.name,
+        last_name: normalizedData.familyName,
         email: normalizedData.email,
         phone: normalizedData.phone,
+        tshirt_size: normalizedData.tshirt_size,
+        university: normalizedData.university,
       };
 
       const res: RegisterSuccessResponse = await registerService(payload);
+      console.log("register response:", res);
 
-      // ذخیره tokens
-      const { access_token, refresh_token } = res.data;
-
-      localStorage.setItem("access_token", access_token);
-      localStorage.setItem("refresh_token", refresh_token);
-
-      // ذخیره داده‌های کاربر برای مرحله OTP
       setUserData(normalizedData);
-
       toast.success("کد تایید به ایمیل شما ارسال شد!");
       setStep("otp");
     } catch (error: any) {
@@ -114,51 +121,70 @@ function SignUp() {
 
       const backend = error?.response?.data as RegisterErrorResponse | undefined;
 
-      // خطای 409 از بک
       if (backend?.status === 409 && backend.messages) {
-        const errors: any = {};
         if (backend.messages.phone) {
-          errors.phone = "شماره موبایل قبلاً ثبت شده است.";
+          setFieldError("phone", "شماره موبایل قبلاً ثبت شده است.");
           toast.error("شماره موبایل قبلاً ثبت شده است.");
         }
         if (backend.messages.email) {
-          errors.email = "ایمیل قبلاً ثبت شده است.";
+          setFieldError("email", "ایمیل قبلاً ثبت شده است.");
           toast.error("ایمیل قبلاً ثبت شده است.");
         }
-        setFieldErrors(errors);
         return;
       }
 
       toast.error("خطا در ثبت اطلاعات. لطفا دوباره تلاش کنید.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
+  // مرحله ۲: تایید OTP و گرفتن توکن‌ها
   const handleOtpSubmit = async () => {
+    if (!userData) {
+      toast.error("اطلاعات کاربر یافت نشد. دوباره تلاش کنید.");
+      setStep("form");
+      return;
+    }
+
+    if (otpValue.length !== 6) return;
+
     try {
-      if (otpValue.length === 6) {
-        setOtpLoading(true);
-        console.log("OTP verification:", otpValue);
+      setOtpLoading(true);
 
-        // اینجا می‌توانید API call برای تایید OTP انجام دهید
-        // const res = await verifyOTP(userData?.email, otpValue);
+      const res: VerifyOtpSuccessResponse = await verifyOtpSignupService({
+        email: userData.email,
+        code: otpValue,
+      });
 
-        toast.success("اطلاعات با موفقیت تایید شد!");
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 1500);
-      }
+      console.log("verify otp response:", res);
+
+      const { access_token, refresh_token } = res.data;
+
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
+
+      toast.success("حساب کاربری شما با موفقیت ساخته شد!");
+      navigate("/dashboard");
     } catch (error: any) {
       console.error("Error verifying OTP:", error);
-      toast.error("کد تایید نادرست است.");
+      const backend = error?.response?.data as VerifyOtpErrorResponse | undefined;
+
+      if (backend?.status === 404) {
+        toast.error("کد تایید یافت نشد یا منقضی شده است.");
+      } else {
+        toast.error("خطا در تایید کد. لطفا دوباره تلاش کنید.");
+      }
+    } finally {
       setOtpLoading(false);
     }
   };
 
   const handleResendOtp = async () => {
     try {
-      // اینجا می‌توانید API call برای ارسال مجدد OTP انجام دهید
-      // await resendOTP(userData?.email);
-      console.log("Resending OTP to:", userData?.email);
+      if (!userData) return;
+      // اینجا می‌تونی API ارسال مجدد OTP رو صدا بزنی
+      console.log("Resending OTP to:", userData.email);
       toast.success("کد تایید دوباره به ایمیل شما ارسال شد.");
     } catch (error) {
       console.error("Error resending OTP:", error);
@@ -182,17 +208,19 @@ function SignUp() {
     >
       <div className="w-full max-w-md">
         {step === "form" ? (
-          <Formik
+          <Formik<SignUpFormValues>
             initialValues={{
               name: "",
               familyName: "",
               email: "",
               phone: "",
+              tshirt_size: "",
+              university: "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting, errors, touched }) => (
+            {({ isSubmitting, setFieldValue, values, errors, touched }) => (
               <Form>
                 <div className="bg-[#00274D]/85 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
                   <h1 className="text-white text-2xl text-center mb-10 font-semibold">
@@ -231,6 +259,37 @@ function SignUp() {
                       maxLength={11}
                     />
 
+                    {/* سایز تیشرت به صورت Select */}
+                    <div className="space-y-2 rtl">
+                      <Select
+                        value={values.tshirt_size}
+                        onValueChange={(val) => setFieldValue("tshirt_size", val)}
+                        dir= "rtl"
+                      >
+                        <SelectTrigger className="w-full bg-white/10 backdrop-blur-md text-white border border-white/20">
+                          <SelectValue placeholder="سایز را انتخاب کنید" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Medium">Medium</SelectItem>
+                          <SelectItem value="Large">Large</SelectItem>
+                          <SelectItem value="X-Large">X-Large</SelectItem>
+                          <SelectItem value="XX-Large">XX-Large</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {touched.tshirt_size && errors.tshirt_size && (
+                        <p className="text-red-400 text-xs">
+                          {errors.tshirt_size as string}
+                        </p>
+                      )}
+                    </div>
+
+                    <CustomInput
+                      name="university"
+                      type="text"
+                      label="دانشگاه"
+                      className="w-full px-4 py-3 rounded-lg"
+                    />
+
                     <Button
                       type="submit"
                       disabled={isSubmitting}
@@ -260,8 +319,8 @@ function SignUp() {
                         className="text-[#FFD500] hover:text-[#e6c200] font-semibold cursor-pointer underline transition-colors duration-200"
                       >
                         وارد شوید
-                      </button>
-                      قبلا حساب کاربری داشته‌اید؟{" "}
+                      </button>{" "}
+                      قبلا حساب کاربری داشته‌اید؟
                     </p>
                   </div>
                 </div>
@@ -294,30 +353,13 @@ function SignUp() {
                   dir="ltr"
                 >
                   <InputOTPGroup className="gap-3">
-                    <InputOTPSlot
-                      index={0}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
-                    <InputOTPSlot
-                      index={1}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
-                    <InputOTPSlot
-                      index={2}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
-                    <InputOTPSlot
-                      index={3}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
-                    <InputOTPSlot
-                      index={4}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
-                    <InputOTPSlot
-                      index={5}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
+                    {[0, 1, 2, 3, 4, 5].map((i) => (
+                      <InputOTPSlot
+                        key={i}
+                        index={i}
+                        className="w-9 h-9 md:w-12 md:h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                      />
+                    ))}
                   </InputOTPGroup>
                 </InputOTP>
               </div>

@@ -13,11 +13,14 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { toast } from "sonner";
-import { loginService } from "@/services/authService";
+
+import { loginService, verifyOtpLoginService } from "@/services/authService";
 import type {
   LoginPayload,
   LoginErrorResponse,
-  LoginSuccessResponse,
+  RegisterSuccessResponse,
+  VerifyOtpSuccessResponse,
+  VerifyOtpErrorResponse,
 } from "@/types/authTypes";
 
 // Validation schema برای ایمیل
@@ -31,7 +34,7 @@ const emailValidationSchema = Yup.object({
     .required("ایمیل الزامی است"),
 });
 
-// Validation schema برای OTP
+// (فعلاً از otpValidationSchema در Formik استفاده نمی‌کنیم، فقط برای بعداً)
 const otpValidationSchema = Yup.object({
   otp: Yup.string()
     .length(6, "کد تایید باید ۶ رقم باشد")
@@ -45,66 +48,93 @@ interface EmailFormValues {
 
 function Login() {
   const navigate = useNavigate();
-  const [step, setStep] = useState("email"); // email یا otp
+  const [step, setStep] = useState<"email" | "otp">("email");
   const [userEmail, setUserEmail] = useState("");
   const [otpValue, setOtpValue] = useState("");
   const [otpLoading, setOtpLoading] = useState(false);
 
+  // مرحله ۱: ارسال ایمیل برای دریافت OTP
   const handleEmailSubmit = async (values: EmailFormValues) => {
     try {
       const normalizedEmail = values.email.trim().toLowerCase();
       setUserEmail(normalizedEmail);
 
-      // اینجا می‌توانید API call برای ارسال OTP انجام دهید
-      // await sendLoginOTP(normalizedEmail);
+      const payload: LoginPayload = {
+        email: normalizedEmail,
+      };
+
+      // بک‌اند اینجا OTP رو به ایمیل می‌فرسته
+      const res: RegisterSuccessResponse = await loginService(payload);
+      console.log("login (send otp) response:", res);
 
       toast.success("کد تایید به ایمیل شما ارسال شد!");
       setStep("otp");
-    } catch (error) {
-      console.error("Error submitting email:", error);
-      toast.error("خطا در ارسال کد تایید. لطفا دوباره تلاش کنید.");
-    }
-  };
-
-  const handleOtpSubmit = async () => {
-    try {
-      if (otpValue.length === 6) {
-        setOtpLoading(true);
-        console.log("OTP verification for:", userEmail, "OTP:", otpValue);
-
-        // اینجا می‌توانید API call برای تایید OTP انجام دهید
-        // const payload: LoginPayload = {
-        //   email: userEmail,
-        //   otp: otpValue,
-        // };
-        // const res: LoginSuccessResponse = await loginService(payload);
-        // const { access_token, refresh_token } = res.data;
-        // localStorage.setItem("access_token", access_token);
-        // localStorage.setItem("refresh_token", refresh_token);
-
-        toast.success("ورود با موفقیت انجام شد!");
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 1500);
-      }
     } catch (error: any) {
-      console.error("Error verifying OTP:", error);
+      console.error("Error submitting email:", error);
 
       const backend = error?.response?.data as LoginErrorResponse | undefined;
 
       if (backend?.status === 401) {
-        toast.error("کد تایید اشتباه است.");
+        toast.error("ایمیل یافت نشد یا غیرمجاز است.");
       } else {
-        toast.error("خطا در تایید. لطفا دوباره تلاش کنید.");
+        toast.error("خطا در ارسال کد تایید. لطفا دوباره تلاش کنید.");
       }
+    }
+  };
+
+  // مرحله ۲: ارسال OTP برای ورود و گرفتن توکن‌ها
+  const handleOtpSubmit = async () => {
+    if (!userEmail) {
+      toast.error("ایمیل کاربر یافت نشد. دوباره تلاش کنید.");
+      setStep("email");
+      return;
+    }
+
+    if (otpValue.length !== 6) return;
+
+    try {
+      setOtpLoading(true);
+      console.log("OTP verification for:", userEmail, "OTP:", otpValue);
+
+      const res: VerifyOtpSuccessResponse = await verifyOtpLoginService({
+        email: userEmail,
+        code: otpValue,
+      });
+
+      console.log("verify login otp response:", res);
+
+      const { access_token, refresh_token } = res.data;
+
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
+
+      toast.success("ورود با موفقیت انجام شد!");
+      navigate("/dashboard");
+    } catch (error: any) {
+      console.error("Error verifying OTP:", error);
+
+      const backend401 = error?.response?.data as LoginErrorResponse | undefined;
+      const backend404 = error?.response?.data as VerifyOtpErrorResponse | undefined;
+
+      if (backend401?.status === 401) {
+        toast.error("کد تایید اشتباه است.");
+      } else if (backend404?.status === 404) {
+        toast.error("کد تایید یافت نشد یا منقضی شده است.");
+      } else {
+        toast.error("خطا در تایید کد. لطفا دوباره تلاش کنید.");
+      }
+    } finally {
       setOtpLoading(false);
     }
   };
 
   const handleResendOtp = async () => {
     try {
-      // اینجا می‌توانید API call برای ارسال مجدد OTP انجام دهید
+      if (!userEmail) return;
+
+      // اینجا می‌توانی API ارسال مجدد OTP برای لاگین را صدا بزنی
       // await resendLoginOTP(userEmail);
+
       console.log("Resending OTP to:", userEmail);
       toast.success("کد تایید دوباره ارسال شد!");
     } catch (error) {
@@ -191,8 +221,8 @@ function Login() {
                         className="text-[#FFD500] hover:text-[#e6c200] font-semibold underline cursor-pointer transition-colors duration-200"
                       >
                         ثبت‌نام کنید
-                      </button>
-                      {" "}حساب کاربری ندارید؟
+                      </button>{" "}
+                      حساب کاربری ندارید؟
                     </p>
                   </div>
                 </div>
@@ -225,30 +255,13 @@ function Login() {
                   dir="ltr"
                 >
                   <InputOTPGroup className="gap-3">
-                    <InputOTPSlot
-                      index={0}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
-                    <InputOTPSlot
-                      index={1}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
-                    <InputOTPSlot
-                      index={2}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
-                    <InputOTPSlot
-                      index={3}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
-                    <InputOTPSlot
-                      index={4}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
-                    <InputOTPSlot
-                      index={5}
-                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                    />
+                    {[0, 1, 2, 3, 4, 5].map((i) => (
+                      <InputOTPSlot
+                        key={i}
+                        index={i}
+                        className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                      />
+                    ))}
                   </InputOTPGroup>
                 </InputOTP>
               </div>
@@ -291,7 +304,7 @@ function Login() {
                     setStep("email");
                     setOtpValue("");
                   }}
-                  className="text-white/70 hover:text-white text-sm transition-colors duration-200"
+                  className="text-white/70 hover:text-white text-sm transition-colors	duration-200"
                 >
                   بازگشت به مرحله قبل
                 </button>
@@ -312,7 +325,7 @@ function Login() {
       <img
         src={CESA}
         alt="CESA Logo"
-        className="absolute bottom-4 left-4 w-20 opacity-80 hover:opacity-100 transition-opacity duration-300"
+        className="absolute bottom-4 left-4 w-20 opacity-80 hover:opacity-100 transition-opacity	duration-300"
       />
     </div>
   );
