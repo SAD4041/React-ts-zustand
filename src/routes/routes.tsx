@@ -6,6 +6,8 @@ import SignUp from "@/pages/SignUp";
 import LogIn from "@/pages/Login";
 import BuildTeam from "@/pages/BuildTeam";
 import Dashboard from "@/pages/Dashboard";
+import BootcampDetails from "@/pages/BootCamp";
+
 
 export const router = createBrowserRouter([
   {
@@ -35,9 +37,13 @@ export const router = createBrowserRouter([
         path: "/buildteam",
         element: <BuildTeam />,
       },
-	        {
+      {
         path: "/dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "/camp",
+        element: <BootcampDetails />,
       },
       // {
     ],
