@@ -1,28 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import adidas from '@/assets/Adidas-Logo.wine.png'
-import nike from '@/assets/Nike,_Inc.-Logo.wine.png'
-import zara from '@/assets/Zara_(retailer)-Logo.wine.png'
-import gucci from '@/assets/Gucci-Logo.wine.png'
-import dior from '@/assets/Christian_Dior_(fashion_house)-Logo.wine.png'
-import chanel from '@/assets/Chanel-Logo.wine.png'
-import burberry from '@/assets/Burberry-Logo.wine.png'
-import fendi from '@/assets/Fendi-Logo.wine.png'
+import { sendUserAction, type UserAction } from '@/services/homeService';
 
-const BestSellersSection: React.FC = () => {
+interface Brand {
+  id: number;
+  name: string;
+  logo_url: string;
+  slug: string;
+}
+
+interface BestBrandsSectionProps {
+  brands: Brand[];
+  onBrandClick: (action: Omit<UserAction, 'timestamp'>) => void;
+}
+
+const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBrandClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  // ❗ تصحیح: هر برند باید لوگو و لینک صحیح خودش را داشته باشد
-  const brands = [
-    { name: 'Adidas', logo: adidas, link: '/brand/adidas' },
-    { name: 'Nike', logo: nike, link: '/brand/nike' },
-    { name: 'Zara', logo: zara, link: '/brand/zara' },
-    { name: 'Gucci', logo: gucci, link: '/brand/gucci' },
-    { name: 'Dior', logo: dior, link: '/brand/dior' },
-    { name: 'Chanel', logo: chanel, link: '/brand/chanel' },
-    { name: 'Burberry', logo: burberry, link: '/brand/burberry' },
-    { name: 'Fendi', logo: fendi, link: '/brand/fendi' },
-  ];
 
   const itemsPerPage = 4;
   const totalItems = brands.length;
@@ -39,7 +32,7 @@ const BestSellersSection: React.FC = () => {
     }
   };
 
-  const visibleProducts = brands.slice(currentIndex, currentIndex + itemsPerPage);
+  const visibleBrands = brands.slice(currentIndex, currentIndex + itemsPerPage);
 
   const listVariants = {
     hidden: { opacity: 0 },
@@ -98,9 +91,9 @@ const BestSellersSection: React.FC = () => {
               key={currentIndex}
             >
               <AnimatePresence initial={false}>
-                {visibleProducts.map((brand, index) => (
+                {visibleBrands.map((brand) => (
                   <motion.div
-                    key={brand.name}
+                    key={brand.id}
                     variants={itemVariants}
                     initial="hidden"
                     animate="visible"
@@ -108,10 +101,18 @@ const BestSellersSection: React.FC = () => {
                     transition={{ duration: 0.3 }}
                     className="flex-shrink-0 cursor-pointer group"
                   >
-                    <a href={brand.link} className="block text-center">
+                    <a
+                      href={`/brand/${brand.slug}`}
+                      className="block text-center"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onBrandClick({ action: "click", target_type: "brand", target_id: brand.id });
+                        window.location.href = `/brand/${brand.slug}`;
+                      }}
+                    >
                       <div className="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center mb-2 group-hover:bg-gray-400 transition-colors">
                         <img
-                          src={brand.logo}
+                          src={brand.logo_url}
                           alt={brand.name}
                           className="h-10 w-auto object-contain filter grayscale group-hover:grayscale-0 transition"
                         />
@@ -154,4 +155,4 @@ const BestSellersSection: React.FC = () => {
   );
 };
 
-export default BestSellersSection;
+export default BestBrandsSection;

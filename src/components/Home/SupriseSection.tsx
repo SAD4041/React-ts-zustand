@@ -1,9 +1,6 @@
-// components/sections/SurpriseSection.tsx
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '@/components/Product/ProductCard';
-import { products } from '@/data/data';
 import { toPersianDigits } from '@/utils/PersianDigits';
 
 interface Timer {
@@ -13,7 +10,22 @@ interface Timer {
   seconds: number;
 }
 
-const SurpriseSection: React.FC = () => {
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  original_price?: number;
+  discount_percent?: number;
+  image_url: string;
+  category: string;
+  in_stock: boolean;
+}
+
+interface SurpriseSectionProps {
+  products: Product[]; // دریافت محصولات از API
+}
+
+const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [timer, setTimer] = useState<Timer>({ days: 0, hours: 3, minutes: 14, seconds: 36 });
 
@@ -116,7 +128,7 @@ const SurpriseSection: React.FC = () => {
               key={currentIndex}
             >
               <AnimatePresence initial={false}>
-                {visibleProducts.map((product, index) => (
+                {visibleProducts.map((product) => (
                   <motion.div
                     key={product.id}
                     variants={itemVariants}

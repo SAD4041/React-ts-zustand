@@ -1,31 +1,21 @@
-// components/sections/BrandSlider.tsx
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import image1 from '@/assets/image1.png';
-import adidas from '@/assets/Adidas-Logo.wine.png'
-import nike from '@/assets/Nike,_Inc.-Logo.wine.png'
-import zara from '@/assets/Zara_(retailer)-Logo.wine.png'
-import gucci from '@/assets/Gucci-Logo.wine.png'
-import dior from '@/assets/Christian_Dior_(fashion_house)-Logo.wine.png'
-import chanel from '@/assets/Chanel-Logo.wine.png'
-import burberry from '@/assets/Burberry-Logo.wine.png'
-import fendi from '@/assets/Fendi-Logo.wine.png'
+import { sendUserAction, type UserAction } from '@/services/homeService';
 
-const BrandSlider: React.FC = () => {
+interface Brand {
+  id: number;
+  name: string;
+  logo_url: string;
+  slug: string;
+}
+
+interface BrandSliderProps {
+  brands: Brand[];
+  onBrandClick: (action: Omit<UserAction, 'timestamp'>) => void;
+}
+
+const BrandSlider: React.FC<BrandSliderProps> = ({ brands = [], onBrandClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  // لیست برندها (هر کدام یک لوگو و لینک دارند)
-  const brands = [
-    { name: 'Adidas', logo: adidas, link: '/brand/adidas' },
-    { name: 'Balenciaga', logo: nike, link: '/brand/nike' },
-    { name: 'Chanel', logo: zara, link: '/brand/zara' },
-    { name: 'Zara', logo: gucci, link: '/brand/gucci' },
-    { name: 'Dior', logo: dior, link: '/brand/dior' },
-    { name: 'Burberry', logo: chanel, link: '/brand/chanel' },
-    { name: 'Fendi', logo: burberry, link: '/brand/burberry' },
-    { name: 'Nike', logo: fendi, link: '/brand/fendi' },
-  ];
 
   const itemsPerPage = 10;
   const totalItems = brands.length;
@@ -96,9 +86,9 @@ const BrandSlider: React.FC = () => {
             key={currentIndex}
           >
             <AnimatePresence initial={false}>
-              {visibleBrands.map((brand, index) => (
+              {visibleBrands.map((brand) => (
                 <motion.div
-                  key={brand.name}
+                  key={brand.id}
                   variants={itemVariants}
                   initial="hidden"
                   animate="visible"
@@ -106,9 +96,17 @@ const BrandSlider: React.FC = () => {
                   transition={{ duration: 0.3 }}
                   className="flex-shrink-0 cursor-pointer"
                 >
-                  <a href={brand.link} className="block">
+                  <a
+                    href={`/brand/${brand.slug}`}
+                    className="block"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onBrandClick({ action: "click", target_type: "brand", target_id: brand.id });
+                      window.location.href = `/brand/${brand.slug}`;
+                    }}
+                  >
                     <img
-                      src={brand.logo}
+                      src={brand.logo_url}
                       alt={brand.name}
                       className="h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition"
                     />

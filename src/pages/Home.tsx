@@ -1,20 +1,18 @@
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Button from "@/components/ui/button";
 import ProductCard from "@/components/Product/ProductCard";
-import { fetchHomePageData } from "@/services/homeService";
+import { fetchHomePageData, sendUserAction, type UserAction } from "@/services/homeService";
 import type { HomePageResponse } from "@/types/homeTypes";
 import SliderSection from "@/components/Home/SliderSection";
 import Header from "@/components/Header/Header";
-import { products } from '@/data/data.ts'
 import Footer from "@/components/Footer/Footer";
 import SurpriseSection from "@/components/Home/SupriseSection";
-import BestSellersSection from "@/components/Home/BestSeller";
+import BestBrandsSection from "@/components/Home/BestBrand";
 import BrandSlider from "@/components/Home/BrandSlider";
 
 import bannerFallback from "@/assets/banner.jpg";
-import adidasFallback from "@/assets/shortTshirt.jpg";
 import category1 from "@/assets/category1.png";
 import category2 from "@/assets/category2.png";
 import category3 from "@/assets/category3.png";
@@ -27,27 +25,10 @@ import style3 from "@/assets/style3.jpg";
 import style4 from "@/assets/style4.jpg";
 import poshtibani from "@/assets/poshtibani.png"
 
-
 export default function Home() {
   const [homeData, setHomeData] = useState<HomePageResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const [amazingIndex, setAmazingIndex] = useState(0);
-  const [bestIndex, setBestIndex] = useState(0);
-
-  const getItemsPerView = (section: "amazing" | "best") => {
-    if (typeof window === "undefined") return 1;
-    const width = window.innerWidth;
-    if (width >= 1280) return section === "amazing" ? 5 : 4;
-    if (width >= 1024) return section === "amazing" ? 4 : 3;
-    if (width >= 768) return 3;
-    if (width >= 640) return 2;
-    return 1;
-  };
-
-  const [amazingPerView, setAmazingPerView] = useState(getItemsPerView("amazing"));
-  const [bestPerView, setBestPerView] = useState(getItemsPerView("best"));
 
   useEffect(() => {
     const loadHomeData = async () => {
@@ -67,25 +48,6 @@ export default function Home() {
     loadHomeData();
   }, []);
 
-  useEffect(() => {
-    const handleResize = () => {
-      const newAmazing = getItemsPerView("amazing");
-      const newBest = getItemsPerView("best");
-      setAmazingPerView(newAmazing);
-      setBestPerView(newBest);
-
-      if (homeData) {
-        setAmazingIndex((i) => Math.min(i, Math.max(0, homeData.amazing_products.length - newAmazing)));
-        setBestIndex((i) => Math.min(i, Math.max(0, homeData.best_selling_brands.length - newBest)));
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, [homeData]);
-
-
   if (loading) {
     return (
       <div className="w-full min-h-screen flex items-center justify-center bg-white">
@@ -98,8 +60,9 @@ export default function Home() {
     console.warn("Home page error fallback activated");
   }
 
+  // داده‌های واقعی یا فیک در صورت خطا
   const data = homeData || {
-    banner: { image_url: bannerFallback },
+    banner: { id: 1, image_url: bannerFallback },
     categories: [
       { id: 1, name: "اکسسوری", slug: "accessories", image_url: category1 },
       { id: 2, name: "لباس گرم", slug: "winter-wear", image_url: category2 },
@@ -108,28 +71,29 @@ export default function Home() {
       { id: 5, name: "پلیور", slug: "sweater", image_url: category5 },
       { id: 6, name: "تیشرت", slug: "tshirt", image_url: category6 },
     ],
-    amazing_products: Array.from({ length: 10 }, (_, i) => ({
-      id: i + 1,
-      name: `محصول شگفت‌انگیز ${i + 1}`,
-      price: 150000,
-      original_price: 200000,
-      discount_percent: 25,
-      image_url: bannerFallback,
-      category: "tshirt",
-      in_stock: true,
-    })),
+    amazing_products: [],
+    best_selling_brands: [],
     style_palettes: [
-      { id: 1, title: "کلاسیک", slug: "classic", image_url: bannerFallback },
-      { id: 2, title: "اسپرت", slug: "sport", image_url: bannerFallback },
-      { id: 3, title: "وینتیج", slug: "vintage", image_url: bannerFallback },
-      { id: 4, title: "بوهو", slug: "boho", image_url: bannerFallback },
+      { id: 1, title: "کلاسیک", slug: "classic", image_url: style1 },
+      { id: 2, title: "اسپرت", slug: "sport", image_url: style2 },
+      { id: 3, title: "وینتیج", slug: "vintage", image_url: style3 },
+      { id: 4, title: "بوهو", slug: "boho", image_url: style4 },
     ],
   };
 
   const { banner, categories, amazing_products, best_selling_brands, style_palettes } = data;
 
+  const logUserAction = (action: Omit<UserAction, 'timestamp'>) => {
+    const userAction: UserAction = {
+      ...action,
+      timestamp: new Date().toISOString(),
+    };
+    sendUserAction(userAction);
+  };
+
   return (
     <div className="w-full min-h-screen bg-white font-vazir">
+
       <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] overflow-hidden">
         <div className="absolute inset-0 rounded-b-[50px] overflow-hidden">
           <img
@@ -158,6 +122,7 @@ export default function Home() {
               key={cat.id}
               to={`/category/${cat.slug}`}
               className="flex flex-col items-center gap-2 group cursor-pointer"
+              onClick={() => logUserAction({ action: "click", target_type: "category", target_id: cat.id })}
             >
               <div className="w-20 h-20 rounded-full p-2 flex items-center justify-center transition-colors">
                 <img
@@ -190,43 +155,40 @@ export default function Home() {
         </div>
       </div>
 
-      <BestSellersSection />
+      <BestBrandsSection brands={best_selling_brands} onBrandClick={logUserAction} />
 
-      <BrandSlider />
+      <BrandSlider brands={best_selling_brands} onBrandClick={logUserAction} />
 
       <div className="py-12 px-4 from-pink-50 to-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8">خرید بر اساس استایل</h2>
-
           <div className="flex flex-col md:flex-row gap-4">
             <div className="md:w-2/3 relative group cursor-pointer overflow-hidden rounded-xl">
               <Link to={`/style/classic`} className="block aspect-square">
                 <img
-                  src={style1}
+                  src={style_palettes[0]?.image_url || style1}
                   alt="کلاسیک"
                   className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                 />
                 <p className="absolute bottom-4 right-4 text-black text-xl font-bold">کلاسیک</p>
               </Link>
             </div>
-
             <div className="md:w-1/2 flex flex-col gap-4">
               <div className="flex gap-4">
                 <div className="w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
                   <Link to={`/style/sport`} className="block aspect-square">
                     <img
-                      src={style2}
+                      src={style_palettes[1]?.image_url || style2}
                       alt="اسپرت"
                       className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                     />
                     <p className="absolute bottom-4 right-4 text-black text-lg font-bold">اسپرت</p>
                   </Link>
                 </div>
-
                 <div className="w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
                   <Link to={`/style/street`} className="block aspect-square">
                     <img
-                      src={style3}
+                      src={style_palettes[2]?.image_url || style3}
                       alt="استریت"
                       className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                     />
@@ -234,11 +196,10 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-
               <div className="relative group cursor-pointer overflow-hidden rounded-xl">
                 <Link to={`/style/vintage`} className="block aspect-square">
                   <img
-                    src={style4}
+                    src={style_palettes[3]?.image_url || style4}
                     alt="وینتیج"
                     className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                   />
@@ -250,18 +211,6 @@ export default function Home() {
         </div>
       </div>
 
-
-      {/* <a
-        href="/support" // یا لینک واقعی پشتیبانی
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 flex items-center justify-center rounded-full border-2 border-gray-800 bg-white shadow-lg cursor-pointer hover:shadow-xl transition"
-        aria-label="پشتیبانی"
-      >
-        <img
-          src={poshtibani} // آیکون پشتیبانی — بعداً با آیکون واقعی عوضش کن
-          alt="پشتیبانی"
-          className="w-10 h-10 object-contain"
-        />
-      </a> */}
       <div className="py-8 mx-6 flex justify-end">
         <a
           href="/support"
