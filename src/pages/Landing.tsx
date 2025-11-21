@@ -19,8 +19,12 @@ import {
   Mail,
   BookOpen,
   Laptop,
+  LogOut,
+  User,
 } from "lucide-react";
 import cesa from "../assets/CESA.svg";
+import uni from "../assets/uni.png";
+import Footer from "@/components/Custom/Footer.tsx";
 
 function ICPCLanding() {
   const [scrollY, setScrollY] = useState(0);
@@ -32,9 +36,24 @@ function ICPCLanding() {
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [particles, setParticles] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   useEffect(() => {
-    // تولید ذرات
+    // چک کردن اگر کاربر لاگین کرده
+    const accessToken = localStorage.getItem("access_token");
+    const userDataStr = localStorage.getItem("userData");
+
+    if (accessToken) {
+      setIsLoggedIn(true);
+      if (userDataStr) {
+        setUserData(JSON.parse(userDataStr));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     const newParticles = [...Array(40)].map((_, i) => ({
       id: i,
       left: Math.random() * 100,
@@ -91,6 +110,19 @@ function ICPCLanding() {
     window.location.href = "/login";
   };
 
+  const handleDashboardClick = () => {
+    window.location.href = "/dashboard";
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("userData");
+    setIsLoggedIn(false);
+    setUserData(null);
+    setUserDropdownOpen(false);
+  };
+
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -140,12 +172,6 @@ function ICPCLanding() {
       label: "شرکت‌کننده",
       color: "#46BEF6",
     },
-    // {
-    //   icon: MapPin,
-    //   number: "110+",
-    //   label: "کشور شرکت‌کننده",
-    //   color: "#D7263D",
-    // },
     {
       icon: Trophy,
       number: "4",
@@ -269,20 +295,60 @@ function ICPCLanding() {
               ))}
             </div>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons or User Profile */}
             <div className="hidden md:flex items-center gap-3">
-              <Button
-                onClick={handleLoginClick}
-                className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-lg transition-all duration-200"
-              >
-                ورود
-              </Button>
-              <Button
-                onClick={handleRegisterClick}
-                className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold px-6 py-2 rounded-lg transition-all duration-200 shadow-lg hover:shadow-[#FFD500]/50"
-              >
-                ثبت‌نام
-              </Button>
+              {isLoggedIn && userData ? (
+                <div className="relative group">
+                  <button
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200"
+                  >
+                    <User className="w-5 h-5" />
+                    <span>{userData?.name}</span>
+                  </button>
+
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-[#00274D]/95 backdrop-blur-lg border border-white/20 rounded-lg shadow-2xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <button
+                      onClick={handleDashboardClick}
+                      className="w-full px-4 py-2 text-right text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200 flex items-center gap-2"
+                    >
+                      <Home className="w-4 h-4" />
+                      داشبورد
+                    </button>
+                    <button
+                      onClick={() => {
+                        window.location.href = "/profile";
+                      }}
+                      className="w-full px-4 py-2 text-right text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200 flex items-center gap-2"
+                    >
+                      <User className="w-4 h-4" />
+                      پروفایل
+                    </button>
+                    <hr className="my-2 border-white/10" />
+                    <button
+                      onClick={handleLogout}
+                      className="w-full px-4 py-2 text-right text-red-400 hover:text-red-300 hover:bg-white/10 transition-all duration-200 flex items-center gap-2"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      خروج
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <Button
+                    onClick={handleLoginClick}
+                    className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-lg transition-all duration-200"
+                  >
+                    ورود
+                  </Button>
+                  <Button
+                    onClick={handleRegisterClick}
+                    className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold px-6 py-2 rounded-lg transition-all duration-200 shadow-lg hover:shadow-[#FFD500]/50"
+                  >
+                    ثبت‌نام
+                  </Button>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -312,18 +378,37 @@ function ICPCLanding() {
                 </button>
               ))}
               <div className="flex flex-col gap-2 mt-4 px-4">
-                <Button
-                  onClick={handleLoginClick}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-lg transition-all duration-200"
-                >
-                  ورود
-                </Button>
-                <Button
-                  onClick={handleRegisterClick}
-                  className="w-full bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-3 rounded-lg transition-all duration-200"
-                >
-                  ثبت‌نام
-                </Button>
+                {isLoggedIn && userData ? (
+                  <>
+                    <Button
+                      onClick={handleDashboardClick}
+                      className="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-lg transition-all duration-200"
+                    >
+                      داشبورد
+                    </Button>
+                    <Button
+                      onClick={handleLogout}
+                      className="w-full bg-red-500/20 hover:bg-red-500/30 text-red-300 py-3 rounded-lg transition-all duration-200"
+                    >
+                      خروج
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      onClick={handleLoginClick}
+                      className="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-lg transition-all duration-200"
+                    >
+                      ورود
+                    </Button>
+                    <Button
+                      onClick={handleRegisterClick}
+                      className="w-full bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-3 rounded-lg transition-all duration-200"
+                    >
+                      ثبت‌نام
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           )}
@@ -343,7 +428,6 @@ function ICPCLanding() {
             }}
           />
 
-          {/* Enhanced Floating Particles */}
           {particles.map((particle) => (
             <div
               key={particle.id}
@@ -422,19 +506,39 @@ function ICPCLanding() {
             className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up"
             style={{ animationDelay: "0.8s" }}
           >
-            <Button
-              onClick={handleRegisterClick}
-              className="group relative bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-bold py-6 px-12 rounded-xl text-lg transition-all duration-300 shadow-2xl hover:shadow-[#FFD500]/50 hover:scale-105"
-            >
-              <Sparkles className="w-5 h-5 inline-block ml-2 group-hover:rotate-12 transition-transform" />
-              ثبت‌نام در مسابقه
-            </Button>
-            <Button
-              onClick={handleCampClick}
-              className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-semibold py-6 px-12 rounded-xl text-lg transition-all duration-300 hover:scale-105"
-            >
-              اطلاعات بوت کمپ
-            </Button>
+            {isLoggedIn ? (
+              <>
+                <Button
+                  onClick={handleDashboardClick}
+                  className="group relative bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-bold py-6 px-12 rounded-xl text-lg transition-all duration-300 shadow-2xl hover:shadow-[#FFD500]/50 hover:scale-105"
+                >
+                  <Home className="w-5 h-5 inline-block ml-2 group-hover:rotate-12 transition-transform" />
+                  رفتن به داشبورد
+                </Button>
+                <Button
+                  onClick={handleCampClick}
+                  className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-semibold py-6 px-12 rounded-xl text-lg transition-all duration-300 hover:scale-105"
+                >
+                  اطلاعات بوت کمپ
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={handleRegisterClick}
+                  className="group relative bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-bold py-6 px-12 rounded-xl text-lg transition-all duration-300 shadow-2xl hover:shadow-[#FFD500]/50 hover:scale-105"
+                >
+                  <Sparkles className="w-5 h-5 inline-block ml-2 group-hover:rotate-12 transition-transform" />
+                  ثبت‌نام در مسابقه
+                </Button>
+                <Button
+                  onClick={handleCampClick}
+                  className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-semibold py-6 px-12 rounded-xl text-lg transition-all duration-300 hover:scale-105"
+                >
+                  اطلاعات بوت کمپ
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Scroll Indicator */}
@@ -480,11 +584,7 @@ function ICPCLanding() {
             ElmocPC یک رقابت علمی–فنی پویا و دانشجویی است که طی چهار دوره گذشته
             به‌صورت آنلاین برگزار شده و توانسته تجربه‌ای موفق، منظم و پرمخاطب
             ایجاد کند. امسال، پس از چندین دوره تجربه ارزشمند در برگزاری آنلاین،
-            این رویداد برای نخستین‌بار به شکل حضوری برگزار خواهد شد. هدف ElmocPC
-            فراهم‌کردن فضایی حرفه‌ای برای یادگیری، چالش، همکاری و سنجش
-            توانمندی‌های شرکت‌کنندگان است؛ فضایی که هر سال با استقبال بیشتری
-            همراه شده و اکنون با برگزاری حضوری، قدمی بزرگ‌تر به سوی تعاملی‌تر و
-            هیجان‌انگیزتر شدن برمی‌دارد.
+            این رویداد برای نخستین‌بار به شکل حضوری برگزار خواهد شد.
           </p>
         </div>
 
@@ -531,7 +631,7 @@ function ICPCLanding() {
             {bootcampModules.map((module, index) => (
               <a
                 key={index}
-                href="/bootcamp-details"
+                href="/camp"
                 className="group relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer"
               >
                 <div
@@ -591,7 +691,7 @@ function ICPCLanding() {
             </div>
             <div className="text-center">
               <Button
-                onClick={() => (window.location.href = "/bootcamp-details")}
+                onClick={() => (window.location.href = "/camp")}
                 className="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 hover:scale-105 border border-white/20"
               >
                 مشاهده جزئیات کامل
@@ -657,72 +757,21 @@ function ICPCLanding() {
               به جمع شرکت‌کنندگان ElmocPC بپیوندید و مهارت‌های الگوریتمی خود را
               در شرایط شبیه‌سازی‌شده‌ی آزمون کشوری محک بزنید.
             </p>
-            <Button
-              onClick={handleRegisterClick}
-              className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-bold py-6 px-12 rounded-xl text-lg transition-all duration-300 shadow-2xl hover:shadow-[#FFD500]/50 hover:scale-105"
-            >
-              <Sparkles className="w-5 h-5 inline-block ml-2" />
-              همین الان ثبت‌نام کنید
-            </Button>
+            {!isLoggedIn && (
+              <Button
+                onClick={handleRegisterClick}
+                className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-bold py-6 px-12 rounded-xl text-lg transition-all duration-300 shadow-2xl hover:shadow-[#FFD500]/50 hover:scale-105"
+              >
+                <Sparkles className="w-5 h-5 inline-block ml-2" />
+                همین الان ثبت‌نام کنید
+              </Button>
+            )}
           </div>
         </div>
       </div>
 
       {/* Footer */}
-      <footer
-        id="contact"
-        className="py-8 border-t border-white/10 bg-black/20 backdrop-blur-sm"
-      >
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            {/* Right side logos */}
-            <div className="flex items-center gap-4 order-2 md:order-1 mt-6 md:mt-0">
-              <img
-                src="/logos/logo1.png"
-                alt="Logo 1"
-                className="h-10 opacity-80 hover:opacity-100 transition"
-              />
-              <img
-                src="/logos/logo2.png"
-                alt="Logo 2"
-                className="h-10 opacity-80 hover:opacity-100 transition"
-              />
-              <img
-                src="/logos/logo3.png"
-                alt="Logo 3"
-                className="h-10 opacity-80 hover:opacity-100 transition"
-              />
-            </div>
-
-            {/* Contact section */}
-            <div className="text-center md:text-left ml-10 mr-10 order-1 md:order-2">
-              <h3 className="text-xl font-bold text-white mb-2">تماس با ما</h3>
-              <p className="text-gray-400 mb-4">
-                برای اطلاعات بیشتر با ما در ارتباط باشید
-              </p>
-
-              <div className="flex justify-end gap-6 text-gray-400 mb-4">
-                <a
-                  href="mailto:info@icpc.com"
-                  className="hover:text-[#FFD500] transition-colors duration-200"
-                >
-                  <Mail className="w-6 h-6" />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Copyright – centered bottom */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-400 mb-1">
-              © 2025 ELMOCPC - تمامی حقوق محفوظ است
-            </p>
-            <p className="text-sm text-gray-500">
-              Computer Engineering Scientific Associate
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       <style jsx>{`
         @keyframes slide-up {

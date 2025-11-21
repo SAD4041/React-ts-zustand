@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   Users, 
@@ -24,57 +25,79 @@ import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [userData, setUserData] = useState(null);
+  const [teamData, setTeamData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // داده‌های نمونه کاربر
-  const userData = {
-    name: "علی احمدی",
-    email: "ali.ahmadi@university.ac.ir",
-    phone: "09123456789",
-    studentId: "98123456",
-    university: "دانشگاه تهران",
-    role: "کاپیتان",
-    avatar: "AA",
-    hasTeam: true,
-    teamName: "Code Warriors",
-    registrationStatus: "confirmed",
-  };
+  // چک کردن توکن و لود کردن اطلاعات کاربر
+  useEffect(() => {
+    const checkAuthAndFetchData = async () => {
+      try {
+        const accessToken = localStorage.getItem("access_token");
 
-  // داده‌های تیم
-  const teamData = {
-    name: "Code Warriors",
-    members: [
-      {
-        name: "علی احمدی",
-        email: "ali.ahmadi@university.ac.ir",
-        phone: "09123456789",
-        studentId: "98123456",
-        university: "دانشگاه تهران",
-        role: "کاپیتان",
-      },
-      {
-        name: "محمد رضایی",
-        email: "m.rezaei@university.ac.ir",
-        phone: "09121234567",
-        studentId: "98123457",
-        university: "دانشگاه تهران",
-        role: "عضو اول",
-      },
-      {
-        name: "سارا محمدی",
-        email: "s.mohammadi@university.ac.ir",
-        phone: "09129876543",
-        studentId: "98123458",
-        university: "دانشگاه تهران",
-        role: "عضو دوم",
-      },
-    ],
-    registrationDate: "1404/01/15",
-    status: "confirmed",
-  };
+        if (!accessToken) {
+          navigate("/login");
+          return;
+        }
 
-  // اطلاعیه‌ها
+        // دریافت اطلاعات کاربر
+        const userResponse = await fetch(
+          `${import.meta.env.VITE_API_URL}/users/profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!userResponse.ok) {
+          if (userResponse.status === 401) {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            navigate("/login");
+            return;
+          }
+          throw new Error("خطا در دریافت اطلاعات کاربر");
+        }
+
+        const user = await userResponse.json();
+        console.log("User data:", user);
+        setUserData(user.data);
+
+        // دریافت اطلاعات تیم اگر کاربر در تیمی است
+        if (user.data?.teamId) {
+          const teamResponse = await fetch(
+            `${import.meta.env.VITE_API_URL}/teams/${user.data.teamId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (teamResponse.ok) {
+            const team = await teamResponse.json();
+            setTeamData(team.data);
+          }
+        }
+      } catch (err: any) {
+        console.error("Error:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuthAndFetchData();
+  }, [navigate]);
+
+  // داده‌های نمونه برای اطلاعیه‌ها
   const notifications = [
     {
       id: 1,
@@ -134,13 +157,42 @@ function Dashboard() {
   ];
 
   const handleLogout = () => {
-    alert("خروج از حساب کاربری");
-    window.location.href = "/login";
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("userData");
+    navigate("/login");
   };
 
   const handleCreateTeam = () => {
-    window.location.href = "/team-registration";
+    navigate("/buildteam");
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#00274D] via-[#003D6B] to-[#00274D] flex items-center justify-center text-white">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#FFD500]/30 border-t-[#FFD500] rounded-full animate-spin mx-auto mb-4" />
+          <p>درحال بارگذاری...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !userData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#00274D] via-[#003D6B] to-[#00274D] flex items-center justify-center text-white">
+        <div className="text-center">
+          <p className="text-red-400 mb-4">{error || "خطا در بارگذاری اطلاعات"}</p>
+          <Button
+            onClick={() => navigate("/login")}
+            className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D]"
+          >
+            بازگشت به ورود
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#00274D] via-[#003D6B] to-[#00274D] text-white" dir="rtl">
@@ -176,17 +228,18 @@ function Dashboard() {
           {sidebarOpen && (
             <div className="mb-8 p-4 bg-white/5 rounded-xl border border-white/10 transition-all duration-300">
               <div className="w-16 h-16 bg-[#FFD500] rounded-full flex items-center justify-center text-[#00274D] font-bold text-xl mx-auto mb-3">
-                {userData.avatar}
+                {userData?.name?.charAt(0)}
+                {userData?.familyName?.charAt(0) || userData?.name?.split(" ")[1]?.charAt(0)}
               </div>
-              <h3 className="text-center font-semibold mb-1">{userData.name}</h3>
-              <p className="text-center text-xs text-gray-400 mb-2">{userData.role}</p>
+              <h3 className="text-center font-semibold mb-1">
+                {userData?.name} {userData?.familyName}
+              </h3>
+              <p className="text-center text-xs text-gray-400 mb-2">
+                {teamData ? "کاپیتان تیم" : "عضو تیم"}
+              </p>
               <div className="flex items-center justify-center gap-2 text-xs">
-                <span className={`px-2 py-1 rounded-full ${
-                  userData.registrationStatus === "confirmed" 
-                    ? "bg-green-500/20 text-green-400" 
-                    : "bg-yellow-500/20 text-yellow-400"
-                }`}>
-                  {userData.registrationStatus === "confirmed" ? "تایید شده" : "در انتظار"}
+                <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded-full">
+                  فعال
                 </span>
               </div>
             </div>
@@ -199,7 +252,6 @@ function Dashboard() {
                 key={item.id}
                 onClick={() => {
                   setActiveTab(item.id);
-                  // Close sidebar on mobile after selecting
                   if (window.innerWidth < 768) {
                     setSidebarOpen(false);
                   }
@@ -262,7 +314,9 @@ function Dashboard() {
             <div className="space-y-6">
               {/* Welcome Card */}
               <div className="bg-gradient-to-r from-[#FFD500]/20 to-[#FFD500]/5 backdrop-blur-md border border-[#FFD500]/30 rounded-2xl p-8">
-                <h2 className="text-3xl font-bold mb-2">سلام، {userData.name}! 👋</h2>
+                <h2 className="text-3xl font-bold mb-2">
+                  سلام، {userData?.name}! 👋
+                </h2>
                 <p className="text-gray-300">
                   به داشبورد مسابقات ICPC 2025 خوش آمدید
                 </p>
@@ -273,7 +327,9 @@ function Dashboard() {
                 <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
                   <div className="flex items-center justify-between mb-4">
                     <Users className="w-10 h-10 text-blue-400" />
-                    <span className="text-3xl font-bold">{teamData.members.length}</span>
+                    <span className="text-3xl font-bold">
+                      {teamData?.members?.length || 0}
+                    </span>
                   </div>
                   <h3 className="text-gray-300">اعضای تیم</h3>
                 </div>
@@ -364,14 +420,16 @@ function Dashboard() {
           {/* Team Tab */}
           {activeTab === "team" && (
             <div className="space-y-6">
-              {userData.hasTeam ? (
+              {teamData ? (
                 <>
                   {/* Team Header */}
                   <div className="bg-gradient-to-r from-[#FFD500]/20 to-[#FFD500]/5 backdrop-blur-md border border-[#FFD500]/30 rounded-2xl p-8">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between flex-wrap gap-4">
                       <div>
-                        <h2 className="text-3xl font-bold mb-2">{teamData.name}</h2>
-                        <p className="text-gray-300">تاریخ ثبت‌نام: {teamData.registrationDate}</p>
+                        <h2 className="text-3xl font-bold mb-2">{teamData?.name}</h2>
+                        <p className="text-gray-300">
+                          تاریخ ثبت‌نام: {teamData?.createdAt || "نامشخص"}
+                        </p>
                       </div>
                       <div className="flex gap-3">
                         <Button className="bg-white/10 hover:bg-white/20 text-white">
@@ -388,19 +446,23 @@ function Dashboard() {
 
                   {/* Team Members */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {teamData.members.map((member, index) => (
+                    {teamData?.members?.map((member: any, index: number) => (
                       <div
                         key={index}
                         className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-200"
                       >
                         <div className="flex items-center gap-4 mb-4">
                           <div className="w-14 h-14 bg-[#FFD500] rounded-full flex items-center justify-center text-[#00274D] font-bold text-lg">
-                            {member.name.charAt(0)}
-                            {member.name.split(" ")[1]?.charAt(0)}
+                            {member.name?.charAt(0)}
+                            {member.familyName?.charAt(0) || member.name?.split(" ")[1]?.charAt(0)}
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-bold text-lg">{member.name}</h3>
-                            <span className="text-sm text-[#FFD500]">{member.role}</span>
+                            <h3 className="font-bold text-lg">
+                              {member.name} {member.familyName}
+                            </h3>
+                            <span className="text-sm text-[#FFD500]">
+                              {member.role || "عضو"}
+                            </span>
                           </div>
                         </div>
                         <div className="space-y-2 text-sm">
@@ -412,14 +474,18 @@ function Dashboard() {
                             <Phone className="w-4 h-4" />
                             <span>{member.phone}</span>
                           </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <Award className="w-4 h-4" />
-                            <span>شماره دانشجویی: {member.studentId}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <BookOpen className="w-4 h-4" />
-                            <span className="truncate">{member.university}</span>
-                          </div>
+                          {member.studentId && (
+                            <div className="flex items-center gap-2 text-gray-300">
+                              <Award className="w-4 h-4" />
+                              <span>شماره دانشجویی: {member.studentId}</span>
+                            </div>
+                          )}
+                          {member.university && (
+                            <div className="flex items-center gap-2 text-gray-300">
+                              <BookOpen className="w-4 h-4" />
+                              <span className="truncate">{member.university}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -555,24 +621,30 @@ function Dashboard() {
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm text-gray-400">نام و نام خانوادگی</label>
-                    <p className="text-lg font-semibold">{userData.name}</p>
+                    <p className="text-lg font-semibold">
+                      {userData?.name} {userData?.familyName}
+                    </p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">ایمیل</label>
-                    <p className="text-lg font-semibold">{userData.email}</p>
+                    <p className="text-lg font-semibold">{userData?.email}</p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">شماره موبایل</label>
-                    <p className="text-lg font-semibold">{userData.phone}</p>
+                    <p className="text-lg font-semibold">{userData?.phone}</p>
                   </div>
-                  <div>
-                    <label className="text-sm text-gray-400">شماره دانشجویی</label>
-                    <p className="text-lg font-semibold">{userData.studentId}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-400">دانشگاه</label>
-                    <p className="text-lg font-semibold">{userData.university}</p>
-                  </div>
+                  {userData?.studentId && (
+                    <div>
+                      <label className="text-sm text-gray-400">شماره دانشجویی</label>
+                      <p className="text-lg font-semibold">{userData?.studentId}</p>
+                    </div>
+                  )}
+                  {userData?.university && (
+                    <div>
+                      <label className="text-sm text-gray-400">دانشگاه</label>
+                      <p className="text-lg font-semibold">{userData?.university}</p>
+                    </div>
+                  )}
                   <Button className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] mt-4">
                     <Edit className="w-5 h-5 ml-2" />
                     ویرایش اطلاعات
