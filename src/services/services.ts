@@ -13,7 +13,7 @@ import type {
 	PutParams,
 } from "../types/apiTypes";
 
-export const baseURL = "http://1.2.3.4:8000"; // backend URL
+export const baseURL = "http://84.32.41.215:8080"; // backend URL
 
 const apiClient: AxiosInstance = axios.create({
 	baseURL,

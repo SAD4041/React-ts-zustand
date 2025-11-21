@@ -13,8 +13,11 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
-// Validation schema برای فرم ورود
-const emailValidationSchema = Yup.object({
+import { toast } from "sonner";
+import { loginService } from "@/services/authService";
+import type { LoginPayload, LoginErrorResponse, LoginSuccessResponse } from "@/types/authTypes";
+// Validation schema
+const validationSchema = Yup.object({
   email: Yup.string()
     .email("فرمت ایمیل معتبر نیست")
     .matches(
@@ -31,6 +34,11 @@ const otpValidationSchema = Yup.object({
     .matches(/^[0-9]{6}$/, "کد تایید فقط می‌تواند عددی باشد")
     .required("کد تایید الزامی است"),
 });
+
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
 
 function Login() {
   const navigate = useNavigate();
@@ -53,6 +61,37 @@ function Login() {
       setStep("otp");
     } catch (error) {
       console.error("Error submitting email:", error);
+  const handleSubmit = async (
+    values: LoginFormValues,
+    { setSubmitting }: FormikHelpers<LoginFormValues>
+  ) => {
+    try {
+      const payload: LoginPayload = {
+        email: values.email.trim().toLowerCase(),
+        password: values.password.trim(),
+      };
+
+      const res: LoginSuccessResponse = await loginService(payload);
+
+      const { access_token, refresh_token } = res.data;
+
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
+
+      toast.success("ورود با موفقیت انجام شد!");
+
+      navigate("/dashboard");
+    } catch (error: any) {
+      console.error("Login error:", error);
+
+      const backend = error?.response?.data as LoginErrorResponse | undefined;
+
+      if (backend?.status === 401) {
+        toast.error("ایمیل یا رمز عبور اشتباه است.");
+        return;
+      }
+
+      toast.error("خطا در ورود. لطفا دوباره تلاش کنید.");
     } finally {
       setSubmitting(false);
     }

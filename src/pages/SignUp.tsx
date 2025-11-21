@@ -12,6 +12,12 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { registerService } from "@/services/authService";
+import type {
+  RegisterPayload,
+  RegisterErrorResponse,
+} from "@/types/authTypes";
+import { toast } from "sonner";
 
 // Validation schema برای فرم ثبت نام
 const validationSchema = Yup.object({
@@ -41,6 +47,14 @@ const validationSchema = Yup.object({
   phone: Yup.string()
     .matches(/^09[0-9]{9}$/, "شماره موبایل باید با ۰۹ شروع شده و ۱۱ رقم باشد")
     .required("شماره موبایل الزامی است"),
+
+  password: Yup.string()
+      .min(8, "رمز عبور باید حداقل ۸ کاراکتر باشد")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        "رمز عبور باید شامل حروف کوچک، بزرگ و عدد باشد"
+      )
+      .required("رمز عبور الزامی است"),
 });
 
 // Validation schema برای OTP
@@ -59,16 +73,37 @@ function SignUp() {
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpValue, setOtpValue] = useState("");
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = async (
+    values: SignUpFormValues,
+    {
+      setSubmitting,
+      setFieldError,
+      resetForm,
+    }: FormikHelpers<SignUpFormValues>
+  ) => {
     try {
       const normalizedData = {
         name: values.name.trim(),
         familyName: values.familyName.trim(),
         email: values.email.trim().toLowerCase(),
         phone: values.phone.trim(),
+        password: values.password.trim(),
       };
 
-      console.log("Form values:", normalizedData);
+      const res = await registerService(payload);
+
+      // tokens
+
+      const { access_token, refresh_token } = res.data;
+
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
+
+
+      toast.success("اطلاعات با موفقیت ثبت شد!");
+      navigate("/Dashboard")
+    } catch (error: any) {
+      console.error("Register error:", error);
 
       // ذخیره داده‌های کاربر
       setUserData(normalizedData);
@@ -80,6 +115,27 @@ function SignUp() {
       setStep("otp");
     } catch (error) {
       console.error("Error submitting form:", error);
+      const backend = error?.response?.data as
+        | RegisterErrorResponse
+        | undefined;
+
+      // خطای 409 از بک
+      if (backend?.status === 409 && backend.messages) {
+        if (backend.messages.phone) {
+          setFieldError("phone", "شماره موبایل قبلاً ثبت شده است.");
+          toast.error("شماره موبایل قبلاً ثبت شده است.");
+        }
+        if (backend.messages.email) {
+          setFieldError("email", "ایمیل قبلاً ثبت شده است.");
+          toast.error("ایمیل قبلاً ثبت شده است.");
+
+        }
+
+        
+        toast.error("خطا در ثبت اطلاعات. لطفا دوباره تلاش کنید.");
+        return;
+      }
+
       alert("خطا در ثبت اطلاعات. لطفا دوباره تلاش کنید.");
     } finally {
       setSubmitting(false);
