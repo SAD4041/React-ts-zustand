@@ -53,7 +53,7 @@ const validationSchema = Yup.object({
     .required("شماره موبایل الزامی است"),
 
   tshirt_size: Yup.string()
-    .oneOf(["Medium", "Large", "X-Large", "XX-Large"], "سایز معتبر نیست")
+    .oneOf(["M", "L", "XL", "XXL"], "سایز معتبر نیست")
     .required("سایز تیشرت الزامی است"),
 
   university: Yup.string()
@@ -270,10 +270,10 @@ function SignUp() {
                           <SelectValue placeholder="سایز را انتخاب کنید" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Medium">Medium</SelectItem>
-                          <SelectItem value="Large">Large</SelectItem>
-                          <SelectItem value="X-Large">X-Large</SelectItem>
-                          <SelectItem value="XX-Large">XX-Large</SelectItem>
+                          <SelectItem value="M">M</SelectItem>
+                          <SelectItem value="L">L</SelectItem>
+                          <SelectItem value="XL">XL</SelectItem>
+                          <SelectItem value="XXL">XXL</SelectItem>
                         </SelectContent>
                       </Select>
                       {touched.tshirt_size && errors.tshirt_size && (
