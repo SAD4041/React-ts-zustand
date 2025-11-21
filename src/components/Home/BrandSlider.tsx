@@ -2,46 +2,48 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import image1 from '@/assets/image1.png'; // فرض می‌کنم همه لوگوها از همین عکس استفاده می‌کنند — بعداً تغییرش می‌دی
+import image1 from '@/assets/image1.png';
+import adidas from '@/assets/Adidas-Logo.wine.png'
+import nike from '@/assets/Nike,_Inc.-Logo.wine.png'
+import zara from '@/assets/Zara_(retailer)-Logo.wine.png'
+import gucci from '@/assets/Gucci-Logo.wine.png'
+import dior from '@/assets/Christian_Dior_(fashion_house)-Logo.wine.png'
+import chanel from '@/assets/Chanel-Logo.wine.png'
+import burberry from '@/assets/Burberry-Logo.wine.png'
+import fendi from '@/assets/Fendi-Logo.wine.png'
 
 const BrandSlider: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // لیست برندها (هر کدام یک لوگو و لینک دارند)
   const brands = [
-    { name: 'Adidas', logo: image1, link: '/brand/adidas' },
-    { name: 'Dior', logo: image1, link: '/brand/dior' },
-    { name: 'Balenciaga', logo: image1, link: '/brand/balenciaga' },
-    { name: 'Chanel', logo: image1, link: '/brand/chanel' },
-    { name: 'Zara', logo: image1, link: '/brand/zara' },
-    { name: 'Louis Vuitton', logo: image1, link: '/brand/louis-vuitton' },
-    { name: 'Burberry', logo: image1, link: '/brand/burberry' },
-    { name: 'Fendi', logo: image1, link: '/brand/fendi' },
-    { name: 'Nike', logo: image1, link: '/brand/nike' },
-    { name: 'Gucci', logo: image1, link: '/brand/gucci' },
+    { name: 'Adidas', logo: adidas, link: '/brand/adidas' },
+    { name: 'Balenciaga', logo: nike, link: '/brand/nike' },
+    { name: 'Chanel', logo: zara, link: '/brand/zara' },
+    { name: 'Zara', logo: gucci, link: '/brand/gucci' },
+    { name: 'Dior', logo: dior, link: '/brand/dior' },
+    { name: 'Burberry', logo: chanel, link: '/brand/chanel' },
+    { name: 'Fendi', logo: burberry, link: '/brand/burberry' },
+    { name: 'Nike', logo: fendi, link: '/brand/fendi' },
   ];
 
-  const itemsPerPage = 10; // تعداد برندها نمایش داده شده در هر اسلاید
+  const itemsPerPage = 10;
   const totalItems = brands.length;
 
-  // تابع برای اسکرول به سمت راست (یک برند)
   const handleNext = () => {
     if (currentIndex < totalItems - itemsPerPage) {
       setCurrentIndex(prev => prev + 1);
     }
   };
 
-  // تابع برای اسکرول به سمت چپ (یک برند)
   const handlePrev = () => {
     if (currentIndex > 0) {
       setCurrentIndex(prev => prev - 1);
     }
   };
 
-  // محصولات قابل نمایش در این اسلاید
   const visibleBrands = brands.slice(currentIndex, currentIndex + itemsPerPage);
 
-  // انیمیشن برای لیست برندها
   const listVariants = {
     hidden: { opacity: 0 },
     visible: {

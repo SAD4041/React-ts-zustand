@@ -109,7 +109,7 @@ const SurpriseSection: React.FC = () => {
 
           <div className="overflow-x-hidden px-4">
             <motion.div
-              className="flex space-x-4"
+              className="flex justify-center space-x-4"
               variants={listVariants}
               initial="hidden"
               animate="visible"
@@ -151,7 +151,7 @@ const SurpriseSection: React.FC = () => {
         <div className="flex flex-col items-center gap-4">
           <h2 className="text-xl font-bold text-red-700">شگفت انگیز</h2>
           <div className="flex flex-col items-center gap-1">
-            <span className="text-xs text-gray-500">...تا پایان</span>
+            <span className="text-xs text-white">...تا پایان</span>
             <div className="flex flex-col items-center gap-1">
               <div className="bg-white px-3 py-1 rounded-md border border-red-300 text-red-600 font-mono text-lg font-bold">
                 {toPersianDigits(timer.hours.toString().padStart(2, '0'))}

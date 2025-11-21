@@ -27,6 +27,7 @@ import style3 from "@/assets/style3.jpg";
 import style4 from "@/assets/style4.jpg";
 import poshtibani from "@/assets/poshtibani.png"
 
+
 export default function Home() {
   const [homeData, setHomeData] = useState<HomePageResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -117,16 +118,6 @@ export default function Home() {
       category: "tshirt",
       in_stock: true,
     })),
-    best_selling_brands: [
-      { id: 1, name: "Adidas", logo_url: adidasFallback, slug: "adidas" },
-      { id: 2, name: "Nike", logo_url: adidasFallback, slug: "nike" },
-      { id: 3, name: "Zara", logo_url: adidasFallback, slug: "zara" },
-      { id: 4, name: "Gucci", logo_url: adidasFallback, slug: "gucci" },
-      { id: 5, name: "Dior", logo_url: adidasFallback, slug: "dior" },
-      { id: 6, name: "Chanel", logo_url: adidasFallback, slug: "chanel" },
-      { id: 7, name: "Burberry", logo_url: adidasFallback, slug: "burberry" },
-      { id: 8, name: "Fendi", logo_url: adidasFallback, slug: "fendi" },
-    ],
     style_palettes: [
       { id: 1, title: "کلاسیک", slug: "classic", image_url: bannerFallback },
       { id: 2, title: "اسپرت", slug: "sport", image_url: bannerFallback },
@@ -139,8 +130,6 @@ export default function Home() {
 
   return (
     <div className="w-full min-h-screen bg-white font-vazir">
-      {/* <Header /> */}
-
       <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] overflow-hidden">
         <div className="absolute inset-0 rounded-b-[50px] overflow-hidden">
           <img
@@ -161,7 +150,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* دسته‌بندی‌ها */}
       <div className="py-8 px-4 max-w-7xl mx-auto">
         <h2 className="text-xl font-bold text-gray-800 mb-6 text-right">خرید بر اساس دسته‌بندی</h2>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
@@ -186,17 +174,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* شگفت‌انگیز */}
-      {/* <SliderSection
-        title="شگفت‌انگیز"
-        link="/products?category=amazing"
-        items={amazing_products}
-        currentIndex={amazingIndex}
-        setIndex={setAmazingIndex}
-        itemsPerView={amazingPerView}
-        isAmazing={true}
-      /> */}
-
       <SurpriseSection />
 
       <div className="py-12 px-4 bg-white">
@@ -213,16 +190,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* پرفروش‌ترین‌ها — برندها */}
-      {/* <SliderSection
-        title="پرفروش‌ترین‌ها"
-        link="/brands"
-        items={best_selling_brands}
-        currentIndex={bestIndex}
-        setIndex={setBestIndex}
-        itemsPerView={bestPerView}
-        isBrandSlider={true}
-      /> */}
       <BestSellersSection />
 
       <BrandSlider />
@@ -231,10 +198,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8">خرید بر اساس استایل</h2>
 
-          {/* لایوت سفارشی بدون کادر */}
           <div className="flex flex-col md:flex-row gap-4">
-
-            {/* ستون چپ - عکس بزرگ "کلاسیک" */}
             <div className="md:w-2/3 relative group cursor-pointer overflow-hidden rounded-xl">
               <Link to={`/style/classic`} className="block aspect-square">
                 <img
@@ -246,12 +210,8 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* ستون راست - شامل دو ردیف */}
             <div className="md:w-1/2 flex flex-col gap-4">
-
-              {/* ردیف بالا: اسپرت + استریت */}
               <div className="flex gap-4">
-                {/* اسپرت */}
                 <div className="w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
                   <Link to={`/style/sport`} className="block aspect-square">
                     <img
@@ -263,7 +223,6 @@ export default function Home() {
                   </Link>
                 </div>
 
-                {/* استریت */}
                 <div className="w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
                   <Link to={`/style/street`} className="block aspect-square">
                     <img
@@ -276,7 +235,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* ردیف پایین: وینتیج */}
               <div className="relative group cursor-pointer overflow-hidden rounded-xl">
                 <Link to={`/style/vintage`} className="block aspect-square">
                   <img
@@ -288,7 +246,6 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -307,20 +264,17 @@ export default function Home() {
       </a> */}
       <div className="py-8 mx-6 flex justify-end">
         <a
-          href="/support" // یا لینک واقعی پشتیبانی
+          href="/support"
           className="w-16 h-16 flex items-center justify-center rounded-full border-2 border-gray-800 bg-white shadow-lg cursor-pointer hover:shadow-xl transition"
           aria-label="پشتیبانی"
         >
           <img
-            src={poshtibani} // آیکون پشتیبانی — بعداً با آیکون واقعی عوضش کن
+            src={poshtibani}
             alt="پشتیبانی"
             className="w-10 h-10 object-contain"
           />
         </a>
       </div>
-
-      {/* <Footer /> */}
-
     </div>
   );
 }
