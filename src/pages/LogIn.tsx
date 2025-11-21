@@ -23,6 +23,9 @@ import type {
   VerifyOtpErrorResponse,
 } from "@/types/authTypes";
 
+// 🆕 استور احراز هویت
+import useUserStore from "@/store/userStore/userStore";
+
 // Validation schema برای ایمیل
 const emailValidationSchema = Yup.object({
   email: Yup.string()
@@ -52,6 +55,9 @@ function Login() {
   const [userEmail, setUserEmail] = useState("");
   const [otpValue, setOtpValue] = useState("");
   const [otpLoading, setOtpLoading] = useState(false);
+
+  // 🆕 از استور: بعد از verify OTP اینو صدا می‌زنیم
+  const { setAuth } = useUserStore();
 
   // مرحله ۱: ارسال ایمیل برای دریافت OTP
   const handleEmailSubmit = async (values: EmailFormValues) => {
@@ -103,11 +109,12 @@ function Login() {
 
       console.log("verify login otp response:", res);
 
-      const { access_token, refresh_token } = res.data;
+      // 🆕 به‌جای localStorage، مستقیم استور رو ست می‌کنیم
+      setAuth(res.data);
 
-      localStorage.setItem("access_token", access_token);
-      localStorage.setItem("refresh_token", refresh_token);
-
+      localStorage.setItem("access_token", res.data.access_token);
+      localStorage.setItem("refresh_token", res.data.refresh_token);
+      
       toast.success("ورود با موفقیت انجام شد!");
       navigate("/dashboard");
     } catch (error: any) {
@@ -218,7 +225,7 @@ function Login() {
                       <button
                         type="button"
                         onClick={handleSignUpClick}
-                        className="text-[#FFD500] hover:text-[#e6c200] font-semibold underline cursor-pointer transition-colors duration-200"
+                        className="text-[#FFD500] hover:text-[#e6c200] font-semibold underline cursor-pointer transition-colors	duration-200"
                       >
                         ثبت‌نام کنید
                       </button>{" "}
@@ -278,7 +285,7 @@ function Login() {
                   font-semibold 
                   py-3 px-6 
                   rounded-lg 
-                  transition-all duration-200 
+                  transition-all	duration-200 
                   disabled:opacity-50 
                   disabled:cursor-not-allowed
                   focus:outline-none 
@@ -304,7 +311,7 @@ function Login() {
                     setStep("email");
                     setOtpValue("");
                   }}
-                  className="text-white/70 hover:text-white text-sm transition-colors	duration-200"
+                  className="text-white/70 hover:text-white text-sm transition-colors duration-200"
                 >
                   بازگشت به مرحله قبل
                 </button>
@@ -318,7 +325,7 @@ function Login() {
       <img
         src={ELMOCPC}
         alt="ELMOCPC Logo"
-        className="absolute bottom-4 right-4 w-32 opacity-80 hover:opacity-100 transition-opacity duration-300"
+        className="absolute bottom-4 right-4 w-32 opacity-80 hover:opacity-100 transition-opacity	duration-300"
       />
 
       {/* لوگو گوشه پایین سمت چپ */}

@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { 
-  Users, 
-  Trophy, 
-  Calendar, 
-  Settings, 
-  LogOut, 
-  User, 
-  Bell, 
+import {
+  Users,
+  Trophy,
+  Calendar,
+  Settings,
+  LogOut,
+  User,
+  Bell,
   ChevronRight,
   Award,
   Clock,
@@ -19,83 +19,102 @@ import {
   BookOpen,
   Download,
   Edit,
-  Plus
+  Plus,
 } from "lucide-react";
 import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
 
+// 🆕 استور احراز هویت
+import useUserStore from "@/store/userStore/userStore";
+import type { AuthUserWithTokens } from "@/types/authTypes";
+
+// نوع ساده برای یوزر داخل داشبورد
+type DashboardUser = {
+  name: string;
+  familyName: string;
+  email: string;
+  phone: string;
+  university?: string;
+  studentId?: string;
+  teamId?: number;
+};
+
+// نوع ساده برای تیم (فعلاً اگر نداشتی، می‌مونه null)
+type DashboardTeam =
+  | {
+      name: string;
+      createdAt?: string;
+      members: {
+        name: string;
+        familyName: string;
+        email: string;
+        phone: string;
+        role?: string;
+        university?: string;
+        studentId?: string;
+      }[];
+    }
+  | null;
+
 function Dashboard() {
   const navigate = useNavigate();
+
+  // 🆕 از استور: authUser (همون چیزی که تو setAuth می‌ریزیم)
+  const { authUser, clearAuth } = useUserStore();
+
   const [activeTab, setActiveTab] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [userData, setUserData] = useState(null);
-  const [teamData, setTeamData] = useState(null);
+  const [userData, setUserData] = useState<DashboardUser | null>(null);
+  const [teamData, setTeamData] = useState<DashboardTeam>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // چک کردن توکن و لود کردن اطلاعات کاربر
+  // اگه یوزر نداشتیم => بفرست لاگین، وگرنه داده‌ها رو از استور نگه دار
   useEffect(() => {
-    const checkAuthAndFetchData = async () => {
-      try {
-        const accessToken = localStorage.getItem("access_token");
+    // استور هنوز لود نشده یا یوزر نداریم
+    if (!authUser) {
+      navigate("/login");
+      return;
+    }
 
-        if (!accessToken) {
-          navigate("/login");
-          return;
-        }
-
-        // دریافت اطلاعات کاربر
-        const userResponse = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/profile`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!userResponse.ok) {
-          if (userResponse.status === 401) {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-            navigate("/login");
-            return;
-          }
-          throw new Error("خطا در دریافت اطلاعات کاربر");
-        }
-
-        const user = await userResponse.json();
-        console.log("User data:", user);
-        setUserData(user.data);
-
-        // دریافت اطلاعات تیم اگر کاربر در تیمی است
-        if (user.data?.teamId) {
-          const teamResponse = await fetch(
-            `${import.meta.env.VITE_API_URL}/teams/${user.data.teamId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (teamResponse.ok) {
-            const team = await teamResponse.json();
-            setTeamData(team.data);
-          }
-        }
-      } catch (err: any) {
-        console.error("Error:", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+    // مپ‌کردن ساختار استور به چیزی که داشبورد انتظار داره
+    const mappedUser: DashboardUser = {
+      name: authUser.first_name,
+      familyName: authUser.last_name,
+      email: authUser.email,
+      phone: authUser.phone,
+      // اگر در آینده اینا رو هم از بک گرفتی اینجا پر کن
+      university: (authUser as any).university,
+      studentId: (authUser as any).studentId,
+      teamId: (authUser as any).teamId,
     };
 
-    checkAuthAndFetchData();
-  }, [navigate]);
+    setUserData(mappedUser);
+
+    // 🔹 اگر بک‌اِند پروفایل/تیم هنوز آماده نیست، اینجا می‌تونی فیک ست کنی
+    // فعلاً اگر teamId نداریم، همون "شما هنوز تیمی ندارید" نمایش داده میشه
+    // اگر دوست داری یه تیم فیک نشون بدی، این رو آن‌کامنت کن:
+    /*
+    if (!mappedUser.teamId) {
+      setTeamData({
+        name: "تیم نمونه",
+        createdAt: "1404/01/10",
+        members: [
+          {
+            name: mappedUser.name,
+            familyName: mappedUser.familyName,
+            email: mappedUser.email,
+            phone: mappedUser.phone,
+            role: "کاپیتان",
+            university: mappedUser.university ?? "دانشگاه نمونه",
+            studentId: mappedUser.studentId ?? "401234567",
+          },
+        ],
+      });
+    }
+    */
+
+    setLoading(false);
+  }, [authUser, navigate]);
 
   // داده‌های نمونه برای اطلاعیه‌ها
   const notifications = [
@@ -157,9 +176,11 @@ function Dashboard() {
   ];
 
   const handleLogout = () => {
+    // 🆕 پاک‌کردن استور
+    clearAuth();
+    // اگر قبلاً توکن رو مستقیم تو localStorage ذخیره می‌کردی، برای احتیاط:
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
-    localStorage.removeItem("userData");
     navigate("/login");
   };
 
@@ -178,11 +199,12 @@ function Dashboard() {
     );
   }
 
-  if (error || !userData) {
+  if (!userData) {
+    // اگر به هر دلیلی یوزر نداشتیم ولی loading هم false شد
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#00274D] via-[#003D6B] to-[#00274D] flex items-center justify-center text-white">
         <div className="text-center">
-          <p className="text-red-400 mb-4">{error || "خطا در بارگذاری اطلاعات"}</p>
+          <p className="text-red-400 mb-4">کاربر یافت نشد</p>
           <Button
             onClick={() => navigate("/login")}
             className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D]"
@@ -195,7 +217,10 @@ function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#00274D] via-[#003D6B] to-[#00274D] text-white" dir="rtl">
+    <div
+      className="min-h-screen bg-gradient-to-br from-[#00274D] via-[#003D6B] to-[#00274D] text-white"
+      dir="rtl"
+    >
       {/* Overlay for mobile */}
       {sidebarOpen && (
         <div
@@ -212,7 +237,11 @@ function Dashboard() {
       >
         <div className={`p-6 ${!sidebarOpen && "hidden md:block"}`}>
           {/* Logo */}
-          <div className={`flex items-center gap-3 mb-8 ${!sidebarOpen && "md:justify-center"}`}>
+          <div
+            className={`flex items-center gap-3 mb-8 ${
+              !sidebarOpen && "md:justify-center"
+            }`}
+          >
             <div className="p-2 bg-[#FFD500]/20 rounded-lg">
               <Trophy className="w-6 h-6 text-[#FFD500]" />
             </div>
@@ -228,11 +257,12 @@ function Dashboard() {
           {sidebarOpen && (
             <div className="mb-8 p-4 bg-white/5 rounded-xl border border-white/10 transition-all duration-300">
               <div className="w-16 h-16 bg-[#FFD500] rounded-full flex items-center justify-center text-[#00274D] font-bold text-xl mx-auto mb-3">
-                {userData?.name?.charAt(0)}
-                {userData?.familyName?.charAt(0) || userData?.name?.split(" ")[1]?.charAt(0)}
+                {userData.name?.charAt(0)}
+                {userData.familyName?.charAt(0) ||
+                  userData.name?.split(" ")[1]?.charAt(0)}
               </div>
               <h3 className="text-center font-semibold mb-1">
-                {userData?.name} {userData?.familyName}
+                {userData.name} {userData.familyName}
               </h3>
               <p className="text-center text-xs text-gray-400 mb-2">
                 {teamData ? "کاپیتان تیم" : "عضو تیم"}
@@ -263,7 +293,9 @@ function Dashboard() {
                 } ${!sidebarOpen && "md:justify-center"}`}
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
-                {sidebarOpen && <span className="whitespace-nowrap">{item.label}</span>}
+                {sidebarOpen && (
+                  <span className="whitespace-nowrap">{item.label}</span>
+                )}
               </button>
             ))}
           </nav>
@@ -271,7 +303,9 @@ function Dashboard() {
           {/* Logout Button */}
           <Button
             onClick={handleLogout}
-            className={`w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 ${!sidebarOpen && "md:px-2"}`}
+            className={`w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 ${
+              !sidebarOpen && "md:px-2"
+            }`}
           >
             <LogOut className="w-5 h-5" />
             {sidebarOpen && <span className="mr-2">خروج</span>}
@@ -280,7 +314,11 @@ function Dashboard() {
       </aside>
 
       {/* Main Content */}
-      <main className={`transition-all duration-300 ${sidebarOpen ? "md:mr-64" : "md:mr-20"}`}>
+      <main
+        className={`transition-all duration-300 ${
+          sidebarOpen ? "md:mr-64" : "md:mr-20"
+        }`}
+      >
         {/* Header */}
         <header className="bg-[#00274D]/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-40">
           <div className="px-6 py-4 flex items-center justify-between">
@@ -295,7 +333,11 @@ function Dashboard() {
                 onClick={() => setSidebarOpen(!sidebarOpen)}
                 className="p-2 hover:bg-white/10 rounded-lg transition-all duration-200"
               >
-                <ChevronRight className={`w-6 h-6 transition-transform duration-300 ${!sidebarOpen ? "" : "rotate-180"}`} />
+                <ChevronRight
+                  className={`w-6 h-6 transition-transform duration-300 ${
+                    !sidebarOpen ? "" : "rotate-180"
+                  }`}
+                />
               </button>
               <button className="relative p-2 hover:bg-white/10 rounded-lg transition-all duration-200">
                 <Bell className="w-6 h-6" />
@@ -315,7 +357,7 @@ function Dashboard() {
               {/* Welcome Card */}
               <div className="bg-gradient-to-r from-[#FFD500]/20 to-[#FFD500]/5 backdrop-blur-md border border-[#FFD500]/30 rounded-2xl p-8">
                 <h2 className="text-3xl font-bold mb-2">
-                  سلام، {userData?.name}! 👋
+                  سلام، {userData.name}! 👋
                 </h2>
                 <p className="text-gray-300">
                   به داشبورد مسابقات ICPC 2025 خوش آمدید
@@ -337,7 +379,9 @@ function Dashboard() {
                 <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
                   <div className="flex items-center justify-between mb-4">
                     <Clock className="w-10 h-10 text-yellow-400" />
-                    <span className="text-3xl font-bold">{upcomingEvents[0].days}</span>
+                    <span className="text-3xl font-bold">
+                      {upcomingEvents[0].days}
+                    </span>
                   </div>
                   <h3 className="text-gray-300">روز تا مسابقه</h3>
                 </div>
@@ -362,7 +406,9 @@ function Dashboard() {
                     <div
                       key={notification.id}
                       className={`p-4 rounded-xl border transition-all duration-200 hover:bg-white/5 ${
-                        !notification.read ? "bg-[#FFD500]/5 border-[#FFD500]/30" : "bg-white/5 border-white/10"
+                        !notification.read
+                          ? "bg-[#FFD500]/5 border-[#FFD500]/30"
+                          : "bg-white/5 border-white/10"
                       }`}
                     >
                       <div className="flex items-start justify-between">
@@ -377,11 +423,17 @@ function Dashboard() {
                             {notification.type === "info" && (
                               <Bell className="w-5 h-5 text-blue-400" />
                             )}
-                            <h4 className="font-semibold">{notification.title}</h4>
+                            <h4 className="font-semibold">
+                              {notification.title}
+                            </h4>
                           </div>
-                          <p className="text-sm text-gray-300">{notification.message}</p>
+                          <p className="text-sm text-gray-300">
+                            {notification.message}
+                          </p>
                         </div>
-                        <span className="text-xs text-gray-500">{notification.date}</span>
+                        <span className="text-xs text-gray-500">
+                          {notification.date}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -409,7 +461,9 @@ function Dashboard() {
                           <p className="text-sm text-gray-400">{event.date}</p>
                         </div>
                       </div>
-                      <span className="text-2xl font-bold text-[#FFD500]">{event.days} روز</span>
+                      <span className="text-2xl font-bold text-[#FFD500]">
+                        {event.days} روز
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -426,9 +480,11 @@ function Dashboard() {
                   <div className="bg-gradient-to-r from-[#FFD500]/20 to-[#FFD500]/5 backdrop-blur-md border border-[#FFD500]/30 rounded-2xl p-8">
                     <div className="flex items-center justify-between flex-wrap gap-4">
                       <div>
-                        <h2 className="text-3xl font-bold mb-2">{teamData?.name}</h2>
+                        <h2 className="text-3xl font-bold mb-2">
+                          {teamData.name}
+                        </h2>
                         <p className="text-gray-300">
-                          تاریخ ثبت‌نام: {teamData?.createdAt || "نامشخص"}
+                          تاریخ ثبت‌نام: {teamData.createdAt || "نامشخص"}
                         </p>
                       </div>
                       <div className="flex gap-3">
@@ -446,7 +502,7 @@ function Dashboard() {
 
                   {/* Team Members */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {teamData?.members?.map((member: any, index: number) => (
+                    {teamData.members.map((member, index) => (
                       <div
                         key={index}
                         className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-200"
@@ -454,7 +510,8 @@ function Dashboard() {
                         <div className="flex items-center gap-4 mb-4">
                           <div className="w-14 h-14 bg-[#FFD500] rounded-full flex items-center justify-center text-[#00274D] font-bold text-lg">
                             {member.name?.charAt(0)}
-                            {member.familyName?.charAt(0) || member.name?.split(" ")[1]?.charAt(0)}
+                            {member.familyName?.charAt(0) ||
+                              member.name?.split(" ")[1]?.charAt(0)}
                           </div>
                           <div className="flex-1">
                             <h3 className="font-bold text-lg">
@@ -483,7 +540,9 @@ function Dashboard() {
                           {member.university && (
                             <div className="flex items-center gap-2 text-gray-300">
                               <BookOpen className="w-4 h-4" />
-                              <span className="truncate">{member.university}</span>
+                              <span className="truncate">
+                                {member.university}
+                              </span>
                             </div>
                           )}
                         </div>
@@ -494,8 +553,12 @@ function Dashboard() {
               ) : (
                 <div className="text-center py-20">
                   <Users className="w-20 h-20 mx-auto mb-6 text-gray-500" />
-                  <h2 className="text-2xl font-bold mb-4">شما هنوز تیمی ندارید</h2>
-                  <p className="text-gray-400 mb-8">برای شرکت در مسابقه، ابتدا یک تیم تشکیل دهید</p>
+                  <h2 className="text-2xl font-bold mb-4">
+                    شما هنوز تیمی ندارید
+                  </h2>
+                  <p className="text-gray-400 mb-8">
+                    برای شرکت در مسابقه، ابتدا یک تیم تشکیل دهید
+                  </p>
                   <Button
                     onClick={handleCreateTeam}
                     className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold px-8 py-3"
@@ -515,15 +578,35 @@ function Dashboard() {
                 <h2 className="text-2xl font-bold mb-6">برنامه زمانی مسابقات</h2>
                 <div className="space-y-4">
                   {[
-                    { title: "ثبت‌نام", date: "1404/01/15 - 1404/02/30", status: "active" },
-                    { title: "مرحله مقدماتی", date: "1404/03/15", status: "upcoming" },
-                    { title: "اعلام نتایج مقدماتی", date: "1404/03/20", status: "upcoming" },
-                    { title: "مرحله نهایی", date: "1404/04/20", status: "upcoming" },
-                    { title: "مراسم اهدای جوایز", date: "1404/04/25", status: "upcoming" },
+                    {
+                      title: "ثبت‌نام",
+                      date: "1404/01/15 - 1404/02/30",
+                      status: "active",
+                    },
+                    {
+                      title: "مرحله مقدماتی",
+                      date: "1404/03/15",
+                      status: "upcoming",
+                    },
+                    {
+                      title: "اعلام نتایج مقدماتی",
+                      date: "1404/03/20",
+                      status: "upcoming",
+                    },
+                    {
+                      title: "مرحله نهایی",
+                      date: "1404/04/20",
+                      status: "upcoming",
+                    },
+                    {
+                      title: "مراسم اهدای جوایز",
+                      date: "1404/04/25",
+                      status: "upcoming",
+                    },
                   ].map((item, index) => (
                     <div
                       key={index}
-                      className={`p-6 rounded-xl border transition-all duration-200 ${
+                      className={`p-6 rounded-xl border transition-all	duration-200 ${
                         item.status === "active"
                           ? "bg-[#FFD500]/10 border-[#FFD500]/30"
                           : "bg-white/5 border-white/10"
@@ -531,7 +614,9 @@ function Dashboard() {
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-bold text-lg mb-1">{item.title}</h3>
+                          <h3 className="font-bold text-lg mb-1">
+                            {item.title}
+                          </h3>
                           <p className="text-gray-400">{item.date}</p>
                         </div>
                         {item.status === "active" && (
@@ -577,8 +662,12 @@ function Dashboard() {
                         </div>
                       )}
                       <div>
-                        <h3 className="font-bold text-lg">{notification.title}</h3>
-                        <p className="text-sm text-gray-400">{notification.date}</p>
+                        <h3 className="font-bold text-lg">
+                          {notification.title}
+                        </h3>
+                        <p className="text-sm text-gray-400">
+                          {notification.date}
+                        </p>
                       </div>
                     </div>
                     {!notification.read && (
@@ -596,16 +685,34 @@ function Dashboard() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  { title: "راهنمای شرکت در مسابقه", icon: BookOpen, color: "blue" },
-                  { title: "سوالات متداول", icon: AlertCircle, color: "green" },
-                  { title: "مسائل سال‌های گذشته", icon: Trophy, color: "yellow" },
-                  { title: "منابع آموزشی الگوریتم", icon: Award, color: "purple" },
+                  {
+                    title: "راهنمای شرکت در مسابقه",
+                    icon: BookOpen,
+                    color: "blue",
+                  },
+                  {
+                    title: "سوالات متداول",
+                    icon: AlertCircle,
+                    color: "green",
+                  },
+                  {
+                    title: "مسائل سال‌های گذشته",
+                    icon: Trophy,
+                    color: "yellow",
+                  },
+                  {
+                    title: "منابع آموزشی الگوریتم",
+                    icon: Award,
+                    color: "purple",
+                  },
                 ].map((resource, index) => (
                   <div
                     key={index}
-                    className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-200 cursor-pointer"
+                    className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all	duration-200 cursor-pointer"
                   >
-                    <resource.icon className={`w-12 h-12 mb-4 text-${resource.color}-400`} />
+                    {/* این کلاس text-${resource.color}-400 تو Tailwind پیش‌فرض داینامیک نیست؛
+                        اگر ارور داد، می‌تونی شرطی‌ش کنی یا ثابت بذاری */}
+                    <resource.icon className="w-12 h-12 mb-4 text-[#FFD500]" />
                     <h3 className="font-bold text-lg">{resource.title}</h3>
                   </div>
                 ))}
@@ -617,32 +724,44 @@ function Dashboard() {
           {activeTab === "settings" && (
             <div className="space-y-6">
               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
-                <h2 className="text-2xl font-bold mb-6">اطلاعات حساب کاربری</h2>
+                <h2 className="text-2xl font-bold mb-6">
+                  اطلاعات حساب کاربری
+                </h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm text-gray-400">نام و نام خانوادگی</label>
+                    <label className="text-sm text-gray-400">
+                      نام و نام خانوادگی
+                    </label>
                     <p className="text-lg font-semibold">
-                      {userData?.name} {userData?.familyName}
+                      {userData.name} {userData.familyName}
                     </p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">ایمیل</label>
-                    <p className="text-lg font-semibold">{userData?.email}</p>
+                    <p className="text-lg font-semibold">{userData.email}</p>
                   </div>
                   <div>
-                    <label className="text-sm text-gray-400">شماره موبایل</label>
-                    <p className="text-lg font-semibold">{userData?.phone}</p>
+                    <label className="text-sm text-gray-400">
+                      شماره موبایل
+                    </label>
+                    <p className="text-lg font-semibold">{userData.phone}</p>
                   </div>
-                  {userData?.studentId && (
+                  {userData.studentId && (
                     <div>
-                      <label className="text-sm text-gray-400">شماره دانشجویی</label>
-                      <p className="text-lg font-semibold">{userData?.studentId}</p>
+                      <label className="text-sm text-gray-400">
+                        شماره دانشجویی
+                      </label>
+                      <p className="text-lg font-semibold">
+                        {userData.studentId}
+                      </p>
                     </div>
                   )}
-                  {userData?.university && (
+                  {userData.university && (
                     <div>
                       <label className="text-sm text-gray-400">دانشگاه</label>
-                      <p className="text-lg font-semibold">{userData?.university}</p>
+                      <p className="text-lg font-semibold">
+                        {userData.university}
+                      </p>
                     </div>
                   )}
                   <Button className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] mt-4">

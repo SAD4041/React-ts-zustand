@@ -22,6 +22,7 @@ import type {
   VerifyOtpErrorResponse,
 } from "@/types/authTypes";
 import { toast } from "sonner";
+import useUserStore from "../store/userStore/userStore";
 
 // Validation schema برای فرم ثبت نام
 const validationSchema = Yup.object({
@@ -86,6 +87,8 @@ function SignUp() {
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpValue, setOtpValue] = useState("");
 
+  const { setAuth } = useUserStore();
+
   // مرحله ۱: ارسال فرم و درخواست OTP
   const handleSubmit = async (
     values: SignUpFormValues,
@@ -141,44 +144,46 @@ function SignUp() {
 
   // مرحله ۲: تایید OTP و گرفتن توکن‌ها
   const handleOtpSubmit = async () => {
-    if (!userData) {
-      toast.error("اطلاعات کاربر یافت نشد. دوباره تلاش کنید.");
-      setStep("form");
-      return;
+  if (!userData) {
+    toast.error("اطلاعات کاربر یافت نشد. دوباره تلاش کنید.");
+    setStep("form");
+    return;
+  }
+
+  if (otpValue.length !== 6) return;
+
+  try {
+    setOtpLoading(true);
+
+    const res: VerifyOtpSuccessResponse = await verifyOtpSignupService({
+      email: userData.email,
+      code: otpValue,
+    });
+
+    console.log("verify otp response:", res);
+
+    // 🆕 به‌جای localStorage، همه‌چیز رو به استور بده
+    // res.data از نوع AuthUserWithTokens هست
+    setAuth(res.data);
+
+    localStorage.setItem("access_token", res.data.access_token);
+    localStorage.setItem("refresh_token", res.data.refresh_token);
+
+    toast.success("حساب کاربری شما با موفقیت ساخته شد!");
+    navigate("/dashboard");
+  } catch (error: any) {
+    console.error("Error verifying OTP:", error);
+    const backend = error?.response?.data as VerifyOtpErrorResponse | undefined;
+
+    if (backend?.status === 404) {
+      toast.error("کد تایید یافت نشد یا منقضی شده است.");
+    } else {
+      toast.error("خطا در تایید کد. لطفا دوباره تلاش کنید.");
     }
-
-    if (otpValue.length !== 6) return;
-
-    try {
-      setOtpLoading(true);
-
-      const res: VerifyOtpSuccessResponse = await verifyOtpSignupService({
-        email: userData.email,
-        code: otpValue,
-      });
-
-      console.log("verify otp response:", res);
-
-      const { access_token, refresh_token } = res.data;
-
-      localStorage.setItem("access_token", access_token);
-      localStorage.setItem("refresh_token", refresh_token);
-
-      toast.success("حساب کاربری شما با موفقیت ساخته شد!");
-      navigate("/dashboard");
-    } catch (error: any) {
-      console.error("Error verifying OTP:", error);
-      const backend = error?.response?.data as VerifyOtpErrorResponse | undefined;
-
-      if (backend?.status === 404) {
-        toast.error("کد تایید یافت نشد یا منقضی شده است.");
-      } else {
-        toast.error("خطا در تایید کد. لطفا دوباره تلاش کنید.");
-      }
-    } finally {
-      setOtpLoading(false);
-    }
-  };
+  } finally {
+    setOtpLoading(false);
+  }
+};
 
   const handleResendOtp = async () => {
     try {
