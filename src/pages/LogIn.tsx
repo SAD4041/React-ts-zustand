@@ -7,13 +7,11 @@ import * as Yup from "yup";
 import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
 import BG from "@/assets/BG.png";
-
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-
 import { toast } from "sonner";
 import { loginService } from "@/services/authService";
 import type {
@@ -22,8 +20,8 @@ import type {
   LoginSuccessResponse,
 } from "@/types/authTypes";
 
-// Validation schema
-const validationSchema = Yup.object({
+// Validation schema برای ایمیل
+const emailValidationSchema = Yup.object({
   email: Yup.string()
     .email("فرمت ایمیل معتبر نیست")
     .matches(
@@ -41,9 +39,8 @@ const otpValidationSchema = Yup.object({
     .required("کد تایید الزامی است"),
 });
 
-interface LoginFormValues {
+interface EmailFormValues {
   email: string;
-  password: string;
 }
 
 function Login() {
@@ -53,76 +50,75 @@ function Login() {
   const [otpValue, setOtpValue] = useState("");
   const [otpLoading, setOtpLoading] = useState(false);
 
-  // ✔️ تابع ایمیل کاملاً بسته شد و باگ برطرف شد
-  const handleEmailSubmit = (values: any, { setSubmitting }: any) => {
+  const handleEmailSubmit = async (values: EmailFormValues) => {
     try {
       const normalizedEmail = values.email.trim().toLowerCase();
       setUserEmail(normalizedEmail);
 
-      // اینجا API ارسال OTP
+      // اینجا می‌توانید API call برای ارسال OTP انجام دهید
+      // await sendLoginOTP(normalizedEmail);
+
+      toast.success("کد تایید به ایمیل شما ارسال شد!");
       setStep("otp");
     } catch (error) {
       console.error("Error submitting email:", error);
-    } finally {
-      setSubmitting(false);
+      toast.error("خطا در ارسال کد تایید. لطفا دوباره تلاش کنید.");
     }
   };
 
-  const handleSubmit = async (
-    values: LoginFormValues,
-    { setSubmitting }: any
-  ) => {
-    try {
-      const payload: LoginPayload = {
-        email: values.email.trim().toLowerCase(),
-        password: values.password.trim(),
-      };
-
-      const res: LoginSuccessResponse = await loginService(payload);
-
-      const { access_token, refresh_token } = res.data;
-
-      localStorage.setItem("access_token", access_token);
-      localStorage.setItem("refresh_token", refresh_token);
-
-      toast.success("ورود با موفقیت انجام شد!");
-
-      navigate("/dashboard");
-    } catch (error: any) {
-      const backend = error?.response?.data as LoginErrorResponse | undefined;
-
-      if (backend?.status === 401) {
-        toast.error("ایمیل یا رمز عبور اشتباه است.");
-      } else {
-        toast.error("خطا در ورود. لطفا دوباره تلاش کنید.");
-      }
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleOtpSubmit = () => {
+  const handleOtpSubmit = async () => {
     try {
       if (otpValue.length === 6) {
         setOtpLoading(true);
+        console.log("OTP verification for:", userEmail, "OTP:", otpValue);
 
+        // اینجا می‌توانید API call برای تایید OTP انجام دهید
+        // const payload: LoginPayload = {
+        //   email: userEmail,
+        //   otp: otpValue,
+        // };
+        // const res: LoginSuccessResponse = await loginService(payload);
+        // const { access_token, refresh_token } = res.data;
+        // localStorage.setItem("access_token", access_token);
+        // localStorage.setItem("refresh_token", refresh_token);
+
+        toast.success("ورود با موفقیت انجام شد!");
         setTimeout(() => {
-          setOtpLoading(false);
-          // navigate("/dashboard");
-        }, 1000);
+          navigate("/dashboard");
+        }, 1500);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error verifying OTP:", error);
+
+      const backend = error?.response?.data as LoginErrorResponse | undefined;
+
+      if (backend?.status === 401) {
+        toast.error("کد تایید اشتباه است.");
+      } else {
+        toast.error("خطا در تایید. لطفا دوباره تلاش کنید.");
+      }
       setOtpLoading(false);
     }
   };
 
-  const handleResendOtp = () => {
+  const handleResendOtp = async () => {
     try {
+      // اینجا می‌توانید API call برای ارسال مجدد OTP انجام دهید
+      // await resendLoginOTP(userEmail);
       console.log("Resending OTP to:", userEmail);
+      toast.success("کد تایید دوباره ارسال شد!");
     } catch (error) {
       console.error("Error resending OTP:", error);
+      toast.error("خطا در ارسال مجدد کد. لطفا دوباره تلاش کنید.");
     }
+  };
+
+  const handleSignUpClick = () => {
+    navigate("/signup");
+  };
+
+  const handleForgotPasswordClick = () => {
+    navigate("/forgot-password");
   };
 
   return (
@@ -130,13 +126,16 @@ function Login() {
       className="relative w-full min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
       style={{
         backgroundImage: `url(${BG})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
       <div className="w-full max-w-md">
         {step === "email" ? (
           <Formik
             initialValues={{ email: "" }}
-            validationSchema={validationSchema}
+            validationSchema={emailValidationSchema}
             onSubmit={handleEmailSubmit}
           >
             {({ isSubmitting }) => (
@@ -151,12 +150,50 @@ function Login() {
                       name="email"
                       type="email"
                       label="ایمیل"
+                      className="w-full px-4 py-3 rounded-lg"
                       dir="ltr"
                     />
 
-                    <Button type="submit" disabled={isSubmitting}>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="
+                        w-full 
+                        bg-[#FFD500] 
+                        hover:bg-[#e6c200]
+                        text-[#00274D] 
+                        font-semibold 
+                        py-3 px-6 
+                        rounded-lg 
+                        transition-all duration-200 
+                        disabled:opacity-50 
+                        disabled:cursor-not-allowed
+                        focus:outline-none 
+                        focus:ring-2 focus:ring-[#FFD500]/50
+                        active:scale-95
+                      "
+                    >
                       {isSubmitting ? "در حال ارسال..." : "دریافت کد تایید"}
                     </Button>
+
+                    <button
+                      type="button"
+                      onClick={handleForgotPasswordClick}
+                      className="text-[#FFD500] hover:text-[#e6c200] text-xs transition-colors duration-200 float-right w-full text-right"
+                    >
+                      رمز عبور را فراموش کرده‌اید؟
+                    </button>
+
+                    <p className="text-white text-center text-sm mt-4 clear-right">
+                      <button
+                        type="button"
+                        onClick={handleSignUpClick}
+                        className="text-[#FFD500] hover:text-[#e6c200] font-semibold underline cursor-pointer transition-colors duration-200"
+                      >
+                        ثبت‌نام کنید
+                      </button>
+                      {" "}حساب کاربری ندارید؟
+                    </p>
                   </div>
                 </div>
               </Form>
@@ -167,56 +204,116 @@ function Login() {
             <h1 className="text-white text-2xl text-center mb-2 font-semibold">
               تایید کد ارسال شده
             </h1>
-
-            <p className="text-[#FFD500] text-center text-lg font-semibold mt-2 break-all">
-              {userEmail}
+            <div className="bg-white/10 border border-white/20 rounded-lg p-4 mb-6">
+              <p className="text-white/70 text-center text-sm">
+                کد تایید به آدرس ایمیل زیر ارسال شد:
+              </p>
+              <p className="text-[#FFD500] text-center text-lg font-semibold mt-2 break-all">
+                {userEmail}
+              </p>
+            </div>
+            <p className="text-white/70 text-center text-sm mb-8">
+              کد تایید را وارد کنید
             </p>
 
-            <div className="flex justify-center mt-6">
-              <InputOTP maxLength={6} value={otpValue} onChange={setOtpValue}>
-                <InputOTPGroup className="gap-3">
-                  {[0, 1, 2, 3, 4, 5].map((i) => (
+            <div className="space-y-6">
+              <div className="flex justify-center">
+                <InputOTP
+                  maxLength={6}
+                  value={otpValue}
+                  onChange={setOtpValue}
+                  dir="ltr"
+                >
+                  <InputOTPGroup className="gap-3">
                     <InputOTPSlot
-                      key={i}
-                      index={i}
+                      index={0}
                       className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
                     />
-                  ))}
-                </InputOTPGroup>
-              </InputOTP>
+                    <InputOTPSlot
+                      index={1}
+                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                    />
+                    <InputOTPSlot
+                      index={2}
+                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                    />
+                    <InputOTPSlot
+                      index={3}
+                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                    />
+                    <InputOTPSlot
+                      index={4}
+                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                    />
+                    <InputOTPSlot
+                      index={5}
+                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                    />
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
+
+              <Button
+                type="button"
+                onClick={handleOtpSubmit}
+                disabled={otpLoading || otpValue.length !== 6}
+                className="
+                  w-full 
+                  bg-[#FFD500] 
+                  hover:bg-[#e6c200]
+                  text-[#00274D] 
+                  font-semibold 
+                  py-3 px-6 
+                  rounded-lg 
+                  transition-all duration-200 
+                  disabled:opacity-50 
+                  disabled:cursor-not-allowed
+                  focus:outline-none 
+                  focus:ring-2 focus:ring-[#FFD500]/50
+                  active:scale-95
+                "
+              >
+                {otpLoading ? "در حال تایید..." : "تایید"}
+              </Button>
+
+              <div className="flex flex-col gap-3">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  className="text-[#FFD500] hover:text-[#e6c200] font-semibold text-sm transition-colors duration-200"
+                >
+                  ارسال مجدد کد تایید
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStep("email");
+                    setOtpValue("");
+                  }}
+                  className="text-white/70 hover:text-white text-sm transition-colors duration-200"
+                >
+                  بازگشت به مرحله قبل
+                </button>
+              </div>
             </div>
-
-            <Button
-              type="button"
-              onClick={handleOtpSubmit}
-              disabled={otpLoading || otpValue.length !== 6}
-              className="w-full mt-6"
-            >
-              {otpLoading ? "در حال تایید..." : "تایید"}
-            </Button>
-
-            <button
-              onClick={handleResendOtp}
-              className="text-[#FFD500] mt-4 block text-center"
-            >
-              ارسال مجدد کد
-            </button>
-
-            <button
-              onClick={() => {
-                setStep("email");
-                setOtpValue("");
-              }}
-              className="text-white/70 mt-2 block text-center"
-            >
-              بازگشت
-            </button>
           </div>
         )}
       </div>
 
-      <img src={ELMOCPC} className="absolute bottom-4 right-4 w-32" />
-      <img src={CESA} className="absolute bottom-4 left-4 w-20" />
+      {/* لوگو گوشه پایین سمت راست */}
+      <img
+        src={ELMOCPC}
+        alt="ELMOCPC Logo"
+        className="absolute bottom-4 right-4 w-32 opacity-80 hover:opacity-100 transition-opacity duration-300"
+      />
+
+      {/* لوگو گوشه پایین سمت چپ */}
+      <img
+        src={CESA}
+        alt="CESA Logo"
+        className="absolute bottom-4 left-4 w-20 opacity-80 hover:opacity-100 transition-opacity duration-300"
+      />
     </div>
   );
 }

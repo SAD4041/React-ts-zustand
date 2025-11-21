@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import CustomInput from "@/components/Custom/CustomInput";
 import { Button } from "@/components/ui/button";
-import { Formik, Form} from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
@@ -48,14 +48,6 @@ const validationSchema = Yup.object({
   phone: Yup.string()
     .matches(/^09[0-9]{9}$/, "شماره موبایل باید با ۰۹ شروع شده و ۱۱ رقم باشد")
     .required("شماره موبایل الزامی است"),
-
-  password: Yup.string()
-    .min(8, "رمز عبور باید حداقل ۸ کاراکتر باشد")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      "رمز عبور باید شامل حروف کوچک، بزرگ و عدد باشد"
-    )
-    .required("رمز عبور الزامی است"),
 });
 
 // Validation schema برای OTP
@@ -71,11 +63,6 @@ interface SignUpFormValues {
   familyName: string;
   email: string;
   phone: string;
-  password: string;
-}
-
-interface OTPFormValues {
-  otp: string;
 }
 
 interface UserData {
@@ -83,27 +70,23 @@ interface UserData {
   familyName: string;
   email: string;
   phone: string;
-  password: string;
 }
 
 function SignUp() {
   const navigate = useNavigate();
-  const [step, setStep] = useState("form"); // form یا otp
+  const [step, setStep] = useState("form");
   const [userData, setUserData] = useState<UserData | null>(null);
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpValue, setOtpValue] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
 
-  const handleSubmit = async (
-    values: SignUpFormValues,
-    { setSubmitting, setFieldError }: FormikHelpers<SignUpFormValues>
-  ) => {
+  const handleSubmit = async (values: SignUpFormValues) => {
     try {
       const normalizedData: SignUpFormValues = {
         name: values.name.trim(),
         familyName: values.familyName.trim(),
         email: values.email.trim().toLowerCase(),
         phone: values.phone.trim(),
-        password: values.password.trim(),
       };
 
       const payload: RegisterPayload = {
@@ -111,7 +94,6 @@ function SignUp() {
         familyName: normalizedData.familyName,
         email: normalizedData.email,
         phone: normalizedData.phone,
-        password: normalizedData.password,
       };
 
       const res: RegisterSuccessResponse = await registerService(payload);
@@ -122,8 +104,11 @@ function SignUp() {
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("refresh_token", refresh_token);
 
-      toast.success("اطلاعات با موفقیت ثبت شد!");
-      navigate("/dashboard");
+      // ذخیره داده‌های کاربر برای مرحله OTP
+      setUserData(normalizedData);
+
+      toast.success("کد تایید به ایمیل شما ارسال شد!");
+      setStep("otp");
     } catch (error: any) {
       console.error("Register error:", error);
 
@@ -131,45 +116,41 @@ function SignUp() {
 
       // خطای 409 از بک
       if (backend?.status === 409 && backend.messages) {
+        const errors: any = {};
         if (backend.messages.phone) {
-          setFieldError("phone", "شماره موبایل قبلاً ثبت شده است.");
+          errors.phone = "شماره موبایل قبلاً ثبت شده است.";
           toast.error("شماره موبایل قبلاً ثبت شده است.");
         }
         if (backend.messages.email) {
-          setFieldError("email", "ایمیل قبلاً ثبت شده است.");
+          errors.email = "ایمیل قبلاً ثبت شده است.";
           toast.error("ایمیل قبلاً ثبت شده است.");
         }
-        setSubmitting(false);
+        setFieldErrors(errors);
         return;
       }
 
       toast.error("خطا در ثبت اطلاعات. لطفا دوباره تلاش کنید.");
-    } finally {
-      setSubmitting(false);
     }
   };
 
-  const handleOtpSubmit = async (
-    values: OTPFormValues,
-    { setSubmitting }: FormikHelpers<OTPFormValues>
-  ) => {
+  const handleOtpSubmit = async () => {
     try {
       if (otpValue.length === 6) {
         setOtpLoading(true);
         console.log("OTP verification:", otpValue);
 
         // اینجا می‌توانید API call برای تایید OTP انجام دهید
-        // const res = await verifyOTP(userData.email, otpValue);
+        // const res = await verifyOTP(userData?.email, otpValue);
 
         toast.success("اطلاعات با موفقیت تایید شد!");
-        // navigate("/dashboard");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1500);
       }
     } catch (error: any) {
       console.error("Error verifying OTP:", error);
       toast.error("کد تایید نادرست است.");
-    } finally {
       setOtpLoading(false);
-      setSubmitting(false);
     }
   };
 
@@ -207,7 +188,6 @@ function SignUp() {
               familyName: "",
               email: "",
               phone: "",
-              password: "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -251,14 +231,6 @@ function SignUp() {
                       maxLength={11}
                     />
 
-                    <CustomInput
-                      name="password"
-                      type="password"
-                      label="رمز عبور"
-                      className="w-full px-4 py-3 rounded-lg"
-                      dir="ltr"
-                    />
-
                     <Button
                       type="submit"
                       disabled={isSubmitting}
@@ -297,118 +269,104 @@ function SignUp() {
             )}
           </Formik>
         ) : (
-          <Formik
-            initialValues={{
-              otp: "",
-            }}
-            validationSchema={otpValidationSchema}
-            onSubmit={handleOtpSubmit}
-          >
-            {({ isSubmitting, values, setFieldValue }) => (
-              <Form>
-                <div className="bg-[#00274D]/85 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
-                  <h1 className="text-white text-2xl text-center mb-2 font-semibold">
-                    تایید کد ارسال شده
-                  </h1>
-                  <div className="bg-white/10 border border-white/20 rounded-lg p-4 mb-6">
-                    <p className="text-white/70 text-center text-sm">
-                      کد تایید به آدرس ایمیل زیر ارسال شد:
-                    </p>
-                    <p className="text-[#FFD500] text-center text-lg font-semibold mt-2 break-all">
-                      {userData?.email}
-                    </p>
-                  </div>
-                  <p className="text-white/70 text-center text-sm mb-8">
-                    کد تایید را وارد کنید
-                  </p>
+          <div className="bg-[#00274D]/85 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+            <h1 className="text-white text-2xl text-center mb-2 font-semibold">
+              تایید کد ارسال شده
+            </h1>
+            <div className="bg-white/10 border border-white/20 rounded-lg p-4 mb-6">
+              <p className="text-white/70 text-center text-sm">
+                کد تایید به آدرس ایمیل زیر ارسال شد:
+              </p>
+              <p className="text-[#FFD500] text-center text-lg font-semibold mt-2 break-all">
+                {userData?.email}
+              </p>
+            </div>
+            <p className="text-white/70 text-center text-sm mb-8">
+              کد تایید را وارد کنید
+            </p>
 
-                  <div className="space-y-6">
-                    <div className="flex justify-center">
-                      <InputOTP
-                        maxLength={6}
-                        value={otpValue}
-                        onChange={(value) => {
-                          setOtpValue(value);
-                          setFieldValue("otp", value);
-                        }}
-                        dir="ltr"
-                      >
-                        <InputOTPGroup className="gap-3">
-                          <InputOTPSlot
-                            index={0}
-                            className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                          />
-                          <InputOTPSlot
-                            index={1}
-                            className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                          />
-                          <InputOTPSlot
-                            index={2}
-                            className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                          />
-                          <InputOTPSlot
-                            index={3}
-                            className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                          />
-                          <InputOTPSlot
-                            index={4}
-                            className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                          />
-                          <InputOTPSlot
-                            index={5}
-                            className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
-                          />
-                        </InputOTPGroup>
-                      </InputOTP>
-                    </div>
+            <div className="space-y-6">
+              <div className="flex justify-center">
+                <InputOTP
+                  maxLength={6}
+                  value={otpValue}
+                  onChange={setOtpValue}
+                  dir="ltr"
+                >
+                  <InputOTPGroup className="gap-3">
+                    <InputOTPSlot
+                      index={0}
+                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                    />
+                    <InputOTPSlot
+                      index={1}
+                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                    />
+                    <InputOTPSlot
+                      index={2}
+                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                    />
+                    <InputOTPSlot
+                      index={3}
+                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                    />
+                    <InputOTPSlot
+                      index={4}
+                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                    />
+                    <InputOTPSlot
+                      index={5}
+                      className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 text-white text-xl font-semibold"
+                    />
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
 
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting || otpLoading || otpValue.length !== 6}
-                      className="
-                        w-full 
-                        bg-[#FFD500] 
-                        hover:bg-[#e6c200]
-                        text-[#00274D] 
-                        font-semibold 
-                        py-3 px-6 
-                        rounded-lg 
-                        transition-all duration-200 
-                        disabled:opacity-50 
-                        disabled:cursor-not-allowed
-                        focus:outline-none 
-                        focus:ring-2 focus:ring-[#FFD500]/50
-                        active:scale-95
-                      "
-                    >
-                      {isSubmitting || otpLoading ? "در حال تایید..." : "تایید"}
-                    </Button>
+              <Button
+                type="button"
+                onClick={handleOtpSubmit}
+                disabled={otpLoading || otpValue.length !== 6}
+                className="
+                  w-full 
+                  bg-[#FFD500] 
+                  hover:bg-[#e6c200]
+                  text-[#00274D] 
+                  font-semibold 
+                  py-3 px-6 
+                  rounded-lg 
+                  transition-all duration-200 
+                  disabled:opacity-50 
+                  disabled:cursor-not-allowed
+                  focus:outline-none 
+                  focus:ring-2 focus:ring-[#FFD500]/50
+                  active:scale-95
+                "
+              >
+                {otpLoading ? "در حال تایید..." : "تایید"}
+              </Button>
 
-                    <div className="flex flex-col gap-3">
-                      <button
-                        type="button"
-                        onClick={handleResendOtp}
-                        className="text-[#FFD500] hover:text-[#e6c200] font-semibold text-sm transition-colors duration-200"
-                      >
-                        ارسال مجدد کد تایید
-                      </button>
+              <div className="flex flex-col gap-3">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  className="text-[#FFD500] hover:text-[#e6c200] font-semibold text-sm transition-colors duration-200"
+                >
+                  ارسال مجدد کد تایید
+                </button>
 
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setStep("form");
-                          setOtpValue("");
-                        }}
-                        className="text-white/70 hover:text-white text-sm transition-colors duration-200"
-                      >
-                        بازگشت به مرحله قبل
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </Form>
-            )}
-          </Formik>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStep("form");
+                    setOtpValue("");
+                  }}
+                  className="text-white/70 hover:text-white text-sm transition-colors duration-200"
+                >
+                  بازگشت به مرحله قبل
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
 
