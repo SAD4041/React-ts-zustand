@@ -1,14 +1,29 @@
 // src/services/authService.ts
 
-import type { LoginPayload, LoginResponse } from "../types/authTypes";
+import type {
+  LoginPayload,
+  LoginSuccessResponse,
+  RegisterPayload,
+  RegisterSuccessResponse,
+} from "../types/authTypes";
+
 import { postData } from "./services";
 
 // Login function
 export const loginService = async (
-	credentials: LoginPayload
-): Promise<LoginResponse> => {
-	return postData({
-		endPoint: `/v1/auth/login`,
-		data: credentials,
-	});
+  payload: LoginPayload
+): Promise<LoginSuccessResponse> => {
+  return postData({
+    endPoint: "/v1/auth/login",
+    data: payload,
+  });
+};
+
+export const registerService = async (
+  payload: RegisterPayload
+): Promise<RegisterSuccessResponse> => {
+  return postData({
+    endPoint: `/v1/auth/signup`, 
+    data: payload,
+  });
 };
