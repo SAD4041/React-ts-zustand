@@ -20,9 +20,12 @@ import {
   Download,
   Edit,
   Plus,
+  ChevronLeft,
 } from "lucide-react";
 import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
+// import { useNavigate } from "react-router-dom"; // داخل کامپوننت const
+// navigate = useNavigate();
 
 // 🆕 استور احراز هویت
 import useUserStore from "@/store/userStore/userStore";
@@ -40,21 +43,19 @@ type DashboardUser = {
 };
 
 // نوع ساده برای تیم (فعلاً اگر نداشتی، می‌مونه null)
-type DashboardTeam =
-  | {
-      name: string;
-      createdAt?: string;
-      members: {
-        name: string;
-        familyName: string;
-        email: string;
-        phone: string;
-        role?: string;
-        university?: string;
-        studentId?: string;
-      }[];
-    }
-  | null;
+type DashboardTeam = {
+  name: string;
+  createdAt?: string;
+  members: {
+    name: string;
+    familyName: string;
+    email: string;
+    phone: string;
+    role?: string;
+    university?: string;
+    studentId?: string;
+  }[];
+} | null;
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -254,7 +255,7 @@ function Dashboard() {
           </div>
 
           {/* User Profile */}
-          {sidebarOpen && (
+          {/* {sidebarOpen && (
             <div className="mb-8 p-4 bg-white/5 rounded-xl border border-white/10 transition-all duration-300">
               <div className="w-16 h-16 bg-[#FFD500] rounded-full flex items-center justify-center text-[#00274D] font-bold text-xl mx-auto mb-3">
                 {userData.name?.charAt(0)}
@@ -273,7 +274,7 @@ function Dashboard() {
                 </span>
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Menu Items */}
           <nav className="space-y-2 mb-8">
@@ -320,35 +321,57 @@ function Dashboard() {
         }`}
       >
         {/* Header */}
-        <header className="bg-[#00274D]/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-40">
+        <header className="bg-[#00274D]/70 backdrop-blur-xl border-b border-white/10 sticky top-0 z-40">
           <div className="px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold">
-                {menuItems.find((item) => item.id === activeTab)?.label}
-              </h1>
-            </div>
-
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              {/* دکمه سایدبار */}
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-2 hover:bg-white/10 rounded-lg transition-all duration-200"
+                className="p-2.5 hover:bg-white/10 rounded-xl transition-all duration-300"
               >
-                <ChevronRight
+                <ChevronLeft
                   className={`w-6 h-6 transition-transform duration-300 ${
-                    !sidebarOpen ? "" : "rotate-180"
+                    sidebarOpen ? "rotate-180" : ""
                   }`}
                 />
               </button>
-              <button className="relative p-2 hover:bg-white/10 rounded-lg transition-all duration-200">
-                <Bell className="w-6 h-6" />
-                {notifications.filter((n) => !n.read).length > 0 && (
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                )}
+              {/* دکمه برگشت به لندینگ - فقط دسکتاپ */}
+              <button
+                onClick={() => navigate("/")}
+                className="hidden md:inline-block px-4 py-2 text-sm font-medium bg-[#FFD500] text-[#00274D] rounded-lg hover:bg-[#ffea80] transition-all duration-200"
+              >
+                صفحه اصلی
               </button>
+            </div>
+
+            <div className="flex items-center gap-5">
+              {/* کارت پروفایل کوچک */}
+              <div className="flex items-center gap-3 bg-white/5 px-4 py-2.5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
+                {/* آواتار */}
+                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-br from-[#FFD500] to-[#ffea80] text-[#00274D] font-bold text-lg shadow-md">
+                  {userData.name?.charAt(0)}
+                  {userData.familyName?.charAt(0) ||
+                    userData.name?.split(" ")[1]?.charAt(0)}
+                </div>
+
+                {/* اطلاعات کاربر */}
+                <div className="flex flex-col">
+                  <span className="font-semibold text-sm">
+                    {userData.name} {userData.familyName}
+                  </span>
+                  <span className="text-[11px] text-gray-300">
+                    {teamData ? "کاپیتان تیم" : "عضو تیم"}
+                  </span>
+                </div>
+
+                {/* وضعیت */}
+                <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full">
+                  فعال
+                </span>
+              </div>
             </div>
           </div>
         </header>
-
         {/* Content Area */}
         <div className="p-6">
           {/* Overview Tab */}
@@ -502,7 +525,7 @@ function Dashboard() {
 
                   {/* Team Members */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {teamData.members.map((member, index) => (
+                    {teamData?.members?.map((member: any, index: number) => (
                       <div
                         key={index}
                         className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-200"
@@ -575,7 +598,9 @@ function Dashboard() {
           {activeTab === "schedule" && (
             <div className="space-y-6">
               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
-                <h2 className="text-2xl font-bold mb-6">برنامه زمانی مسابقات</h2>
+                <h2 className="text-2xl font-bold mb-6">
+                  برنامه زمانی مسابقات
+                </h2>
                 <div className="space-y-4">
                   {[
                     {
@@ -724,9 +749,7 @@ function Dashboard() {
           {activeTab === "settings" && (
             <div className="space-y-6">
               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
-                <h2 className="text-2xl font-bold mb-6">
-                  اطلاعات حساب کاربری
-                </h2>
+                <h2 className="text-2xl font-bold mb-6">اطلاعات حساب کاربری</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm text-gray-400">
@@ -738,7 +761,7 @@ function Dashboard() {
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">ایمیل</label>
-                    <p className="text-lg font-semibold">{userData.email}</p>
+                    <p className="text-lg font-semibold">{userData?.email}</p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">
@@ -773,7 +796,6 @@ function Dashboard() {
             </div>
           )}
         </div>
-
         {/* Footer Logos */}
         <div className="fixed bottom-4 right-4 left-4 flex justify-between items-center pointer-events-none">
           <img src={CESA} alt="CESA Logo" className="w-16 opacity-50" />

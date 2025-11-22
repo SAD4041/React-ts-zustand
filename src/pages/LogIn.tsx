@@ -213,14 +213,6 @@ function Login() {
                       {isSubmitting ? "در حال ارسال..." : "دریافت کد تایید"}
                     </Button>
 
-                    <button
-                      type="button"
-                      onClick={handleForgotPasswordClick}
-                      className="text-[#FFD500] hover:text-[#e6c200] text-xs transition-colors duration-200 float-right w-full text-right"
-                    >
-                      رمز عبور را فراموش کرده‌اید؟
-                    </button>
-
                     <p className="text-white text-center text-sm mt-4 clear-right">
                       <button
                         type="button"

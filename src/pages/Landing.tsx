@@ -28,7 +28,6 @@ import Footer from "@/components/Custom/Footer.tsx";
 
 import useUserStore from "@/store/userStore/userStore";
 
-
 function ICPCLanding() {
   const [scrollY, setScrollY] = useState(0);
   const [countdown, setCountdown] = useState({
@@ -41,15 +40,10 @@ function ICPCLanding() {
   const [particles, setParticles] = useState([]);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
-
   const { authUser, clearAuth } = useUserStore();
   const isLoggedIn = !!authUser;
   const displayName =
-    authUser?.first_name ||
-    authUser?.email?.split("@")[0] ||
-    "کاربر";
-    
-
+    authUser?.first_name || authUser?.email?.split("@")[0] || "کاربر";
 
   useEffect(() => {
     const newParticles = [...Array(40)].map((_, i) => ({
@@ -298,9 +292,7 @@ function ICPCLanding() {
             <div className="hidden md:flex items-center gap-3">
               {isLoggedIn ? (
                 <div className="relative group">
-                  <button
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200"
-                  >
+                  <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200">
                     <User className="w-5 h-5" />
                     <span>{displayName}</span>
                   </button>
@@ -312,15 +304,6 @@ function ICPCLanding() {
                     >
                       <Home className="w-4 h-4" />
                       داشبورد
-                    </button>
-                    <button
-                      onClick={() => {
-                        window.location.href = "/profile";
-                      }}
-                      className="w-full px-4 py-2 text-right text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200 flex items-center gap-2"
-                    >
-                      <User className="w-4 h-4" />
-                      پروفایل
                     </button>
                     <hr className="my-2 border-white/10" />
                     <button
@@ -622,12 +605,12 @@ function ICPCLanding() {
               آماده‌سازی شدید برای مسابقه با برنامه آموزشی فشرده و عملی
             </p>
           </div>
-
+{/* 
           <div
             className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
             dir="rtl"
-          >
-            {bootcampModules.map((module, index) => (
+          > */}
+            {/* {bootcampModules.map((module, index) => (
               <a
                 key={index}
                 href="/camp"
@@ -659,10 +642,10 @@ function ICPCLanding() {
                       </li>
                     ))}
                   </ul>
-                </div>
-              </a>
+                </div> */}
+              {/* </a>
             ))}
-          </div>
+          </div> */}
 
           <div className="bg-gradient-to-r from-[#46BEF6]/20 to-[#D7263D]/20 backdrop-blur-md border border-white/10 rounded-2xl p-8">
             <div className="grid md:grid-cols-3 gap-8 mb-8">

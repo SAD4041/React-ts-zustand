@@ -46,6 +46,7 @@ export interface RegisterPayload {
   last_name: string;
   email: string;
   phone: string;
+  national_code: string;
   tshirt_size: string;
   university: string;
 }
