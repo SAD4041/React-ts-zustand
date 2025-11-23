@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useState} from 'react';
 import type { Brand } from '@/types/productListingTypes';
 
 interface BrandFilterProps {
@@ -8,11 +8,17 @@ interface BrandFilterProps {
 }
 
 const BrandFilter: React.FC<BrandFilterProps> = ({ brands, selectedBrands, onToggleBrand }) => {
+
+
+  const [showAllBrands, setShowAllBrands] = useState(false);
+
+  const visibleCount = showAllBrands ? brands.length : 5;
+
   return (
     <div className="mb-6">
       <h3 className="font-bold mb-3">برند ها</h3>
       <div className="space-y-2">
-        {brands.map(brand => (
+        {brands.slice(0, visibleCount).map(brand => (
           <label key={brand.id} className="flex items-center cursor-pointer">
             <span
               onClick={(e) => {
@@ -36,6 +42,28 @@ const BrandFilter: React.FC<BrandFilterProps> = ({ brands, selectedBrands, onTog
           </label>
         ))}
       </div>
+
+      {brands.length > 5 && (
+        <button
+          type="button"
+          onClick={() => setShowAllBrands(!showAllBrands)}
+          className="mt-2 flex items-center text-xs text-gray-600 hover:text-gray-800 transition"
+        >
+          {showAllBrands ? (
+            <>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+              </svg>
+            </>
+          ) : (
+            <>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </>
+          )}
+        </button>
+      )}
     </div>
   );
 };
