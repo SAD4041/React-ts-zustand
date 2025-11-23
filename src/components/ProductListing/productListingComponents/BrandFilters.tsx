@@ -1,15 +1,7 @@
 import React ,{useState} from 'react';
-import type { Brand } from '@/types/productListingTypes';
-
-interface BrandFilterProps {
-  brands: Brand[];
-  selectedBrands: string[];
-  onToggleBrand: (slug: string) => void;
-}
+import type { BrandFilterProps } from '@/types/productListingTypes';
 
 const BrandFilter: React.FC<BrandFilterProps> = ({ brands, selectedBrands, onToggleBrand }) => {
-
-
   const [showAllBrands, setShowAllBrands] = useState(false);
 
   const visibleCount = showAllBrands ? brands.length : 5;

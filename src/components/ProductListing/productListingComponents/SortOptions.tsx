@@ -1,22 +1,9 @@
 import React from 'react';
 import sortIcon from '@/assets/Listing Icon.png'
-
-export type SortOption = 'newest' | 'cheapest' | 'expensive' | 'most-salled' | 'most-revelent';
-
-interface SortOptionsProps {
-  currentSort: SortOption | null;
-  onSortChange: (sort: SortOption) => void;
-}
+import {sorts} from '@/data/data'
+import type {SortOptionsProps , SortOption} from '@/types/productListingTypes'
 
 const SortOptions: React.FC<SortOptionsProps> = ({ currentSort, onSortChange }) => {
-  const sorts = [
-    { value: 'most-revelent', label: 'مرتبط ترین' },
-    { value: 'newest', label: 'جدیدترین' },
-    { value: 'most-salled', label: 'پرفروش ترین' },
-    { value: 'cheapest', label: 'ارزان ترین' },
-    { value: 'expensive', label: 'گران ترین' },
-    { value: 'chosen', label: 'منتخب' }
-  ];
 
   return (
     <div className="flex items-center space-x-4  text-sm mb-4">

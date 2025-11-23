@@ -59,6 +59,20 @@ export type MenuItem = {
 
 //=========================================================
 
+export  const productsPerPage = 4;
+export  const pagesPerGroup = 5;
+export  const productsPerGroup = productsPerPage * pagesPerGroup;
+export  const currentCategory = "تیشرت زنانه";
+
+export const sorts = [
+    { value: 'most-revelent', label: 'مرتبط ترین' },
+    { value: 'newest', label: 'جدیدترین' },
+    { value: 'most-salled', label: 'پرفروش ترین' },
+    { value: 'cheapest', label: 'ارزان ترین' },
+    { value: 'expensive', label: 'گران ترین' },
+    { value: 'chosen', label: 'منتخب' }
+  ];
+
 
 export const subCategories: SubCategory[] = [
   {

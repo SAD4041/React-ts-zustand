@@ -1,12 +1,6 @@
 import React from 'react';
 import { toPersianDigits } from '@/utils/PersianDigits';
-
-interface PaginationProps {
-  currentGroup: number;
-  totalGroups: number;
-  onGroupChange: (group: number) => void;
-  pagesPerGroup: number;
-}
+import type { PaginationProps } from '@/types/productListingTypes';
 
 const Pagination: React.FC<PaginationProps> = ({ 
   currentGroup, 
@@ -37,8 +31,6 @@ const Pagination: React.FC<PaginationProps> = ({
   }
 
   const items: (number | 'dots')[] = [];
-
-
   items.push(groupStarts[0]);
 
   if (currentGroup > 2) {

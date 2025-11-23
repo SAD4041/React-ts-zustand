@@ -4,8 +4,8 @@ import Pagination from './productListingComponents/Pagination';
 import FilterSidebar from './productListingComponents/FilterSidebar';
 import ProductGrid from './productListingComponents/ProductGrid';
 import SortOptions from './productListingComponents/SortOptions';
-import type { SortOption } from './productListingComponents/SortOptions';
-import { products } from '@/data/data';
+import type { SortOption } from '@/types/productListingTypes';
+import { products, currentCategory, productsPerGroup , pagesPerGroup} from '@/data/data';
 
 const ProductListing: React.FC = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -14,10 +14,6 @@ const ProductListing: React.FC = () => {
   const [currentSort, setCurrentSort] = useState<SortOption>('most-revelent');
   const [currentGroup, setCurrentGroup] = useState(1);
 
-  const productsPerPage = 4;
-  const pagesPerGroup = 5;
-  const productsPerGroup = productsPerPage * pagesPerGroup;
-  const currentCategory = "تیشرت زنانه";
 
   const productsWithoutPriceFilter = useMemo(() => {
     let result = [...products];

@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import type { ColorOption } from '@/types/productListingTypes';
-
-interface ColorFilterProps {
-  colors: ColorOption[];
-  selectedColors: string[];
-  onToggleColor: (code: string) => void;
-}
+import type { ColorFilterProps } from '@/types/productListingTypes';
 
 const ColorFilter: React.FC<ColorFilterProps> = ({ colors, selectedColors, onToggleColor }) => {
   const [showAllColors, setShowAllColors] = useState(false);

@@ -1,11 +1,7 @@
 import React from 'react';
-import type { SubCategory } from '@/types/productListingTypes';
+import type { SubCategoryProps } from '@/types/productListingTypes';
 
-interface Props {
-  category: SubCategory;
-}
-
-const SubCategoryCard: React.FC<Props> = ({ category }) => {
+const SubCategoryCard: React.FC<SubCategoryProps> = ({ category }) => {
   return (
     <div className="shrink-0 w-40 cursor-pointer group">
       <div className="relative overflow-hidden rounded-lg shadow-sm">
