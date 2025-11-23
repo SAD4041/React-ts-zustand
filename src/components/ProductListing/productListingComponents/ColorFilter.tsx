@@ -36,7 +36,7 @@ const ColorFilter: React.FC<ColorFilterProps> = ({ colors, selectedColors, onTog
         <button
           type="button"
           onClick={() => setShowAllColors(!showAllColors)}
-          className="mt-2 flex items-center text-xs text-gray-600 hover:text-gray-800 transition"
+          className="mt-2 flex justify-center w-full text-xs text-gray-600 hover:text-gray-800 transition"
         >
           {showAllColors ? (
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

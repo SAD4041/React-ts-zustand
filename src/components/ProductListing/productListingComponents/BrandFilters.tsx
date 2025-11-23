@@ -47,7 +47,7 @@ const BrandFilter: React.FC<BrandFilterProps> = ({ brands, selectedBrands, onTog
         <button
           type="button"
           onClick={() => setShowAllBrands(!showAllBrands)}
-          className="mt-2 flex items-center text-xs text-gray-600 hover:text-gray-800 transition"
+          className="mt-2 flex justify-center w-full text-xs text-gray-600 hover:text-gray-800 transition"
         >
           {showAllBrands ? (
             <>
