@@ -6,7 +6,6 @@ import SizeFilter from './SizeFilter';
 import ColorFilter from './ColorFilter';
 import PriceRangeFilter from './PriceRange';
 
-
 const FilterSidebar: React.FC<FilterSidebarProps> = ({
   selectedBrands,
   selectedSizes,
@@ -20,28 +19,28 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   onClearFilters,
 }) => {
   return (
-    <aside className="w-64 bg-gray-50 p-3 rounded-lg shadow-sm">
+    <aside className="w-64 bg-muted p-3 rounded-lg shadow-sm h-fit">
 
       <BrandFilter
         brands={brands}
         selectedBrands={selectedBrands}
         onToggleBrand={onBrandToggle}
       />
-      <hr className="my-1.5 border-gray-200" />
+      <hr className="my-1.5 border-border" />
 
       <SizeFilter
         selectedSizes={selectedSizes}
         onToggleSize={onSizeToggle}
         sizes={sizes}
       />
-      <hr className="my-1.5 border-gray-200" />
+      <hr className="my-1.5 border-border" />
 
       <ColorFilter
         selectedColors={selectedColors}
         onToggleColor={onColorToggle}
         colors={colors}
       />
-      <hr className="my-1.5 border-gray-200" />
+      <hr className="my-1.5 border-border" />
 
       <PriceRangeFilter
         minPrice={priceRange.min}
@@ -49,11 +48,11 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
         onPriceChange={onPriceChange}
         globalMaxPrice={globalMaxPrice}
       />
-      <hr className="my-1.5 border-gray-200" />
+      <hr className="my-1.5 border-border" />
 
       <button
         onClick={onClearFilters}
-        className="w-full mt-2 py-1 text-s bg-[#FE621F] text-white rounded hover:bg-orange-400 transition"
+        className="w-full mt-2 py-1 text-sm bg-primary text-primary-foreground rounded hover:bg-primary/90 transition"
       >
         پاک کردن فیلترها
       </button>

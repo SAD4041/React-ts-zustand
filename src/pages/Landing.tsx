@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import ProductListing from "@/components/ProductListing/productListing";
 
 function Landing() {
 	const Navigate = useNavigate();
@@ -17,7 +16,6 @@ function Landing() {
 				</button>
 			</div>
 			<p className="text-5xl text-center ">This is your landing</p> */}
-			<ProductListing/>
 		</div>
 	);
 }

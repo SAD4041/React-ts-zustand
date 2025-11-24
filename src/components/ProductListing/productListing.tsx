@@ -5,7 +5,7 @@ import FilterSidebar from './productListingComponents/FilterSidebar';
 import ProductGrid from './productListingComponents/ProductGrid';
 import SortOptions from './productListingComponents/SortOptions';
 import type { SortOption } from '@/types/productListingTypes';
-import { products, currentCategory, productsPerGroup , pagesPerGroup} from '@/data/data';
+import { products, currentCategory, productsPerGroup, pagesPerGroup } from '@/data/data';
 
 const ProductListing: React.FC = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -13,7 +13,6 @@ const ProductListing: React.FC = () => {
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [currentSort, setCurrentSort] = useState<SortOption>('most-revelent');
   const [currentGroup, setCurrentGroup] = useState(1);
-
 
   const productsWithoutPriceFilter = useMemo(() => {
     let result = [...products];
@@ -42,14 +41,14 @@ const ProductListing: React.FC = () => {
     return Math.max(...productsWithoutPriceFilter.map(p => p.discountedPrice));
   }, [productsWithoutPriceFilter]);
 
-  useEffect(() => {
-  if (priceRange.max === 10000000) {
-    setPriceRange({ min: 0, max: globalMaxPrice });
-  }
-}, [globalMaxPrice]);
-
   const initialMaxPrice = Math.max(...products.map(p => p.discountedPrice), 100000);
   const [priceRange, setPriceRange] = useState({ min: 0, max: initialMaxPrice });
+
+  useEffect(() => {
+    if (priceRange.max === 10000000) {
+      setPriceRange({ min: 0, max: globalMaxPrice });
+    }
+  }, [globalMaxPrice]);
 
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...productsWithoutPriceFilter];
@@ -86,7 +85,6 @@ const ProductListing: React.FC = () => {
       setCurrentGroup(1);
     }
   }, [totalGroups, currentGroup]);
-
 
   const handleBrandToggle = (name: string) => {
     setSelectedBrands(prev =>
@@ -149,14 +147,14 @@ const ProductListing: React.FC = () => {
                 onSortChange={handleSortChange} 
               />
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               {filteredProductsCount.toLocaleString('fa-IR')} محصول در دسته {currentCategory}
             </div>
           </div>
 
-          <hr className="mb-4 border-gray-200" />
+          <hr className="mb-4 border-border" />
 
-          <div className="h-[600px] overflow-y-auto border rounded-lg p-4 bg-white shadow-sm">
+          <div className="h-[600px] overflow-y-auto border border-border rounded-lg p-4 bg-card shadow-sm">
             <ProductGrid products={productsToDisplay} />
           </div>
 

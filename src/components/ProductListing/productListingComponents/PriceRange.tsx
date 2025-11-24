@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { formatPrice } from '@/utils/FormatPrice';
-import {toPersianDigits} from '@/utils/PersianDigits';
+import { toPersianDigits } from '@/utils/PersianDigits';
 import type { PriceRangeFilterProps } from '@/types/productListingTypes';
-
 
 const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
   minPrice,
@@ -38,19 +37,19 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
               setLocalMax(value[1]);
             }
           }}
-          trackStyle={[{ backgroundColor: '#F97316', height: 6 }]}
+          trackStyle={[{ backgroundColor: 'var(--slider-track)', height: 6 }]}
           handleStyle={[
-            { borderColor: '#F97316', height: 20, width: 20, marginLeft: -10, marginTop: -7 },
-            { borderColor: '#F97316', height: 20, width: 20, marginLeft: -10, marginTop: -7 }
+            { borderColor: 'var(--slider-handle)', height: 20, width: 20, marginLeft: -10, marginTop: -7 },
+            { borderColor: 'var(--slider-handle)', height: 20, width: 20, marginLeft: -10, marginTop: -7 }
           ]}
         />
       </div>
 
       <div className="flex justify-between text-sm mt-2">
-        <span className="bg-gray-100 px-2 py-1 rounded">
+        <span className="bg-muted px-2 py-1 rounded">
           {toPersianDigits(formatPrice(localMax))}
         </span>
-        <span className="bg-gray-100 px-2 py-1 rounded">
+        <span className="bg-muted px-2 py-1 rounded">
           {toPersianDigits(formatPrice(localMin))}
         </span>
       </div>

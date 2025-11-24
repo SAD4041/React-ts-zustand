@@ -1,7 +1,6 @@
 import React from 'react';
 import type { SizeFilterProps } from '@/types/productListingTypes';
 
-
 const SizeFilter: React.FC<SizeFilterProps> = ({ sizes, selectedSizes, onToggleSize }) => {
   return (
     <div className="mb-6">
@@ -14,8 +13,8 @@ const SizeFilter: React.FC<SizeFilterProps> = ({ sizes, selectedSizes, onToggleS
             onClick={() => onToggleSize(size)}
             className={`px-3 py-1 rounded-md text-sm transition ${
               selectedSizes.includes(size)
-                ? 'bg-[#FE621F] text-white border border-orange-600'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-primary text-primary-foreground border border-primary/50'
+                : 'bg-muted text-foreground hover:bg-muted/80'
             }`}
           >
             {size}

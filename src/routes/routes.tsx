@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Landing from "@/pages/Landing";
+import ProductList from "@/pages/ProductListing"
 import Temp from "@/pages/Temp";
 
 export const router = createBrowserRouter([
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
 			{
 				path: "/temp",
 				element: <Temp />,
+			},
+			{
+				path: "/productList",
+				element: <ProductList/>
 			},
 			// {
 			// 	path: "/AboutUs",

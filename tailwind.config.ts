@@ -14,7 +14,9 @@ const config: Config = {
 			fontFamily: {
 				sans: ["Vazirmatn", 'sans-serif'],
 			},
-
+			fontSize: {
+			'2xs': '0.625rem', 
+			},
 			colors: {
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",

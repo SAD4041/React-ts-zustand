@@ -17,8 +17,8 @@ const ColorFilter: React.FC<ColorFilterProps> = ({ colors, selectedColors, onTog
             onClick={() => onToggleColor(color.code)}
             className={`w-6 h-6 rounded-full border-2 transition ${
               selectedColors.includes(color.code)
-                ? 'border-gray-300 ring-1 ring-offset-1 ring-[#FE621F]'
-                : 'border-gray-300 hover:border-[#FE621F]'
+                ? 'border-border ring-1 ring-offset-1 ring-primary'
+                : 'border-border hover:border-primary'
             }`}
             style={{ backgroundColor: color.code }}
             title={color.name}
@@ -30,16 +30,16 @@ const ColorFilter: React.FC<ColorFilterProps> = ({ colors, selectedColors, onTog
         <button
           type="button"
           onClick={() => setShowAllColors(!showAllColors)}
-          className="mt-2 flex justify-center w-full text-xs text-gray-600 hover:text-gray-800 transition"
+          className="mt-2 flex justify-center w-full text-xs text-muted-foreground hover:text-foreground transition"
         >
           {showAllColors ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-              </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+            </svg>
           ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           )}
         </button>
       )}
