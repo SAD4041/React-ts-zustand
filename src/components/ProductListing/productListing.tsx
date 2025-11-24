@@ -66,6 +66,8 @@ const ProductListing: React.FC = () => {
             return a.discountedPrice - b.discountedPrice;
           case 'expensive':
             return b.discountedPrice - a.discountedPrice;
+          case 'most-salled': 
+            return (b.sales || 0) - (a.sales || 0);
           default:
             return 0;
         }
