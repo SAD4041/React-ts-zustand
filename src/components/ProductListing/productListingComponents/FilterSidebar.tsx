@@ -19,7 +19,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   onClearFilters,
 }) => {
   return (
-    <aside className="w-64 bg-muted p-3 rounded-lg shadow-sm h-fit">
+    <aside className="w-68 bg-muted p-3 rounded-lg shadow-sm h-fit">
 
       <BrandFilter
         brands={brands}

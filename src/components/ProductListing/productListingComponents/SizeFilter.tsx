@@ -14,7 +14,7 @@ const SizeFilter: React.FC<SizeFilterProps> = ({ sizes, selectedSizes, onToggleS
             className={`px-3 py-1 rounded-md text-sm transition ${
               selectedSizes.includes(size)
                 ? 'bg-primary text-primary-foreground border border-primary/50'
-                : 'bg-muted text-foreground hover:bg-muted/80'
+                : 'bg-muted text-foreground border border-border hover:border-primary hover:bg-primary/5'
             }`}
           >
             {size}
