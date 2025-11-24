@@ -121,7 +121,7 @@ const ProductListing: React.FC = () => {
 
   return (
     <div dir="rtl" className="container mx-auto px-4 py-6 font-vazir">
-      <div className="mb-0 mt-70">
+      <div>
         <SubCategorySlider />
       </div>
 
