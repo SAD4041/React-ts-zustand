@@ -9,7 +9,7 @@
   font-display: swap;
 }
 
-@font-face {
+@font-face {  
   font-family: "Peyda";
   src: url("/fonts/peyda-extralight.ttf") format("truetype");
   font-weight: 200;

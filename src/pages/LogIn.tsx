@@ -114,14 +114,26 @@ function Login() {
 
       localStorage.setItem("access_token", res.data.access_token);
       localStorage.setItem("refresh_token", res.data.refresh_token);
-      
+
       toast.success("ورود با موفقیت انجام شد!");
-      navigate("/dashboard");
+
+      // 🆕 بررسی اگر ایمیل ادمین باشه، به صفحه ادمین برو
+      const adminEmail = "kianyarii1383@gmail.com";
+      if (userEmail === adminEmail) {
+        console.log("Admin login detected, redirecting to admin panel");
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error: any) {
       console.error("Error verifying OTP:", error);
 
-      const backend401 = error?.response?.data as LoginErrorResponse | undefined;
-      const backend404 = error?.response?.data as VerifyOtpErrorResponse | undefined;
+      const backend401 = error?.response?.data as
+        | LoginErrorResponse
+        | undefined;
+      const backend404 = error?.response?.data as
+        | VerifyOtpErrorResponse
+        | undefined;
 
       if (backend401?.status === 401) {
         toast.error("کد تایید اشتباه است.");

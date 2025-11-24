@@ -14,6 +14,15 @@ import {
 import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
 import BG from "@/assets/BG.png";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+
+// 🆕 ایمپورت سرویس تیم
+import { createTeamService, inviteUserService } from "@/services/teamService";
+import type {
+  CreateTeamPayload,
+  InviteUserPayload,
+} from "@/types/teamTypes";
 
 // Validation schema برای اطلاعات هر عضو
 const memberValidationSchema = Yup.object({
@@ -44,11 +53,6 @@ const memberValidationSchema = Yup.object({
     .matches(/^09[0-9]{9}$/, "شماره موبایل باید با ۰۹ شروع شده و ۱۱ رقم باشد")
     .required("شماره موبایل الزامی است"),
 
-  studentId: Yup.string()
-    .matches(/^[0-9]+$/, "شماره دانشجویی باید فقط شامل اعداد باشد")
-    .min(6, "شماره دانشجویی باید حداقل ۶ رقم باشد")
-    .required("شماره دانشجویی الزامی است"),
-
   university: Yup.string()
     .min(3, "نام دانشگاه باید حداقل ۳ حرف باشد")
     .required("نام دانشگاه الزامی است"),
@@ -60,73 +64,179 @@ const teamValidationSchema = Yup.object({
     .min(3, "نام تیم باید حداقل ۳ حرف باشد")
     .max(50, "نام تیم نباید بیشتر از ۵۰ حرف باشد")
     .required("نام تیم الزامی است"),
+  teamDescription: Yup.string()
+    .min(10, "توضیحات تیم باید حداقل ۱۰ حرف باشد")
+    .max(500, "توضیحات تیم نباید بیشتر از ۵۰۰ حرف باشد")
+    .required("توضیحات تیم الزامی است"),
 });
 
+// تایپ برای اطلاعات عضو
+interface MemberData {
+  name: string;
+  familyName: string;
+  email: string;
+  phone: string;
+  university: string;
+  nationalCode?: string;
+  tshirtSize?: string;
+}
+
 function TeamRegistration() {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
-  const [teamData, setTeamData] = useState({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [teamId, setTeamId] = useState<number | null>(null);
+
+  // جدا کردن state‌ها برای جلوگیری از کانفلیکت
+  const [teamInfo, setTeamInfo] = useState({
     teamName: "",
-    members: [
-      {
-        name: "",
-        familyName: "",
-        email: "",
-        phone: "",
-        studentId: "",
-        university: "",
-        role: "کاپیتان",
-      },
-      {
-        name: "",
-        familyName: "",
-        email: "",
-        phone: "",
-        studentId: "",
-        university: "",
-        role: "عضو اول",
-      },
-      {
-        name: "",
-        familyName: "",
-        email: "",
-        phone: "",
-        studentId: "",
-        university: "",
-        role: "عضو دوم",
-      },
-    ],
+    teamDescription: "",
+  });
+
+  const [member1, setMember1] = useState<MemberData>({
+    name: "",
+    familyName: "",
+    email: "",
+    phone: "",
+    university: "",
+    nationalCode: "",
+    tshirtSize: "M",
+  });
+
+  const [member2, setMember2] = useState<MemberData>({
+    name: "",
+    familyName: "",
+    email: "",
+    phone: "",
+    university: "",
+    nationalCode: "",
+    tshirtSize: "M",
   });
 
   const steps = [
-    { title: "نام تیم", icon: Award },
-    { title: "کاپیتان تیم", icon: User },
+    { title: "نام و توضیح تیم", icon: Award },
     { title: "عضو اول", icon: User },
     { title: "عضو دوم", icon: User },
     { title: "تایید نهایی", icon: CheckCircle },
   ];
 
-  const handleTeamNameSubmit = (values, { setSubmitting }) => {
-    setTeamData({ ...teamData, teamName: values.teamName });
-    setCurrentStep(1);
-    setSubmitting(false);
+  // 🆕 مرحله 1: ایجاد تیم
+  const handleCreateTeam = async (values: { teamName: string; teamDescription: string }) => {
+    try {
+      setIsSubmitting(true);
+
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        toast.error("توکن یافت نشد. لطفا دوباره وارد شوید.");
+        navigate("/login");
+        return;
+      }
+
+      const teamPayload: CreateTeamPayload = {
+        name: values.teamName,
+        description: values.teamDescription,
+      };
+
+      console.log("📋 Creating team with payload:", teamPayload);
+      const response = await createTeamService(teamPayload);
+
+      if (response?.data?.id) {
+        setTeamId(response.data.id);
+        setTeamInfo({
+          teamName: values.teamName,
+          teamDescription: values.teamDescription,
+        });
+        toast.success("تیم با موفقیت ایجاد شد!");
+        setCurrentStep(1);
+      } else {
+        throw new Error("خطا در ایجاد تیم");
+      }
+    } catch (error: any) {
+      console.error("Error creating team:", error);
+
+      if (error?.messages?.team?.user_already_has_team) {
+        toast.error("شما قبلاً یک تیم دارید");
+      } else if (error?.messages?.team?.name_already_exists) {
+        toast.error("این نام تیم قبلاً انتخاب شده است");
+      } else if (error?.response?.data?.messages?.team) {
+        toast.error(
+          Object.values(error.response.data.messages.team)[0] as string
+        );
+      } else {
+        toast.error(error?.message || "خطا در ایجاد تیم");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleMemberSubmit = (values, { setSubmitting }) => {
-    const updatedMembers = [...teamData.members];
-    updatedMembers[currentStep - 1] = {
-      ...values,
-      role: teamData.members[currentStep - 1].role,
-    };
-    setTeamData({ ...teamData, members: updatedMembers });
-    setCurrentStep(currentStep + 1);
-    setSubmitting(false);
+  // 🆕 ذخیره اطلاعات عضو اول
+  const handleMember1Submit = (values: MemberData) => {
+    setMember1(values);
+    toast.success("اطلاعات عضو اول ذخیره شد!");
+    setCurrentStep(2);
   };
 
-  const handleFinalSubmit = () => {
-    console.log("Team Registration Data:", teamData);
-    alert("تیم شما با موفقیت ثبت شد!");
-    // اینجا می‌توانید API call انجام دهید
-    // await registerTeam(teamData);
+  // 🆕 ذخیره اطلاعات عضو دوم
+  const handleMember2Submit = (values: MemberData) => {
+    setMember2(values);
+    toast.success("اطلاعات عضو دوم ذخیره شد!");
+    setCurrentStep(3);
+  };
+
+  // 🆕 مرحله نهایی: ارسال هر دو عضو با هم
+  const handleFinalSubmit = async () => {
+    if (!teamId) {
+      toast.error("تیم یافت نشد");
+      return;
+    }
+
+    // بررسی کامل بودن اطلاعات هر دو عضو
+    if (!member1.name || !member2.name) {
+      toast.error("لطفا اطلاعات هر دو عضو را کامل وارد کنید");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      const membersPayload: InviteUserPayload = {
+        members: [
+          {
+            first_name: member1.name,
+            last_name: member1.familyName,
+            email: member1.email,
+            phone: member1.phone,
+            university: member1.university,
+            national_code: member1.nationalCode || "",
+            tshirt_size: member1.tshirtSize || "M",
+          },
+          {
+            first_name: member2.name,
+            last_name: member2.familyName,
+            email: member2.email,
+            phone: member2.phone,
+            university: member2.university,
+            national_code: member2.nationalCode || "",
+            tshirt_size: member2.tshirtSize || "M",
+          },
+        ],
+      };
+
+      console.log("📨 Inviting both members with payload:", membersPayload);
+      await inviteUserService(teamId.toString(), membersPayload);
+
+      toast.success("هر دو عضو با موفقیت دعوت شدند!");
+      
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+    } catch (error: any) {
+      console.error("Error inviting members:", error);
+      toast.error(error?.message || "خطا در دعوت اعضا");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleBack = () => {
@@ -135,7 +245,7 @@ function TeamRegistration() {
     }
   };
 
-  const handleEdit = (step) => {
+  const handleEditStep = (step: number) => {
     setCurrentStep(step);
   };
 
@@ -152,49 +262,43 @@ function TeamRegistration() {
       <div className="w-full max-w-4xl">
         {/* Progress Bar */}
         <div className="bg-[#00274D]/85 backdrop-blur-md rounded-3xl p-6 mb-6 shadow-2xl border border-white/20">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between relative">
             {steps.map((step, index) => (
-              <div key={index} className="flex flex-col items-center flex-1">
-                <div
+              <div
+                key={index}
+                className="flex flex-col items-center flex-1 relative z-10"
+              >
+                <button
+                  onClick={() => index < currentStep && handleEditStep(index)}
+                  disabled={index >= currentStep}
                   className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
                     index < currentStep
-                      ? "bg-green-500 text-white"
+                      ? "bg-green-500 text-white cursor-pointer hover:bg-green-600"
                       : index === currentStep
                       ? "bg-[#FFD500] text-[#00274D]"
                       : "bg-white/20 text-white/50"
                   }`}
                 >
                   <step.icon className="w-6 h-6" />
-                </div>
+                </button>
                 <p className="text-white text-xs mt-2 text-center hidden md:block">
                   {step.title}
                 </p>
-                {index < steps.length - 1 && (
-                  <div
-                    className={`absolute top-6 h-0.5 transition-all duration-300 hidden md:block ${
-                      index < currentStep ? "bg-green-500" : "bg-white/20"
-                    }`}
-                    style={{
-                      width: "calc((100% - 48px) / 4)",
-                      right: `calc(${index * 25}% + 24px)`,
-                    }}
-                  />
-                )}
               </div>
             ))}
           </div>
         </div>
 
         {/* Form Container */}
-        <div className="bg-[#00274D]/85 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
-          {/* Step 0: نام تیم */}
+        <div className="bg-[#00274D] backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
+          {/* Step 0: نام و توضیح تیم */}
           {currentStep === 0 && (
             <Formik
-              initialValues={{ teamName: teamData.teamName }}
+              initialValues={teamInfo}
               validationSchema={teamValidationSchema}
-              onSubmit={handleTeamNameSubmit}
+              onSubmit={handleCreateTeam}
             >
-              {({ isSubmitting }) => (
+              {({ isSubmitting: formSubmitting }) => (
                 <Form>
                   <div className="text-center mb-8">
                     <Users className="w-16 h-16 mx-auto mb-4 text-[#FFD500]" />
@@ -202,7 +306,7 @@ function TeamRegistration() {
                       ثبت‌نام تیم
                     </h1>
                     <p className="text-gray-300">
-                      ابتدا یک نام منحصر به فرد برای تیم خود انتخاب کنید
+                      نام و توضیحات تیم خود را وارد کنید
                     </p>
                   </div>
 
@@ -214,9 +318,16 @@ function TeamRegistration() {
                       className="w-full px-4 py-3 rounded-lg text-lg"
                     />
 
+                    <CustomInput
+                      name="teamDescription"
+                      type="text"
+                      label="توضیحات تیم"
+                      className="w-full px-4 py-3 rounded-lg"
+                    />
+
                     <Button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={formSubmitting}
                       className="w-full bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-4 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#FFD500]/50 active:scale-95"
                     >
                       ادامه
@@ -228,26 +339,25 @@ function TeamRegistration() {
             </Formik>
           )}
 
-          {/* Steps 1-3: اطلاعات اعضا */}
-          {currentStep >= 1 && currentStep <= 3 && (
+          {/* Step 1: اطلاعات عضو اول */}
+          {currentStep === 1 && (
             <Formik
-              initialValues={teamData.members[currentStep - 1]}
+              initialValues={member1}
               validationSchema={memberValidationSchema}
-              onSubmit={handleMemberSubmit}
+              onSubmit={handleMember1Submit}
               enableReinitialize
             >
-              {({ isSubmitting }) => (
+              {({ isSubmitting: formSubmitting }) => (
                 <Form>
                   <div className="text-center mb-8">
                     <div className="inline-block p-4 bg-[#FFD500]/20 rounded-2xl mb-4">
                       <User className="w-12 h-12 text-[#FFD500]" />
                     </div>
                     <h1 className="text-white text-3xl font-bold mb-2">
-                      {teamData.members[currentStep - 1].role}
+                      عضو اول
                     </h1>
                     <p className="text-gray-300">
-                      لطفا اطلاعات {teamData.members[currentStep - 1].role} را
-                      وارد کنید
+                      لطفا اطلاعات عضو اول را وارد کنید
                     </p>
                   </div>
 
@@ -284,17 +394,23 @@ function TeamRegistration() {
                     />
 
                     <CustomInput
-                      name="studentId"
-                      type="text"
-                      label="شماره دانشجویی"
-                      className="w-full px-4 py-3 rounded-lg"
-                      dir="ltr"
-                    />
-
-                    <CustomInput
                       name="university"
                       type="text"
                       label="نام دانشگاه"
+                      className="w-full px-4 py-3 rounded-lg"
+                    />
+
+                    <CustomInput
+                      name="nationalCode"
+                      type="text"
+                      label="کد ملی"
+                      className="w-full px-4 py-3 rounded-lg"
+                    />
+
+                    <CustomInput
+                      name="tshirtSize"
+                      type="text"
+                      label="سایز تیشرت"
                       className="w-full px-4 py-3 rounded-lg"
                     />
                   </div>
@@ -310,10 +426,10 @@ function TeamRegistration() {
                     </Button>
                     <Button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={formSubmitting}
                       className="flex-1 bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-4 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#FFD500]/50 active:scale-95"
                     >
-                      ادامه
+                      ذخیره و ادامه
                       <ArrowLeft className="w-5 h-5 mr-2 inline-block" />
                     </Button>
                   </div>
@@ -322,8 +438,107 @@ function TeamRegistration() {
             </Formik>
           )}
 
-          {/* Step 4: تایید نهایی */}
-          {currentStep === 4 && (
+          {/* Step 2: اطلاعات عضو دوم */}
+          {currentStep === 2 && (
+            <Formik
+              initialValues={member2}
+              validationSchema={memberValidationSchema}
+              onSubmit={handleMember2Submit}
+              enableReinitialize
+            >
+              {({ isSubmitting: formSubmitting }) => (
+                <Form>
+                  <div className="text-center mb-8">
+                    <div className="inline-block p-4 bg-[#FFD500]/20 rounded-2xl mb-4">
+                      <User className="w-12 h-12 text-[#FFD500]" />
+                    </div>
+                    <h1 className="text-white text-3xl font-bold mb-2">
+                      عضو دوم
+                    </h1>
+                    <p className="text-gray-300">
+                      لطفا اطلاعات عضو دوم را وارد کنید
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <CustomInput
+                      name="name"
+                      type="text"
+                      label="نام"
+                      className="w-full px-4 py-3 rounded-lg"
+                    />
+
+                    <CustomInput
+                      name="familyName"
+                      type="text"
+                      label="نام خانوادگی"
+                      className="w-full px-4 py-3 rounded-lg"
+                    />
+
+                    <CustomInput
+                      name="email"
+                      type="email"
+                      label="ایمیل"
+                      className="w-full px-4 py-3 rounded-lg"
+                      dir="ltr"
+                    />
+
+                    <CustomInput
+                      name="phone"
+                      type="tel"
+                      label="شماره موبایل"
+                      className="w-full px-4 py-3 rounded-lg"
+                      dir="ltr"
+                      maxLength={11}
+                    />
+
+                    <CustomInput
+                      name="university"
+                      type="text"
+                      label="نام دانشگاه"
+                      className="w-full px-4 py-3 rounded-lg"
+                    />
+
+                    <CustomInput
+                      name="nationalCode"
+                      type="text"
+                      label="کد ملی"
+                      className="w-full px-4 py-3 rounded-lg"
+                    />
+
+                    <CustomInput
+                      name="tshirtSize"
+                      type="text"
+                      label="سایز تیشرت"
+                      className="w-full px-4 py-3 rounded-lg"
+                    />
+                  </div>
+
+                  <div className="flex gap-4">
+                    <Button
+                      type="button"
+                      onClick={handleBack}
+                      className="flex-1 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200"
+                    >
+                      <ArrowRight className="w-5 h-5 ml-2 inline-block" />
+                      قبلی
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={formSubmitting}
+                      className="flex-1 bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-4 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#FFD500]/50 active:scale-95"
+                    >
+                      ذخیره و ادامه
+                      <ArrowLeft className="w-5 h-5 mr-2 inline-block" />
+                    </Button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          )}
+
+          {/* Step 3: تایید نهایی */}
+          {currentStep === 3 && (
             <div>
               <div className="text-center mb-8">
                 <CheckCircle className="w-16 h-16 mx-auto mb-4 text-green-500" />
@@ -336,20 +551,27 @@ function TeamRegistration() {
                 </p>
               </div>
 
-              {/* نمایش نام تیم */}
+              {/* نمایش نام تیم و توضیحات */}
               <div className="bg-[#FFD500]/10 border border-[#FFD500]/30 rounded-xl p-6 mb-6">
-                <div className="flex items-center justify-between">
-                  <div>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
                     <h3 className="text-[#FFD500] font-semibold mb-2">
                       نام تیم
                     </h3>
-                    <p className="text-white text-xl font-bold">
-                      {teamData.teamName}
+                    <p className="text-white text-xl font-bold mb-4">
+                      {teamInfo.teamName}
+                    </p>
+
+                    <h3 className="text-[#FFD500] font-semibold mb-2">
+                      توضیحات تیم
+                    </h3>
+                    <p className="text-white text-sm whitespace-pre-wrap">
+                      {teamInfo.teamDescription}
                     </p>
                   </div>
                   <Button
-                    onClick={() => handleEdit(0)}
-                    className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm transition-all duration-200"
+                    onClick={() => handleEditStep(0)}
+                    className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm transition-all duration-200 ml-4"
                   >
                     ویرایش
                   </Button>
@@ -358,58 +580,115 @@ function TeamRegistration() {
 
               {/* نمایش اطلاعات اعضا */}
               <div className="space-y-4 mb-6">
-                {teamData.members.map((member, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/5 border border-white/10 rounded-xl p-6"
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-[#FFD500] font-semibold text-lg">
-                        {member.role}
-                      </h3>
-                      <Button
-                        onClick={() => handleEdit(index + 1)}
-                        className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm transition-all duration-200"
-                      >
-                        ویرایش
-                      </Button>
+                {/* عضو اول */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-[#FFD500] font-semibold text-lg">
+                      عضو اول
+                    </h3>
+                    <Button
+                      onClick={() => handleEditStep(1)}
+                      className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm transition-all duration-200"
+                    >
+                      ویرایش
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-400">نام و نام خانوادگی: </span>
+                      <span className="text-white font-semibold">
+                        {member1.name} {member1.familyName}
+                      </span>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-400">ایمیل: </span>
+                      <span className="text-white font-semibold" dir="ltr">
+                        {member1.email}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">شماره موبایل: </span>
+                      <span className="text-white font-semibold" dir="ltr">
+                        {member1.phone}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">دانشگاه: </span>
+                      <span className="text-white font-semibold">
+                        {member1.university}
+                      </span>
+                    </div>
+                    {member1.nationalCode && (
                       <div>
-                        <span className="text-gray-400">
-                          نام و نام خانوادگی:{" "}
-                        </span>
+                        <span className="text-gray-400">کد ملی: </span>
                         <span className="text-white font-semibold">
-                          {member.name} {member.familyName}
+                          {member1.nationalCode}
                         </span>
                       </div>
-                      <div>
-                        <span className="text-gray-400">ایمیل: </span>
-                        <span className="text-white font-semibold" dir="ltr">
-                          {member.email}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">شماره موبایل: </span>
-                        <span className="text-white font-semibold" dir="ltr">
-                          {member.phone}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">شماره دانشجویی: </span>
-                        <span className="text-white font-semibold" dir="ltr">
-                          {member.studentId}
-                        </span>
-                      </div>
-                      <div className="md:col-span-2">
-                        <span className="text-gray-400">دانشگاه: </span>
-                        <span className="text-white font-semibold">
-                          {member.university}
-                        </span>
-                      </div>
+                    )}
+                    <div>
+                      <span className="text-gray-400">سایز تیشرت: </span>
+                      <span className="text-white font-semibold">
+                        {member1.tshirtSize}
+                      </span>
                     </div>
                   </div>
-                ))}
+                </div>
+
+                {/* عضو دوم */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-[#FFD500] font-semibold text-lg">
+                      عضو دوم
+                    </h3>
+                    <Button
+                      onClick={() => handleEditStep(2)}
+                      className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm transition-all duration-200"
+                    >
+                      ویرایش
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-400">نام و نام خانوادگی: </span>
+                      <span className="text-white font-semibold">
+                        {member2.name} {member2.familyName}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">ایمیل: </span>
+                      <span className="text-white font-semibold" dir="ltr">
+                        {member2.email}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">شماره موبایل: </span>
+                      <span className="text-white font-semibold" dir="ltr">
+                        {member2.phone}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">دانشگاه: </span>
+                      <span className="text-white font-semibold">
+                        {member2.university}
+                      </span>
+                    </div>
+                    {member2.nationalCode && (
+                      <div>
+                        <span className="text-gray-400">کد ملی: </span>
+                        <span className="text-white font-semibold">
+                          {member2.nationalCode}
+                        </span>
+                      </div>
+                    )}
+                    <div>
+                      <span className="text-gray-400">سایز تیشرت: </span>
+                      <span className="text-white font-semibold">
+                        {member2.tshirtSize}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="flex gap-4">
@@ -423,10 +702,11 @@ function TeamRegistration() {
                 </Button>
                 <Button
                   onClick={handleFinalSubmit}
-                  className="flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/50 active:scale-95"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <CheckCircle className="w-5 h-5 ml-2 inline-block" />
-                  تایید و ثبت نهایی
+                  {isSubmitting ? "درحال ارسال دعوت..." : "ارسال دعوت و ثبت نهایی"}
                 </Button>
               </div>
             </div>

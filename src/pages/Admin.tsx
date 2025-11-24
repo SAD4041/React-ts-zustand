@@ -44,24 +44,26 @@ function AdminTeamsApproval() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState<"all" | "pending" | "approved" | "rejected">("pending");
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "pending" | "approved" | "rejected"
+  >("pending");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [approving, setApproving] = useState<string | null>(null);
   const [rejecting, setRejecting] = useState<string | null>(null);
 
+
   useEffect(() => {
     fetchTeams();
   }, []);
-
   const fetchTeams = async () => {
     try {
       const accessToken = localStorage.getItem("access_token");
 
-    //   if (!accessToken) {
-    //     navigate("/login");
-    //     return;
-    //   }
+      if (!accessToken) {
+        navigate("/login");
+        return;
+      }
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/admin/teams`,
@@ -76,19 +78,28 @@ function AdminTeamsApproval() {
       if (!response.ok) {
         if (response.status === 401) {
           localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
           navigate("/login");
           return;
         }
-        throw new Error("خطا در دریافت لیست تیم‌ها");
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      // 🆕 چک کن content-type JSON باشه
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        console.error("Response content-type:", contentType);
+        throw new Error("API response is not valid JSON");
       }
 
       const data = await response.json();
       console.log("Teams:", data);
-      setTeams(data.data || []);
+      setTeams(data.data || data || []);
     } catch (err: any) {
-      console.error("Error:", err);
+      console.error("Error fetching teams:", err);
       setError(err.message);
       toast.error(err.message || "خطا در بارگذاری تیم‌ها");
+      setTeams([]);
     } finally {
       setLoading(false);
     }
@@ -174,7 +185,8 @@ function AdminTeamsApproval() {
     const matchesSearch =
       team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       team.captain?.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === "all" || team.status === filterStatus;
+    const matchesStatus =
+      filterStatus === "all" || team.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
 
@@ -202,7 +214,10 @@ function AdminTeamsApproval() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#00274D] via-[#003D6B] to-[#00274D] text-white" dir="rtl">
+    <div
+      className="min-h-screen bg-gradient-to-br from-[#00274D] via-[#003D6B] to-[#00274D] text-white"
+      dir="rtl"
+    >
       {/* Sidebar */}
       <aside
         className={`fixed top-0 right-0 h-full bg-[#00274D]/95 backdrop-blur-md border-l border-white/10 transition-all duration-300 z-50 w-64 overflow-y-auto ${
@@ -277,19 +292,21 @@ function AdminTeamsApproval() {
             </div>
 
             <div className="flex gap-2">
-              {(["all", "pending", "approved", "rejected"] as const).map((status) => (
-                <button
-                  key={status}
-                  onClick={() => setFilterStatus(status)}
-                  className={`px-4 py-2 rounded-lg transition-all ${
-                    filterStatus === status
-                      ? "bg-[#FFD500] text-[#00274D]"
-                      : "bg-white/5 hover:bg-white/10 text-white/80"
-                  }`}
-                >
-                  {status === "all" ? "همه" : statusLabel[status]}
-                </button>
-              ))}
+              {(["all", "pending", "approved", "rejected"] as const).map(
+                (status) => (
+                  <button
+                    key={status}
+                    onClick={() => setFilterStatus(status)}
+                    className={`px-4 py-2 rounded-lg transition-all ${
+                      filterStatus === status
+                        ? "bg-[#FFD500] text-[#00274D]"
+                        : "bg-white/5 hover:bg-white/10 text-white/80"
+                    }`}
+                  >
+                    {status === "all" ? "همه" : statusLabel[status]}
+                  </button>
+                )
+              )}
             </div>
           </div>
 
@@ -320,12 +337,15 @@ function AdminTeamsApproval() {
                         </span>
                       </div>
                       <p className="text-gray-400 text-sm">
-                        تاریخ ثبت‌نام: {new Date(team.createdAt).toLocaleDateString("fa-IR")}
+                        تاریخ ثبت‌نام:{" "}
+                        {new Date(team.createdAt).toLocaleDateString("fa-IR")}
                       </p>
                     </div>
                     <Button
                       onClick={() =>
-                        setSelectedTeam(selectedTeam?.id === team.id ? null : team)
+                        setSelectedTeam(
+                          selectedTeam?.id === team.id ? null : team
+                        )
                       }
                       className="bg-white/10 hover:bg-white/20 text-white"
                     >

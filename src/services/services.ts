@@ -25,8 +25,14 @@ const apiClient: AxiosInstance = axios.create({
 
 apiClient.interceptors.request.use(
 	(config: InternalAxiosRequestConfig) => {
-		// const token = getTokenFromStore();
-		// if (token) config.headers.Authorization = `Bearer ${token}`;
+		// 🆕 فعال کردن Authorization header
+		const token = localStorage.getItem("access_token");
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
+			console.log("✅ Token added to request:", token.substring(0, 20) + "...");
+		} else {
+			console.warn("⚠️ No token found in localStorage");
+		}
 		return config;
 	},
 	(error) => Promise.reject(error)
@@ -35,7 +41,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
 	(response: AxiosResponse) => response,
 	(error) => {
-		console.error(error);
+		console.error("❌ API Error:", error.response?.status, error.response?.data);
 		return Promise.reject(error);
 	}
 );
