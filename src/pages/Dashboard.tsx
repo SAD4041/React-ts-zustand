@@ -10,7 +10,6 @@ import {
   LogOut,
   User,
   Bell,
-  ChevronRight,
   Award,
   Clock,
   CheckCircle,
@@ -22,9 +21,12 @@ import {
   Edit,
   Plus,
   ChevronLeft,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react";
 import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
+import { toast } from "sonner";
 
 // استور احراز هویت
 import useUserStore from "@/store/userStore/userStore";
@@ -35,6 +37,10 @@ import {
   getUserRegistrationStatus,
   translateTeamStatus,
   getStatusColor,
+  submitTeamService,
+  deleteTeamService,
+  getInvitesService,
+  cancelInviteService,
 } from "@/services/teamService";
 
 // نوع ساده برای یوزر داخل داشبورد
@@ -44,6 +50,16 @@ type DashboardUser = {
   email: string;
   phone: string;
   teamId?: number;
+};
+
+// تایپ TeamInvite براساس response واقعی
+type TeamInvite = {
+  id: string;
+  token: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  expires_at: string;
 };
 
 function Dashboard() {
@@ -57,6 +73,12 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [teamLoading, setTeamLoading] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [invites, setInvites] = useState<TeamInvite[]>([]);
+  const [invitesLoading, setInvitesLoading] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteStep, setDeleteStep] = useState(1);
+  const [submitting, setSubmitting] = useState(false);
 
   // تابع برای دریافت اطلاعات تیم
   const fetchTeamData = async () => {
@@ -74,8 +96,38 @@ function Dashboard() {
     }
   };
 
+  // تابع برای دریافت دعوت‌نامه‌ها
+  const fetchInvites = async () => {
+    if (!teamData) return;
+
+    setInvitesLoading(true);
+    try {
+      const response = await getInvitesService(teamData.id);
+      setInvites(response.data);
+    } catch (error) {
+      console.error("Error fetching invites:", error);
+      setInvites([]);
+    } finally {
+      setInvitesLoading(false);
+    }
+  };
+
+  // تابع handleCancelInvite
+  const handleCancelInvite = async (inviteToken: string, inviteid: string) => {
+    try {
+      await cancelInviteService(inviteToken, inviteid);
+      toast.success("دعوت با موفقیت لغو شد");
+      fetchInvites(); // رفرش لیست دعوت‌نامه‌ها
+    } catch (error: any) {
+      console.error("Error canceling invite:", error);
+      toast.error(error?.message || "خطا در لغو دعوت");
+    }
+  };
+
   // تابع برای تولید نوتیف‌ها براساس وضعیت تیم
-  const getNotificationsBasedOnStatus = (teamData: DashboardTeamType | null) => {
+  const getNotificationsBasedOnStatus = (
+    teamData: DashboardTeamType | null
+  ) => {
     if (!teamData) {
       return [
         {
@@ -92,7 +144,6 @@ function Dashboard() {
     const baseNotifications = [];
     const today = new Date().toLocaleDateString("fa-IR");
 
-    // نوتیف براساس وضعیت تیم
     switch (teamData.status) {
       case "draft":
         baseNotifications.push({
@@ -104,18 +155,16 @@ function Dashboard() {
           read: false,
         });
         break;
-
       case "submitted":
         baseNotifications.push({
           id: 1,
           title: "تیم ثبت شد",
-          message: "اطلاعات تیم با موفقیت ثبت شد. لطفا پرداخت را انجام دهید",
+          message: "اطلاعات تیم با موفقیت ثبت شد. لطفا منتظر بمانید ",
           type: "success",
           date: today,
           read: false,
         });
         break;
-
       case "waiting_for_payment":
         baseNotifications.push({
           id: 1,
@@ -126,7 +175,6 @@ function Dashboard() {
           read: false,
         });
         break;
-
       case "receipt_pending":
         if (teamData.receipt_image_url) {
           baseNotifications.push({
@@ -148,7 +196,6 @@ function Dashboard() {
           });
         }
         break;
-
       case "accepted":
         baseNotifications.push({
           id: 1,
@@ -159,7 +206,6 @@ function Dashboard() {
           read: false,
         });
         break;
-
       case "rejected":
         baseNotifications.push({
           id: 1,
@@ -172,7 +218,6 @@ function Dashboard() {
         break;
     }
 
-    // نوتیف‌های عمومی
     baseNotifications.push(
       {
         id: 2,
@@ -201,7 +246,6 @@ function Dashboard() {
       return;
     }
 
-    // مپ کردن کاربر
     const mappedUser: DashboardUser = {
       name: authUser.first_name,
       familyName: authUser.last_name,
@@ -215,13 +259,17 @@ function Dashboard() {
     setLoading(false);
   }, [authUser, navigate]);
 
-  // وقتی teamData تغییر کرد، نوتیف‌ها رو آپدیت کن
   useEffect(() => {
     const newNotifications = getNotificationsBasedOnStatus(teamData);
     setNotifications(newNotifications);
   }, [teamData]);
 
-  // تابع برای رفرش اطلاعات تیم
+  useEffect(() => {
+    if (teamData) {
+      fetchInvites();
+    }
+  }, [teamData]);
+
   const refreshTeamData = () => {
     fetchTeamData();
   };
@@ -231,6 +279,62 @@ function Dashboard() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     navigate("/login");
+  };
+
+  const handleDeleteClick = () => {
+    setShowDeleteModal(true);
+    setDeleteStep(1);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setDeleteStep(1);
+  };
+
+  const handleConfirmStep1 = () => {
+    setDeleteStep(2);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!teamData) return;
+
+    try {
+      setDeleting(true);
+      await deleteTeamService(teamData.id);
+      toast.success("تیم با موفقیت حذف شد!");
+      setShowDeleteModal(false);
+      await fetchTeamData();
+    } catch (error: any) {
+      console.error("Error deleting team:", error);
+      toast.error(error?.message || "خطا در حذف تیم");
+    } finally {
+      setDeleting(false);
+      setDeleteStep(1);
+    }
+  };
+
+  const handleSubmitTeam = async () => {
+    if (!teamData) {
+      toast.error("تیم یافت نشد");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      await submitTeamService(teamData.id);
+      toast.success("تیم با موفقیت ثبت نهایی شد!");
+      await fetchTeamData();
+    } catch (error: any) {
+      console.error("Error submitting team:", error);
+
+      const errorMessage =
+        error?.response?.data?.messages?.team?.pending_invitations ||
+        "خطا در ثبت نهایی تیم";
+
+      toast.error(errorMessage);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleCreateTeam = () => {
@@ -249,7 +353,6 @@ function Dashboard() {
     }
   };
 
-  // رویدادهای پیش‌رو
   const upcomingEvents = [
     {
       title: "پایان ثبت‌نام",
@@ -279,6 +382,8 @@ function Dashboard() {
     { id: "resources", label: "منابع آموزشی", icon: BookOpen },
     { id: "settings", label: "تنظیمات", icon: Settings },
   ];
+
+  console.log(teamData);
 
   if (loading) {
     return (
@@ -312,7 +417,6 @@ function Dashboard() {
       className="min-h-screen bg-gradient-to-br from-[#00274D] via-[#003D6B] to-[#00274D] text-white"
       dir="rtl"
     >
-      {/* Overlay for mobile */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
@@ -320,14 +424,12 @@ function Dashboard() {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`fixed top-0 right-0 h-full bg-[#00274D]/95 backdrop-blur-md border-l border-white/10 transition-all duration-300 z-50 overflow-y-auto ${
           sidebarOpen ? "w-64" : "w-0 md:w-20"
         }`}
       >
         <div className={`p-6 ${!sidebarOpen && "hidden md:block"}`}>
-          {/* Logo */}
           <div
             className={`flex items-center gap-3 mb-8 ${
               !sidebarOpen && "md:justify-center"
@@ -338,22 +440,25 @@ function Dashboard() {
             </div>
             {sidebarOpen && (
               <div>
-                <h2 className="text-lg font-bold">ICPC 2025</h2>
+                <h2 className="text-lg font-bold">
+                  <span className="text-[#ffffff]">ELMO</span>
+                  <span className="text-[#46BEF6]">C</span>
+                  <span className="text-[#D7263D]">P</span>
+                  <span className="text-[#FFD500]">C</span>
+                  <span className="text-white"> 2025</span>
+                </h2>
                 <p className="text-xs text-gray-400">Dashboard</p>
               </div>
             )}
           </div>
 
-          {/* Menu Items */}
           <nav className="space-y-2 mb-8">
             {menuItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => {
                   setActiveTab(item.id);
-                  if (window.innerWidth < 768) {
-                    setSidebarOpen(false);
-                  }
+                  if (window.innerWidth < 768) setSidebarOpen(false);
                 }}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   activeTab === item.id
@@ -369,7 +474,6 @@ function Dashboard() {
             ))}
           </nav>
 
-          {/* Logout Button */}
           <Button
             onClick={handleLogout}
             className={`w-full bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 ${
@@ -382,17 +486,14 @@ function Dashboard() {
         </div>
       </aside>
 
-      {/* Main Content */}
       <main
         className={`transition-all duration-300 ${
           sidebarOpen ? "md:mr-64" : "md:mr-20"
         }`}
       >
-        {/* Header */}
         <header className="bg-[#00274D]/70 backdrop-blur-xl border-b border-white/10 sticky top-0 z-40">
           <div className="px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              {/* دکمه سایدبار */}
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
                 className="p-2.5 hover:bg-white/10 rounded-xl transition-all duration-300"
@@ -403,7 +504,6 @@ function Dashboard() {
                   }`}
                 />
               </button>
-              {/* دکمه برگشت به لندینگ - فقط دسکتاپ */}
               <button
                 onClick={() => navigate("/")}
                 className="hidden md:inline-block px-4 py-2 text-sm font-medium bg-[#FFD500] text-[#00274D] rounded-lg hover:bg-[#ffea80] transition-all duration-200"
@@ -413,15 +513,11 @@ function Dashboard() {
             </div>
 
             <div className="flex items-center gap-5">
-              {/* کارت پروفایل کوچک */}
               <div className="flex items-center gap-3 bg-white/5 px-4 py-2.5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
-                {/* آواتار */}
                 <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-br from-[#FFD500] to-[#ffea80] text-[#00274D] font-bold text-lg shadow-md">
                   {userData.name?.charAt(0)}
                   {userData.familyName?.charAt(0)}
                 </div>
-
-                {/* اطلاعات کاربر */}
                 <div className="flex flex-col">
                   <span className="font-semibold text-sm">
                     {userData.name} {userData.familyName}
@@ -430,8 +526,6 @@ function Dashboard() {
                     {teamData ? "کاپیتان تیم" : "عضو تیم"}
                   </span>
                 </div>
-
-                {/* وضعیت */}
                 <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full">
                   فعال
                 </span>
@@ -440,22 +534,18 @@ function Dashboard() {
           </div>
         </header>
 
-        {/* Content Area */}
         <div className="p-6">
-          {/* Overview Tab */}
           {activeTab === "overview" && (
             <div className="space-y-6">
-              {/* Welcome Card */}
               <div className="bg-gradient-to-r from-[#FFD500]/20 to-[#FFD500]/5 backdrop-blur-md border border-[#FFD500]/30 rounded-2xl p-8">
                 <h2 className="text-3xl font-bold mb-2">
                   سلام، {userData.name}! 👋
                 </h2>
                 <p className="text-gray-300">
-                  به داشبورد مسابقات ICPC 2025 خوش آمدید
+                  به داشبورد مسابقات ELMOCPC 2025 خوش آمدید
                 </p>
               </div>
 
-              {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -492,7 +582,6 @@ function Dashboard() {
                 </div>
               </div>
 
-              {/* Recent Notifications */}
               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
                 <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                   <Bell className="w-6 h-6 text-[#FFD500]" />
@@ -540,7 +629,6 @@ function Dashboard() {
                 </div>
               </div>
 
-              {/* Upcoming Events */}
               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
                 <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                   <Calendar className="w-6 h-6 text-[#FFD500]" />
@@ -571,7 +659,6 @@ function Dashboard() {
             </div>
           )}
 
-          {/* Team Tab */}
           {activeTab === "team" && (
             <div className="space-y-6">
               {teamLoading ? (
@@ -581,7 +668,6 @@ function Dashboard() {
                 </div>
               ) : teamData ? (
                 <>
-                  {/* Team Header */}
                   <div className="bg-gradient-to-r from-[#FFD500]/20 to-[#FFD500]/5 backdrop-blur-md border border-[#FFD500]/30 rounded-2xl p-8">
                     <div className="flex items-center justify-between flex-wrap gap-4">
                       <div>
@@ -606,7 +692,23 @@ function Dashboard() {
                           )}
                         </div>
                       </div>
-                      <div className="flex gap-3">
+                      <div className="flex gap-3 flex-wrap">
+                        {(teamData.status === "draft" ||
+                          teamData.status === "rejected") && (
+                          <Button
+                            onClick={handleSubmitTeam}
+                            disabled={submitting}
+                            className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border border-blue-500/30 disabled:opacity-50"
+                          >
+                            {submitting ? (
+                              <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin ml-2" />
+                            ) : (
+                              <CheckCircle className="w-5 h-5 ml-2" />
+                            )}
+                            ثبت نهایی تیم
+                          </Button>
+                        )}
+
                         <Button
                           onClick={handleEditTeam}
                           className="bg-white/10 hover:bg-white/20 text-white"
@@ -614,54 +716,252 @@ function Dashboard() {
                           <Edit className="w-5 h-5 ml-2" />
                           ویرایش تیم
                         </Button>
-                        <Button
-                          onClick={handleInviteMember}
-                          className="bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30"
-                        >
-                          <Plus className="w-5 h-5 ml-2" />
-                          دعوت عضو
-                        </Button>
-                        <Button className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D]">
-                          <Download className="w-5 h-5 ml-2" />
-                          دانلود کارت شرکت
-                        </Button>
+
+                        {(teamData.status === "submitted" ||
+                          teamData.status === "accepted") && (
+                          <Button
+                            onClick={handleInviteMember}
+                            className="bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30"
+                          >
+                            <Plus className="w-5 h-5 ml-2" />
+                            دعوت عضو
+                          </Button>
+                        )}
+
+                        {teamData.status === "accepted" && (
+                          <Button className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D]">
+                            <Download className="w-5 h-5 ml-2" />
+                            دانلود کارت شرکت
+                          </Button>
+                        )}
+
+                        {teamData.status !== "accepted" && (
+                          <Button
+                            onClick={handleDeleteClick}
+                            className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30"
+                          >
+                            <Trash2 className="w-5 h-5 ml-2" />
+                            حذف تیم
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
 
-                  {/* Team Members */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {teamData.members.map((member) => (
-                      <div
-                        key={member.id}
-                        className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-200"
-                      >
-                        <div className="flex items-center gap-4 mb-4">
-                          <div className="w-14 h-14 bg-[#FFD500] rounded-full flex items-center justify-center text-[#00274D] font-bold text-lg">
-                            {member.name?.charAt(0)}
-                            {member.familyName?.charAt(0)}
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="font-bold text-lg">
-                              {member.name} {member.familyName}
-                            </h3>
-                            <span className="text-sm text-[#FFD500]">
-                              {member.role}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="space-y-2 text-sm">
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <Mail className="w-4 h-4" />
-                            <span className="truncate">{member.email}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <Phone className="w-4 h-4" />
-                            <span>{member.phone}</span>
-                          </div>
+                  {showDeleteModal && (
+                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                      <div className="bg-[#00274D] border border-white/10 rounded-2xl p-6 max-w-md w-full">
+                        {deleteStep === 1 ? (
+                          <>
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                <AlertCircle className="w-6 h-6 text-red-400" />
+                              </div>
+                              <h3 className="text-lg font-bold">
+                                هشدار حذف تیم
+                              </h3>
+                            </div>
+                            <p className="text-gray-300 mb-6">
+                              آیا از حذف تیم{" "}
+                              <span className="text-[#FFD500] font-semibold">
+                                {teamData.name}
+                              </span>{" "}
+                              مطمئن هستید؟ این عمل غیرقابل بازگشت است و تمام
+                              اطلاعات تیم حذف خواهد شد.
+                            </p>
+                            <div className="flex gap-3">
+                              <Button
+                                onClick={handleCancelDelete}
+                                className="flex-1 bg-white/10 hover:bg-white/20 text-white"
+                              >
+                                انصراف
+                              </Button>
+                              <Button
+                                onClick={handleConfirmStep1}
+                                className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30"
+                              >
+                                ادامه
+                              </Button>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                <AlertTriangle className="w-6 h-6 text-red-400" />
+                              </div>
+                              <h3 className="text-lg font-bold">تایید نهایی</h3>
+                            </div>
+                            <p className="text-gray-300 mb-4">
+                              برای حذف نهایی تیم، لطفا عبارت زیر را تایپ کنید:
+                            </p>
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
+                              <p className="text-center text-[#FFD500] font-mono text-lg">
+                                حذف تیم {teamData.name}
+                              </p>
+                            </div>
+                            <p className="text-sm text-gray-400 mb-4 text-center">
+                              لطفا عبارت بالا را عیناً کپی کرده و در کادر زیر
+                              پیست کنید
+                            </p>
+                            <input
+                              type="text"
+                              placeholder={`حذف تیم ${teamData.name}`}
+                              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-red-500/50 mb-4"
+                              onChange={(e) => {
+                                if (
+                                  e.target.value === `حذف تیم ${teamData.name}`
+                                )
+                                  setDeleteStep(3);
+                              }}
+                            />
+                            <div className="flex gap-3">
+                              <Button
+                                onClick={() => setDeleteStep(1)}
+                                className="flex-1 bg-white/10 hover:bg-white/20 text-white"
+                              >
+                                بازگشت
+                              </Button>
+                              <Button
+                                onClick={handleConfirmDelete}
+                                disabled={deleteStep !== 3 || deleting}
+                                className="flex-1 bg-red-500 hover:bg-red-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {deleting ? (
+                                  <>
+                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-2" />
+                                    در حال حذف...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Trash2 className="w-5 h-5 ml-2" />
+                                    حذف نهایی
+                                  </>
+                                )}
+                              </Button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {invitesLoading ? (
+                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+                      <div className="flex items-center justify-center py-4">
+                        <div className="w-6 h-6 border-2 border-[#FFD500]/30 border-t-[#FFD500] rounded-full animate-spin" />
+                        <span className="mr-2">
+                          درحال بارگذاری دعوت‌نامه‌ها...
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    invites?.length > 0 && (
+                      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+                        <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-[#FFD500]">
+                          <Bell className="w-6 h-6" />
+                          دعوت‌نامه‌های در انتظار پاسخ
+                          <span className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full text-sm">
+                            {invites.length} دعوت
+                          </span>
+                        </h3>
+                        <div className="space-y-3">
+                          {invites.map((invite) => (
+                            <div
+                              key={invite.id}
+                              className="flex items-center justify-between p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl"
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center">
+                                  <Clock className="w-5 h-5 text-yellow-400" />
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold">
+                                    {invite.first_name} {invite.last_name}
+                                  </h4>
+                                  <p className="text-sm text-gray-300">
+                                    {invite.email}
+                                  </p>
+                                  <p className="text-xs text-gray-400">
+                                    انقضا:{" "}
+                                    {new Date(
+                                      invite.expires_at
+                                    ).toLocaleDateString("fa-IR")}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-yellow-400 text-sm">
+                                  در انتظار پاسخ
+                                </span>
+                                <Button
+                                  size="sm"
+                                  onClick={() =>
+                                    handleCancelInvite(invite.token.toString(), teamData.id.toString())
+                                  }
+                                  className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30"
+                                >
+                                  لغو دعوت
+                                </Button>
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                    ))}
+                    )
+                  )}
+
+                  <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-[#FFD500]">
+                      <Users className="w-6 h-6" />
+                      اعضای تیم
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      {teamData.members.map((member, index) => (
+                        <div
+                          key={member.id}
+                          className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-200"
+                        >
+                          <div className="flex items-center gap-4 mb-4">
+                            <div className="w-14 h-14 bg-[#FFD500] rounded-full flex items-center justify-center text-[#00274D] font-bold text-lg">
+                              {member.name?.charAt(0)}
+                              {member.familyName?.charAt(0)}
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="font-bold text-lg">
+                                {member.name} {member.familyName}
+                              </h3>
+                              <span className="text-sm text-[#FFD500]">
+                                {index === 0 ? "کاپیتان" : member.role}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="space-y-2 text-sm">
+                            <div className="flex items-center gap-2 text-gray-300">
+                              <Mail className="w-4 h-4" />
+                              <span className="truncate">{member.email}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-300">
+                              <Phone className="w-4 h-4" />
+                              <span>{member.phone}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-green-400 text-xs">
+                              <CheckCircle className="w-3 h-3" />
+                              <span>عضو تایید شده</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <Button
+                      onClick={refreshTeamData}
+                      className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-3 px-6 rounded-lg transition-all duration-200"
+                    >
+                      بروزرسانی اطلاعات تیم
+                    </Button>
                   </div>
 
                   {/* دکمه رفرش */}
@@ -695,6 +995,7 @@ function Dashboard() {
             </div>
           )}
 
+          {/* سایر تب‌ها (schedule, notifications, resources, settings) بدون تغییر باقی می‌مانند */}
           {/* Schedule Tab */}
           {activeTab === "schedule" && (
             <div className="space-y-6">
@@ -879,7 +1180,6 @@ function Dashboard() {
           )}
         </div>
 
-        {/* Footer Logos */}
         <div className="fixed bottom-4 right-4 left-4 flex justify-between items-center pointer-events-none">
           <img src={CESA} alt="CESA Logo" className="w-16 opacity-50" />
           <img src={ELMOCPC} alt="ELMOCPC Logo" className="w-24 opacity-50" />
