@@ -18,11 +18,12 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 // 🆕 ایمپورت سرویس تیم
-import { createTeamService, inviteUserService } from "@/services/teamService";
-import type {
-  CreateTeamPayload,
-  InviteUserPayload,
-} from "@/types/teamTypes";
+import {
+  createTeamService,
+  inviteUserService,
+  submitTeamService,
+} from "@/services/teamService";
+import type { CreateTeamPayload, InviteUserPayload } from "@/types/teamTypes";
 
 // Validation schema برای اطلاعات هر عضو
 const memberValidationSchema = Yup.object({
@@ -121,7 +122,10 @@ function TeamRegistration() {
   ];
 
   // 🆕 مرحله 1: ایجاد تیم
-  const handleCreateTeam = async (values: { teamName: string; teamDescription: string }) => {
+  const handleCreateTeam = async (values: {
+    teamName: string;
+    teamDescription: string;
+  }) => {
     try {
       setIsSubmitting(true);
 
@@ -191,15 +195,40 @@ function TeamRegistration() {
       return;
     }
 
-    // بررسی کامل بودن اطلاعات هر دو عضو
-    if (!member1.name || !member2.name) {
-      toast.error("لطفا اطلاعات هر دو عضو را کامل وارد کنید");
-      return;
+    // بررسی کامل بودن اطلاعات
+    const requiredFields = [
+      "name",
+      "familyName",
+      "email",
+      "phone",
+      "university",
+    ];
+
+    for (const member of [member1, member2]) {
+      for (const field of requiredFields) {
+        if (!member[field]) {
+          toast.error(
+            `لطفا اطلاعات ${
+              field === "name"
+                ? "نام"
+                : field === "familyName"
+                ? "نام خانوادگی"
+                : field === "email"
+                ? "ایمیل"
+                : field === "phone"
+                ? "شماره موبایل"
+                : "دانشگاه"
+            } را کامل کنید`
+          );
+          return;
+        }
+      }
     }
 
     try {
       setIsSubmitting(true);
 
+      // دعوت هر دو عضو در یک درخواست
       const membersPayload: InviteUserPayload = {
         members: [
           {
@@ -223,17 +252,30 @@ function TeamRegistration() {
         ],
       };
 
-      console.log("📨 Inviting both members with payload:", membersPayload);
+      console.log("📨 دعوت اعضا:", membersPayload);
       await inviteUserService(teamId.toString(), membersPayload);
 
-      toast.success("هر دو عضو با موفقیت دعوت شدند!");
-      
+      // ثبت نهایی تیم
+      console.log("✅ ثبت نهایی تیم");
+      await submitTeamService(teamId.toString());
+
+      toast.success("تیم با موفقیت تشکیل شد! اعضا دعوت شدند.");
+
       setTimeout(() => {
         navigate("/dashboard");
-      }, 1500);
+      }, 2000);
     } catch (error: any) {
-      console.error("Error inviting members:", error);
-      toast.error(error?.message || "خطا در دعوت اعضا");
+      console.error("❌ خطا در تشکیل تیم:", error);
+
+      if (error.response?.status === 400) {
+        const errorMessage =
+          error.response?.data?.message || error.response?.data?.error;
+        toast.error(errorMessage || "خطا در اطلاعات وارد شده");
+      } else {
+        toast.error(
+          error?.message || "خطا در تشکیل تیم. لطفا دوباره تلاش کنید"
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -595,7 +637,9 @@ function TeamRegistration() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className="text-gray-400">نام و نام خانوادگی: </span>
+                      <span className="text-gray-400">
+                        نام و نام خانوادگی:{" "}
+                      </span>
                       <span className="text-white font-semibold">
                         {member1.name} {member1.familyName}
                       </span>
@@ -650,7 +694,9 @@ function TeamRegistration() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className="text-gray-400">نام و نام خانوادگی: </span>
+                      <span className="text-gray-400">
+                        نام و نام خانوادگی:{" "}
+                      </span>
                       <span className="text-white font-semibold">
                         {member2.name} {member2.familyName}
                       </span>
@@ -706,7 +752,9 @@ function TeamRegistration() {
                   className="flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <CheckCircle className="w-5 h-5 ml-2 inline-block" />
-                  {isSubmitting ? "درحال ارسال دعوت..." : "ارسال دعوت و ثبت نهایی"}
+                  {isSubmitting
+                    ? "درحال ارسال دعوت..."
+                    : "ارسال دعوت و ثبت نهایی"}
                 </Button>
               </div>
             </div>

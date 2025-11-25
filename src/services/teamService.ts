@@ -1,4 +1,5 @@
 // src/services/teamService.ts
+// src/services/teamService.ts
 import type {
   CreateTeamPayload,
   CreateTeamSuccessResponse,
@@ -12,9 +13,108 @@ import type {
 
 import { getData, postData, putData, deleteData, postImageData } from "./services";
 
+// تایپ برای تیم در داشبورد
+export type DashboardTeam = {
+  id: string;
+  name: string;
+  description: string;
+  status: string;
+  creator_id: number;
+  receipt_image_url?: string;
+  members: {
+    id: string;
+    name: string;
+    familyName: string;
+    email: string;
+    phone: string;
+    role: string;
+  }[];
+} | null;
+
+// تابع برای ترجمه status به فارسی
+export const translateTeamStatus = (status: string): string => {
+  const statusMap: { [key: string]: string } = {
+    'draft': 'پیش‌نویس',
+    'submitted': 'ثبت شده',
+    'waiting_for_payment': 'در انتظار پرداخت',
+    'receipt_pending': 'در انتظار تایید فیش',
+    'accepted': 'تایید شده',
+    'rejected': 'رد شده'
+  };
+  return statusMap[status] || status;
+};
+
+// تابع برای دریافت رنگ status
+export const getStatusColor = (status: string): string => {
+  const colorMap: { [key: string]: string } = {
+    'draft': 'text-gray-400 bg-gray-500/20',
+    'submitted': 'text-blue-400 bg-blue-500/20',
+    'waiting_for_payment': 'text-yellow-400 bg-yellow-500/20',
+    'receipt_pending': 'text-orange-400 bg-orange-500/20', 
+    'accepted': 'text-green-400 bg-green-500/20',
+    'rejected': 'text-red-400 bg-red-500/20'
+  };
+  return colorMap[status] || 'text-gray-400 bg-gray-500/20';
+};
+
+// تابع برای دریافت وضعیت ثبت‌نام کاربر
+export const getUserRegistrationStatus = (teamData: DashboardTeam | null): { text: string; color: string } => {
+  if (!teamData) {
+    return { text: 'ثبت‌نام نشده', color: 'text-red-400 bg-red-500/20' };
+  }
+
+  const statusMap: { [key: string]: { text: string; color: string } } = {
+    'draft': { text: 'پیش‌نویس', color: 'text-gray-400 bg-gray-500/20' },
+    'submitted': { text: 'ثبت شده', color: 'text-blue-400 bg-blue-500/20' },
+    'waiting_for_payment': { text: 'در انتظار پرداخت', color: 'text-yellow-400 bg-yellow-500/20' },
+    'receipt_pending': { text: 'در انتظار تایید', color: 'text-orange-400 bg-orange-500/20' },
+    'accepted': { text: 'تایید شده', color: 'text-green-400 bg-green-500/20' },
+    'rejected': { text: 'رد شده', color: 'text-red-400 bg-red-500/20' }
+  };
+
+  return statusMap[teamData.status] || { text: 'نامشخص', color: 'text-gray-400 bg-gray-500/20' };
+};
+
+/* -----------------------------------------
+   GET TEAM FOR DASHBOARD
+   دریافت اطلاعات تیم برای نمایش در داشبورد
+----------------------------------------- */
+export const getTeamForDashboardService = async (): Promise<DashboardTeam> => {
+  try {
+    const response = await getData({
+      endPoint: "/v1/user/teams",
+    });
+    
+    // مپ کردن داده‌های تیم به فرمت مورد نیاز داشبورد
+    return {
+      id: response.data.id.toString(),
+      name: response.data.name,
+      description: response.data.description,
+      status: response.data.status,
+      creator_id: response.data.creator_id,
+      receipt_image_url: response.data.receipt_image_url,
+      members: response.data.members?.map((member: any) => ({
+        id: member.id.toString(),
+        name: member.first_name,
+        familyName: member.last_name,
+        email: member.email,
+        phone: member.phone,
+        role: member.id === response.data.creator_id ? "کاپیتان" : "عضو"
+      })) || []
+    };
+  } catch (error) {
+    // اگر تیمی وجود نداشت، null برمی‌گردانیم
+    if ((error as any).response?.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+};
+
+// ... بقیه سرویس‌ها بدون تغییر
+
 /* -----------------------------------------
    CREATE TEAM
-   ریسپانس موفق: status 201 + داده تیم
 ----------------------------------------- */
 export const createTeamService = async (
   payload: CreateTeamPayload
@@ -27,7 +127,6 @@ export const createTeamService = async (
 
 /* -----------------------------------------
    GET TEAM
-   دریافت اطلاعات تیم
 ----------------------------------------- */
 export const getTeamService = async (): Promise<Team> => {
   return getData({
@@ -37,7 +136,6 @@ export const getTeamService = async (): Promise<Team> => {
 
 /* -----------------------------------------
    UPDATE TEAM
-   بروزرسانی اطلاعات تیم
 ----------------------------------------- */
 export const updateTeamService = async (
   teamId: string,
@@ -51,7 +149,6 @@ export const updateTeamService = async (
 
 /* -----------------------------------------
    DELETE TEAM
-   حذف تیم
 ----------------------------------------- */
 export const deleteTeamService = async (teamId: string): Promise<void> => {
   return deleteData({
@@ -61,10 +158,7 @@ export const deleteTeamService = async (teamId: string): Promise<void> => {
 
 /* -----------------------------------------
    INVITE USER
-   دعوت کاربر به تیم
 ----------------------------------------- */
-
-
 export const inviteUserService = async (
   teamId: string,
   payload: InviteUserPayload
@@ -75,10 +169,8 @@ export const inviteUserService = async (
   });
 };
 
-
 /* -----------------------------------------
    GET INVITES
-   دریافت لیست دعوت‌نامه‌ها
 ----------------------------------------- */
 export const getInvitesService = async (teamId: string): Promise<TeamInvite[]> => {
   return getData({
@@ -88,7 +180,6 @@ export const getInvitesService = async (teamId: string): Promise<TeamInvite[]> =
 
 /* -----------------------------------------
    CANCEL INVITE
-   لغو دعوت‌نامه
 ----------------------------------------- */
 export const cancelInviteService = async (inviteId: string): Promise<void> => {
   return deleteData({
@@ -98,7 +189,6 @@ export const cancelInviteService = async (inviteId: string): Promise<void> => {
 
 /* -----------------------------------------
    REMOVE MEMBER
-   حذف عضو از تیم
 ----------------------------------------- */
 export const removeMemberService = async (
   teamId: string,
@@ -111,7 +201,6 @@ export const removeMemberService = async (
 
 /* -----------------------------------------
    ACCEPT INVITE
-   پذیرش دعوت به تیم
 ----------------------------------------- */
 export const acceptInviteService = async (
   payload: AcceptRejectInvitePayload
@@ -124,7 +213,6 @@ export const acceptInviteService = async (
 
 /* -----------------------------------------
    REJECT INVITE
-   رد دعوت به تیم
 ----------------------------------------- */
 export const rejectInviteService = async (
   payload: AcceptRejectInvitePayload
@@ -137,7 +225,6 @@ export const rejectInviteService = async (
 
 /* -----------------------------------------
    LEAVE TEAM
-   ترک تیم
 ----------------------------------------- */
 export const leaveTeamService = async (teamId: string): Promise<void> => {
   return postData({
@@ -148,7 +235,6 @@ export const leaveTeamService = async (teamId: string): Promise<void> => {
 
 /* -----------------------------------------
    SUBMIT TEAM
-   ثبت نهایی تیم
 ----------------------------------------- */
 export const submitTeamService = async (teamId: string): Promise<void> => {
   return postData({
@@ -159,7 +245,6 @@ export const submitTeamService = async (teamId: string): Promise<void> => {
 
 /* -----------------------------------------
    UPLOAD RECEIPT
-   آپلود فیش پرداختی
 ----------------------------------------- */
 export const uploadReceiptService = async (
   teamId: string,
@@ -173,7 +258,6 @@ export const uploadReceiptService = async (
 
 /* -----------------------------------------
    GET ALL TEAM STATUSES
-   دریافت وضعیت تمام تیم‌ها
 ----------------------------------------- */
 export const getAllTeamStatusesService = async (): Promise<TeamStatus[]> => {
   return getData({
