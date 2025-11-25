@@ -2,72 +2,72 @@
 /* src/index.css */
 /* === Peyda Font Faces === */
 @font-face {
-  font-family: 'Peyda';
-  src: url('./assets/fonts/Peyda-Thin.ttf') format('truetype');
+  font-family: "Peyda";
+  src: url("./assets/fonts/Peyda-Thin.ttf") format("truetype");
   font-weight: 100;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Peyda';
-  src: url('./assets/fonts/peyda-extralight.ttf') format('truetype');
+  font-family: "Peyda";
+  src: url("./assets/fonts/peyda-extralight.ttf") format("truetype");
   font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Peyda';
-  src: url('./assets/fonts/Peyda-Light.ttf') format('truetype');
+  font-family: "Peyda";
+  src: url("./assets/fonts/Peyda-Light.ttf") format("truetype");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Peyda';
-  src: url('./assets/fonts/Peyda-Regular.ttf') format('truetype');
+  font-family: "Peyda";
+  src: url("./assets/fonts/Peyda-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Peyda';
-  src: url('./assets/fonts/Peyda-Medium.ttf') format('truetype');
+  font-family: "Peyda";
+  src: url("./assets/fonts/Peyda-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Peyda';
-  src: url('./assets/fonts/Peyda-SemiBold.ttf') format('truetype');
+  font-family: "Peyda";
+  src: url("./assets/fonts/Peyda-SemiBold.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Peyda';
-  src: url('./assets/fonts/Peyda-Bold.ttf') format('truetype');
+  font-family: "Peyda";
+  src: url("./assets/fonts/Peyda-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Peyda';
-  src: url('./assets/fonts/Peyda-ExtraBold.ttf') format('truetype');
+  font-family: "Peyda";
+  src: url("./assets/fonts/Peyda-ExtraBold.ttf") format("truetype");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Peyda';
-  src: url('./assets/fonts/Peyda-Black.ttf') format('truetype');
+  font-family: "Peyda";
+  src: url("./assets/fonts/Peyda-Black.ttf") format("truetype");
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -79,15 +79,15 @@
 @tailwind utilities;
 
 @layer utilities {
-	.rtl {
-		direction: rtl;
-	}
-	.ltr {
-		direction: ltr;
-	}
-	.vazir {
-		font-family: "Vazir", sans-serif;
-	}
+  .rtl {
+    direction: rtl;
+  }
+  .ltr {
+    direction: ltr;
+  }
+  .vazir {
+    font-family: "Vazir", sans-serif;
+  }
 }
 
 @font-face {
@@ -169,6 +169,12 @@
   .vazir {
     font-family: "Vazir", sans-serif;
   }
+  .bg-gray-main {
+    background-color: var(--color-gray-main);
+  }
+  .rounded-xl {
+    border-radius: 12.5px;
+  }
 }
 @font-face {
   font-family: "Peyda";
@@ -214,12 +220,12 @@
   --secondary-hover: #6c96e6;
   --error: #c30025;
   --success: #009262;
-  --neutral-gray : #9d9d9d;
-  --neutral-gray-bold : #666666;
-  --gray-text : #616161;
-  --gold-badge : #FFD700;
-  --silver-badge: #C0C0C0;
-  --bronze-badge: #CD7F32;
+  --neutral-gray: #9d9d9d;
+  --neutral-gray-bold: #666666;
+  --gray-text: #616161;
+  --gold-badge: #ffd700;
+  --silver-badge: #c0c0c0;
+  --bronze-badge: #cd7f32;
   --disable: #b1b1b1;
   --primary-foreground: oklch(0.985 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -254,6 +260,8 @@
   --walking-man-width: 233px;
   --walking-man-height: 320px;
   --title-size: 30px;
+  --profile-title-size: 24px;
+  --profile-paragraph-size: 16px;
   --login-from-h: 410px;
   --login-from-w: 420px;
 }
@@ -263,16 +271,17 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: 15px;
+  /* saman's colors maping with the develop ones */
   --radius-primary-radius: 8px;
   --radius-secondary-radius: 12.5px;
-    /* saman's colors maping with the develop ones */
+  /* saman's colors maping with the develop ones */
   --color-blue-main: var(--secondry);
   --color-blue-side: var(--secondry-hover);
   --color-red-main: var(--error);
   --color-orange-main: var(--primary);
   --color-gray-main: var(--disable);
   --color-gray-side: #f1f1f1; /* not defined in develop */
-  --color-skin-main: #FFEAD9; /* not defined in develop */
+  --color-skin-main: #ffead9; /* not defined in develop */
   /* end of the mapping */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -309,18 +318,20 @@
   --color-primary-hover: var(--primary-hover);
   --color-secondry: var(--secondry);
   --color-secondry-hover: var(--secondry-hover);
-  --color-gray-text : var(--gray-text);
-  --color-gold-badge : var(--gold-badge);
-  --color-silver-badge : var(--silver-badge);
-  --color-bronze-badge : var(--bronze-badge);
+  --color-gray-text: var(--gray-text);
+  --color-gold-badge: var(--gold-badge);
+  --color-silver-badge: var(--silver-badge);
+  --color-bronze-badge: var(--bronze-badge);
   --color-error: var(--error);
   --color-success: var(--success);
   --color-disable: var(--disable);
   --color-neutral-gray: var(--neutral-gray);
-  --color-neutral-gray-bold :var(--neutral-gray-bold);
+  --color-neutral-gray-bold: var(--neutral-gray-bold);
   --shadow-button: var(--shadow-button);
   --shadow-button-active: var(--shadow-button-active);
   --text-title: var(--title-size);
+  --text-profile-paragraph-size: var(--profile-paragraph-size);
+  --text-profile-title-size: var(--profile-title-size);
 }
 
 .dark {
@@ -421,12 +432,53 @@
   animation: exit-to-right 200ms ease-in;
 }
 
-/* @import "@/styles/animations.css"; if you extracted it separately */
-
-/* @keyframes slide-in-from-right {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+@keyframes carousel-slide-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
-[data-state="open"][data-side="right"] .sheet-content {
-  animation: slide-in-from-right 250ms ease-out;
-} */
+
+@keyframes carousel-slide-right {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes carousel-enter-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes carousel-enter-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@layer utilities {
+  .carousel-exit-left {
+    animation: carousel-slide-left 300ms ease forwards;
+  }
+  .carousel-exit-right {
+    animation: carousel-slide-right 300ms ease forwards;
+  }
+  .carousel-enter-left {
+    animation: carousel-enter-left 300ms ease forwards;
+  }
+  .carousel-enter-right {
+    animation: carousel-enter-right 300ms ease forwards;
+  }
+}

@@ -1,7 +1,15 @@
 import * as React from "react";
-import { DropdownMenuItem, type DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import CustomButton from "./CustomButton";
+import {
+  DropdownMenuItem,
+  type DropdownMenuCheckboxItemProps,
+} from "@radix-ui/react-dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import DropdownButton from "./DropdownButton";
 import CustomCheckbox from "./CustomCheckbox";
 import { useState } from "react";
@@ -11,7 +19,9 @@ type Checked = DropdownMenuCheckboxItemProps["checked"];
 interface Props {
   items: { id: number; name: string }[]; // Ensure this is an array
   checkedCategories: { [key: number]: boolean };
-  setCheckedCategories: React.Dispatch<React.SetStateAction<{ [key: number]: boolean }>>;
+  setCheckedCategories: React.Dispatch<
+    React.SetStateAction<{ [key: number]: boolean }>
+  >;
 }
 
 const CustomDropdown = ({
@@ -90,7 +100,9 @@ const CustomDropdown = ({
           dir="rtl"
           onSelect={(event) => {
             event.preventDefault(); // Prevents closing on clear filter click
-            setCheckedCategories(Object.fromEntries(items.map((category) => [category.id, false])));
+            setCheckedCategories(
+              Object.fromEntries(items.map((category) => [category.id, false]))
+            );
           }}
         >
           پاک‌سازی فیلتر

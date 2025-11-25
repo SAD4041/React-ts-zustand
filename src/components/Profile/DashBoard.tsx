@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ProfileHeader from "./ProfileHeader/ProfileHeader";
 import ProfileBody from "./ProfileBody";
 import useUserStore from "@/store/userStore/userStore";
+import ProfileHeader from "./ProfileHeader/ProfileHeader";
 
 const DashBoard: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState("post");
@@ -28,8 +28,10 @@ const DashBoard: React.FC = () => {
 
   return (
     <>
-      <ProfileHeader userId={profileId} isOwner={isOwner} />
-      <ProfileBody userId={profileId} />
+      <ProfileHeader userId={4} isOwner={isOwner} />
+      <ProfileBody />
+      {/* <ProfileHeader userId={profileId} isOwner={isOwner} />
+      <ProfileBody userId={profileId} /> */}
     </>
   );
 };

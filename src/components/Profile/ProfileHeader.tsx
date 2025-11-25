@@ -31,7 +31,7 @@ function getUserInitials(fullName: string): string {
   return initials;
 }
 
-const ProfileHeader = ({
+const profileHeader = ({
   fullName,
   personalColor = "bg-blue-500 text-white",
   isOwner,

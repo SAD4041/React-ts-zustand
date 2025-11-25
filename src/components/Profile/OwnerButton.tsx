@@ -23,7 +23,7 @@ const OwnerButton = () => {
     <div className="flex justify-center gap-xa-8 sm:gap-x-15 md:gap-x-26 mt-5">
       <div>
         <CustomButton
-          backgroundColor="bg-secondary hover:bg-secondary"
+          className="bg-secondary hover:bg-secondary"
           onClick={handleEditProfile}
         >
           ویرایش پروفایل
@@ -33,7 +33,7 @@ const OwnerButton = () => {
       <div>
         <CustomButton
           onClick={() => setOpen(true)}
-          backgroundColor="bg-primary hover:bg-primary"
+          className="bg-primary hover:bg-primary"
         >
           بساز+
         </CustomButton>
@@ -55,11 +55,16 @@ const OwnerButton = () => {
               </SheetDescription> */}
           </SheetHeader>
           <div className="grid flex-1 justify-center auto-rows-min gap-6 px-1 mt-6 ">
-                <CustomButton pageAddress="/create-post" backgroundColor="bg-primary hover:bg-primary" >پست جدید</CustomButton>
+            <CustomButton
+              pageAddress="/create-post"
+              className="bg-primary hover:bg-primary"
+            >
+              پست جدید
+            </CustomButton>
 
             <CustomButton
               pageAddress="/temp"
-              backgroundColor="bg-secondary hover:bg-secondary"
+              className="bg-secondary hover:bg-secondary"
             >
               چالش جدید
             </CustomButton>

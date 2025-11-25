@@ -2,23 +2,22 @@
   position: absolute;
   width: 30px;
   height: 30px;
-
 }
 
 .badgeCenter {
-  bottom: -12.5%;
-    left: 50%;
+  bottom: -15%;
+  left: 50%;
   transform: translateX(-50%);
 }
 
 .badgeRight {
-  bottom: -0.5%;
-  right: -3.5%;
+  bottom: -5.5%;
+  right: 6.5%;
 }
 
 .badgeLeft {
-  bottom: -0.5%;
-  left: -3.5%;
+  bottom: -5.5%;
+  left: 6.5%;
 }
 
 /* @media (max-width: 639px) {
@@ -83,8 +82,8 @@
 } */
 
 /* .profile-pic.holding { */
-  /* Apply your visual effect */
-  /* transform: scale(1.5);
+/* Apply your visual effect */
+/* transform: scale(1.5);
   z-index: 9999;
   position: absolute;
   top: 50%;

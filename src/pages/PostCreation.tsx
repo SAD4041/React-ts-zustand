@@ -43,7 +43,7 @@ const PostCreation = () => {
     setImageURLs((prev) => prev.filter((_, i) => i !== index));
   };
   const handleSubmit = (values: any) => {
-    if(images.length === 0) {
+    if (images.length === 0) {
       CustomToast("لطفا تصویر را بارگذاری کنید", "error");
       return;
     }
@@ -107,8 +107,14 @@ const PostCreation = () => {
                     </CarouselContent>
 
                     {/* Absolute buttons on the edges of the label */}
-                    <CarouselPrevious type="button" className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white rounded-full p-1 shadow-md z-20" />
-                    <CarouselNext type="button" className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white rounded-full p-1 shadow-md z-20" />
+                    <CarouselPrevious
+                      type="button"
+                      className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white rounded-full p-1 shadow-md z-20"
+                    />
+                    <CarouselNext
+                      type="button"
+                      className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white rounded-full p-1 shadow-md z-20"
+                    />
                   </Carousel>
                 ) : (
                   <span className="text-neutral-gray font-bold text-center">
@@ -117,11 +123,7 @@ const PostCreation = () => {
                 )}
               </label>
 
-              <CustomButton
-                width="w-full"
-                backgroundColor="bg-secondary"
-                className="relative flex items-center"
-              >
+              <CustomButton className="relative flex items-center w-full bg-secondary">
                 <input
                   type="file"
                   accept="image/*"
@@ -165,10 +167,9 @@ const PostCreation = () => {
             <div className="mt-10 mr-[24px] ml-[24px]">
               <CustomButton
                 type="submit"
-                width="w-full"
-                backgroundColor="bg-secondary"
-                height="h-[46.6px]"
+                className="h-[46.6px] bg-secondary w-full"
                 pageAddress={`/dashboard/${userId}`}
+
                 // disabled={isSubmitting || images.length === 0}
                 // loading={isSubmitting}
               >
