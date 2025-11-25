@@ -116,8 +116,8 @@ function TeamRegistration() {
 
   const steps = [
     { title: "نام و توضیح تیم", icon: Award },
-    { title: "عضو اول", icon: User },
     { title: "عضو دوم", icon: User },
+    { title: "عضو سوم", icon: User },
     { title: "تایید نهایی", icon: CheckCircle },
   ];
 
@@ -177,14 +177,14 @@ function TeamRegistration() {
   // 🆕 ذخیره اطلاعات عضو اول
   const handleMember1Submit = (values: MemberData) => {
     setMember1(values);
-    toast.success("اطلاعات عضو اول ذخیره شد!");
+    toast.success("اطلاعات عضو دوم ذخیره شد!");
     setCurrentStep(2);
   };
 
   // 🆕 ذخیره اطلاعات عضو دوم
   const handleMember2Submit = (values: MemberData) => {
     setMember2(values);
-    toast.success("اطلاعات عضو دوم ذخیره شد!");
+    toast.success("اطلاعات عضو سوم ذخیره شد!");
     setCurrentStep(3);
   };
 
@@ -255,11 +255,7 @@ function TeamRegistration() {
       console.log("📨 دعوت اعضا:", membersPayload);
       await inviteUserService(teamId.toString(), membersPayload);
 
-      // ثبت نهایی تیم
-      console.log("✅ ثبت نهایی تیم");
-      await submitTeamService(teamId.toString());
-
-      toast.success("تیم با موفقیت تشکیل شد! اعضا دعوت شدند.");
+      toast.success(" اعضا دعوت شدند.پس از تایید اعضا نسبت به نهایی کردن تیم اقدام کنید");
 
       setTimeout(() => {
         navigate("/dashboard");
@@ -373,7 +369,7 @@ function TeamRegistration() {
                       className="w-full bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-4 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#FFD500]/50 active:scale-95"
                     >
                       ادامه
-                      <ArrowLeft className="w-5 h-5 mr-2 inline-block" />
+                      <ArrowRight className="w-5 h-5 mr-2 inline-block" />
                     </Button>
                   </div>
                 </Form>
@@ -396,14 +392,15 @@ function TeamRegistration() {
                       <User className="w-12 h-12 text-[#FFD500]" />
                     </div>
                     <h1 className="text-white text-3xl font-bold mb-2">
-                      عضو اول
+                      عضو دوم
                     </h1>
                     <p className="text-gray-300">
-                      لطفا اطلاعات عضو اول را وارد کنید
+                      لطفا اطلاعات عضو دوم را وارد کنید
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
+                  dir="rtl">
                     <CustomInput
                       name="name"
                       type="text"
@@ -463,7 +460,7 @@ function TeamRegistration() {
                       onClick={handleBack}
                       className="flex-1 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200"
                     >
-                      <ArrowRight className="w-5 h-5 ml-2 inline-block" />
+                      <ArrowLeft className="w-5 h-5 ml-2 inline-block" />
                       قبلی
                     </Button>
                     <Button
@@ -472,7 +469,7 @@ function TeamRegistration() {
                       className="flex-1 bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-4 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#FFD500]/50 active:scale-95"
                     >
                       ذخیره و ادامه
-                      <ArrowLeft className="w-5 h-5 mr-2 inline-block" />
+                      <ArrowRight className="w-5 h-5 mr-2 inline-block" />
                     </Button>
                   </div>
                 </Form>
@@ -495,14 +492,15 @@ function TeamRegistration() {
                       <User className="w-12 h-12 text-[#FFD500]" />
                     </div>
                     <h1 className="text-white text-3xl font-bold mb-2">
-                      عضو دوم
+                      عضو سوم
                     </h1>
                     <p className="text-gray-300">
-                      لطفا اطلاعات عضو دوم را وارد کنید
+                      لطفا اطلاعات عضو سوم را وارد کنید
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
+                  dir="rtl">
                     <CustomInput
                       name="name"
                       type="text"
@@ -562,7 +560,7 @@ function TeamRegistration() {
                       onClick={handleBack}
                       className="flex-1 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200"
                     >
-                      <ArrowRight className="w-5 h-5 ml-2 inline-block" />
+                      <ArrowLeft className="w-5 h-5 ml-2 inline-block" />
                       قبلی
                     </Button>
                     <Button
@@ -571,7 +569,7 @@ function TeamRegistration() {
                       className="flex-1 bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-4 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#FFD500]/50 active:scale-95"
                     >
                       ذخیره و ادامه
-                      <ArrowLeft className="w-5 h-5 mr-2 inline-block" />
+                      <ArrowRight className="w-5 h-5 mr-2 inline-block" />
                     </Button>
                   </div>
                 </Form>
@@ -594,7 +592,8 @@ function TeamRegistration() {
               </div>
 
               {/* نمایش نام تیم و توضیحات */}
-              <div className="bg-[#FFD500]/10 border border-[#FFD500]/30 rounded-xl p-6 mb-6">
+              <div className="bg-[#FFD500]/10 border border-[#FFD500]/30 rounded-xl p-6 mb-6"
+              dir="rtl">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <h3 className="text-[#FFD500] font-semibold mb-2">
@@ -621,12 +620,13 @@ function TeamRegistration() {
               </div>
 
               {/* نمایش اطلاعات اعضا */}
-              <div className="space-y-4 mb-6">
+              <div className="space-y-4 mb-6"
+              dir="rtl">
                 {/* عضو اول */}
                 <div className="bg-white/5 border border-white/10 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-[#FFD500] font-semibold text-lg">
-                      عضو اول
+                      عضو دوم
                     </h3>
                     <Button
                       onClick={() => handleEditStep(1)}
@@ -683,7 +683,7 @@ function TeamRegistration() {
                 <div className="bg-white/5 border border-white/10 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-[#FFD500] font-semibold text-lg">
-                      عضو دوم
+                      عضو سوم
                     </h3>
                     <Button
                       onClick={() => handleEditStep(2)}
@@ -743,7 +743,7 @@ function TeamRegistration() {
                   onClick={handleBack}
                   className="flex-1 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200"
                 >
-                  <ArrowRight className="w-5 h-5 ml-2 inline-block" />
+                  <ArrowLeft className="w-5 h-5 ml-2 inline-block" />
                   قبلی
                 </Button>
                 <Button
@@ -754,7 +754,7 @@ function TeamRegistration() {
                   <CheckCircle className="w-5 h-5 ml-2 inline-block" />
                   {isSubmitting
                     ? "درحال ارسال دعوت..."
-                    : "ارسال دعوت و ثبت نهایی"}
+                    : "ارسال دعوت"}
                 </Button>
               </div>
             </div>
@@ -763,18 +763,18 @@ function TeamRegistration() {
       </div>
 
       {/* لوگو گوشه پایین سمت راست */}
-      <img
+      {/* <img
         src={ELMOCPC}
         alt="ELMOCPC Logo"
         className="absolute bottom-4 right-4 w-32 opacity-80 hover:opacity-100 transition-opacity duration-300"
-      />
+      /> */}
 
       {/* لوگو گوشه پایین سمت چپ */}
-      <img
+      {/* <img
         src={CESA}
         alt="CESA Logo"
         className="absolute bottom-4 left-4 w-20 opacity-80 hover:opacity-100 transition-opacity duration-300"
-      />
+      /> */}
     </div>
   );
 }

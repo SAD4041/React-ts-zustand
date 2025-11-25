@@ -181,9 +181,9 @@ export const getInvitesService = async (teamId: string): Promise<TeamInvite[]> =
 /* -----------------------------------------
    CANCEL INVITE
 ----------------------------------------- */
-export const cancelInviteService = async (inviteId: string): Promise<void> => {
+export const cancelInviteService = async (invitetoken: string, inviteTeamid: string): Promise<void> => {
   return deleteData({
-    endPoint: `/v1/user/teams/invites/${inviteId}`,
+    endPoint: `/v1/user/teams/${inviteTeamid}/invitations/${invitetoken}`,
   });
 };
 
