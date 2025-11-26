@@ -6,12 +6,13 @@ const config: Config = {
 		"./index.html",
 		"./src/**/*.{js,ts,jsx,tsx}",
 		"./components/**/*.{js,ts,jsx,tsx}",
+		"./pages/**/*.{ts,tsx,js,jsx}",
 	],
 	darkMode: "class",
 	theme: {
 		extend: {
 			fontFamily: {
-				vazirmatn: ["Vazirmatn", "Roboto"],
+				sans: ["Vazirmatn", 'sans-serif'],
 			},
 
 			colors: {
