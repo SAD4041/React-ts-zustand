@@ -64,14 +64,13 @@ const CustomerReviewsSection = () => {
       </div>
 
       {/* فرم ثبت نظر جدید - دکمه به سمت چپ */}
-      <div className="my-6 mx-10 p-4 rounded-lg border border-gray-500">
+      <div className="my-6 mx-10 p-4 rounded-lg border border-gray-500 dir-ltr text-left">
         <form onSubmit={handleReviewSubmit}>
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
               <span className="text-sm font-medium">S</span>
             </div>
-
-            <div className="flex-1">
+            <div className="flex-1 pl-12">
               <div className="flex items-center gap-2 mb-1">
                 <span className="font-medium text-gray-800">شما</span>
               </div>
@@ -80,9 +79,8 @@ const CustomerReviewsSection = () => {
                 value={newReview}
                 onChange={(e) => setNewReview(e.target.value)}
                 placeholder="نظر خود را بنویسید..."
-                className="flex center w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-
             </div>
           </div>
           <button
@@ -122,7 +120,7 @@ const CustomerReviewsSection = () => {
 
             {/* دکمه‌های مفید بود / مفید نبود - به سمت چپ و با افکت هاور و کلیک */}
             {!review.isEditable && (
-              <div className="flex items-center gap-2 mt-3 justify-start">
+              <div className="flex items-center gap-2 mt-3 justify-start" dir='ltr'>
                 <button
                   onClick={() => handleNotHelpfulClick(review.id)}
                   className={`flex items-center gap-1 text-xs font-medium py-1 px-2 rounded-md transition cursor-pointer ${notHelpfulVote[review.id]
@@ -130,8 +128,8 @@ const CustomerReviewsSection = () => {
                     : 'bg-white text-gray-700 hover:bg-red-50 hover:text-red-700 border border-gray-300'
                     }`}
                 >
-                  <img src={thumbsDownIcon} alt="مفید نبود" className="h-6 w-6" />
                   مفید نبود ({review.notHelpfulCount})
+                  <img src={thumbsDownIcon} alt="مفید نبود" className="h-6 w-6" />
                 </button>
                 <button
                   onClick={() => handleHelpfulClick(review.id)}
@@ -140,8 +138,8 @@ const CustomerReviewsSection = () => {
                     : 'bg-white text-gray-700 hover:bg-green-50 hover:text-green-700 border border-gray-300'
                     }`}
                 >
-                  <img src={thumbsUpIcon} alt="مفید بود" className="h-6 w-6" />
                   مفید بود ({review.helpfulCount})
+                  <img src={thumbsUpIcon} alt="مفید بود" className="h-6 w-6" />
                 </button>
               </div>
             )}
