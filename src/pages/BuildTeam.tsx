@@ -65,10 +65,10 @@ const teamValidationSchema = Yup.object({
     .min(3, "نام تیم باید حداقل ۳ حرف باشد")
     .max(50, "نام تیم نباید بیشتر از ۵۰ حرف باشد")
     .required("نام تیم الزامی است"),
-  teamDescription: Yup.string()
-    .min(10, "توضیحات تیم باید حداقل ۱۰ حرف باشد")
-    .max(500, "توضیحات تیم نباید بیشتر از ۵۰۰ حرف باشد")
-    .required("توضیحات تیم الزامی است"),
+  teamDescription: Yup.string().max(
+    500,
+    "توضیحات تیم نباید بیشتر از ۵۰۰ حرف باشد"
+  ),
 });
 
 // تایپ برای اطلاعات عضو
@@ -145,11 +145,19 @@ function TeamRegistration() {
       const response = await createTeamService(teamPayload);
 
       if (response?.data?.id) {
-        setTeamId(response.data.id);
-        setTeamInfo({
+        const teamId = response.data.id;
+        const teamInfo = {
           teamName: values.teamName,
           teamDescription: values.teamDescription,
-        });
+        };
+
+        // ذخیره در localStorage
+        localStorage.setItem("teamId", teamId.toString());
+        localStorage.setItem("teamInfo", JSON.stringify(teamInfo));
+
+        setTeamId(teamId);
+        setTeamInfo(teamInfo);
+
         toast.success("تیم با موفقیت ایجاد شد!");
         setCurrentStep(1);
       } else {
@@ -255,7 +263,9 @@ function TeamRegistration() {
       console.log("📨 دعوت اعضا:", membersPayload);
       await inviteUserService(teamId.toString(), membersPayload);
 
-      toast.success(" اعضا دعوت شدند.پس از تایید اعضا نسبت به نهایی کردن تیم اقدام کنید");
+      toast.success(
+        " اعضا دعوت شدند.پس از تایید اعضا نسبت به نهایی کردن تیم اقدام کنید"
+      );
 
       setTimeout(() => {
         navigate("/dashboard");
@@ -399,8 +409,10 @@ function TeamRegistration() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
-                  dir="rtl">
+                  <div
+                    className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
+                    dir="rtl"
+                  >
                     <CustomInput
                       name="name"
                       type="text"
@@ -499,8 +511,10 @@ function TeamRegistration() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
-                  dir="rtl">
+                  <div
+                    className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
+                    dir="rtl"
+                  >
                     <CustomInput
                       name="name"
                       type="text"
@@ -592,8 +606,10 @@ function TeamRegistration() {
               </div>
 
               {/* نمایش نام تیم و توضیحات */}
-              <div className="bg-[#FFD500]/10 border border-[#FFD500]/30 rounded-xl p-6 mb-6"
-              dir="rtl">
+              <div
+                className="bg-[#FFD500]/10 border border-[#FFD500]/30 rounded-xl p-6 mb-6"
+                dir="rtl"
+              >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <h3 className="text-[#FFD500] font-semibold mb-2">
@@ -620,8 +636,7 @@ function TeamRegistration() {
               </div>
 
               {/* نمایش اطلاعات اعضا */}
-              <div className="space-y-4 mb-6"
-              dir="rtl">
+              <div className="space-y-4 mb-6" dir="rtl">
                 {/* عضو اول */}
                 <div className="bg-white/5 border border-white/10 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -752,9 +767,7 @@ function TeamRegistration() {
                   className="flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <CheckCircle className="w-5 h-5 ml-2 inline-block" />
-                  {isSubmitting
-                    ? "درحال ارسال دعوت..."
-                    : "ارسال دعوت"}
+                  {isSubmitting ? "درحال ارسال دعوت..." : "ارسال دعوت"}
                 </Button>
               </div>
             </div>

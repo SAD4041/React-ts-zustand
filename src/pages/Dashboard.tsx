@@ -269,6 +269,7 @@ function Dashboard() {
       fetchInvites();
     }
   }, [teamData]);
+  // console.log(teamData.status)
 
   const refreshTeamData = () => {
     fetchTeamData();
@@ -349,7 +350,7 @@ function Dashboard() {
 
   const handleInviteMember = () => {
     if (teamData) {
-      navigate(`/invite-member/${teamData.id}`);
+      navigate(`/invitemember/`);
     }
   };
 
@@ -709,16 +710,7 @@ function Dashboard() {
                           </Button>
                         )}
 
-                        <Button
-                          onClick={handleEditTeam}
-                          className="bg-white/10 hover:bg-white/20 text-white"
-                        >
-                          <Edit className="w-5 h-5 ml-2" />
-                          ویرایش تیم
-                        </Button>
-
-                        {(teamData.status === "submitted" ||
-                          teamData.status === "accepted") && (
+                        {(!invites || invites.length !== 2) && (teamData.status !== "submitted"|| !teamData) && (
                           <Button
                             onClick={handleInviteMember}
                             className="bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30"
@@ -735,7 +727,7 @@ function Dashboard() {
                           </Button>
                         )}
 
-                        {teamData.status !== "accepted" && (
+                        {teamData.status !== "submitted" && (
                           <Button
                             onClick={handleDeleteClick}
                             className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30"
@@ -897,7 +889,10 @@ function Dashboard() {
                                 <Button
                                   size="sm"
                                   onClick={() =>
-                                    handleCancelInvite(invite.token.toString(), teamData.id.toString())
+                                    handleCancelInvite(
+                                      invite.token.toString(),
+                                      teamData.id.toString()
+                                    )
                                   }
                                   className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30"
                                 >

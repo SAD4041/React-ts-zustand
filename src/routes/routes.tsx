@@ -9,6 +9,7 @@ import Dashboard from "@/pages/Dashboard";
 import BootcampDetails from "@/pages/BootCamp";
 import AcceptTeamInvite from "@/pages/AcceptTeamInvite";
 import AdminTeamsApproval from "@/pages/Admin";
+import InviteMember from "@/pages/inviteMember";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
         path: "admin",
         element: <AdminTeamsApproval />,
       },
+      {
+        path: "invitemember",
+        element: <InviteMember />,
+      }
     ],
   },
 ]);
