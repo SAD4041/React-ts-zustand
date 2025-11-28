@@ -5,7 +5,10 @@ import { toast } from "sonner";
 import BG from "@/assets/BG.png";
 import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
-import { acceptInviteService, rejectInviteService } from "@/services/teamService";
+import {
+  acceptInviteService,
+  rejectInviteService,
+} from "@/services/teamService";
 
 function AcceptTeamInvite() {
   const [searchParams] = useSearchParams();
@@ -38,26 +41,24 @@ function AcceptTeamInvite() {
       }, 1500);
     } catch (err: any) {
       console.error("Error accepting team invite:", err);
-      
+
       let errorMsg = "خطا در قبول دعوت";
-      
-      if (err?.messages) {
-        // هندل کردن ارورهای مختلف
-        if (err.messages.invitation?.["already rejected"]) {
-          errorMsg = "این دعوت قبلاً رد شده است";
-        } else if (err.messages.invitation?.["already accepted"]) {
-          errorMsg = "این دعوت قبلاً قبول شده است";
-        } else if (err.messages.invitation?.["expired"]) {
-          errorMsg = "این دعوت منقضی شده است";
-        } else if (err.messages.invitation?.["not found"]) {
-          errorMsg = "دعوت یافت نشد";
-        } else {
-          errorMsg = Object.values(err.messages).flat().join(', ') || errorMsg;
+
+      if (err.response?.data) {
+        const data = err.response.data;
+
+        if (data.messages) {
+          errorMsg =
+            Object.values(data.messages)
+              .flatMap((m: any) => Object.values(m))
+              .join(", ") || errorMsg;
+        } else if (data.message) {
+          errorMsg = data.message;
         }
-      } else if (err?.message) {
+      } else if (err.message) {
         errorMsg = err.message;
       }
-      
+
       setError(errorMsg);
       toast.error(errorMsg);
     } finally {
@@ -88,9 +89,9 @@ function AcceptTeamInvite() {
       }, 1500);
     } catch (err: any) {
       console.error("Error rejecting team invite:", err);
-      
+
       let errorMsg = "خطا در رد کردن دعوت";
-      
+
       if (err?.messages) {
         // هندل کردن ارورهای مختلف
         if (err.messages.invitation?.["already rejected"]) {
@@ -102,12 +103,12 @@ function AcceptTeamInvite() {
         } else if (err.messages.invitation?.["not found"]) {
           errorMsg = "دعوت یافت نشد";
         } else {
-          errorMsg = Object.values(err.messages).flat().join(', ') || errorMsg;
+          errorMsg = Object.values(err.messages).flat().join(", ") || errorMsg;
         }
       } else if (err?.message) {
         errorMsg = err.message;
       }
-      
+
       setError(errorMsg);
       toast.error(errorMsg);
     } finally {
@@ -119,10 +120,10 @@ function AcceptTeamInvite() {
     const accessToken = localStorage.getItem("access_token");
     if (!accessToken) {
       toast.error("لطفا ابتدا وارد حساب کاربری خود شوید");
-      navigate("/login", { 
-        state: { 
-          redirectTo: `/accept-invite?token=${token}` 
-        } 
+      navigate("/login", {
+        state: {
+          redirectTo: `/accept-invite?token=${token}`,
+        },
       });
       return false;
     }
@@ -143,7 +144,9 @@ function AcceptTeamInvite() {
             <h1 className="text-white text-2xl text-center font-semibold">
               خطا در پردازش دعوت
             </h1>
-            <p className="text-white/70 text-center text-sm">توکن دعوت یافت نشد</p>
+            <p className="text-white/70 text-center text-sm">
+              توکن دعوت یافت نشد
+            </p>
             <Button
               onClick={() => navigate("/login")}
               className="w-full bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-3 px-6 rounded-lg"
@@ -182,8 +185,7 @@ function AcceptTeamInvite() {
               آیا می‌خواهید به این تیم اضافه شوید؟
             </p>
 
-            <div className="flex gap-3 w-full"
-            dir="rtl">
+            <div className="flex gap-3 w-full" dir="rtl">
               <Button
                 onClick={handleAcceptTeamInvite}
                 disabled={loading}

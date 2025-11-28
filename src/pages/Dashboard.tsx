@@ -23,6 +23,8 @@ import {
   ChevronLeft,
   Trash2,
   AlertTriangle,
+  Upload,
+  Receipt,
 } from "lucide-react";
 import ELMOCPC from "@/assets/ELMOCPC.svg";
 import CESA from "@/assets/CESA.svg";
@@ -41,6 +43,7 @@ import {
   deleteTeamService,
   getInvitesService,
   cancelInviteService,
+  uploadReceiptService,
 } from "@/services/teamService";
 
 // نوع ساده برای یوزر داخل داشبورد
@@ -79,6 +82,52 @@ function Dashboard() {
   const [deleting, setDeleting] = useState(false);
   const [deleteStep, setDeleteStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isCaptain, setIsCaptain] = useState(false);
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [paymentInfo] = useState({
+    ticketPrice: 450000,
+    cardNumber: "6104-3387-4761-8581",
+    bankName: "بانک ملت مهدی تقی دولابی",
+  });
+
+  const formatPrice = (price: number) => {
+    return (
+      new Intl.NumberFormat("fa-IR").format(price) + " هزار تومان  برای کل تیم"
+    );
+  };
+
+  const handleFileSelect = (file: File | null) => {
+    if (!file) return;
+
+    // بررسی نوع فایل
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "application/pdf",
+    ];
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
+    const isTypeAllowed =
+      allowedTypes.includes(file.type) ||
+      ["jpg", "jpeg", "png", "pdf"].includes(fileExtension || "");
+
+    if (!isTypeAllowed) {
+      toast.error("فرمت فایل مجاز نیست. فقط JPG, PNG, PDF قابل قبول است");
+      return;
+    }
+
+    // بررسی حجم فایل (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("حجم فایل باید کمتر از 5MB باشد");
+      return;
+    }
+
+    setSelectedFile(file);
+  };
 
   // تابع برای دریافت اطلاعات تیم
   const fetchTeamData = async () => {
@@ -93,6 +142,34 @@ function Dashboard() {
       setTeamData(null);
     } finally {
       setTeamLoading(false);
+    }
+  };
+
+  const handleUploadReceipt = async (file: File) => {
+    if (!teamData) return;
+
+    try {
+      setUploading(true);
+
+      // ایجاد FormData
+      const formData = new FormData();
+      formData.append("receipt", file);
+
+      console.log("آپلود فایل:", file.name, "برای تیم:", teamData.id);
+
+      // فراخوانی سرویس آپلود
+      await uploadReceiptService(teamData.id, formData);
+
+      toast.success("فیش پرداخت با موفقیت آپلود شد");
+      setShowUploadModal(false);
+      setSelectedFile(null);
+      setIsDragging(false);
+      await fetchTeamData(); // رفرش اطلاعات تیم
+    } catch (error: any) {
+      console.error("Error uploading receipt:", error);
+      toast.error(error?.message || "خطا در آپلود فیش");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -209,8 +286,9 @@ function Dashboard() {
       case "rejected":
         baseNotifications.push({
           id: 1,
-          title: "نیاز به اصلاح",
-          message: "تیم شما رد شده است. لطفا اطلاعات را اصلاح کنید",
+          title: "اطلاعات معتبر نیست",
+          message:
+            "تیم شما رد شده است. لطفا در صورت هرگونه ابهام با پشتبانی ارتباط بگیرید.",
           type: "error",
           date: today,
           read: false,
@@ -258,6 +336,22 @@ function Dashboard() {
     fetchTeamData();
     setLoading(false);
   }, [authUser, navigate]);
+
+  useEffect(() => {
+    if (teamData && authUser) {
+      // بررسی اینکه آیا کاربر فعلی کاپیتان تیم هست یا نه
+      const captainStatus = teamData.creator_id === authUser.id;
+      setIsCaptain(captainStatus);
+      console.log(
+        "وضعیت کاپیتان:",
+        captainStatus,
+        "User ID:",
+        authUser.id,
+        "Creator ID:",
+        teamData.creator_id
+      );
+    }
+  }, [teamData, authUser]);
 
   useEffect(() => {
     const newNotifications = getNotificationsBasedOnStatus(teamData);
@@ -524,7 +618,11 @@ function Dashboard() {
                     {userData.name} {userData.familyName}
                   </span>
                   <span className="text-[11px] text-gray-300">
-                    {teamData ? "کاپیتان تیم" : "عضو تیم"}
+                    {teamData
+                      ? isCaptain
+                        ? "کاپیتان تیم"
+                        : "عضو تیم"
+                      : "بدون تیم"}
                   </span>
                 </div>
                 <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full">
@@ -582,12 +680,61 @@ function Dashboard() {
                   <h3 className="text-gray-300">وضعیت ثبت‌نام</h3>
                 </div>
               </div>
+              {teamData?.status === "waiting_for_payment" && (
+                <div className="bg-orange-500/10 backdrop-blur-md border border-orange-500/30 rounded-2xl p-6 space-y-6 mb-12">
+                  {/* عنوان */}
+                  <h3 className="text-xl font-bold flex items-center gap-2 text-orange-400">
+                    <Receipt className="w-6 h-6" />
+                    آپلود فیش پرداخت
+                  </h3>
+
+                  {/* اطلاعات پرداخت */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-white/5 rounded-lg p-4">
+                      <p className="text-gray-400 text-sm mb-1">
+                        مبلغ قابل پرداخت
+                      </p>
+                      <p className="text-lg font-bold text-[#FFD500]">
+                        {formatPrice(paymentInfo.ticketPrice)}
+                      </p>
+                    </div>
+
+                    <div className="bg-white/5 rounded-lg p-4">
+                      <p className="text-gray-400 text-sm mb-1">شماره کارت</p>
+                      <p
+                        className="text-lg font-bold text-green-400 font-mono text-right"
+                        dir="ltr"
+                      >
+                        {paymentInfo.cardNumber}
+                      </p>
+                      <p className="text-gray-400 text-xs mt-1">
+                        {paymentInfo.bankName}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* متن راهنما */}
+                  <p className="text-gray-300 text-sm">
+                    لطفا پس از واریز مبلغ، فیش پرداخت را آپلود کنید.
+                  </p>
+
+                  {/* دکمه آپلود */}
+                  <Button
+                    onClick={() => setShowUploadModal(true)}
+                    className="flex items-center gap-2 bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 border border-orange-500/30 justify-center w-full md:w-auto"
+                  >
+                    <Upload className="w-5 h-5" />
+                    آپلود فیش
+                  </Button>
+                </div>
+              )}
 
               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
                 <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                   <Bell className="w-6 h-6 text-[#FFD500]" />
                   آخرین اطلاعیه‌ها
                 </h3>
+
                 <div className="space-y-3">
                   {notifications.slice(0, 3).map((notification) => (
                     <div
@@ -693,12 +840,25 @@ function Dashboard() {
                           )}
                         </div>
                       </div>
+                      {/* بخش اطلاع‌رسانی برای اعضای غیرکاپیتان */}
+{teamData && !isCaptain && (
+  <div className="bg-blue-500/10 backdrop-blur-md border border-blue-500/30 rounded-2xl p-6">
+    <div className="flex items-center gap-3">
+      <Users className="w-6 h-6 text-blue-400" />
+      <div>
+        <h3 className="font-bold text-blue-400 mb-2">شما عضو تیم هستید</h3>
+        <p className="text-gray-300 text-sm">
+          برای تغییرات در تیم (ثبت نهایی، دعوت عضو، حذف تیم) با کاپیتان تیم تماس بگیرید.
+        </p>
+      </div>
+    </div>
+  </div>
+)}
                       <div className="flex gap-3 flex-wrap">
-                        {(teamData.status === "draft" ||
-                          teamData.status === "rejected") && (
+                        {teamData.status === "draft" && (
                           <Button
                             onClick={handleSubmitTeam}
-                            disabled={submitting}
+                            disabled={submitting || !isCaptain}
                             className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border border-blue-500/30 disabled:opacity-50"
                           >
                             {submitting ? (
@@ -709,15 +869,50 @@ function Dashboard() {
                             ثبت نهایی تیم
                           </Button>
                         )}
+                        
 
-                        {(!invites || invites.length !== 2) && (teamData.status !== "submitted"|| !teamData) && (
-                          <Button
-                            onClick={handleInviteMember}
-                            className="bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30"
-                          >
-                            <Plus className="w-5 h-5 ml-2" />
-                            دعوت عضو
-                          </Button>
+                        {(!invites || invites.length !== 2) &&
+                          (teamData.status === "draft" || !teamData) && (
+                            <Button
+                              onClick={handleInviteMember}
+                              disabled={!isCaptain}
+                              className="bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30"
+                            >
+                              <Plus className="w-5 h-5 ml-2" />
+                              دعوت عضو
+                            </Button>
+                          )}
+
+                        {/* بخش آپلود فیش در تیم من */}
+                        {teamData &&
+                          teamData.status === "waiting_for_payment" && (
+                            <div className="bg-orange-500/10 backdrop-blur-md border border-orange-500/30 rounded-2xl p-6">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <h3 className="text-xl font-bold mb-2 flex items-center gap-2 text-orange-400">
+                                    <Receipt className="w-6 h-6" />
+                                    آپلود فیش پرداخت
+                                  </h3>
+                                  <p className="text-gray-300 ml-12">
+                                    وضعیت: در انتظار آپلود فیش پرداخت
+                                  </p>
+                                </div>
+                                <Button
+                                  onClick={() => setShowUploadModal(true)}
+                                  disabled={!isCaptain}
+                                  className="bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 border border-orange-500/30"
+                                >
+                                  <Upload className="w-5 h-5 ml-2" />
+                                  آپلود فیش
+                                </Button>
+                              </div>
+                            </div>
+                          )}
+                        {teamData.status == "rejected" && (
+                          <p className="text-red-400 ml-4">
+                            تیم شما رد شده است. لطفا دوباره اکانت بسازید یا با
+                            پشتیبانی در ارتباط باشید.
+                          </p>
                         )}
 
                         {teamData.status === "accepted" && (
@@ -727,9 +922,10 @@ function Dashboard() {
                           </Button>
                         )}
 
-                        {teamData.status !== "submitted" && (
+                        {teamData.status === "draft" && (
                           <Button
                             onClick={handleDeleteClick}
+                            disabled={!isCaptain || deleting}
                             className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30"
                           >
                             <Trash2 className="w-5 h-5 ml-2" />
@@ -848,7 +1044,7 @@ function Dashboard() {
                       </div>
                     </div>
                   ) : (
-                    invites?.length > 0 && (
+                    invites?.length > 0 &&  isCaptain &&(
                       <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
                         <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-[#FFD500]">
                           <Bell className="w-6 h-6" />
@@ -894,6 +1090,7 @@ function Dashboard() {
                                       teamData.id.toString()
                                     )
                                   }
+                                  disabled={invitesLoading || !isCaptain}
                                   className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30"
                                 >
                                   لغو دعوت
@@ -927,7 +1124,7 @@ function Dashboard() {
                                 {member.name} {member.familyName}
                               </h3>
                               <span className="text-sm text-[#FFD500]">
-                                {index === 0 ? "کاپیتان" : member.role}
+                                {index === 0 ? "کاپیتان" : "عضو تیم"}
                               </span>
                             </div>
                           </div>
@@ -948,15 +1145,6 @@ function Dashboard() {
                         </div>
                       ))}
                     </div>
-                  </div>
-
-                  <div className="text-center">
-                    <Button
-                      onClick={refreshTeamData}
-                      className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-3 px-6 rounded-lg transition-all duration-200"
-                    >
-                      بروزرسانی اطلاعات تیم
-                    </Button>
                   </div>
 
                   {/* دکمه رفرش */}
@@ -1175,10 +1363,116 @@ function Dashboard() {
           )}
         </div>
 
-        <div className="fixed bottom-4 right-4 left-4 flex justify-between items-center pointer-events-none">
+        {/* <div className="fixed bottom-4 right-4 left-4 flex justify-between items-center pointer-events-none">
           <img src={CESA} alt="CESA Logo" className="w-16 opacity-50" />
           <img src={ELMOCPC} alt="ELMOCPC Logo" className="w-24 opacity-50" />
-        </div>
+        </div> */}
+
+        {showUploadModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-[#00274D] border border-white/10 rounded-2xl p-6 max-w-md w-full shadow-xl">
+              {/* عنوان */}
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center">
+                  <Upload className="w-6 h-6 text-orange-400" />
+                </div>
+                <h3 className="text-lg font-bold text-white">
+                  آپلود فیش پرداخت
+                </h3>
+              </div>
+
+              {/* Dropzone */}
+              <div
+                onDragEnter={(e) => {
+                  e.preventDefault();
+                  setIsDragging(true);
+                }}
+                onDragOver={(e) => e.preventDefault()}
+                onDragLeave={() => setIsDragging(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDragging(false);
+                  const file = e.dataTransfer.files?.[0];
+                  if (file) {
+                    handleFileSelect(file);
+                  }
+                }}
+                className={`
+          border-2 border-dashed rounded-xl p-6 min-h-[200px] 
+          flex flex-col items-center justify-center cursor-pointer transition
+          ${
+            isDragging
+              ? "border-orange-400 bg-orange-500/10"
+              : "border-orange-500/30"
+          }
+        `}
+                onClick={() =>
+                  document.getElementById("receipt-input")?.click()
+                }
+              >
+                <Receipt className="w-12 h-12 text-orange-400 mb-3" />
+
+                {!selectedFile ? (
+                  <>
+                    <p className="text-gray-200 mb-1">فایل را اینجا رها کنید</p>
+                    <p className="text-sm text-gray-400">
+                      یا کلیک کنید برای انتخاب
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-green-300 font-medium">
+                    {selectedFile.name} انتخاب شد ✔
+                  </p>
+                )}
+
+                <input
+                  id="receipt-input"
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.pdf"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) setSelectedFile(file);
+                  }}
+                />
+              </div>
+
+              {/* توضیحات */}
+              <div className="text-xs text-gray-400 mt-4 mb-6 text-center leading-relaxed">
+                <p>فرمت‌های قابل قبول: JPG, PNG, PDF</p>
+                <p>حداکثر حجم: 5MB</p>
+              </div>
+
+              {/* دکمه‌ها */}
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => setShowUploadModal(false)}
+                  className="flex-1 bg-white/10 hover:bg-white/20 text-white"
+                  disabled={uploading}
+                >
+                  انصراف
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    if (selectedFile) handleUploadReceipt(selectedFile);
+                  }}
+                  className="flex-1 bg-orange-500/20 text-orange-400 border border-orange-500/30 hover:bg-orange-500/30"
+                  disabled={!selectedFile || uploading}
+                >
+                  {uploading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin ml-2" />
+                      در حال آپلود...
+                    </>
+                  ) : (
+                    "آپلود فایل"
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
