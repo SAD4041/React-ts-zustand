@@ -958,6 +958,16 @@ function Dashboard() {
                       بروزرسانی اطلاعات تیم
                     </Button>
                   </div>
+
+                  {/* دکمه رفرش */}
+                  <div className="text-center">
+                    <Button
+                      onClick={refreshTeamData}
+                      className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-3 px-6 rounded-lg transition-all duration-200"
+                    >
+                      بروزرسانی اطلاعات تیم
+                    </Button>
+                  </div>
                 </>
               ) : (
                 <div className="text-center py-20">
