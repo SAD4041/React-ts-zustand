@@ -1,7 +1,11 @@
-const NameBio = () => {
-  // const{ fullName, bio} = {"saman", "سلااام صبحت بخیررر"} ;
-  const fullName = "سامان خواجه امیری";
-  const bio = " موجودی به درد نخور مخصوصا در رفاقت و کار های وابسته به آن";
+import type React from "react";
+import { defaultLocale } from "yup";
+
+interface NameBioProps {
+  fullName: string;
+  bio: string;
+}
+export default function NameBio({ fullName, bio }: NameBioProps) {
   return (
     <div className="px-2">
       <p className="mb-2 text-profile-title-size text-right font-medium md:text-2xl text-black-500">
@@ -13,5 +17,4 @@ const NameBio = () => {
       </p>
     </div>
   );
-};
-export default NameBio;
+}
