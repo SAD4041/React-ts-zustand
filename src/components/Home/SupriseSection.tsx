@@ -2,28 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '@/components/Product/ProductCard';
 import { toPersianDigits } from '@/utils/PersianDigits';
+import type { Timer, Product, SurpriseSectionProps } from '@/types/homeTypes';
 
-interface Timer {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  original_price?: number;
-  discount_percent?: number;
-  image_url: string;
-  category: string;
-  in_stock: boolean;
-}
-
-interface SurpriseSectionProps {
-  products: Product[]; // دریافت محصولات از API
-}
 
 const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);

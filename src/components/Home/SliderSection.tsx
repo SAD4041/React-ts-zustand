@@ -6,24 +6,7 @@ import Button from "@/components/ui/button";
 import ProductCard from "@/components/Product/ProductCard";
 import adidasFallback from "@/assets/shortTshirt.jpg";
 import {products} from '@/data/data.ts'
-
-interface SliderItem {
-  id: number;
-  name: string;
-  logo_url?: string;
-  slug: string;
-}
-
-interface SliderSectionProps {
-  title: string;
-  link: string;
-  items: any[];
-  currentIndex: number;
-  setIndex: (index: number) => void;
-  itemsPerView: number;
-  isAmazing?: boolean;
-  isBrandSlider?: boolean;
-}
+import type {SliderItem, SliderSectionProps} from '@/types/homeTypes'
 
 export default function SliderSection({
   title,

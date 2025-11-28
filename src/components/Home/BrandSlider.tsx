@@ -1,18 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sendUserAction, type UserAction } from '@/services/homeService';
-
-interface Brand {
-  id: number;
-  name: string;
-  logo_url: string;
-  slug: string;
-}
-
-interface BrandSliderProps {
-  brands: Brand[];
-  onBrandClick: (action: Omit<UserAction, 'timestamp'>) => void;
-}
+import type {Brand, BrandSliderProps} from '@/types/homeTypes';
 
 const BrandSlider: React.FC<BrandSliderProps> = ({ brands = [], onBrandClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -59,10 +48,8 @@ const BrandSlider: React.FC<BrandSliderProps> = ({ brands = [], onBrandClick }) 
 
   return (
     <div className="w-full my-[100px] py-6 px-4 md:px-8 bg-gray-100 rounded-xl shadow-sm">
-      {/* ساختار اصلی: یک flex-row */}
       <div className="flex flex-col md:flex-row items-center gap-4">
 
-        {/* دکمه چپ */}
         <button
           onClick={handlePrev}
           disabled={currentIndex === 0}
@@ -76,7 +63,6 @@ const BrandSlider: React.FC<BrandSliderProps> = ({ brands = [], onBrandClick }) 
           </svg>
         </button>
 
-        {/* لیست برندها */}
         <div className="flex-grow overflow-x-hidden px-4">
           <motion.div
             className="flex space-x-10 justify-center"

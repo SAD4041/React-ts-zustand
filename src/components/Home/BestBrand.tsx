@@ -1,18 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sendUserAction, type UserAction } from '@/services/homeService';
-
-interface Brand {
-  id: number;
-  name: string;
-  logo_url: string;
-  slug: string;
-}
-
-interface BestBrandsSectionProps {
-  brands: Brand[];
-  onBrandClick: (action: Omit<UserAction, 'timestamp'>) => void;
-}
+import type {Brand, BestBrandsSectionProps} from '@/types/homeTypes';
 
 const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBrandClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -61,14 +50,11 @@ const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBr
     <div className="w-full py-6 px-4 md:px-8 bg-white rounded-xl shadow-sm border border-gray-100">
       <div className="flex flex-col md:flex-row items-start gap-4">
 
-        {/* بخش اسلایدر برند‌ها */}
         <div className="flex-grow relative">
-          {/* عنوان موبایل */}
           <div className="md:hidden flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-gray-800">پرفروش‌ترین برند‌ها</h2>
+            <h2 className="text-xl font-bold text-gray-800">برند‌ها</h2>
           </div>
 
-          {/* دکمه قبلی - ثابت در سمت چپ */}
           <button
             onClick={handlePrev}
             disabled={currentIndex === 0}
@@ -81,7 +67,6 @@ const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBr
             </svg>
           </button>
 
-          {/* کانتینر اسلایدر - وسط‌چین و با فضای کافی */}
           <div className="overflow-x-hidden px-8">
             <motion.div
               className="flex justify-center space-x-10"
