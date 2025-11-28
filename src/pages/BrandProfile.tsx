@@ -1,14 +1,15 @@
 // BrandProfileHeader.jsx
-import shareIcon from '../assets/brand-dashboard/Send_light.png';
-import shopIcon from '../assets/brand-dashboard/Shop.png';
-import locationIcon from '../assets/brand-dashboard/Pin_alt_light.png';
-import phoneIcon from '../assets/brand-dashboard/Phone.png';
-import emailIcon from '../assets/brand-dashboard/Message.png';
-import calendarIcon from '../assets/brand-dashboard/Date_today.png';
-import starIcon from '../assets/brand-dashboard/Star.png';
+import shareIcon from '../assets/brand-profile/Send_light.png';
+import shopIcon from '../assets/brand-profile/Shop.png';
+import locationIcon from '../assets/brand-profile/Pin_alt_light.png';
+import phoneIcon from '../assets/brand-profile/Phone.png';
+import emailIcon from '../assets/brand-profile/Message.png';
+import calendarIcon from '../assets/brand-profile/Date_today.png';
+import starIcon from '../assets/brand-profile/Star.png';
 import ProductCard from '@/components/Product/ProductCard';
 import Tshirt from '@/assets/image1.png'
 import Comments from '@/components/BrandProfile/Comments';
+import BrandProductsSection from '@/components/BrandProfile/BrandProductSection';
 
 const BrandDashboard = () => {
   // change it with dynamic data    داده‌های ماک شده
@@ -32,6 +33,35 @@ const BrandDashboard = () => {
       subtitle: "روی کالکشن بهار و تابستان",
     }
   };
+  const mockProduct = {
+    id: 1,
+    name: "تیشرت CATWAREHOUSE",
+    model: "Bussiness Not Boomin",
+    price: 699999,
+    discountedPrice: 531999,
+    discount: 24,
+    hasDiscount: true,
+    image: Tshirt, // اینجا تصویر واقعی رو قرار بده
+    sizes: [
+      { label: "XS" },
+      { label: "S" },
+      { label: "M" },
+      { label: "L" },
+      { label: "XL" },
+      { label: "2XL" },
+      { label: "3XL" }
+    ],
+    colors: ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4"], // رنگ‌های موجود
+    stock: 8, // موجودی
+    category: "پوشاک"
+  };
+  const products = Array.from({ length: 3 }, (_, i) => ({
+    ...mockProduct,
+    id: i + 1,
+    name: `${mockProduct.name} ${i + 1}`,
+    price: mockProduct.price - (i * 1000),
+    discountedPrice: mockProduct.discountedPrice - (i * 1000),
+  }));
 
   return (
     <div dir="rtl" className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -60,17 +90,18 @@ const BrandDashboard = () => {
           )}
         </div>
 
-        <div className="pt-10 flex items-start gap-6 justify-between">
-          <div className="flex-1 flex items-start gap-30">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <h1 className="text-xl font-bold text-gray-800">{brandData.name}</h1>
-                {brandData.isOfficial && (
-                  <span className="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded-full">برند رسمی</span>
-                )}
-              </div>
-              <p className="text-sm text-gray-600 italic mb-3">{brandData.slogan}</p>
+        <div className="pt-10 flex items-start gap-6">
+          <div className='w-1/3'>
+            <div className="flex items-center gap-2 mb-1">
+              <h1 className="text-xl font-bold text-gray-800">{brandData.name}</h1>
+              {brandData.isOfficial && (
+                <span className="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded-full">برند رسمی</span>
+              )}
             </div>
+            <p className="text-sm text-gray-600 italic mb-3">{brandData.slogan}</p>
+          </div>
+          <div className="w-1/3 flex-1 flex items-start gap-30">
+
 
             {/* اطلاعات عددی - کنار هم و با خط جداکننده */}
             <div className="flex items-center pt-2 gap-6 text-sm text-gray-700">
@@ -163,96 +194,8 @@ const BrandDashboard = () => {
 
           <div className="relative mt-4">
             {/* اسلایدر محصولات */}
-            <div className="overflow-x-hidden px-4">
-              {[
-                {
-                  id: 1,
-                  name: "تیشرت CATWAREHOUSE",
-                  model: "Bussiness Not Boomin",
-                  price: 699999,
-                  discountedPrice: 531999,
-                  discount: 24,
-                  hasDiscount: true,
-                  image: Tshirt,
-                  sizes: [
-                    { label: "XS" },
-                    { label: "S" },
-                    { label: "M" },
-                    { label: "L" },
-                    { label: "XL" },
-                    { label: "2XL" },
-                    { label: "3XL" }
-                  ],
-                  colors: [
-                    { hex: "#FF6B6B", label: "قرمز" },
-                    { hex: "#4ECDC4", label: "فیروزه‌ای" },
-                    { hex: "#45B7D1", label: "آبی" },
-                    { hex: "#96CEB4", label: "سبز" }
-                  ],
-                  stock: 8,
-                  rating: 4.5,
-                  ratingCount: 120,
-                  sales: 45
-                },
-                {
-                  id: 2,
-                  name: "تیشرت CATWAREHOUSE",
-                  model: "Bussiness Not Boomin",
-                  price: 699999,
-                  discountedPrice: 531999,
-                  discount: 24,
-                  hasDiscount: true,
-                  image: Tshirt,
-                  sizes: [
-                    { label: "XS" },
-                    { label: "S" },
-                    { label: "M" },
-                    { label: "L" },
-                    { label: "XL" },
-                    { label: "2XL" },
-                    { label: "3XL" }
-                  ],
-                  colors: [
-                    { hex: "#FF6B6B", label: "قرمز" },
-                    { hex: "#4ECDC4", label: "فیروزه‌ای" },
-                    { hex: "#45B7D1", label: "آبی" },
-                    { hex: "#96CEB4", label: "سبز" }
-                  ],
-                  stock: 5,
-                  rating: 4.3,
-                  ratingCount: 89,
-                  sales: 32
-                },
-                {
-                  id: 3,
-                  name: "تیشرت CATWAREHOUSE",
-                  model: "Bussiness Not Boomin",
-                  price: 699999,
-                  discountedPrice: 531999,
-                  discount: 24,
-                  hasDiscount: true,
-                  image: Tshirt,
-                  sizes: [
-                    { label: "XS" },
-                    { label: "S" },
-                    { label: "M" },
-                    { label: "L" },
-                    { label: "XL" },
-                    { label: "2XL" },
-                    { label: "3XL" }
-                  ],
-                  colors: [
-                    { hex: "#FF6B6B", label: "قرمز" },
-                    { hex: "#4ECDC4", label: "فیروزه‌ای" },
-                    { hex: "#45B7D1", label: "آبی" },
-                    { hex: "#96CEB4", label: "سبز" }
-                  ],
-                  stock: 12,
-                  rating: 4.7,
-                  ratingCount: 156,
-                  sales: 67
-                }
-              ].map((product) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+              {products.map((product) => (
                 <div key={product.id} className="inline-block mx-3 cursor-pointer">
                   <a href=''><ProductCard product={product} /></a>
                   {/* change it to product detail */}
@@ -261,15 +204,15 @@ const BrandDashboard = () => {
             </div>
           </div>
         </div>
-        <a href='/'> 
-        {/* change it to brand's products offer */}
+        <a href='/'>
+          {/* change it to brand's products offer */}
           <button className="w-3/4 mt-3 mx-auto block bg-white text-red-500 font-medium py-2 rounded-md hover:bg-gray-100 transition-colors text-center cursor-pointer">
             مشاهده محصولات
           </button>
         </a>
-
-
       </div>
+      <BrandProductsSection />
+
       <Comments />
 
       <div className='my-10'></div>

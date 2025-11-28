@@ -1,9 +1,9 @@
 // CustomerReviewsSection.jsx
 
 import React, { useState } from 'react';
-import starIcon from '@/assets/brand-dashboard/Star.png';
-import thumbsUpIcon from '@/assets/brand-dashboard/Vector.png';
-import thumbsDownIcon from '@/assets/brand-dashboard/Vector.png';
+import starIcon from '@/assets/brand-profile/Star.png';
+import thumbsUpIcon from '@/assets/brand-profile/Vector.png';
+import thumbsDownIcon from '@/assets/brand-profile/Vector.png';
 
 const CustomerReviewsSection = () => {
   const [newReview, setNewReview] = useState('');
@@ -151,7 +151,7 @@ const CustomerReviewsSection = () => {
 
       {/* دکمه مشاهده نظرات بیشتر */}
       <div className="mt-4 text-center">
-        <button className="border border-gray-300 text-gray-700 text-sm font-medium py-2 px-4 rounded-full hover:bg-gray-100 transition cursor-pointer">
+        <button className="border border-gray-300 text-gray-700 text-sm font-medium py-2 px-4 rounded-xl hover:bg-gray-100 transition cursor-pointer">
           مشاهده نظرات بیشتر
         </button>
       </div>
