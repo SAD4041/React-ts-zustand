@@ -13,12 +13,12 @@ import BestBrandsSection from "@/components/Home/BestBrand";
 import BrandSlider from "@/components/Home/BrandSlider";
 
 import bannerFallback from "@/assets/banner.jpg";
-import category1 from "@/assets/category1.png";
-import category2 from "@/assets/category2.png";
-import category3 from "@/assets/category3.png";
-import category4 from "@/assets/category4.png";
-import category5 from "@/assets/category5.png";
-import category6 from "@/assets/category6.png";
+import category1 from "@/assets/category/category1.png";
+import category2 from "@/assets/category/category2.png";
+import category3 from "@/assets/category/category3.png";
+import category4 from "@/assets/category/category4.png";
+import category5 from "@/assets/category/category5.png";
+import category6 from "@/assets/category/category6.png";
 import style1 from "@/assets/style1.jpg";
 import style2 from "@/assets/style2.jpg";
 import style3 from "@/assets/style3.jpg";
@@ -51,7 +51,7 @@ export default function Home() {
   if (loading) {
     return (
       <div className="w-full min-h-screen flex items-center justify-center bg-white">
-        <div className="text-lg font-medium text-gray-600">در حال بارگذاری صفحه اصلی...</div>
+        <div className="text-lg font-medium text-gray-600">...در حال بارگذاری صفحه اصلی</div>
       </div>
     );
   }
@@ -60,7 +60,6 @@ export default function Home() {
     console.warn("Home page error fallback activated");
   }
 
-  // داده‌های واقعی یا فیک در صورت خطا
   const data = homeData || {
     banner: { id: 1, image_url: bannerFallback },
     categories: [
@@ -157,7 +156,7 @@ export default function Home() {
 
       <BestBrandsSection brands={best_selling_brands} onBrandClick={logUserAction} />
 
-      <BrandSlider brands={best_selling_brands} onBrandClick={logUserAction} />
+      <BrandSlider />
 
       <div className="py-12 px-4 from-pink-50 to-white">
         <div className="max-w-7xl mx-auto">

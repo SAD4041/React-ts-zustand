@@ -1,122 +1,48 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { sendUserAction, type UserAction } from '@/services/homeService';
-import type {Brand, BrandSliderProps} from '@/types/homeTypes';
+import React from 'react';
 
-const BrandSlider: React.FC<BrandSliderProps> = ({ brands = [], onBrandClick }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+import adidas from '@/assets/brands/Adidas-Logo.wine.png';
+import dior from '@/assets/brands/Christian_Dior_(fashion_house)-Logo.wine.png';
+import balenciaga from '@/assets/brands/Balenciaga-Logo.wine.png';
+import chanel from '@/assets/brands/Chanel-Logo.wine.png';
+import zara from '@/assets/brands/Zara_(retailer)-Logo.wine.png';
+import louisVuitton from '@/assets/brands/Louis_Vuitton-Logo.wine.png';
+import burberry from '@/assets/brands/Burberry-Logo.wine.png';
+import fendi from '@/assets/brands/Fendi-Logo.wine.png';
+import nike from '@/assets/brands/Nike,_Inc.-Logo.wine.png';
+import gucci from '@/assets/brands/Gucci-Logo.wine.png';
 
-  const itemsPerPage = 10;
-  const totalItems = brands.length;
-
-  const handleNext = () => {
-    if (currentIndex < totalItems - itemsPerPage) {
-      setCurrentIndex(prev => prev + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
-    }
-  };
-
-  const visibleBrands = brands.slice(currentIndex, currentIndex + itemsPerPage);
-
-  const listVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { x: 20, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15,
-      },
-    },
-  };
+const BrandSlider = () => {
+  const brands = [
+    { name: "Adidas", logo: adidas },
+    { name: "Dior", logo: dior },
+    { name: "Balenciaga", logo: balenciaga },
+    { name: "Chanel", logo: chanel },
+    { name: "Zara", logo: zara },
+    { name: "Louis Vuitton", logo: louisVuitton },
+    { name: "Burberry", logo: burberry },
+    { name: "Fendi", logo: fendi },
+    { name: "Nike", logo: nike },
+    { name: "Gucci", logo: gucci }
+  ];
 
   return (
-    <div className="w-full my-[100px] py-6 px-4 md:px-8 bg-gray-100 rounded-xl shadow-sm">
-      <div className="flex flex-col md:flex-row items-center gap-4">
-
-        <button
-          onClick={handlePrev}
-          disabled={currentIndex === 0}
-          className={`p-3 rounded-full bg-white border border-gray-300 hover:bg-gray-100 transition cursor-pointer ${
-            currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          aria-label="قبلی"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-
-        <div className="flex-grow overflow-x-hidden px-4">
-          <motion.div
-            className="flex space-x-10 justify-center"
-            variants={listVariants}
-            initial="hidden"
-            animate="visible"
-            key={currentIndex}
-          >
-            <AnimatePresence initial={false}>
-              {visibleBrands.map((brand) => (
-                <motion.div
-                  key={brand.id}
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  transition={{ duration: 0.3 }}
-                  className="flex-shrink-0 cursor-pointer"
-                >
-                  <a
-                    href={`/brand/${brand.slug}`}
-                    className="block"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onBrandClick({ action: "click", target_type: "brand", target_id: brand.id });
-                      window.location.href = `/brand/${brand.slug}`;
-                    }}
-                  >
-                    <img
-                      src={brand.logo_url}
-                      alt={brand.name}
-                      className="h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition"
-                    />
-                  </a>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+    <div className="py-6 ">
+      {/* پس‌زمینه گرادیان طوسی به سفید */}
+      <div className="bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 rounded-lg p-4">
+        {/* لیست لوگوها */}
+        <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">
+          {brands.map((brand, index) => (
+            <div key={index} className="flex-shrink-0">
+              <a href={`brands/${brand.name}`}>
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  className="h-10 w-auto object-contain cursor-pointer"
+                />
+              </a>
+            </div>
+          ))}
         </div>
-
-        {/* دکمه راست */}
-        <button
-          onClick={handleNext}
-          disabled={currentIndex >= totalItems - itemsPerPage}
-          className={`p-3 rounded-full bg-white border border-gray-300 hover:bg-gray-100 transition cursor-pointer ${
-            currentIndex >= totalItems - itemsPerPage ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          aria-label="بعدی"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-
       </div>
     </div>
   );
