@@ -1,5 +1,12 @@
+/* Import Vazirmatn font (weights 400, 500, 700) */
+@import "@fontsource/vazirmatn/400.css";
+@import "@fontsource/vazirmatn/500.css";
+@import "@fontsource/vazirmatn/700.css";
+
+/* Import Tailwind */
 @import "tailwindcss";
 
+/* Custom utilities */
 @layer utilities {
 	.rtl {
 		direction: rtl;
@@ -8,12 +15,13 @@
 		direction: ltr;
 	}
 	.vazir {
-		font-family: "Vazir", sans-serif;
+		font-family: "Vazirmatn", sans-serif !important;
 	}
 }
 
+/* Apply Vazirmatn globally */
 :root {
-	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	font-family: "Vazirmatn", system-ui, Avenir, Helvetica, Arial, sans-serif !important;
 	line-height: 1.5;
 	font-weight: 400;
 
@@ -25,7 +33,9 @@
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+
 	--radius: 0.625rem;
+
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.145 0 0);
 	--card: oklch(1 0 0);
@@ -59,11 +69,13 @@
 	--sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Theme setup */
 @theme inline {
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
 	--radius-xl: calc(var(--radius) + 4px);
+
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);
@@ -97,6 +109,7 @@
 	--color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* Dark mode */
 .dark {
 	--background: oklch(0.145 0 0);
 	--foreground: oklch(0.985 0 0);
@@ -131,8 +144,10 @@
 	--sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Tailwind base layer fix */
 @layer base {
 	* {
 		@apply border-border outline-ring/50;
+		font-family: "Vazirmatn", sans-serif;
 	}
 }
