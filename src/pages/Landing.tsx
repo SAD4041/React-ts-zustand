@@ -16,6 +16,7 @@ function Landing() {
 				</button>
 			</div>
 			<p className="text-5xl text-center ">This is your landing</p> */}
+			
 		</div>
 	);
 }
