@@ -32,7 +32,7 @@ function AcceptTeamInvite() {
       setLoading(true);
       setError(null);
 
-      await acceptInviteService({ token });
+      await acceptInviteService({ token, invitetoken: token });
 
       toast.success("شما با موفقیت به تیم اضافه شدید!");
 
@@ -80,7 +80,7 @@ function AcceptTeamInvite() {
       setLoading(true);
       setError(null);
 
-      await rejectInviteService({ token });
+      await rejectInviteService({ token, invitetoken: token });
 
       toast.success("دعوت رد شد");
 

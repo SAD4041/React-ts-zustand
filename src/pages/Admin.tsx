@@ -28,7 +28,7 @@ import {
   rejectTeamService,
   fetchUsersService,
   verifyReceiptService,
-  fetchPendingReceiptsService, 
+  fetchPendingReceiptsService,
   type Team,
   type User,
 } from "@/services/adminServices";
@@ -41,6 +41,11 @@ type TeamStatus =
   | "accepted"
   | "rejected";
 type ActiveTab = "teams" | "users";
+type Receipt = {
+  id: number;
+  team_id: number;
+  [key: string]: any;
+};
 
 function AdminTeamsApproval() {
   const navigate = useNavigate();
@@ -66,6 +71,7 @@ function AdminTeamsApproval() {
     id: number;
     teamName: string;
     teamId?: number; // اضافه کردن teamId
+    approved?: boolean;
   } | null>(null);
   const [verificationNotes, setVerificationNotes] = useState("");
   const [pendingReceipts, setPendingReceipts] = useState<Receipt[]>([]);
@@ -122,10 +128,10 @@ function AdminTeamsApproval() {
     try {
       setVerifyingReceipt(receiptId);
 
-      const payload: VerifyReceiptPayload = {
-        approved: approved,
-        notes: verificationNotes || undefined,
-      };
+      // const payload: VerifyReceiptPayload = {
+      //   approved: approved,
+      //   notes: verificationNotes || undefined,
+      // };
 
       await verifyReceiptService(receiptId, approved, verificationNotes);
 

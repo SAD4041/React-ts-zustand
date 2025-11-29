@@ -109,7 +109,7 @@ function InviteMember() {
       };
 
       console.log("📨 ارسال دعوت:", invitePayload);
-      await inviteUserService(teamId, invitePayload);
+      await inviteUserService(teamId.toString(), invitePayload);
 
       toast.success("دعوت با موفقیت ارسال شد!");
 

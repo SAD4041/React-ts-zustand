@@ -172,12 +172,19 @@ export const inviteUserService = async (
 /* -----------------------------------------
    GET INVITES
 ----------------------------------------- */
-export const getInvitesService = async (teamId: string): Promise<TeamInvite[]> => {
+// در فایل teamService.ts
+// در فایل teamService.ts
+interface InvitesResponse {
+  status: number;
+  message: string;
+  data: TeamInvite[];
+}
+
+export const getInvitesService = async (teamId: string): Promise<InvitesResponse> => {
   return getData({
     endPoint: `/v1/user/teams/${teamId}/invitations/pending`,
   });
 };
-
 /* -----------------------------------------
    CANCEL INVITE
 ----------------------------------------- */

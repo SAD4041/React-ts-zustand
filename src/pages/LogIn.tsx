@@ -37,13 +37,13 @@ const emailValidationSchema = Yup.object({
     .required("ایمیل الزامی است"),
 });
 
-// (فعلاً از otpValidationSchema در Formik استفاده نمی‌کنیم، فقط برای بعداً)
-const otpValidationSchema = Yup.object({
-  otp: Yup.string()
-    .length(6, "کد تایید باید ۶ رقم باشد")
-    .matches(/^[0-9]{6}$/, "کد تایید فقط می‌تواند عددی باشد")
-    .required("کد تایید الزامی است"),
-});
+// // (فعلاً از otpValidationSchema در Formik استفاده نمی‌کنیم، فقط برای بعداً)
+// const otpValidationSchema = Yup.object({
+//   otp: Yup.string()
+//     .length(6, "کد تایید باید ۶ رقم باشد")
+//     .matches(/^[0-9]{6}$/, "کد تایید فقط می‌تواند عددی باشد")
+//     .required("کد تایید الزامی است"),
+// });
 
 interface EmailFormValues {
   email: string;
@@ -166,9 +166,9 @@ function Login() {
     navigate("/signup");
   };
 
-  const handleForgotPasswordClick = () => {
-    navigate("/forgot-password");
-  };
+  // const handleForgotPasswordClick = () => {
+  //   navigate("/forgot-password");
+  // };
 
   return (
     <div

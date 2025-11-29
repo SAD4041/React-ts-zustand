@@ -26,8 +26,6 @@ import {
   Upload,
   Receipt,
 } from "lucide-react";
-import ELMOCPC from "@/assets/ELMOCPC.svg";
-import CESA from "@/assets/CESA.svg";
 import { toast } from "sonner";
 
 // استور احراز هویت
@@ -46,6 +44,8 @@ import {
   uploadReceiptService,
 } from "@/services/teamService";
 
+import type { TeamInvite } from "@/types/teamTypes";
+
 // نوع ساده برای یوزر داخل داشبورد
 type DashboardUser = {
   name: string;
@@ -56,14 +56,20 @@ type DashboardUser = {
 };
 
 // تایپ TeamInvite براساس response واقعی
-type TeamInvite = {
-  id: string;
-  token: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  expires_at: string;
-};
+// type TeamInvite = {
+//   id: string;
+//   token: string;
+//   email: string;
+//   first_name: string;
+//   last_name: string;
+//   expires_at: string;
+//   data: {
+//     // ساختار داخلی data
+//     team_id?: number;
+//     role?: string;
+//     // سایر فیلدها
+//   };
+// };
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -181,6 +187,7 @@ function Dashboard() {
     try {
       const response = await getInvitesService(teamData.id);
       setInvites(response.data);
+      console.log("دریافت دعوت‌نامه‌ها:", response.data);
     } catch (error) {
       console.error("Error fetching invites:", error);
       setInvites([]);
@@ -436,11 +443,11 @@ function Dashboard() {
     navigate("/buildteam");
   };
 
-  const handleEditTeam = () => {
-    if (teamData) {
-      navigate(`/edit-team/${teamData.id}`);
-    }
-  };
+  // const handleEditTeam = () => {
+  //   if (teamData) {
+  //     navigate(`/edit-team/${teamData.id}`);
+  //   }
+  // };
 
   const handleInviteMember = () => {
     if (teamData) {
@@ -841,19 +848,22 @@ function Dashboard() {
                         </div>
                       </div>
                       {/* بخش اطلاع‌رسانی برای اعضای غیرکاپیتان */}
-{teamData && !isCaptain && (
-  <div className="bg-blue-500/10 backdrop-blur-md border border-blue-500/30 rounded-2xl p-6">
-    <div className="flex items-center gap-3">
-      <Users className="w-6 h-6 text-blue-400" />
-      <div>
-        <h3 className="font-bold text-blue-400 mb-2">شما عضو تیم هستید</h3>
-        <p className="text-gray-300 text-sm">
-          برای تغییرات در تیم (ثبت نهایی، دعوت عضو، حذف تیم) با کاپیتان تیم تماس بگیرید.
-        </p>
-      </div>
-    </div>
-  </div>
-)}
+                      {teamData && !isCaptain && (
+                        <div className="bg-blue-500/10 backdrop-blur-md border border-blue-500/30 rounded-2xl p-6">
+                          <div className="flex items-center gap-3">
+                            <Users className="w-6 h-6 text-blue-400" />
+                            <div>
+                              <h3 className="font-bold text-blue-400 mb-2">
+                                شما عضو تیم هستید
+                              </h3>
+                              <p className="text-gray-300 text-sm">
+                                برای تغییرات در تیم (ثبت نهایی، دعوت عضو، حذف
+                                تیم) با کاپیتان تیم تماس بگیرید.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       <div className="flex gap-3 flex-wrap">
                         {teamData.status === "draft" && (
                           <Button
@@ -869,7 +879,6 @@ function Dashboard() {
                             ثبت نهایی تیم
                           </Button>
                         )}
-                        
 
                         {(!invites || invites.length !== 2) &&
                           (teamData.status === "draft" || !teamData) && (
@@ -1035,21 +1044,22 @@ function Dashboard() {
                   )}
 
                   {invitesLoading ? (
-                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 md:p-6">
                       <div className="flex items-center justify-center py-4">
-                        <div className="w-6 h-6 border-2 border-[#FFD500]/30 border-t-[#FFD500] rounded-full animate-spin" />
-                        <span className="mr-2">
+                        <div className="w-5 h-5 md:w-6 md:h-6 border-2 border-[#FFD500]/30 border-t-[#FFD500] rounded-full animate-spin" />
+                        <span className="mr-2 text-sm md:text-base">
                           درحال بارگذاری دعوت‌نامه‌ها...
                         </span>
                       </div>
                     </div>
                   ) : (
-                    invites?.length > 0 &&  isCaptain &&(
-                      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
-                        <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-[#FFD500]">
-                          <Bell className="w-6 h-6" />
+                    invites?.length > 0 &&
+                    isCaptain && (
+                      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 md:p-6">
+                        <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 flex items-center gap-2 text-[#FFD500]">
+                          <Bell className="w-5 h-5 md:w-6 md:h-6" />
                           دعوت‌نامه‌های در انتظار پاسخ
-                          <span className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full text-sm">
+                          <span className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full text-xs md:text-sm">
                             {invites.length} دعوت
                           </span>
                         </h3>
@@ -1057,20 +1067,20 @@ function Dashboard() {
                           {invites.map((invite) => (
                             <div
                               key={invite.id}
-                              className="flex items-center justify-between p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl"
+                              className="flex flex-col sm:flex-row sm:items-center justify-between p-3 md:p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl gap-3"
                             >
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center">
-                                  <Clock className="w-5 h-5 text-yellow-400" />
+                              <div className="flex items-center gap-3 flex-1">
+                                <div className="w-8 h-8 md:w-10 md:h-10 bg-yellow-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                  <Clock className="w-4 h-4 md:w-5 md:h-5 text-yellow-400" />
                                 </div>
-                                <div>
-                                  <h4 className="font-semibold">
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-semibold text-sm md:text-base truncate">
                                     {invite.first_name} {invite.last_name}
                                   </h4>
-                                  <p className="text-sm text-gray-300">
+                                  <p className="text-xs md:text-sm text-gray-300 truncate">
                                     {invite.email}
                                   </p>
-                                  <p className="text-xs text-gray-400">
+                                  <p className="text-xs text-gray-400 mt-1">
                                     انقضا:{" "}
                                     {new Date(
                                       invite.expires_at
@@ -1078,8 +1088,8 @@ function Dashboard() {
                                   </p>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-yellow-400 text-sm">
+                              <div className="flex items-center gap-2 justify-between sm:justify-end">
+                                <span className="text-yellow-400 text-xs md:text-sm whitespace-nowrap">
                                   در انتظار پاسخ
                                 </span>
                                 <Button
@@ -1091,7 +1101,7 @@ function Dashboard() {
                                     )
                                   }
                                   disabled={invitesLoading || !isCaptain}
-                                  className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30"
+                                  className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs md:text-sm px-2 md:px-3 py-1 md:py-2"
                                 >
                                   لغو دعوت
                                 </Button>

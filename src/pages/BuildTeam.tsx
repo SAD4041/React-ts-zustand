@@ -11,8 +11,6 @@ import {
   User,
   Award,
 } from "lucide-react";
-import ELMOCPC from "@/assets/ELMOCPC.svg";
-import CESA from "@/assets/CESA.svg";
 import BG from "@/assets/BG.png";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +19,6 @@ import { useNavigate } from "react-router-dom";
 import {
   createTeamService,
   inviteUserService,
-  submitTeamService,
 } from "@/services/teamService";
 import type { CreateTeamPayload, InviteUserPayload } from "@/types/teamTypes";
 
@@ -214,7 +211,7 @@ function TeamRegistration() {
 
     for (const member of [member1, member2]) {
       for (const field of requiredFields) {
-        if (!member[field]) {
+        if (!member[field as keyof MemberData]) {
           toast.error(
             `لطفا اطلاعات ${
               field === "name"

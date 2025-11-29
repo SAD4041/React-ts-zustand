@@ -32,11 +32,16 @@ export interface TeamMember {
 export interface TeamInvite {
   id: number;
   teamId: number;
+  first_name: string;
+  last_name: string;
   email: string;
+  token: string;
   status: 'pending' | 'accepted' | 'rejected' | 'cancelled';
   createdAt: string;
   expiresAt: string;
+  expires_at: string;
   invitedBy: number;
+      data: any;
 }
 
 // وضعیت تیم
@@ -233,6 +238,7 @@ export interface RemoveMemberErrorResponse {
 
 export interface AcceptRejectInvitePayload {
   invitetoken: string;
+  token: string;
 }
 
 export interface AcceptRejectInviteSuccessResponse {
@@ -325,7 +331,7 @@ export interface UploadReceiptErrorResponse {
       not_found?: string;
       not_submitted?: string;
     };
-    [key: string]: ;
+    [key: string]: any;
   };
   data: string;
 }
