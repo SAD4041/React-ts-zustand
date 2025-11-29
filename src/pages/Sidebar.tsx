@@ -1,5 +1,6 @@
 import UserSidebar from "@/components/Sidebar/UserSidebar";
 import BrandSidebar from "@/components/Sidebar/BrandSidebar";
+import { BrowserRouter } from "react-router-dom";
 
 function SidebarTest() {
 
@@ -9,7 +10,9 @@ function SidebarTest() {
 				<button
 					className="text-white bg-sky-600 rounded-md p-2 cursor-pointer"
 					onClick={() => {
-						<BrandSidebar/>
+                        <BrowserRouter>
+                            <BrandSidebar/>
+                        </BrowserRouter>
 					}}
 				>
 					Brand
