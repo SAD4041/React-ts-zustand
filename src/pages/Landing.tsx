@@ -39,7 +39,7 @@ function ICPCLanding() {
   });
 
   useEffect(() => {
-    const targetDate = new Date("2025-12-21T00:00:00");
+    const targetDate = new Date("2025-12-12T00:00:00");
 
     const timer = setInterval(() => {
       const now = new Date();
