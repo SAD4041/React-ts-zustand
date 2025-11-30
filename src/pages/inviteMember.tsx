@@ -86,7 +86,8 @@ function InviteMember() {
       }
 
       // دریافت teamId از localStorage یا props
-      const teamId = Number(localStorage.getItem("teamId"));
+      const teamId = localStorage.getItem("teamId");
+      console.log("🏷️ teamId:", teamId);
 
       if (!teamId) {
         toast.error("تیم یافت نشد. لطفا ابتدا تیم ایجاد کنید.");

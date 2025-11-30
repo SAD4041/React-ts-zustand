@@ -193,6 +193,7 @@ function TeamRegistration() {
         setTeamInfo(teamInfo);
 
         toast.success("تیم با موفقیت ایجاد شد!");
+        localStorage.setItem("teamId", currentStep.toString())
         setCurrentStep(1);
       } else {
         throw new Error("خطا در ایجاد تیم");
