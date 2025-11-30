@@ -180,6 +180,7 @@ function TeamRegistration() {
 
       if (response?.data?.id) {
         const teamId = response.data.id;
+        console.log("✅ Team created with ID:", teamId);
         const teamInfo = {
           teamName: values.teamName,
           teamDescription: values.teamDescription,
@@ -193,7 +194,6 @@ function TeamRegistration() {
         setTeamInfo(teamInfo);
 
         toast.success("تیم با موفقیت ایجاد شد!");
-        localStorage.setItem("teamId", currentStep.toString())
         setCurrentStep(1);
       } else {
         throw new Error("خطا در ایجاد تیم");
@@ -306,8 +306,8 @@ function TeamRegistration() {
       );
 
       // پاکسازی localStorage پس از موفقیت
-      localStorage.removeItem("teamId");
-      localStorage.removeItem("teamInfo");
+      // localStorage.removeItem("teamId");
+      // localStorage.removeItem("teamInfo");
       localStorage.removeItem("member1");
       localStorage.removeItem("member2");
       localStorage.removeItem("currentStep");
@@ -340,8 +340,8 @@ function TeamRegistration() {
 
   const handleBackDasboard = () => {
     // پاکسازی localStorage هنگام خروج
-    localStorage.removeItem("teamId");
-    localStorage.removeItem("teamInfo");
+    // localStorage.removeItem("teamId");
+    // localStorage.removeItem("teamInfo");
     localStorage.removeItem("member1");
     localStorage.removeItem("member2");
     localStorage.removeItem("currentStep");
