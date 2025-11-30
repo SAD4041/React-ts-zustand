@@ -439,62 +439,6 @@ function Dashboard() {
     }
   };
 
-  const handleDeleteClick = () => {
-    setShowDeleteModal(true);
-    setDeleteStep(1);
-  };
-
-  const handleCancelDelete = () => {
-    setShowDeleteModal(false);
-    setDeleteStep(1);
-  };
-
-  const handleConfirmStep1 = () => {
-    setDeleteStep(2);
-  };
-
-  const handleConfirmDelete = async () => {
-    if (!teamData) return;
-
-    try {
-      setDeleting(true);
-      await deleteTeamService(teamData.id);
-      toast.success("تیم با موفقیت حذف شد!");
-      setShowDeleteModal(false);
-      await fetchTeamData();
-    } catch (error: any) {
-      console.error("Error deleting team:", error);
-      toast.error(error?.message || "خطا در حذف تیم");
-    } finally {
-      setDeleting(false);
-      setDeleteStep(1);
-    }
-  };
-
-  const handleSubmitTeam = async () => {
-    if (!teamData) {
-      toast.error("تیم یافت نشد");
-      return;
-    }
-
-    try {
-      setSubmitting(true);
-      await submitTeamService(teamData.id);
-      toast.success("تیم با موفقیت ثبت نهایی شد!");
-      await fetchTeamData();
-    } catch (error: any) {
-      console.error("Error submitting team:", error);
-
-      const errorMessage =
-        error?.response?.data?.messages?.team?.pending_invitations ||
-        "خطا در ثبت نهایی تیم";
-
-      toast.error(errorMessage);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   const handleCreateTeam = () => {
     navigate("/buildteam");
   };

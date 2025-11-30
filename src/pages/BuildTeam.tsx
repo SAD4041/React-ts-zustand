@@ -115,7 +115,6 @@ function TeamRegistration() {
     { title: "نام و توضیح تیم", icon: Award },
     { title: "عضو دوم", icon: User },
     { title: "عضو سوم", icon: User },
-    { title: "عضو سوم", icon: User },
     { title: "تایید نهایی", icon: CheckCircle },
   ];
 
@@ -261,11 +260,9 @@ function TeamRegistration() {
       console.log("📨 دعوت اعضا:", membersPayload);
       await inviteUserService(teamId.toString(), membersPayload);
 
-      // ثبت نهایی تیم
-      console.log("✅ ثبت نهایی تیم");
-      await submitTeamService(teamId.toString());
-
-      toast.success("تیم با موفقیت تشکیل شد! اعضا دعوت شدند.");
+      toast.success(
+        " اعضا دعوت شدند.پس از تایید اعضا نسبت به نهایی کردن تیم اقدام کنید"
+      );
 
       setTimeout(() => {
         navigate("/dashboard");
@@ -409,7 +406,10 @@ function TeamRegistration() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div
+                    className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
+                    dir="rtl"
+                  >
                     <CustomInput
                       name="name"
                       type="text"
@@ -508,7 +508,10 @@ function TeamRegistration() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div
+                    className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
+                    dir="rtl"
+                  >
                     <CustomInput
                       name="name"
                       type="text"
@@ -600,7 +603,10 @@ function TeamRegistration() {
               </div>
 
               {/* نمایش نام تیم و توضیحات */}
-              <div className="bg-[#FFD500]/10 border border-[#FFD500]/30 rounded-xl p-6 mb-6">
+              <div
+                className="bg-[#FFD500]/10 border border-[#FFD500]/30 rounded-xl p-6 mb-6"
+                dir="rtl"
+              >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <h3 className="text-[#FFD500] font-semibold mb-2">
@@ -627,7 +633,7 @@ function TeamRegistration() {
               </div>
 
               {/* نمایش اطلاعات اعضا */}
-              <div className="space-y-4 mb-6">
+              <div className="space-y-4 mb-6" dir="rtl">
                 {/* عضو اول */}
                 <div className="bg-white/5 border border-white/10 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -758,9 +764,7 @@ function TeamRegistration() {
                   className="flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <CheckCircle className="w-5 h-5 ml-2 inline-block" />
-                  {isSubmitting
-                    ? "درحال ارسال دعوت..."
-                    : "ارسال دعوت و ثبت نهایی"}
+                  {isSubmitting ? "درحال ارسال دعوت..." : "ارسال دعوت"}
                 </Button>
               </div>
             </div>
