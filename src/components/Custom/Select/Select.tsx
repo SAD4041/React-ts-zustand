@@ -23,6 +23,7 @@ const SelectRoot: React.FC<SelectPrimitive.SelectProps> = ({
 	dir = "rtl",
 	name,
 	value,
+	onValueChange,
 	...props
 }) => {
 	const [field, meta, helpers] = useField(name || "");
@@ -42,6 +43,7 @@ const SelectRoot: React.FC<SelectPrimitive.SelectProps> = ({
 					requestAnimationFrame(() => {
 						helpers.setValue(v);
 						setSelfValue(v);
+						onValueChange?.(v);
 					});
 				}}
 				dir={dir}
@@ -60,13 +62,14 @@ const SelectValue = SelectPrimitive.Value;
 const SelectTrigger = React.forwardRef<
 	React.ElementRef<typeof SelectPrimitive.Trigger>,
 	React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => {
+>(({ className, children, style, ...props }, ref) => {
 	const context = React.useContext(SelectContext);
 	const hasError = context?.hasError || false;
 
 	return (
 		<ShadCnSelectTrigger
 			ref={ref}
+			style={style}
 			className={cn(
 				"w-full flex h-13 !text-[15px] border rounded-full bg-white font-[Alibaba] font-bold px-6 py-1 text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm drop-shadow-lg data-[state=open]:rounded-b-none data-[state=open]:rounded-t-2xl",
 				hasError

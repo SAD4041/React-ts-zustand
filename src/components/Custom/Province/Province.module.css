@@ -1,0 +1,7 @@
+.dynamicSize {
+	font-size: var(--fs) !important;
+}
+
+.dynamicSize span {
+	font-size: var(--fs) !important;
+}

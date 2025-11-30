@@ -26,6 +26,10 @@ import PetKindToggleGroup from "@/components/PetRegister/PetKindToggleGroup";
 import Toggle from "@/components/Custom/Toggle/Toggle";
 import { useState } from "react";
 import * as Yup from "yup";
+import Address from "@/components/Custom/Address/Address";
+import { LocationSelector } from "@/components/Custom/Province/LocationSelector";
+import { Province } from "@/components/Custom/Province/Province";
+import { City } from "@/components/Custom/Province/City";
 import PetToggleGroup from "@/components/Booking/PetOwner/PetToggleGroup";
 import ServiceToggleGroup from "@/components/Booking/PetOwner/ServiceToggleGroup";
 import ToggleGroupField from "@/components/Booking/PetOwner/ToggleGroupField";
@@ -124,6 +128,12 @@ function Test() {
 								placeholder="ایمیل"
 							/>
 						</div>
+
+						<LocationSelector>
+							<Province />
+							<City />
+						</LocationSelector>
+						<Address />
 
 						<PetDatePicker
 							from={10}
