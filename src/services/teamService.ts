@@ -219,14 +219,13 @@ export const acceptInviteService = async (token: string): Promise<void> => {
 /* -----------------------------------------
    REJECT INVITE
 ----------------------------------------- */
-export const rejectInviteService = async (
-  payload: string
-): Promise<void> => {
+export const rejectInviteService = async (token: string): Promise<void> => {
   return postData({
     endPoint: `/v1/invitations/reject-team`,
-    data: payload,
+    data: { token }, // 👈 حتماً آبجکت باشه
   });
 };
+
 
 /* -----------------------------------------
    LEAVE TEAM
