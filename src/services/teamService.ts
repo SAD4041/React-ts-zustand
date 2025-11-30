@@ -209,12 +209,10 @@ export const removeMemberService = async (
 /* -----------------------------------------
    ACCEPT INVITE
 ----------------------------------------- */
-export const acceptInviteService = async (
-  payload: string
-): Promise<void> => {
+export const acceptInviteService = async (token: string): Promise<void> => {
   return postData({
     endPoint: `/v1/invitations/accept-team`,
-    data: payload,
+    data: { token }, // 👈 این مهمه
   });
 };
 
