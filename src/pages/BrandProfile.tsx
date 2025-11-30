@@ -1,4 +1,7 @@
-// BrandProfileHeader.jsx
+// BrandProfile.tsx
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
 import shareIcon from '../assets/brand-profile/Send_light.png';
 import shopIcon from '../assets/brand-profile/Shop.png';
 import locationIcon from '../assets/brand-profile/Pin_alt_light.png';
@@ -6,62 +9,47 @@ import phoneIcon from '../assets/brand-profile/Phone.png';
 import emailIcon from '../assets/brand-profile/Message.png';
 import calendarIcon from '../assets/brand-profile/Date_today.png';
 import starIcon from '../assets/brand-profile/Star.png';
-import ProductCard from '@/components/Product/ProductCard';
 import Tshirt from '@/assets/image1.png'
+
+import ProductCard from '@/components/Product/ProductCard';
 import Comments from '@/components/BrandProfile/Comments';
 import BrandProductsSection from '@/components/BrandProfile/BrandProductSection';
+import { getBrandProfile, getBrandProducts } from '@/services/brandProfile';
 
-const BrandDashboard = () => {
-  // change it with dynamic data    داده‌های ماک شده
-  const brandData = {
-    name: "برند مدآواران",
-    slogan: '"مد امروز، سبک فردا"',
-    rating: 4.8,
-    followers: 23456,
-    sales: 45678,
-    isOfficial: true,
-    coverImage: "https://via.placeholder.com/1200x300?text=Cover+Image",
-    avatar: "https://via.placeholder.com/150?text=Brand",
-    location: "تهران، ایران",
-    phone: "۰۲۱-۱۲۳۴۵۶۷۸",
-    email: "info@modavaran.com",
-    since: "عضو از فروردین ۱۳۹۵",
-    description: "برند مدآواران با هدف ارائه پوشاک باکیفیت و مدرن تاسیس شده است. ما با تمرکز بر کیفیت، طراحی منحصر به فرد و قیمت‌گذاری منصفانه، تلاش می‌کنیم بهترین تجربه خرید را برای مشتریان فراهم کنیم. از لباس‌های روزمره تا ست‌های خاص، همه چیز در جند کلیک فاصله تا تو. ما با ضمانت بازگشت و ارسال سریع، کنارتاییم.",
-    promotion: {
-      discount: "۵۰٪",
-      title: "تخفیف تا ۵۰٪",
-      subtitle: "روی کالکشن بهار و تابستان",
+const BrandProfile = () => {
+  const { brandId, brandName } = useParams<{ brandId: string; brandName: string }>();
+  const [brandData, setBrandData] = useState<any>(null);
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBrandData = async () => {
+      try {
+        const brand = await getBrandProfile(brandId, brandName);
+        setBrandData(brand);
+      } catch (error) {
+        console.error("Error fetching brand data:", error);
+      }
+    };
+
+    const fetchProducts = async () => {
+      try {
+        const prods = await getBrandProducts(brandId, brandName);
+        setProducts(prods);
+      } catch (error) {
+        console.error("Error fetching brand products:", error);
+      }
+    };
+
+    if (brandId) {
+      Promise.all([fetchBrandData(), fetchProducts()]).finally(() => setLoading(false));
     }
-  };
-  const mockProduct = {
-    id: 1,
-    name: "تیشرت CATWAREHOUSE",
-    model: "Bussiness Not Boomin",
-    price: 699999,
-    discountedPrice: 531999,
-    discount: 24,
-    hasDiscount: true,
-    image: Tshirt, // اینجا تصویر واقعی رو قرار بده
-    sizes: [
-      { label: "XS" },
-      { label: "S" },
-      { label: "M" },
-      { label: "L" },
-      { label: "XL" },
-      { label: "2XL" },
-      { label: "3XL" }
-    ],
-    colors: ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4"], // رنگ‌های موجود
-    stock: 8, // موجودی
-    category: "پوشاک"
-  };
-  const products = Array.from({ length: 3 }, (_, i) => ({
-    ...mockProduct,
-    id: i + 1,
-    name: `${mockProduct.name} ${i + 1}`,
-    price: mockProduct.price - (i * 1000),
-    discountedPrice: mockProduct.discountedPrice - (i * 1000),
-  }));
+  }, [brandId, brandName]);
+
+  if (loading) return <div>...در حال بارگذاری</div>;
+
+  if (!brandData) return <div>.داده‌ای یافت نشد</div>;
+
 
   return (
     <div dir="rtl" className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -178,7 +166,6 @@ const BrandDashboard = () => {
         </div>
       </div>
 
-      {/* بخش تبلیغاتی */}
       {/* بخش تبلیغاتی - قرمز */}
       <div className="mt-[100px] mx-[150px] p-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl text-white">
         <div className='flex'>
@@ -221,4 +208,4 @@ const BrandDashboard = () => {
   );
 };
 
-export default BrandDashboard;
+export default BrandProfile;

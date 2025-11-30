@@ -1,64 +1,14 @@
-// BrandProductsSection.jsx
+// BrandProductsSection.tsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { getBrandProducts } from '@/services/brandProfile';
 import ProductCard from '@/components/Product/ProductCard';
 import SortOptions from '@/components/ProductListing/productListingComponents/SortOptions';
 import type { SortOption } from '@/components/ProductListing/productListingComponents/SortOptions';
-import filterIcon from '@/assets/brand-profile/Filter_alt.png'; 
-import Tshirt from '@/assets/image1.png'; // اگر این مسیر درست نیست، خودت جایگزین کن
+import filterIcon from '@/assets/brand-profile/Filter_alt.png';
 
-// داده ماک شده برای یک محصول
-const mockProduct = {
-  id: 1,
-  name: "تیشرت CATWAREHOUSE",
-  model: "Bussiness Not Boomin",
-  price: 699999,
-  discountedPrice: 531999,
-  discount: 24,
-  hasDiscount: true,
-  image: Tshirt, // اینجا تصویر واقعی رو قرار بده
-  sizes: [
-    { label: "XS" },
-    { label: "S" },
-    { label: "M" },
-    { label: "L" },
-    { label: "XL" },
-    { label: "2XL" },
-    { label: "3XL" }
-  ],
-  colors: ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4"], // رنگ‌های موجود
-  stock: 8, // موجودی
-  category: "mens-clothes" // این ویژگی جدید برای فیلتر کردن
-};
-
-// تولید ۱۰ محصول با دسته‌های مختلف
-const products = Array.from({ length: 10 }, (_, i) => {
-  const categories = ["all", "mens-clothes", "womens-clothes", "kids-clothes", "accessory"];
-  const randomCategory = categories[i % categories.length];
-
-  return {
-    ...mockProduct,
-    id: i + 1,
-    name: `${mockProduct.name} ${i + 1}`,
-    price: mockProduct.price - (i * 1000),
-    discountedPrice: mockProduct.discountedPrice - (i * 1000),
-    category: randomCategory
-  };
-});
-
-// کامپوننت FilterOptions
-interface FilterOption {
-  value: string;
-  label: string;
-}
-
-interface FilterOptionsProps {
-  options: FilterOption[];
-  currentFilter: string;
-  onFilterChange: (filter: string) => void;
-}
-
-const FilterOptions: React.FC<FilterOptionsProps> = ({ options, currentFilter, onFilterChange }) => {
+const FilterOptions: React.FC<{ options: any[]; currentFilter: string; onFilterChange: (filter: string) => void }> = ({ options, currentFilter, onFilterChange }) => {
   return (
     <div className="px-10 flex flex-wrap gap-2 mb-4">
       {options.map((option) => (
@@ -79,10 +29,29 @@ const FilterOptions: React.FC<FilterOptionsProps> = ({ options, currentFilter, o
 };
 
 const BrandProductsSection = () => {
+  const { brandId } = useParams();
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [currentSort, setCurrentSort] = useState<SortOption | null>(null);
 
-  // لیست دسته‌ها
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await getBrandProducts(brandId, { category: selectedCategory, sort: currentSort });
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [brandId, selectedCategory, currentSort]);
+
+  if (loading) return <div>در حال بارگذاری...</div>;
+
   const categories = [
     { value: "all", label: "همه محصولات" },
     { value: "mens-clothes", label: "لباس مردانه" },
@@ -90,30 +59,6 @@ const BrandProductsSection = () => {
     { value: "kids-clothes", label: "لباس بچه‌گانه" },
     { value: "accessory", label: "اکسسوری" }
   ];
-
-  // فیلتر محصولات بر اساس دسته
-  const filteredProducts = products.filter(product => {
-    if (selectedCategory === 'all') return true;
-    return product.category === selectedCategory;
-  });
-
-  // مرتب‌سازی محصولات
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    switch (currentSort) {
-      case 'newest':
-        return b.id - a.id; // جدیدترین اول
-      case 'cheapest':
-        return a.discountedPrice - b.discountedPrice; // ارزان‌ترین اول
-      case 'expensive':
-        return b.discountedPrice - a.discountedPrice; // گران‌ترین اول
-      case 'most-salled':
-        // فرض می‌کنیم یک فیلد فروش داریم
-        return (b.sales || 0) - (a.sales || 0); // پرفروش‌ترین اول
-      case 'most-revelent':
-      default:
-        return 0; // بدون تغییر
-    }
-  });
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -141,12 +86,8 @@ const BrandProductsSection = () => {
         onFilterChange={handleCategoryChange}
       />
 
-      {/* <div className="px-10">
-        <SortOptions currentSort={currentSort} onSortChange={handleSortChange} />
-      </div> */}
-
       <div className="px-10 grid grid-cols-2 md:grid-cols-5 gap-3">
-        {sortedProducts.map((product) => (
+        {products.map((product) => (
           <div key={product.id} className="flex-shrink-0 cursor-pointer">
             <ProductCard product={product} />
           </div>

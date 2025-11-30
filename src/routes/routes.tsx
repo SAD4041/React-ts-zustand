@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Landing from "@/pages/Landing";
 import Temp from "@/pages/Temp";
-import BrandDashboard from "@/pages/BrandProfile";
+import BrandProfile from "@/pages/BrandProfile";
 
 export const router = createBrowserRouter([
 	{
@@ -21,8 +21,8 @@ export const router = createBrowserRouter([
 				element: <Temp />,
 			},
 			{
-				path: "/brand-dashboard",
-				element: <BrandDashboard />,
+				path: "/brandProfile/:brandId/:brandName",
+				element: <BrandProfile />,
 			},
 			// {
 		],
