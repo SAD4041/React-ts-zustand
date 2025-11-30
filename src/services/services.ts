@@ -13,7 +13,7 @@ import type {
 	PutParams,
 } from "../types/apiTypes";
 
-export const baseURL = "http://84.32.41.215:8080"; // backend URL
+export const baseURL = "https://api.elmocpc.ir"; // backend URL
 
 const apiClient: AxiosInstance = axios.create({
 	baseURL,
@@ -74,16 +74,31 @@ export const postData = async ({ endPoint, data, headers }: PostParams) => {
 };
 
 // ✅ POST image/form-data
-export const postImageData = async ({ endPoint, data }: PostParams) => {
-	try {
-		const response: AxiosResponse = await apiClient.post(endPoint, data, {
-			headers: { "Content-Type": "multipart/form-data" },
-		});
-		return response.data;
-	} catch (error) {
-		console.error("error in postImageData", error);
-		throw error;
-	}
+// در فایل services.ts
+export const postImageData = async ({
+  endPoint,
+  data,
+}: {
+  endPoint: string;
+  data: FormData;
+}) => {
+  const accessToken = localStorage.getItem("access_token");
+  
+  const response = await fetch(`${baseURL}${endPoint}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      // توجه: برای FormData نباید Content-Type ست شود
+    },
+    body: data,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "خطا در آپلود فایل");
+  }
+
+  return response.json();
 };
 
 // ✅ PATCH

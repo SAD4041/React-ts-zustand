@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import type { InputHTMLAttributes, ReactNode } from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Field, type FieldProps } from "formik";
 
 type CustomInputProps = InputHTMLAttributes<HTMLInputElement> & {

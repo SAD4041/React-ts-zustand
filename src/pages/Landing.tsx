@@ -5,40 +5,67 @@ import {
   Trophy,
   Users,
   Code,
-  ChevronDown,
   Clock,
-  MapPin,
   Award,
   Zap,
-  Target,
-  Sparkles,
   Menu,
   X,
   Home,
   Info,
   Mail,
-  BookOpen,
-  Laptop,
-  LogOut,
+  Flag,
   User,
+  LogOut,
+  Sparkles,
+  Shield,
+  Medal,
+  Laptop,
+  AlertTriangle,
+  Smartphone,
+  ClipboardCheck,
+  Folder,
 } from "lucide-react";
 import cesa from "../assets/CESA.svg";
-import uni from "../assets/uni.png";
 import Footer from "@/components/Custom/Footer.tsx";
-
 import useUserStore from "@/store/userStore/userStore";
 
 function ICPCLanding() {
   const [scrollY, setScrollY] = useState(0);
   const [countdown, setCountdown] = useState({
-    days: 45,
-    hours: 12,
-    minutes: 30,
-    seconds: 15,
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
+
+  useEffect(() => {
+    const targetDate = new Date("2025-12-12T00:00:00");
+
+    const timer = setInterval(() => {
+      const now = new Date();
+      const diff = targetDate.getTime() - now.getTime();
+
+      if (diff <= 0) {
+        clearInterval(timer);
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      setCountdown({ days, hours, minutes, seconds });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [particles, setParticles] = useState([]);
-  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [particles, setParticles] = useState<any[]>([]);
+  // const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  // const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   const { authUser, clearAuth } = useUserStore();
   const isLoggedIn = !!authUser;
@@ -68,34 +95,8 @@ function ICPCLanding() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0)
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        if (prev.hours > 0)
-          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        if (prev.days > 0)
-          return {
-            ...prev,
-            days: prev.days - 1,
-            hours: 23,
-            minutes: 59,
-            seconds: 59,
-          };
-        return prev;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
   const handleRegisterClick = () => {
     window.location.href = "/signup";
-  };
-
-  const handleCampClick = () => {
-    window.location.href = "/camp";
   };
 
   const handleLoginClick = () => {
@@ -107,13 +108,17 @@ function ICPCLanding() {
   };
 
   const handleLogout = () => {
-    // 🆕 پاک کردن استور و توکن‌ها
     clearAuth();
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
-    localStorage.removeItem("userData"); // اگر قبلاً استفاده می‌کردی
-    setUserDropdownOpen(false);
+    localStorage.removeItem("userData");
+    // setUserDropdownOpen(false);
   };
+
+  // const handleSignUpClick = () => {
+  //   window.location.href =
+  //     "https://evand.com/events/%DA%A9%D9%85%D9%BE-%D8%A2%D9%85%D8%A7%D8%AF%DA%AF%DB%8C-elmocpc-42621082";
+  // };
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -135,15 +140,20 @@ function ICPCLanding() {
       action: () => scrollToSection("about"),
     },
     {
-      label: "بوت کمپ",
-      icon: BookOpen,
-      action: () => scrollToSection("bootcamp"),
-    },
-    {
       label: "جدول زمانی",
       icon: Calendar,
       action: () => scrollToSection("timeline"),
     },
+    {
+      label: "قوانین و جوایز",
+      icon: Trophy,
+      action: () => scrollToSection("rules"),
+    },
+    // {
+    //   label: "شرکت‌کنندگان قبلی",
+    //   icon: Star,
+    //   action: () => scrollToSection("testimonials"),
+    // },
     {
       label: "تماس با ما",
       icon: Mail,
@@ -154,99 +164,253 @@ function ICPCLanding() {
   const stats = [
     {
       icon: Award,
-      number: "10+",
+      number: "15+",
       label: "دانشگاه شرکت‌کننده",
       color: "#D7263D",
     },
     {
       icon: Users,
-      number: "1000+",
+      number: "1200+",
       label: "شرکت‌کننده",
       color: "#46BEF6",
     },
     {
       icon: Trophy,
-      number: "4",
-      label: "سال برگزاری",
+      number: "5",
+      label: "سال تجربه موفق",
       color: "#FFD500",
+    },
+    {
+      icon: Flag,
+      number: "200+",
+      label: "تیم ثبت‌نام‌شده",
+      color: "#3DDC84",
     },
   ];
 
   const features = [
     {
       icon: Code,
-      title: "چهار دوره تجربه موفق",
+      title: "مسابقه حضوری ویژه",
       description:
-        "ElmocPC با پشتوانه چهار دوره برگزاری آنلاین و استقبال گسترده شرکت‌کنندگان ادامه می‌یابد.",
+        "اولین دوره حضوری ELMOCPC با امکانات و فضای رقابتی حرفه‌ای در دانشگاه علم و صنعت",
       gradient: "from-blue-500 to-cyan-500",
     },
     {
       icon: Users,
-      title: "نسخه حضوری",
+      title: "رقابت تیمی",
       description:
-        "امسال رویداد با تمرکز بر تعامل، همکاری و تجربه واقعی رقابت به‌صورت حضوری برگزار می‌شود.",
+        "شرکت در قالب تیم‌های ۳ نفره و تجربه کار گروهی واقعی در محیط دانشگاه",
       gradient: "from-purple-500 to-pink-500",
     },
     {
       icon: Zap,
       title: "شبیه‌سازی آزمون کشوری",
       description:
-        "رقابتی طراحی‌شده بر اساس استانداردها و شرایط مسابقات کشوری برای آمادگی کامل تیم‌ها.",
+        "آماده‌سازی برای مسابقات ملی با استانداردهای بین‌المللی ICPC",
       gradient: "from-green-500 to-emerald-500",
     },
     {
       icon: Trophy,
-      title: "جوایز و افتخارات",
-      description: "مدال‌ها، گواهینامه‌ها و جوایز ارزشمند برای تیم‌های برتر.",
+      title: "جوایز ارزشمند",
+      description: "30 میلیون تومان جایزه نقدی و هدایای ویژه برای تیم‌های برتر",
       gradient: "from-amber-500 to-orange-500",
-    },
-  ];
-
-  const bootcampModules = [
-    {
-      day: "روز اول",
-      title: "مبانی الگوریتم‌ها",
-      topics: ["مرتب‌سازی", "جستجو", "تحلیل پیچیدگی"],
-      icon: Code,
-      gradient: "from-blue-500 to-cyan-500",
-    },
-    {
-      day: "روز دوم",
-      title: "ساختمان‌های داده",
-      topics: ["آرایه‌ها", "لیست‌های پیوندی", "صف و پشته"],
-      icon: Laptop,
-      gradient: "from-purple-500 to-pink-500",
-    },
-    {
-      day: "روز سوم",
-      title: "الگوریتم‌های پیشرفته",
-      topics: ["پویا سازی", "گراف", "درخت‌ها"],
-      icon: BookOpen,
-      gradient: "from-amber-500 to-orange-500",
-    },
-    {
-      day: "روز چهارم",
-      title: "مسابقه عملی",
-      topics: ["حل مسائل", "تیم‌ورک", "تقابل نهایی"],
-      icon: Trophy,
-      gradient: "from-green-500 to-emerald-500",
     },
   ];
 
   const timeline = [
-    { date: "1 تا 5 آذر 1404", title: "ثبت نام بوت کمپ", status: "active" },
-    { date: "6 تا 14 آذر 1404", title: "برگزاری بوت کمپ", status: "upcoming" },
-    { date: "4 آذر 1404", title: "شروع ثبت‌نام", status: "upcoming" },
-    { date: "15 آذر 1404", title: "پایان ثبت‌نام", status: "upcoming" },
-    { date: "21 آذر 1404", title: "روز مسابقه", status: "upcoming" },
+    {
+      date: "1 تا 5 آذر 1404",
+      title: "ثبت نام بوت کمپ",
+      status: "completed", // ✅ تغییر به completed
+    },
+    {
+      date: "۷ آذر ۱۴۰۴",
+      title: "شروع ثبت‌نام مسابقه",
+      status: "active", // 🟡 فعال
+    },
+    {
+      date: "۱۵ آذر ۱۴۰۴",
+      title: "پایان مهلت ثبت‌نام",
+      status: "upcoming", // 🔵 آینده
+    },
+    {
+      date: "۱۸ آذر ۱۴۰۴",
+      title: "اعلام لیست نهایی تیم‌ها",
+      status: "upcoming",
+    },
+    {
+      date: "۲۱ آذر ۱۴۰۴",
+      title: "روز برگزاری مسابقه",
+      status: "upcoming",
+    },
+    {
+      date: "۲۱ آذر ۱۴۰۴",
+      title: "مراسم اختتامیه و اهدای جوایز",
+      status: "upcoming",
+    },
   ];
+  // اضافه کردن این تابع قبل از return
+  const getLineStatus = (currentItemStatus: string, nextItemStatus: string) => {
+    if (currentItemStatus === "completed" && nextItemStatus === "completed") {
+      return "completed";
+    }
+    if (currentItemStatus === "completed" && nextItemStatus === "active") {
+      return "completed-to-active";
+    }
+    if (currentItemStatus === "active" && nextItemStatus === "upcoming") {
+      return "active-to-upcoming";
+    }
+    if (currentItemStatus === "completed" && nextItemStatus === "upcoming") {
+      return "completed-to-upcoming";
+    }
+    return "upcoming";
+  };
+
+  const prizes = [
+    {
+      rank: "🥇 مقام اول",
+      medal: Medal,
+      reward: " ۱۵,۰۰۰,۰۰۰ تومان",
+      color: "from-yellow-500 to-amber-500",
+    },
+    {
+      rank: "🥈 مقام دوم",
+      medal: Medal,
+      reward: " ۱۰,۰۰۰,۰۰۰ تومان",
+      color: "from-gray-400 to-gray-300",
+    },
+    {
+      rank: "🥉 مقام سوم",
+      medal: Medal,
+      reward: "  ۵,۰۰۰,۰۰۰ تومان",
+      color: "from-orange-700 to-orange-600",
+    },
+    {
+      rank: "🏆 تیم‌های برتر",
+      medal: Trophy,
+      reward: "گواهینامه معتبر + هدایای ویژه",
+      color: "from-blue-500 to-cyan-500",
+    },
+  ];
+  const rules = [
+    {
+      title: "شرایط شرکت",
+      description:
+        "هر تیم می‌تواند از ۱ تا ۳ نفر تشکیل شود و حضور دانش‌آموزان و دانشجویان در تمامی مقاطع مجاز است",
+      icon: Users,
+      color: "#46BEF6",
+    },
+    {
+      title: "مدت زمان مسابقه",
+      description:
+        "مسابقه برای مدت ۵ ساعت متوالی برگزار می‌شود. زمان‌بندی دقیق متعاقبا اعلام می‌شود",
+      icon: Clock,
+      color: "#FFD500",
+    },
+    {
+      title: "زبان‌ها و محیط توسعه",
+      description:
+        "زبان‌های C++، Python، Java و JavaScript مورد پذیرش هستند و انتخاب محیط توسعه آزاد است. نسخه‌های استاندارد Python، GCC، Java و Node.js الزامی است",
+      icon: Code,
+      color: "#3DDC84",
+    },
+    {
+      title: "قوانین فنی و منابع",
+      description:
+        "استفاده از اینترنت به‌صورت کامل ممنوع است. تنها منابع مجاز، مستندات آفلاین و حداکثر ۲۰ صفحه منابع چاپ‌شده یا دست‌نویس برای کمک قابل استفاده است",
+      icon: Shield,
+      color: "#D7263D",
+    },
+    {
+      title: "تجهیزات مجاز و سخت‌افزار",
+      description:
+        "هر تیم تنها مجاز به همراه داشتن یک لپ‌تاپ است. استفاده از چند مانیتور، تبلت یا سخت‌افزار اضافی ممنوع است. نصب نرم‌افزار جدید فقط با اجازه مسئول فنی مجاز است",
+      icon: Laptop,
+      color: "#8A2BE2",
+    },
+    {
+      title: "ممنوعیت وسایل الکترونیکی",
+      description:
+        "در هنگام ورود، تلفن‌های همراه از شرکت‌کنندگان دریافت می‌شود. استفاده از هرگونه وسیله ارتباطی یا ابزارهای تولید خودکار کد مانند AI، Copilot و ... ممنوع است",
+      icon: Smartphone,
+      color: "#FF7F50",
+    },
+    {
+      title: "تخلفات و رفتار حرفه‌ای",
+      description:
+        "هرگونه تبادل کد یا اطلاعات میان تیم‌ها و رفتار نامناسب باعث حذف تیم خواهد شد. در صورت انجام هرگونه عمل مغایر قوانین، تیم متخلف بدون هیچ استثنایی از ادامه مسابقه حذف خواهد شد",
+      icon: AlertTriangle,
+      color: "#FF4C4C",
+    },
+    {
+      title: "سیستم داوری و امتیازدهی",
+      description:
+        "تمام ارسال‌ها توسط داور خودکار بررسی می‌شود و نتیجه داوری نهایی و غیرقابل‌تغییر است. امتیاز هر سؤال متفاوت است و زمان و تعداد ارسال‌ها روی امتیاز نهایی تأثیر دارد. رده‌بندی لحظه‌ای نمایش داده می‌شود",
+      icon: ClipboardCheck,
+      color: "#00BFFF",
+    },
+    {
+      title: "خروج موقت",
+      description:
+        "خروج از سالن مسابقه فقط با اجازه داور ممکن است و زمان خروج به تیم اضافه نمی‌شود",
+      icon: LogOut,
+      color: "#FF6347",
+    },
+    {
+      title: "تحویل نهایی و پلتفرم",
+      description:
+        "تیم باید تمام کدها را در پوشه مشخص‌شده ذخیره کرده و طبق دستورالعمل، در پلتفرم اعلامی آپلود کند",
+      icon: Folder,
+      color: "#32CD32",
+    },
+  ];
+
+  // const testimonials = [
+  //   {
+  //     name: "علی محمدی",
+  //     university: "دانشگاه علم و صنعت",
+  //     year: "شرکت‌کننده دوره چهارم",
+  //     comment:
+  //       "تجربه فوق‌العاده‌ای بود! مسابقات ELMOCPC بهترین فرصت برای آمادگی در مسابقات کشوری است.",
+  //     avatar: "👨‍💻",
+  //   },
+  //   {
+  //     name: "سارا احمدی",
+  //     university: "دانشگاه تهران",
+  //     year: "قهرمان دوره سوم",
+  //     comment:
+  //       "با شرکت در ELMOCPC توانستم برای مسابقات ملی کاملاً آماده شوم. فضای رقابتی بسیار حرفه‌ای بود.",
+  //     avatar: "👩‍💻",
+  //   },
+  //   {
+  //     name: "محمد جعفری",
+  //     university: "شریف",
+  //     year: "نایب قهرمان دوره چهارم",
+  //     comment:
+  //       "کیفیت سوالات و سطح مسابقه واقعاً قابل تحسین است. به همه دانشجویان کامپیوتر توصیه می‌کنم.",
+  //     avatar: "🧑‍💻",
+  //   },
+  // ];
+
+  // const nextTestimonial = () => {
+  //   setActiveTestimonial((prev) =>
+  //     prev === testimonials.length - 1 ? 0 : prev + 1
+  //   );
+  // };
+
+  // const prevTestimonial = () => {
+  //   setActiveTestimonial((prev) =>
+  //     prev === 0 ? testimonials.length - 1 : prev - 1
+  //   );
+  // };
 
   return (
     <div
       className="min-h-screen bg-gradient-to-br from-[#00274D] via-[#003D6B] to-[#00274D] text-white overflow-x-hidden"
       dir="rtl"
     >
-      {/* Navbar */}
+      {/* Navbar - بدون تغییر */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300
     ${
@@ -287,7 +451,6 @@ function ICPCLanding() {
               ))}
             </div>
 
-            {/* CTA Buttons or User Profile */}
             {/* CTA Buttons or User Profile */}
             <div className="hidden md:flex items-center gap-3">
               {isLoggedIn ? (
@@ -397,7 +560,7 @@ function ICPCLanding() {
         </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section - بهبود یافته */}
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         {/* Animated Background */}
         <div className="absolute inset-0">
@@ -433,7 +596,7 @@ function ICPCLanding() {
           {/* Logo Section */}
           <div className="mb-8 animate-fade-in">
             <div className="inline-block p-4">
-              <img src={cesa} alt="" />
+              <img src={cesa} alt="ELMOCPC Logo" className="h-16 md:h-20" />
             </div>
           </div>
 
@@ -454,14 +617,21 @@ function ICPCLanding() {
             پنجمین دوره مسابقات برنامه‌نویسی دانشجویی دانشگاه علم و صنعت
           </p>
 
+          <p
+            className="text-lg md:text-xl mb-8 text-[#FFD500] animate-slide-up font-semibold"
+            style={{ animationDelay: "0.3s" }}
+          >
+            🏆 اولین دوره حضوری - فرصت استثنایی برای رقابت و یادگیری
+          </p>
+
           {/* Countdown Timer */}
           <div
             className="mb-12 animate-slide-up"
-            style={{ animationDelay: "0.6s" }}
+            style={{ animationDelay: "0.4s" }}
           >
             <p className="text-sm text-[#FFD500] mb-4 flex items-center justify-center gap-2">
               <Clock className="w-4 h-4" />
-              زمان باقی‌مانده تا پایان ثبت‌نام
+              زمان باقی‌مانده تا روز مسابقه
             </p>
             <div className="flex justify-center gap-4 flex-wrap" dir="ltr">
               {[
@@ -472,10 +642,10 @@ function ICPCLanding() {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 min-w-[80px]"
+                  className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 min-w-[80px] transform hover:scale-110 transition-transform duration-300"
                 >
                   <div className="text-3xl font-bold text-[#FFD500]">
-                    {item.value}
+                    {String(item.value).padStart(2, "0")}
                   </div>
                   <div className="text-xs text-gray-300 mt-1">{item.label}</div>
                 </div>
@@ -486,7 +656,7 @@ function ICPCLanding() {
           {/* CTA Buttons */}
           <div
             className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up"
-            style={{ animationDelay: "0.8s" }}
+            style={{ animationDelay: "0.6s" }}
           >
             {isLoggedIn ? (
               <>
@@ -494,14 +664,8 @@ function ICPCLanding() {
                   onClick={handleDashboardClick}
                   className="group relative bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-bold py-6 px-12 rounded-xl text-lg transition-all duration-300 shadow-2xl hover:shadow-[#FFD500]/50 hover:scale-105"
                 >
-                  <Home className="w-5 h-5 inline-block ml-2 group-hover:rotate-12 transition-transform" />
-                  رفتن به داشبورد
-                </Button>
-                <Button
-                  onClick={handleCampClick}
-                  className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-semibold py-6 px-12 rounded-xl text-lg transition-all duration-300 hover:scale-105"
-                >
-                  اطلاعات بوت کمپ
+                  <Trophy className="w-5 h-5 inline-block ml-2 group-hover:rotate-12 transition-transform" />
+                  داشبورد و ادامه ی ثبت نام
                 </Button>
               </>
             ) : (
@@ -510,22 +674,38 @@ function ICPCLanding() {
                   onClick={handleRegisterClick}
                   className="group relative bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-bold py-6 px-12 rounded-xl text-lg transition-all duration-300 shadow-2xl hover:shadow-[#FFD500]/50 hover:scale-105"
                 >
-                  <Sparkles className="w-5 h-5 inline-block ml-2 group-hover:rotate-12 transition-transform" />
+                  <Trophy className="w-5 h-5 inline-block ml-2 group-hover:rotate-12 transition-transform" />
                   ثبت‌نام در مسابقه
                 </Button>
                 <Button
-                  onClick={handleCampClick}
+                  onClick={handleLoginClick}
                   className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-semibold py-6 px-12 rounded-xl text-lg transition-all duration-300 hover:scale-105"
                 >
-                  اطلاعات بوت کمپ
+                  ورود به حساب کاربری
                 </Button>
               </>
             )}
           </div>
 
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            {/* <ChevronDown className="w-8 h-8 text-[#FFD500]" /> */}
+          {/* Additional Info */}
+          <div
+            className="mt-12 animate-slide-up"
+            style={{ animationDelay: "0.8s" }}
+          >
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-300">
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-[#46BEF6]" />
+                <span>تیم‌های حداکثر ۳ نفره</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-[#FFD500]" />
+                <span>۵ ساعت رقابت فشرده</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Award className="w-4 h-4 text-[#D7263D]" />
+                <span>جوایز نقدی و هدیه های دیگر </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -533,7 +713,7 @@ function ICPCLanding() {
       {/* Stats Section */}
       <div className="py-20 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div
                 key={index}
@@ -559,14 +739,12 @@ function ICPCLanding() {
       {/* Features Section */}
       <div id="about" className="py-20 container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-white bg-clip-text text-transparent">
-            درباره ELMOCPC
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-[#46BEF6] via-[#FFD500] to-[#D7263D] bg-clip-text text-transparent">
+            چرا در ELMOCPC شرکت کنیم؟
           </h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            ElmocPC یک رقابت علمی–فنی پویا و دانشجویی است که طی چهار دوره گذشته
-            به‌صورت آنلاین برگزار شده و توانسته تجربه‌ای موفق، منظم و پرمخاطب
-            ایجاد کند. امسال، پس از چندین دوره تجربه ارزشمند در برگزاری آنلاین،
-            این رویداد برای نخستین‌بار به شکل حضوری برگزار خواهد شد.
+            پنجمین دوره مسابقات برنامه‌نویسی دانشجویی دانشگاه علم و صنعت، فرصتی
+            استثنایی برای سنجش مهارت‌ها، یادگیری تیمی و آمادگی برای مسابقات ملی
           </p>
         </div>
 
@@ -579,147 +757,93 @@ function ICPCLanding() {
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`}
               />
-              <feature.icon
-                className={`w-12 h-12 mb-4 bg-gradient-to-br ${feature.gradient} bg-clip-text text-transparent`}
-              />
-              <h3 className="text-xl font-bold mb-2 text-white">
+              <feature.icon className="w-12 h-12 mb-4 text-[#FFD500]" />
+              <h3 className="text-xl font-bold mb-3 text-white">
                 {feature.title}
               </h3>
-              <p className="text-gray-300">{feature.description}</p>
+              <p className="text-gray-300 leading-relaxed">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Bootcamp Section */}
-      <div id="bootcamp" className="py-20 bg-black/20 backdrop-blur-sm">
+      {/* Prizes Section */}
+      <div className="py-20 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <div className="inline-block mb-4 px-4 py-2 bg-[#FFD500]/20 rounded-full border border-[#FFD500]/50">
-              <span className="text-[#FFD500] font-semibold">🚀 جدید</span>
+              <span className="text-[#FFD500] font-semibold">🎁 جوایز</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-              بوت کمپ فشرده 4 روزه
+              جوایز ارزشمند مسابقه
             </h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              آماده‌سازی شدید برای مسابقه با برنامه آموزشی فشرده و عملی
+              علاوه بر افتخار و اعتبار، جوایز نقدی و جوایز ویژه در انتظار
+              تیم‌های برتر است
             </p>
           </div>
-{/* 
-          <div
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
-            dir="rtl"
-          > */}
-            {/* {bootcampModules.map((module, index) => (
-              <a
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6" dir="rtl">
+            {prizes.map((prize, index) => (
+              <div
                 key={index}
-                href="/camp"
-                className="group relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer"
+                className="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:scale-105 transition-all duration-300"
               >
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${module.gradient} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`}
+                  className={`absolute inset-0 bg-gradient-to-br ${prize.color} opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-300`}
                 />
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-4">
-                    <module.icon
-                      className={`w-10 h-10 bg-gradient-to-br ${module.gradient} bg-clip-text text-transparent`}
-                    />
-                    <span className="text-sm font-bold text-[#FFD500] bg-[#FFD500]/20 px-3 py-1 rounded-full">
-                      {module.day}
-                    </span>
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4 text-white">
-                    {module.title}
-                  </h3>
-                  <ul className="space-y-2">
-                    {module.topics.map((topic, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-center gap-2 text-gray-300"
-                      >
-                        <span className="w-1.5 h-1.5 bg-[#FFD500] rounded-full" />
-                        {topic}
-                      </li>
-                    ))}
-                  </ul>
-                </div> */}
-              {/* </a>
-            ))}
-          </div> */}
-
-          <div className="bg-gradient-to-r from-[#46BEF6]/20 to-[#D7263D]/20 backdrop-blur-md border border-white/10 rounded-2xl p-8">
-            <div className="grid md:grid-cols-3 gap-8 mb-8">
-              <div className="text-center">
-                <Clock className="w-12 h-12 text-[#46BEF6] mx-auto mb-4" />
-                <h4 className="text-lg font-bold text-white mb-2">مدت زمان</h4>
-                <p className="text-gray-300">4 روز 12 ساعت آموزش</p>
-              </div>
-              <div className="text-center">
-                <Users className="w-12 h-12 text-[#FFD500] mx-auto mb-4" />
-                <h4 className="text-lg font-bold text-white mb-2">
-                  آموزش عملی
-                </h4>
-                <p className="text-gray-300">مدرسین باتجربه و مسائل واقعی</p>
-              </div>
-              <div className="text-center">
-                <Award className="w-12 h-12 text-[#D7263D] mx-auto mb-4" />
-                <h4 className="text-lg font-bold text-white mb-2">
-                  گواهی‌نامه
-                </h4>
-                <p className="text-gray-300">
-                  صدور گواهی‌نامه برای شرکت‌کنندگان
+                <prize.medal className="w-12 h-12 mb-4 text-[#FFD500] mx-auto" />
+                <h3 className="text-lg font-bold mb-2 text-white text-center">
+                  {prize.rank}
+                </h3>
+                <p className="text-gray-300 text-sm text-center">
+                  {prize.reward}
                 </p>
               </div>
-            </div>
-            <div className="text-center">
-              <Button
-                onClick={() => (window.location.href = "/camp")}
-                className="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 hover:scale-105 border border-white/20"
-              >
-                مشاهده جزئیات کامل
-              </Button>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Timeline Section */}
-      <div id="timeline" className="py-20 container mx-auto px-4" dir="rtl">
+      {/* Rules Section */}
+      <div id="rules" className="py-20 container mx-auto px-4">
         <div className="text-center mb-16">
-          <div className="text-4xl md:text-5xl font-bold mb-4 bg-[#46BEF6] bg-clip-text text-transparent">
-            جدول زمانی مسابقه
+          <div className="inline-block mb-4 px-4 py-2 bg-[#46BEF6]/20 rounded-full border border-[#46BEF6]/50">
+            <span className="text-[#46BEF6] font-semibold">📋 قوانین</span>
           </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
+            قوانین و شرایط مسابقه
+          </h2>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            برای شرکت در مسابقه، این شرایط را به دقت مطالعه کنید
+          </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          {timeline.map((item, index) => (
+        <div className="grid md:grid-cols-2 gap-6" dir="rtl">
+          {rules.map((rule, index) => (
             <div
               key={index}
-              className="relative flex items-center mb-8 last:mb-0"
+              className="group relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 hover:scale-105"
             >
-              <div
-                className={`w-4 h-4 rounded-full ${
-                  item.status === "active"
-                    ? "bg-[#FFD500] animate-pulse"
-                    : "bg-white/30"
-                } z-10`}
-              />
-              {index !== timeline.length - 1 && (
-                <div className="absolute left-2 top-4 w-0.5 h-16 bg-white/20" />
-              )}
-              <div className="flex-1 mr-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all duration-300">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-1">
-                      {item.title}
-                    </h3>
-                    <p className="text-gray-400">{item.date}</p>
-                  </div>
-                  {item.status === "active" && (
-                    <span className="bg-[#FFD500] text-[#00274D] px-4 py-1 rounded-full text-sm font-semibold">
-                      فعال
-                    </span>
-                  )}
+              <div className="flex items-start gap-4">
+                <div
+                  className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center"
+                  style={{ backgroundColor: `${rule.color}20` }}
+                >
+                  <rule.icon
+                    className="w-6 h-6"
+                    style={{ color: rule.color }}
+                  />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold mb-2 text-white">
+                    {rule.title}
+                  </h3>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    {rule.description}
+                  </p>
                 </div>
               </div>
             </div>
@@ -727,27 +851,250 @@ function ICPCLanding() {
         </div>
       </div>
 
-      {/* CTA Section */}
-      <div className="py-20 bg-black/20 backdrop-blur-sm">
+      {/* Testimonials Section */}
+      {/* <div id="testimonials" className="py-20 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-4">
-          <div className="bg-gradient-to-r from-[#FFD500]/20 to-[#FFD500]/5 backdrop-blur-md border border-[#FFD500]/30 rounded-3xl p-12 text-center">
-            <Target className="w-16 h-16 mx-auto mb-6 text-[#FFD500]" />
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              آماده‌اید برای چالش؟
+          <div className="text-center mb-16">
+            <div className="inline-block mb-4 px-4 py-2 bg-[#3DDC84]/20 rounded-full border border-[#3DDC84]/50">
+              <span className="text-[#3DDC84] font-semibold">💬 نظرات</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
+              تجربه شرکت‌کنندگان قبلی
             </h2>
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-              به جمع شرکت‌کنندگان ElmocPC بپیوندید و مهارت‌های الگوریتمی خود را
-              در شرایط شبیه‌سازی‌شده‌ی آزمون کشوری محک بزنید.
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+              بشنوید از کسانی که در دوره‌های قبل ELMOCPC شرکت کرده‌اند
             </p>
-            {!isLoggedIn && (
-              <Button
-                onClick={handleRegisterClick}
-                className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-bold py-6 px-12 rounded-xl text-lg transition-all duration-300 shadow-2xl hover:shadow-[#FFD500]/50 hover:scale-105"
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8">
+              <div className="text-center">
+                <div className="text-4xl mb-4">
+                  {testimonials[activeTestimonial].avatar}
+                </div>
+                <p className="text-lg text-gray-300 mb-6 leading-relaxed">
+                  "{testimonials[activeTestimonial].comment}"
+                </p>
+                <div className="text-white font-semibold">
+                  {testimonials[activeTestimonial].name}
+                </div>
+                <div className="text-gray-400 text-sm">
+                  {testimonials[activeTestimonial].university} -{" "}
+                  {testimonials[activeTestimonial].year}
+                </div>
+              </div> */}
+
+      {/* Navigation */}
+      {/* <div className="flex justify-center gap-4 mt-8">
+                <button
+                  onClick={prevTestimonial}
+                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+                <div className="flex gap-2 items-center">
+                  {testimonials.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActiveTestimonial(index)}
+                      className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                        index === activeTestimonial
+                          ? "bg-[#FFD500]"
+                          : "bg-white/30"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={nextTestimonial}
+                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> */}
+
+      {/* Timeline Section */}
+      <div id="timeline" className="py-20 container mx-auto px-4" dir="rtl">
+        <div className="text-center mb-16">
+          <div className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-[#46BEF6] to-[#FFD500] bg-clip-text text-transparent">
+            برنامه زمانی مسابقه
+          </div>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            از ثبت‌نام تا برگزاری مسابقه و مراسم اختتامیه
+          </p>
+        </div>
+
+        <div className="max-w-4xl mx-auto">
+          {timeline.map((item, index) => {
+            const isLastItem = index === timeline.length - 1;
+            const lineStatus = !isLastItem
+              ? getLineStatus(item.status, timeline[index + 1].status)
+              : null;
+
+            return (
+              <div
+                key={index}
+                className="relative flex items-center mb-8 last:mb-0 group"
               >
-                <Sparkles className="w-5 h-5 inline-block ml-2" />
-                همین الان ثبت‌نام کنید
+                {/* دایره وضعیت */}
+                <div
+                  className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                    item.status === "completed"
+                      ? "bg-[#3DDC84] border-[#3DDC84]"
+                      : item.status === "active"
+                      ? "bg-[#FFD500] border-[#FFD500] animate-pulse"
+                      : "bg-transparent border-white/30 group-hover:border-[#46BEF6]"
+                  } z-10 transition-all duration-300`}
+                >
+                  {item.status === "completed" && (
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={3}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )}
+                </div>
+
+                {/* خط اتصال */}
+                {!isLastItem && (
+                  <div
+                    className={`absolute left-3 top-6 w-0.5 h-16 transition-all duration-300 ${
+                      lineStatus === "completed"
+                        ? "bg-[#3DDC84]"
+                        : lineStatus === "completed-to-active"
+                        ? "bg-gradient-to-b from-[#3DDC84] to-[#FFD500]"
+                        : lineStatus === "active-to-upcoming"
+                        ? "bg-gradient-to-b from-[#FFD500] to-[#46BEF6]"
+                        : lineStatus === "completed-to-upcoming"
+                        ? "bg-gradient-to-b from-[#3DDC84] to-[#46BEF6]"
+                        : "bg-white/20 group-hover:bg-[#46BEF6]"
+                    }`}
+                  />
+                )}
+
+                {/* کارت محتوا */}
+                <div
+                  className={`flex-1 mr-6 backdrop-blur-md border rounded-xl p-6 transition-all duration-300 group-hover:scale-105 ${
+                    item.status === "completed"
+                      ? "bg-[#3DDC84]/10 border-[#3DDC84]/30"
+                      : item.status === "active"
+                      ? "bg-[#FFD500]/10 border-[#FFD500]/30"
+                      : "bg-white/5 border-white/10 hover:bg-white/10"
+                  }`}
+                >
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3
+                        className={`text-xl font-bold mb-1 ${
+                          item.status === "completed"
+                            ? "text-[#3DDC84]"
+                            : item.status === "active"
+                            ? "text-[#FFD500]"
+                            : "text-white"
+                        }`}
+                      >
+                        {item.title}
+                      </h3>
+                      <p
+                        className={`${
+                          item.status === "completed"
+                            ? "text-[#3DDC84]/80"
+                            : item.status === "active"
+                            ? "text-[#FFD500]/80"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {item.date}
+                      </p>
+                    </div>
+
+                    {/* بجک وضعیت */}
+                    {item.status === "completed" && (
+                      <span className="bg-[#3DDC84] text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                        <svg
+                          className="w-3 h-3"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                        تکمیل شده
+                      </span>
+                    )}
+                    {item.status === "active" && (
+                      <span className="bg-[#FFD500] text-[#00274D] px-3 py-1 rounded-full text-sm font-semibold animate-pulse flex items-center gap-1">
+                        <div className="w-2 h-2 bg-[#00274D] rounded-full animate-ping" />
+                        در جریان
+                      </span>
+                    )}
+                    {item.status === "upcoming" && (
+                      <span className="bg-white/20 text-white/80 px-3 py-1 rounded-full text-sm font-semibold">
+                        پیش رو
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Final CTA Section */}
+      <div className="py-20 bg-gradient-to-r from-[#00274D] to-[#003D6B]">
+        <div className="container mx-auto px-4">
+          <div className="bg-gradient-to-r from-[#FFD500]/20 to-[#46BEF6]/20 backdrop-blur-md border border-white/20 rounded-3xl p-12 text-center">
+            <Trophy className="w-20 h-20 mx-auto mb-6 text-[#FFD500]" />
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+              فرصت را از دست ندهید!
+            </h2>
+            <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed">
+              همین حالا در پنجمین دوره مسابقات برنامه‌نویسی دانشجویی دانشگاه علم
+              و صنعت ثبت‌نام کنید و در رقابتی فراموش‌نشدنی شرکت نمایید
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              {isLoggedIn ? (
+                <Button
+                  onClick={handleDashboardClick}
+                  className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 hover:scale-105 shadow-2xl hover:shadow-[#FFD500]/50"
+                >
+                  <Trophy className="w-5 h-5 ml-2" />
+                  ثبت‌نام نهایی تیم
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleRegisterClick}
+                  className="bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 hover:scale-105 shadow-2xl hover:shadow-[#FFD500]/50"
+                >
+                  <Sparkles className="w-5 h-5 ml-2" />
+                  شروع ثبت‌نام
+                </Button>
+              )}
+              <Button
+                onClick={() => scrollToSection("rules")}
+                className="bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-xl text-lg transition-all duration-300 hover:scale-105 border border-white/20"
+              >
+                مطالعه قوانین
               </Button>
-            )}
+            </div>
           </div>
         </div>
       </div>
@@ -755,7 +1102,7 @@ function ICPCLanding() {
       {/* Footer */}
       <Footer />
 
-      <style jsx>{`
+      <style>{`
         @keyframes slide-up {
           from {
             opacity: 0;
@@ -822,6 +1169,36 @@ function ICPCLanding() {
         .animate-slide-down {
           animation: slide-down 0.3s ease-out forwards;
         }
+            @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(255, 213, 0, 0.7);
+    }
+    50% {
+      box-shadow: 0 0 0 10px rgba(255, 213, 0, 0);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s infinite;
+  }
+
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-bounce-in {
+    animation: bounce-in 0.6s ease-out;
+  }
       `}</style>
     </div>
   );

@@ -1,77 +1,92 @@
 @import "tailwindcss";
 /* src/index.css */
 /* === Peyda Font Faces === */
+/* Thin */
 @font-face {
   font-family: "Peyda";
-  src: url("/fonts/Peyda-Thin.ttf") format("truetype");
+  src: url("./assets/fonts/PEYDA-THIN.TTF") format("truetype");
   font-weight: 100;
   font-style: normal;
   font-display: swap;
 }
 
-@font-face {  
+/* ExtraLight */
+@font-face {
   font-family: "Peyda";
-  src: url("/fonts/peyda-extralight.ttf") format("truetype");
+  src: url("./assets/fonts/PEYDA-EXTRALIGHT.TTF") format("truetype");
   font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 
+/* Light */
 @font-face {
   font-family: "Peyda";
-  src: url("/fonts/Peyda-Light.ttf") format("truetype");
+  src: url("./assets/fonts/PEYDA-LIGHT.TTF") format("truetype");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 
+/* Regular */
 @font-face {
   font-family: "Peyda";
-  src: url("/fonts/Peyda-Regular.ttf") format("truetype");
+  src: url("./assets/fonts/PEYDA-REGULAR.TTF") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
+/* Medium */
 @font-face {
   font-family: "Peyda";
-  src: url("/fonts/Peyda-Medium.ttf") format("truetype");
+  src: url("./assets/fonts/PEYDA-MEDIUM.TTF") format("truetype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
+/* SemiBold */
 @font-face {
   font-family: "Peyda";
-  src: url("/fonts/Peyda-SemiBold.ttf") format("truetype");
+  src: url("./assets/fonts/PEYDA-SEMIBOLD.TTF") format("truetype");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
+/* Bold */
 @font-face {
   font-family: "Peyda";
-  src: url("/fonts/Peyda-Bold.ttf") format("truetype");
+  src: url("./assets/fonts/PEYDA-BOLD.TTF") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
+/* ExtraBold */
 @font-face {
   font-family: "Peyda";
-  src: url("/fonts/Peyda-ExtraBold.ttf") format("truetype");
+  src: url("./assets/fonts/PEYDA-EXTRA-BOLD.TTF") format("truetype");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
 }
 
+/* Black */
 @font-face {
   font-family: "Peyda";
-  src: url("/fonts/Peyda-Black.ttf") format("truetype");
+  src: url("./assets/fonts/PEYDA-BLACK.TTF") format("truetype");
   font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
+
+/* استفاده در کل صفحه */
+body {
+  font-family: "Peyda", sans-serif;
+}
+
 
 /* === Tailwind base imports === */
 @tailwind base;

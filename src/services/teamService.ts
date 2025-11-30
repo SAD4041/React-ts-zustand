@@ -7,7 +7,7 @@ import type {
   UpdateTeamPayload,
   TeamInvite,
   TeamStatus,
-  AcceptRejectInvitePayload,
+  // AcceptRejectInvitePayload,
   InviteUserPayload
 } from "@/types/teamTypes";
 
@@ -172,12 +172,19 @@ export const inviteUserService = async (
 /* -----------------------------------------
    GET INVITES
 ----------------------------------------- */
-export const getInvitesService = async (teamId: string): Promise<TeamInvite[]> => {
+// در فایل teamService.ts
+// در فایل teamService.ts
+interface InvitesResponse {
+  status: number;
+  message: string;
+  data: TeamInvite[];
+}
+
+export const getInvitesService = async (teamId: string): Promise<InvitesResponse> => {
   return getData({
     endPoint: `/v1/user/teams/${teamId}/invitations/pending`,
   });
 };
-
 /* -----------------------------------------
    CANCEL INVITE
 ----------------------------------------- */
@@ -202,26 +209,23 @@ export const removeMemberService = async (
 /* -----------------------------------------
    ACCEPT INVITE
 ----------------------------------------- */
-export const acceptInviteService = async (
-  payload: AcceptRejectInvitePayload
-): Promise<void> => {
+export const acceptInviteService = async (token: string): Promise<void> => {
   return postData({
     endPoint: `/v1/invitations/accept-team`,
-    data: payload,
+    data: { token }, // 👈 این مهمه
   });
 };
 
 /* -----------------------------------------
    REJECT INVITE
 ----------------------------------------- */
-export const rejectInviteService = async (
-  payload: AcceptRejectInvitePayload
-): Promise<void> => {
+export const rejectInviteService = async (token: string): Promise<void> => {
   return postData({
     endPoint: `/v1/invitations/reject-team`,
-    data: payload,
+    data: { token }, // 👈 حتماً آبجکت باشه
   });
 };
+
 
 /* -----------------------------------------
    LEAVE TEAM
