@@ -52,7 +52,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
       <button
         onClick={onClearFilters}
-        className="w-full mt-2 py-1 text-sm bg-primary text-primary-foreground rounded hover:bg-primary/90 transition"
+        className="w-full mt-2 py-1 text-sm bg-primary text-primary-foreground rounded hover:bg-primary-hover transition"
       >
         پاک کردن فیلترها
       </button>

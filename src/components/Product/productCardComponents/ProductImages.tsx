@@ -1,10 +1,6 @@
 import React from 'react';
 import { toPersianDigits } from "../../../utils/PersianDigits";
-
-interface ProductImageProps {
-  imageUrl: string;
-  discount: number;
-}
+import type { ProductImageProps } from "@/types/productCardTypes"
 
 const ProductImage: React.FC<ProductImageProps> = ({ imageUrl, discount }) => {
   return (
@@ -17,7 +13,7 @@ const ProductImage: React.FC<ProductImageProps> = ({ imageUrl, discount }) => {
       <img
         src={imageUrl}
         alt="Product Picture"
-        className="w-full h-auto object-cover rounded-lg"
+        className="w-product-image h-auto object-cover rounded-lg"
       />
     </div>
   );

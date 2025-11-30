@@ -20,7 +20,7 @@ const SortOptions: React.FC<SortOptionsProps> = ({ currentSort, onSortChange }) 
             onClick={() => onSortChange(sort.value as SortOption)}
             className={`px-3 py-1 rounded-md transition ${
               isActive
-                ? 'bg-primary/10 text-primary border border-primary/30'
+                ? 'bg-primary-bg-subtle text-primary border border-primary-border-subtle'
                 : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             }`}
           >

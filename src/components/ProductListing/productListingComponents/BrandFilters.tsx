@@ -20,7 +20,7 @@ const BrandFilter: React.FC<BrandFilterProps> = ({ brands, selectedBrands, onTog
               className={`w-4 h-4 border rounded flex items-center justify-center mr-2 transition ${
                 selectedBrands.includes(brand.name)
                   ? 'bg-primary border-primary'
-                  : 'border-border hover:border-primary'
+                  : 'border-border hover:border-primary-border-hover'
               }`}
             >
               {selectedBrands.includes(brand.name) && (

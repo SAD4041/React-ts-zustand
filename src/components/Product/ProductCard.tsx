@@ -3,16 +3,12 @@ import ProductDetails from './productCardComponents/ProductDetails';
 import SizeSelector from './productCardComponents/SizeSelector';
 import ColorSelector from './productCardComponents/ColorSelector';
 import { toPersianDigits } from "../../utils/PersianDigits";
-import type { Product } from '@/types/productListingTypes';
-
-interface ProductCardProps {
-  product: Product;
-}
+import type { ProductCardProps } from '@/types/productCardTypes';
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
-    <div className="w-full max-w-[220px] bg-card rounded-xl shadow-sm overflow-hidden transition hover:shadow-md border border-border p-2 flex flex-col">
-      <div className="flex-shrink-0 mb-2">
+    <div className="w-full max-w-product-card bg-card rounded-xl shadow-sm overflow-hidden transition hover:shadow-md border border-border p-product-card flex flex-col">
+      <div className="flex-shrink-0 mb-product-image-gap">
         <ProductImage
           key={product.id}
           imageUrl={product.image}
@@ -28,7 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <SizeSelector product={product} />
       </div>
 
-      <div dir="rtl" className="mt-1 flex items-center justify-between text-2xs">
+      <div dir="rtl" className="mt-product-size-gap flex items-center justify-between text-2xs">
         <ColorSelector product={product} />
         {product.stock < 10 && (
           <p className="text-primary font-medium truncate">

@@ -15,7 +15,36 @@ const config: Config = {
 				sans: ["Vazirmatn", 'sans-serif'],
 			},
 			fontSize: {
-			'2xs': '0.625rem', 
+			'2xs': '0.625rem',
+			'product-title': '0.875rem',   
+			'product-price': '0.875rem',   
+			'product-discounted': '0.875rem',
+			'product-rating': '0.875rem',
+			'product-rating-count': '0.75rem', 
+			'product-size-label': '0.625rem', 
+			},
+
+			width: {
+			'product-card': '220px',        
+			'product-image': '100%',       
+			'product-color-dot': '1.625rem',
+			'product-tuman-icon': '1.125rem',
+			},
+
+			height: {
+			'product-color-dot': '1.625rem',
+			'product-tuman-icon': '1.125rem',
+			},
+
+			padding: {
+			'product-card': '0.5rem',
+			},
+
+			spacing: {
+			'product-image-gap': '0.5rem', 
+			'product-details-gap': '0.75rem', 
+			'product-size-gap': '0.25rem', 
+			'product-color-gap': '0.125rem',
 			},
 			colors: {
 				background: "hsl(var(--background))",
@@ -31,6 +60,10 @@ const config: Config = {
 				primary: {
 					DEFAULT: "hsl(var(--primary))",
 					foreground: "hsl(var(--primary-foreground))",
+					hover: "hsl(var(--primary-hover))",
+					active: "hsl(var(--primary-active))",
+					border: "hsl(var(--primary-border))",
+					'border-hover': "hsl(var(--primary-border-hover))",
 				},
 				secondary: {
 					DEFAULT: "hsl(var(--secondary))",
@@ -39,6 +72,7 @@ const config: Config = {
 				muted: {
 					DEFAULT: "hsl(var(--muted))",
 					foreground: "hsl(var(--muted-foreground))",
+					hover: "hsl(var(--muted-hover))",
 				},
 				accent: {
 					DEFAULT: "hsl(var(--accent))",
