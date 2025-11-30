@@ -1,7 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import CustomInput from "@/components/Custom/CustomInput";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field, type FieldProps } from "formik";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import * as Yup from "yup";
 import {
   Users,
@@ -16,10 +23,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 // 🆕 ایمپورت سرویس تیم
-import {
-  createTeamService,
-  inviteUserService,
-} from "@/services/teamService";
+import { createTeamService, inviteUserService } from "@/services/teamService";
 import type { CreateTeamPayload, InviteUserPayload } from "@/types/teamTypes";
 
 // Validation schema برای اطلاعات هر عضو
@@ -54,6 +58,14 @@ const memberValidationSchema = Yup.object({
   university: Yup.string()
     .min(3, "نام دانشگاه باید حداقل ۳ حرف باشد")
     .required("نام دانشگاه الزامی است"),
+
+  nationalCode: Yup.string()
+    .matches(/^[0-9]{10}$/, "کد ملی باید ۱۰ رقم باشد")
+    .required("کد ملی الزامی است"),
+
+  tshirtSize: Yup.string()
+    .oneOf(["M", "L", "XL", "XXL"], "سایز معتبر انتخاب کنید")
+    .required("سایز تیشرت الزامی است"),
 });
 
 // Validation برای اطلاعات تیم
@@ -84,6 +96,26 @@ function TeamRegistration() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [teamId, setTeamId] = useState<number | null>(null);
+
+  // بارگذاری اطلاعات از localStorage در ابتدا
+  useEffect(() => {
+    const savedTeamId = localStorage.getItem("teamId");
+    const savedTeamInfo = localStorage.getItem("teamInfo");
+    const savedMember1 = localStorage.getItem("member1");
+    const savedMember2 = localStorage.getItem("member2");
+    const savedCurrentStep = localStorage.getItem("currentStep");
+
+    if (savedTeamId) setTeamId(Number(savedTeamId));
+    if (savedTeamInfo) setTeamInfo(JSON.parse(savedTeamInfo));
+    if (savedMember1) setMember1(JSON.parse(savedMember1));
+    if (savedMember2) setMember2(JSON.parse(savedMember2));
+    if (savedCurrentStep) setCurrentStep(Number(savedCurrentStep));
+  }, []);
+
+  // ذخیره اطلاعات در localStorage هنگام تغییر
+  useEffect(() => {
+    localStorage.setItem("currentStep", currentStep.toString());
+  }, [currentStep]);
 
   // جدا کردن state‌ها برای جلوگیری از کانفلیکت
   const [teamInfo, setTeamInfo] = useState({
@@ -118,6 +150,11 @@ function TeamRegistration() {
     { title: "تایید نهایی", icon: CheckCircle },
   ];
 
+  // ذخیره اطلاعات در localStorage
+  const saveToLocalStorage = (key: string, data: any) => {
+    localStorage.setItem(key, JSON.stringify(data));
+  };
+
   // 🆕 مرحله 1: ایجاد تیم
   const handleCreateTeam = async (values: {
     teamName: string;
@@ -148,9 +185,9 @@ function TeamRegistration() {
           teamDescription: values.teamDescription,
         };
 
-        // ذخیره در localStorage
+        // ذخیره در localStorage و state
         localStorage.setItem("teamId", teamId.toString());
-        localStorage.setItem("teamInfo", JSON.stringify(teamInfo));
+        saveToLocalStorage("teamInfo", teamInfo);
 
         setTeamId(teamId);
         setTeamInfo(teamInfo);
@@ -165,6 +202,7 @@ function TeamRegistration() {
 
       if (error?.messages?.team?.user_already_has_team) {
         toast.error("شما قبلاً یک تیم دارید");
+        navigate("/dashboard");
       } else if (error?.messages?.team?.name_already_exists) {
         toast.error("این نام تیم قبلاً انتخاب شده است");
       } else if (error?.response?.data?.messages?.team) {
@@ -182,6 +220,7 @@ function TeamRegistration() {
   // 🆕 ذخیره اطلاعات عضو اول
   const handleMember1Submit = (values: MemberData) => {
     setMember1(values);
+    saveToLocalStorage("member1", values);
     toast.success("اطلاعات عضو دوم ذخیره شد!");
     setCurrentStep(2);
   };
@@ -189,6 +228,7 @@ function TeamRegistration() {
   // 🆕 ذخیره اطلاعات عضو دوم
   const handleMember2Submit = (values: MemberData) => {
     setMember2(values);
+    saveToLocalStorage("member2", values);
     toast.success("اطلاعات عضو سوم ذخیره شد!");
     setCurrentStep(3);
   };
@@ -261,8 +301,15 @@ function TeamRegistration() {
       await inviteUserService(teamId.toString(), membersPayload);
 
       toast.success(
-        " اعضا دعوت شدند.پس از تایید اعضا نسبت به نهایی کردن تیم اقدام کنید"
+        "اعضا دعوت شدند. پس از تایید اعضا نسبت به نهایی کردن تیم اقدام کنید"
       );
+
+      // پاکسازی localStorage پس از موفقیت
+      localStorage.removeItem("teamId");
+      localStorage.removeItem("teamInfo");
+      localStorage.removeItem("member1");
+      localStorage.removeItem("member2");
+      localStorage.removeItem("currentStep");
 
       setTimeout(() => {
         navigate("/dashboard");
@@ -288,6 +335,17 @@ function TeamRegistration() {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  const handleBackDasboard = () => {
+    // پاکسازی localStorage هنگام خروج
+    localStorage.removeItem("teamId");
+    localStorage.removeItem("teamInfo");
+    localStorage.removeItem("member1");
+    localStorage.removeItem("member2");
+    localStorage.removeItem("currentStep");
+
+    navigate("/dashboard");
   };
 
   const handleEditStep = (step: number) => {
@@ -366,7 +424,7 @@ function TeamRegistration() {
                     <CustomInput
                       name="teamDescription"
                       type="text"
-                      label="توضیحات تیم"
+                      label="توضیحات تیم "
                       className="w-full px-4 py-3 rounded-lg"
                     />
 
@@ -451,27 +509,58 @@ function TeamRegistration() {
                     <CustomInput
                       name="nationalCode"
                       type="text"
-                      label="کد ملی"
+                      label="کد ملی "
                       className="w-full px-4 py-3 rounded-lg"
+                      maxLength={10}
                     />
 
-                    <CustomInput
-                      name="tshirtSize"
-                      type="text"
-                      label="سایز تیشرت"
-                      className="w-full px-4 py-3 rounded-lg"
-                    />
+                    {/* اصلاح شده: نام فیلد با state همخوانی دارد */}
+                    <Field name="tshirtSize">
+                      {({ field, form }: FieldProps) => (
+                        <div className="space-y-2 rtl w-full">
+                          <label className="text-white text-sm">
+                            سایز تیشرت
+                          </label>
+
+                          <Select
+                            value={field.value}
+                            onValueChange={(val) =>
+                              form.setFieldValue(field.name, val)
+                            }
+                            dir="rtl"
+                          >
+                            <SelectTrigger className="w-full bg-white/10 backdrop-blur-md text-white border border-white/20 px-4 py-3 rounded-lg">
+                              <SelectValue placeholder="سایز تیشرت را انتخاب کنید" />
+                            </SelectTrigger>
+
+                            <SelectContent className="rtl">
+                              <SelectItem value="M">M</SelectItem>
+                              <SelectItem value="L">L</SelectItem>
+                              <SelectItem value="XL">XL</SelectItem>
+                              <SelectItem value="XXL">XXL</SelectItem>
+                            </SelectContent>
+                          </Select>
+
+                          {form.touched[field.name] &&
+                            form.errors[field.name] && (
+                              <p className="text-red-400 text-xs">
+                                {form.errors[field.name] as string}
+                              </p>
+                            )}
+                        </div>
+                      )}
+                    </Field>
                   </div>
 
                   <div className="flex gap-4">
                     <Button
                       type="button"
-                      onClick={handleBack}
+                      onClick={handleBackDasboard}
                       className="flex-1 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200"
                     >
-                      <ArrowLeft className="w-5 h-5 ml-2 inline-block" />
-                      قبلی
+                      بعدا دعوت می کنم یا تیم زیر 3 نفره دارم
                     </Button>
+
                     <Button
                       type="submit"
                       disabled={formSubmitting}
@@ -555,14 +644,45 @@ function TeamRegistration() {
                       type="text"
                       label="کد ملی"
                       className="w-full px-4 py-3 rounded-lg"
+                      maxLength={10}
                     />
 
-                    <CustomInput
-                      name="tshirtSize"
-                      type="text"
-                      label="سایز تیشرت"
-                      className="w-full px-4 py-3 rounded-lg"
-                    />
+                    {/* اصلاح شده برای عضو دوم */}
+                    <Field name="tshirtSize">
+                      {({ field, form }: FieldProps) => (
+                        <div className="space-y-2 rtl w-full">
+                          <label className="text-white text-sm">
+                            سایز تیشرت
+                          </label>
+
+                          <Select
+                            value={field.value}
+                            onValueChange={(val) =>
+                              form.setFieldValue(field.name, val)
+                            }
+                            dir="rtl"
+                          >
+                            <SelectTrigger className="w-full bg-white/10 backdrop-blur-md text-white border border-white/20 px-4 py-3 rounded-lg">
+                              <SelectValue placeholder="سایز تیشرت را انتخاب کنید" />
+                            </SelectTrigger>
+
+                            <SelectContent className="rtl">
+                              <SelectItem value="M">M</SelectItem>
+                              <SelectItem value="L">L</SelectItem>
+                              <SelectItem value="XL">XL</SelectItem>
+                              <SelectItem value="XXL">XXL</SelectItem>
+                            </SelectContent>
+                          </Select>
+
+                          {form.touched[field.name] &&
+                            form.errors[field.name] && (
+                              <p className="text-red-400 text-xs">
+                                {form.errors[field.name] as string}
+                              </p>
+                            )}
+                        </div>
+                      )}
+                    </Field>
                   </div>
 
                   <div className="flex gap-4">
@@ -620,7 +740,7 @@ function TeamRegistration() {
                       توضیحات تیم
                     </h3>
                     <p className="text-white text-sm whitespace-pre-wrap">
-                      {teamInfo.teamDescription}
+                      {teamInfo.teamDescription || "بدون توضیحات"}
                     </p>
                   </div>
                   <Button
@@ -685,7 +805,7 @@ function TeamRegistration() {
                     <div>
                       <span className="text-gray-400">سایز تیشرت: </span>
                       <span className="text-white font-semibold">
-                        {member1.tshirtSize}
+                        {member1.tshirtSize || "M"}
                       </span>
                     </div>
                   </div>
@@ -742,7 +862,7 @@ function TeamRegistration() {
                     <div>
                       <span className="text-gray-400">سایز تیشرت: </span>
                       <span className="text-white font-semibold">
-                        {member2.tshirtSize}
+                        {member2.tshirtSize || "M"}
                       </span>
                     </div>
                   </div>
@@ -771,20 +891,6 @@ function TeamRegistration() {
           )}
         </div>
       </div>
-
-      {/* لوگو گوشه پایین سمت راست */}
-      {/* <img
-        src={ELMOCPC}
-        alt="ELMOCPC Logo"
-        className="absolute bottom-4 right-4 w-32 opacity-80 hover:opacity-100 transition-opacity duration-300"
-      /> */}
-
-      {/* لوگو گوشه پایین سمت چپ */}
-      {/* <img
-        src={CESA}
-        alt="CESA Logo"
-        className="absolute bottom-4 left-4 w-20 opacity-80 hover:opacity-100 transition-opacity duration-300"
-      /> */}
     </div>
   );
 }

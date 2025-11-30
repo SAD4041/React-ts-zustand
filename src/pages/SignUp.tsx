@@ -295,7 +295,7 @@ function SignUp() {
                         dir="rtl"
                       >
                         <SelectTrigger className="w-full bg-white/10 backdrop-blur-md text-white border border-white/20">
-                          <SelectValue placeholder="سایز را انتخاب کنید" />
+                          <SelectValue placeholder="سایز تیشرت را انتخاب کنید" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="M">M</SelectItem>
