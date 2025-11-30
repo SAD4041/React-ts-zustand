@@ -7,7 +7,7 @@ import type {
   UpdateTeamPayload,
   TeamInvite,
   TeamStatus,
-  AcceptRejectInvitePayload,
+  // AcceptRejectInvitePayload,
   InviteUserPayload
 } from "@/types/teamTypes";
 
@@ -210,7 +210,7 @@ export const removeMemberService = async (
    ACCEPT INVITE
 ----------------------------------------- */
 export const acceptInviteService = async (
-  payload: AcceptRejectInvitePayload
+  payload: string
 ): Promise<void> => {
   return postData({
     endPoint: `/v1/invitations/accept-team`,
@@ -222,7 +222,7 @@ export const acceptInviteService = async (
    REJECT INVITE
 ----------------------------------------- */
 export const rejectInviteService = async (
-  payload: AcceptRejectInvitePayload
+  payload: string
 ): Promise<void> => {
   return postData({
     endPoint: `/v1/invitations/reject-team`,

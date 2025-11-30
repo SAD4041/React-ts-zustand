@@ -238,7 +238,7 @@ export interface RemoveMemberErrorResponse {
 
 export interface AcceptRejectInvitePayload {
   invitetoken: string;
-  token: string;
+  // token: string;
 }
 
 export interface AcceptRejectInviteSuccessResponse {

@@ -25,14 +25,14 @@ function AcceptTeamInvite() {
         return;
       }
 
-      if (!checkAuthentication()) {
-        return;
-      }
+      // if (!checkAuthentication()) {
+      //   return;
+      // }
 
       setLoading(true);
       setError(null);
 
-      await acceptInviteService({ token, invitetoken: token });
+      await acceptInviteService(token);
 
       toast.success("شما با موفقیت به تیم اضافه شدید!");
 
@@ -73,14 +73,14 @@ function AcceptTeamInvite() {
         return;
       }
 
-      if (!checkAuthentication()) {
-        return;
-      }
+      // if (!checkAuthentication()) {
+      //   return;
+      // }
 
       setLoading(true);
       setError(null);
 
-      await rejectInviteService({ token, invitetoken: token });
+      await rejectInviteService(token);
 
       toast.success("دعوت رد شد");
 
@@ -116,19 +116,19 @@ function AcceptTeamInvite() {
     }
   };
 
-  const checkAuthentication = () => {
-    const accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      toast.error("لطفا ابتدا وارد حساب کاربری خود شوید");
-      navigate("/login", {
-        state: {
-          redirectTo: `/accept-invite?token=${token}`,
-        },
-      });
-      return false;
-    }
-    return true;
-  };
+  // const checkAuthentication = () => {
+  //   const accessToken = localStorage.getItem("access_token");
+  //   if (!accessToken) {
+  //     toast.error("لطفا ابتدا وارد حساب کاربری خود شوید");
+  //     navigate("/login", {
+  //       state: {
+  //         redirectTo: `/accept-invite?token=${token}`,
+  //       },
+  //     });
+  //     return false;
+  //   }
+  //   return true;
+  // };
 
   if (!token) {
     return (
