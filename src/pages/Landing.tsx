@@ -9,7 +9,7 @@ function Landing() {
 				<button
 					className="text-white bg-sky-600 rounded-md p-2 cursor-pointer"
 					onClick={() => {
-						Navigate("/temp");
+						Navigate("/aboutus");
 					}}
 				>
 					Temp route
