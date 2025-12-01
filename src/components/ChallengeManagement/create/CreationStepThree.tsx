@@ -53,7 +53,7 @@ const Step3Members: React.FC<StepThreeProps> = ({
         {selectedUsers.map((user) => (
           <span
             key={user.id}
-            className="inline-flex items-center gap-1 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm"
+            className="inline-flex items-center gap-1 bg-primary-picture-background text-primary px-3 py-1 rounded-full text-sm"
           >
             {user.username}
             <button

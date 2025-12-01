@@ -35,7 +35,7 @@ const TitleAndDescriptionInput: React.FC<
                   }}
                   label="عنوان چالش"
                   width="w-full"
-                  className="rounded-[8px] mb-4"
+                  className="rounded-primary-radius mb-4"
                 />
               )}
             </Field>
@@ -62,7 +62,7 @@ const TitleAndDescriptionInput: React.FC<
                 }}
                 width="w-full"
                 label="توضیحات چالش"
-                className="rounded-[8px] resize-none"
+                className="rounded-primary-radius resize-none"
                 as = "textarea"
                 rows={5}
               />

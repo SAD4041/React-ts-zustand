@@ -74,7 +74,7 @@ export const router = createBrowserRouter([
         element: <PostPage />,
       },
       {
-        path: "/editChallenge",
+        path: "/editChallenge/:challengeId",
         element: <ChallengeEdit />,
       },
       {

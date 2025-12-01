@@ -4,8 +4,6 @@ import React from "react";
 import UserCard from "@/components/Custom/UserCard";
 import type { UserCardListProps } from "@/types/userCardListType";
 
-
-
 const UserCardList: React.FC<UserCardListProps> = ({
   users,
   onDelete,
@@ -17,14 +15,14 @@ const UserCardList: React.FC<UserCardListProps> = ({
         className="w-full flex flex-col items-center space-y-4 overflow-y-auto max-h-[300px]"
         style={{
           overflowY: "scroll",
-          scrollbarWidth: "none", // For Firefox
-          msOverflowStyle: "none", // For IE and Edge
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
         }}
       >
         {users.map((user) => (
           <UserCard
-            key={user.id}
-            id={user.id}
+            key={user.user_id}
+            id={user.user_id}
             username={user.username}
             imagePath={user.imagePath}
             bio={user.bio}
