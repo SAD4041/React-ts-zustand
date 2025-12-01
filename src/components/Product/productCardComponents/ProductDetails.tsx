@@ -4,8 +4,6 @@ import tuman from "../../../assets/tuman.png";
 import { toPersianDigits } from "../../../utils/PersianDigits";
 import type { ProductProps } from '@/types/productCardTypes';
 
-
-
 const ProductDetails: React.FC<ProductProps> = ({ product }) => {
   const formatPrice = (num: number): string => {
     return toPersianDigits(num.toLocaleString('en-US'));
