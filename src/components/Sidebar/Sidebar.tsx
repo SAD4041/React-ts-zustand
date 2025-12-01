@@ -13,7 +13,7 @@ export default function Sidebar({ items }: SidebarProps) {
 
   return (
     <div
-      className={`fixed top-0 right-0 h-screen bg-background shadow-lg transition-all duration-300 ease-in-out z-50 ${
+      className={`fixed top-0 right-0 h-screen bg-sidebar shadow-lg transition-all duration-300 ease-in-out z-50 ${
         isHovered ? 'w-[300px]' : 'w-[110px]'
       }`}
       onMouseEnter={() => setIsHovered(true)}
@@ -28,7 +28,7 @@ export default function Sidebar({ items }: SidebarProps) {
             <div
               key={item.id}
               onClick={item.onClick}
-              className="relative flex items-center justify-end px-9 py-6 cursor-pointer hover:bg-muted transition-colors duration-200"
+              className="relative flex items-center justify-end px-9 py-6 cursor-pointer hover:bg-muted-foregound transition-colors duration-200"
             >
               <span
                 className={`text-foreground text-2xl mr-14 whitespace-nowrap transition-all duration-300 ${
@@ -51,7 +51,7 @@ export default function Sidebar({ items }: SidebarProps) {
             <div
               key={bottomItem.id}
               onClick={bottomItem.onClick}
-              className="relative flex items-center justify-end px-9 py-4 cursor-pointer hover:bg-muted transition-colors duration-200"
+              className="relative flex items-center justify-end px-9 py-4 cursor-pointer hover:bg-muted-foregound transition-colors duration-200"
             >
               <span
                 className={`text-foreground text-2xl mr-14 whitespace-nowrap transition-all duration-300 ${
