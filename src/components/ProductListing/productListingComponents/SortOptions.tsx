@@ -1,6 +1,6 @@
 import React from 'react';
 import sortIcon from '@/assets/Listing Icon.png';
-import { sorts } from '@/data/data';
+import { sorts } from '@/data/productListingData';
 import type { SortOptionsProps, SortOption } from '@/types/productListingTypes';
 
 const SortOptions: React.FC<SortOptionsProps> = ({ currentSort, onSortChange }) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { brands, sizes, colors } from '@/data/data';
+import { brands, sizes, colors } from '@/data/productListingData';
 import type { FilterSidebarProps } from '@/types/productListingTypes';
 import BrandFilter from './BrandFilters';
 import SizeFilter from './SizeFilter';

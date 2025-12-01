@@ -5,7 +5,7 @@ import FilterSidebar from './productListingComponents/FilterSidebar';
 import ProductGrid from './productListingComponents/ProductGrid';
 import SortOptions from './productListingComponents/SortOptions';
 import type { SortOption } from '@/types/productListingTypes';
-import { products, currentCategory, productsPerGroup, pagesPerGroup } from '@/data/data';
+import { products, currentCategory, productsPerGroup, pagesPerGroup } from '@/data/productListingData';
 
 const ProductListing: React.FC = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);

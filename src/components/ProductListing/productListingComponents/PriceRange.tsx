@@ -3,7 +3,7 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { formatPrice } from '@/utils/FormatPrice';
 import { toPersianDigits } from '@/utils/PersianDigits';
-import type { PriceRangeFilterProps,SliderValue} from '@/types/productListingTypes';
+import type { PriceRangeFilterProps} from '@/types/productListingTypes';
 
 const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
   minPrice,
@@ -31,7 +31,7 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
           min={0}
           max={globalMaxPrice}
           value={[localMin, localMax]}
-          onChange={(value: SliderValue) => {
+          onChange={(value) => {
             if (Array.isArray(value)) {
               setLocalMin(value[0]);
               setLocalMax(value[1]);
