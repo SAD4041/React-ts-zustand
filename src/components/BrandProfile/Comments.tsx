@@ -6,6 +6,7 @@ import { getBrandReviews, submitBrandReview } from '@/services/brandProfile';
 import starIcon from '@/assets/brand-profile/Star.png';
 import thumbsUpIcon from '@/assets/brand-profile/Vector.png';
 import thumbsDownIcon from '@/assets/brand-profile/Vector.png';
+import LoadingSpinner from '../LoadingSpinner';
 
 const CustomerReviewsSection = () => {
   const { brandId } = useParams();
@@ -54,7 +55,7 @@ const CustomerReviewsSection = () => {
     setHelpfulVote(prev => ({ ...prev, [reviewId]: false }));
   };
 
-  if (loading) return <div>در حال بارگذاری...</div>;
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="mx-[150px] mt-12 p-4 bg-white rounded-xl shadow-sm border border-gray-200">

@@ -15,6 +15,7 @@ import ProductCard from '@/components/Product/ProductCard';
 import Comments from '@/components/BrandProfile/Comments';
 import BrandProductsSection from '@/components/BrandProfile/BrandProductSection';
 import { getBrandProfile, getBrandProducts } from '@/services/brandProfile';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const BrandProfile = () => {
   const { brandId, brandName } = useParams<{ brandId: string; brandName: string }>();
@@ -46,7 +47,7 @@ const BrandProfile = () => {
     }
   }, [brandId, brandName]);
 
-  if (loading) return <div>...در حال بارگذاری</div>;
+  if (loading) return <LoadingSpinner />;
 
   if (!brandData) return <div>.داده‌ای یافت نشد</div>;
 

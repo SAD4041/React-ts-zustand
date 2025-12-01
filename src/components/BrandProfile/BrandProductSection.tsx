@@ -8,6 +8,7 @@ import SortOptions from '@/components/ProductListing/productListingComponents/So
 import type { SortOption } from '@/components/ProductListing/productListingComponents/SortOptions';
 import filterIcon from '@/assets/brand-profile/Filter_alt.png';
 import { categories } from '@/data/brandProfile/data';
+import LoadingSpinner from '../LoadingSpinner';
 
 const FilterOptions: React.FC<{ options: any[]; currentFilter: string; onFilterChange: (filter: string) => void }> = ({ options, currentFilter, onFilterChange }) => {
   return (
@@ -51,7 +52,7 @@ const BrandProductsSection = () => {
     fetchProducts();
   }, [brandId, selectedCategory, currentSort]);
 
-  if (loading) return <div>در حال بارگذاری...</div>;
+  if (loading) return <LoadingSpinner />;
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
