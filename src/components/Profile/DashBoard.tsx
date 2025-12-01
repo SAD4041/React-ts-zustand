@@ -28,7 +28,7 @@ const DashBoard: React.FC = () => {
 
   return (
     <>
-      <ProfileHeader userId={4} isOwner={isOwner} />
+      <ProfileHeader userId={profileId} isOwner={isOwner} />
       <ProfileBody />
       {/* <ProfileHeader userId={profileId} isOwner={isOwner} />
       <ProfileBody userId={profileId} /> */}

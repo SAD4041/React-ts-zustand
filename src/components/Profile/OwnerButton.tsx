@@ -63,7 +63,7 @@ const OwnerButton = () => {
             </CustomButton>
 
             <CustomButton
-              pageAddress="/temp"
+              pageAddress="/createChallenge"
               className="bg-secondary hover:bg-secondary"
             >
               چالش جدید

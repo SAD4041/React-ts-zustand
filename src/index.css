@@ -216,6 +216,7 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: #ff7700;
   --primary-hover: #ffca9b;
+  --primary-picture-background : #FFF1E5;
   --secondary: #3871dd;
   --secondary-hover: #6c96e6;
   --error: #c30025;
@@ -327,6 +328,7 @@
   --color-disable: var(--disable);
   --color-neutral-gray: var(--neutral-gray);
   --color-neutral-gray-bold: var(--neutral-gray-bold);
+  --color-primary-picture-background : var(--primary-picture-background);
   --shadow-button: var(--shadow-button);
   --shadow-button-active: var(--shadow-button-active);
   --text-title: var(--title-size);
