@@ -1,11 +1,5 @@
-import React, { useState } from 'react';
-export interface NavItem {
-  id: string;
-  label: string;
-  icon: React.ReactNode;
-  onClick?: () => void;
-}
-
+import { useState } from 'react';
+import type { NavItem } from '@/types/sidebarTypes';
 interface SidebarProps {
   items: NavItem[];
 }
