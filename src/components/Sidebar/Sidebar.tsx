@@ -7,9 +7,15 @@ interface SidebarProps {
 
 export default function Sidebar({ items }: SidebarProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const topItems = items.slice(0, items.length - 1);
   const bottomItem = items[items.length - 1];
+
+  const handleClick = (item: NavItem) => {
+    setActiveId(item.id);
+    item.onClick?.();
+  };
 
   return (
     <div
@@ -24,48 +30,62 @@ export default function Sidebar({ items }: SidebarProps) {
 
         {/* Top items */}
         <div>
-          {topItems.map(item => (
-            <div
-              key={item.id}
-              onClick={item.onClick}
-              className="relative flex items-center justify-end px-9 py-6 cursor-pointer hover:bg-muted-foregound transition-colors duration-200"
-            >
-              <span
-                className={`text-foreground text-2xl mr-14 whitespace-nowrap transition-all duration-300 ${
-                  isHovered
-                    ? 'opacity-100 translate-x-0'
-                    : 'opacity-0 translate-x-4 pointer-events-none'
-                }`}
-              >
-                {item.label}
-              </span>
+          {topItems.map(item => {
+            const isActive = item.id === activeId;
 
-              <div className="flex-shrink-0 text-foreground">{item.icon}</div>
-            </div>
-          ))}
+            return (
+              <div
+                key={item.id}
+                onClick={() => handleClick(item)}
+                className={`relative flex items-center justify-end px-9 py-6 cursor-pointer transition-colors duration-200
+                  ${isActive ? 'bg-muted border-r-4 border-primary' : 'hover:bg-muted-foreground'}
+                `}
+              >
+                <span
+                  className={`text-foreground text-2xl mr-14 whitespace-nowrap transition-all duration-300
+                    ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'}
+                    ${isActive ? 'font-bold' : ''}
+                  `}
+                >
+                  {item.label}
+                </span>
+
+                <div className={`flex-shrink-0 text-foreground`}>
+                  {item.icon}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
-        {/* Bottom (logout or last item) */}
+        {/* Bottom */}
         <div>
-          {bottomItem && (
-            <div
-              key={bottomItem.id}
-              onClick={bottomItem.onClick}
-              className="relative flex items-center justify-end px-9 py-4 cursor-pointer hover:bg-muted-foregound transition-colors duration-200"
-            >
-              <span
-                className={`text-foreground text-2xl mr-14 whitespace-nowrap transition-all duration-300 ${
-                  isHovered
-                    ? 'opacity-100 translate-x-0'
-                    : 'opacity-0 translate-x-4 pointer-events-none'
-                }`}
-              >
-                {bottomItem.label}
-              </span>
+          {bottomItem && (() => {
+            const isActive = bottomItem.id === activeId;
 
-              <div className="flex-shrink-0 text-foreground">{bottomItem.icon}</div>
-            </div>
-          )}
+            return (
+              <div
+                key={bottomItem.id}
+                onClick={() => handleClick(bottomItem)}
+                className={`relative flex items-center justify-end px-9 py-4 cursor-pointer transition-colors duration-200
+                  ${isActive ? 'bg-muted border-r-4 border-primary' : 'hover:bg-muted-foreground'}
+                `}
+              >
+                <span
+                  className={`text-foreground text-2xl mr-14 whitespace-nowrap transition-all duration-300
+                    ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'}
+                    ${isActive ? 'font-bold' : ''}
+                  `}
+                >
+                  {bottomItem.label}
+                </span>
+
+                <div className="flex-shrink-0 text-foreground">
+                  {bottomItem.icon}
+                </div>
+              </div>
+            );
+          })()}
         </div>
 
       </nav>
