@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import CustomInput from "@/components/Custom/CustomInput";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field, type FieldProps } from "formik";
 import * as Yup from "yup";
 import { UserPlus, Send, ArrowLeft } from "lucide-react";
 import BG from "@/assets/BG.png";
@@ -9,6 +9,13 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { inviteUserService } from "@/services/teamService";
 import type { InviteUserPayload } from "@/types/teamTypes";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 // Validation schema برای اطلاعات عضو
 const memberValidationSchema = Yup.object({
@@ -45,7 +52,7 @@ const memberValidationSchema = Yup.object({
 
   nationalCode: Yup.string()
     .matches(/^[0-9]{10}$/, "کد ملی باید ۱۰ رقم باشد")
-    .optional(),
+    .required("کد ملی الزامی است"),
 
   tshirtSize: Yup.string().optional(),
 });
@@ -125,7 +132,9 @@ function InviteMember() {
           error.response?.data?.message || error.response?.data?.error;
         toast.error(errorMessage || "خطا در اطلاعات وارد شده");
       } else {
-        toast.error(error?.message || "خطا در ارسال دعوت. لطفا دوباره تلاش کنید");
+        toast.error(
+          error?.message || "خطا در ارسال دعوت. لطفا دوباره تلاش کنید"
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -166,7 +175,10 @@ function InviteMember() {
                 </div>
 
                 {/* Form Fields */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6" dir="rtl">
+                <div
+                  className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"
+                  dir="rtl"
+                >
                   <CustomInput
                     name="name"
                     type="text"
@@ -208,18 +220,44 @@ function InviteMember() {
                   <CustomInput
                     name="nationalCode"
                     type="text"
-                    label="کد ملی (اختیاری)"
+                    label="کد ملی"
                     className="w-full px-4 py-3 rounded-lg"
                     maxLength={10}
                   />
 
-                  <CustomInput
-                    name="tshirtSize"
-                    type="text"
-                    label="سایز تیشرت"
-                    className="w-full px-4 py-3 rounded-lg"
-                    placeholder="M"
-                  />
+                  <Field name="tshirtSize">
+                    {({ field, form }: FieldProps) => (
+                      <div className="space-y-2 rtl w-full">
+                        <label className="text-white text-sm">سایز تیشرت</label>
+
+                        <Select
+                          value={field.value}
+                          onValueChange={(val) =>
+                            form.setFieldValue(field.name, val)
+                          }
+                          dir="rtl"
+                        >
+                          <SelectTrigger className="w-full bg-white/10 backdrop-blur-md text-white border border-white/20 px-4 py-3 rounded-lg">
+                            <SelectValue placeholder="سایز تیشرت را انتخاب کنید" />
+                          </SelectTrigger>
+
+                          <SelectContent className="rtl bg-gray-800 text-white border-white/20">
+                            <SelectItem value="M">M</SelectItem>
+                            <SelectItem value="L">L</SelectItem>
+                            <SelectItem value="XL">XL</SelectItem>
+                            <SelectItem value="XXL">XXL</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        {form.touched[field.name] &&
+                          form.errors[field.name] && (
+                            <p className="text-red-400 text-xs">
+                              {form.errors[field.name] as string}
+                            </p>
+                          )}
+                      </div>
+                    )}
+                  </Field>
                 </div>
 
                 {/* Action Buttons */}
@@ -238,7 +276,9 @@ function InviteMember() {
                     className="flex-1 bg-[#FFD500] hover:bg-[#e6c200] text-[#00274D] font-semibold py-4 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#FFD500]/50 active:scale-95"
                   >
                     <Send className="w-5 h-5 ml-2 inline-block" />
-                    {formSubmitting || isSubmitting ? "در حال ارسال..." : "ارسال دعوت"}
+                    {formSubmitting || isSubmitting
+                      ? "در حال ارسال..."
+                      : "ارسال دعوت"}
                   </Button>
                 </div>
               </Form>
