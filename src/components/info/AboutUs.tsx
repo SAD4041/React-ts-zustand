@@ -8,7 +8,6 @@ export default function App() {
     { number: '+۱', label: 'سال تجربه' },
   ];
 
-  // Reordered: تعهد به برتری (right), تمرکز بر کیفیت (center), مشتری محوری (left)
   const values = [
     {
       icon: Award,
@@ -30,7 +29,6 @@ export default function App() {
     },
   ];
 
-  // Team members with exact text as in the image
   const team = [
     { name: 'امیر امرائی', role: 'فرانت', image: '1' },
     { name: 'امیر عباد تیمور پور', role: 'فرانت', image: '2' },
