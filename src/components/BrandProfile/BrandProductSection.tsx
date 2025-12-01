@@ -7,6 +7,7 @@ import ProductCard from '@/components/Product/ProductCard';
 import SortOptions from '@/components/ProductListing/productListingComponents/SortOptions';
 import type { SortOption } from '@/components/ProductListing/productListingComponents/SortOptions';
 import filterIcon from '@/assets/brand-profile/Filter_alt.png';
+import { categories } from '@/data/brandProfile/data';
 
 const FilterOptions: React.FC<{ options: any[]; currentFilter: string; onFilterChange: (filter: string) => void }> = ({ options, currentFilter, onFilterChange }) => {
   return (
@@ -51,14 +52,6 @@ const BrandProductsSection = () => {
   }, [brandId, selectedCategory, currentSort]);
 
   if (loading) return <div>در حال بارگذاری...</div>;
-
-  const categories = [
-    { value: "all", label: "همه محصولات" },
-    { value: "mens-clothes", label: "لباس مردانه" },
-    { value: "womens-clothes", label: "لباس زنانه" },
-    { value: "kids-clothes", label: "لباس بچه‌گانه" },
-    { value: "accessory", label: "اکسسوری" }
-  ];
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);

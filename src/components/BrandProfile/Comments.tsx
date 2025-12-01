@@ -36,9 +36,8 @@ const CustomerReviewsSection = () => {
     e.preventDefault();
     if (newReview.trim()) {
       try {
-        await submitBrandReview(brandId, { text: newReview, rating: 5 }); // rating موقت
+        await submitBrandReview(brandId, { text: newReview, rating: 5 });
         setNewReview('');
-        // می‌تونی دوباره لیست نظرات رو فرخوانی کنی
       } catch (error) {
         console.error("Error submitting review:", error);
       }
