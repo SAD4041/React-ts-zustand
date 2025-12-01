@@ -89,6 +89,9 @@ function Dashboard() {
   const [isDragging, setIsDragging] = useState(false);
   const [isCaptain, setIsCaptain] = useState(false);
   const [daysLeft, setDaysLeft] = useState(0);
+  const [showFinalSubmitModal, setShowFinalSubmitModal] = useState(false);
+  const [submitStep, setSubmitStep] = useState(1);
+  // const [isSubmittingTeam, setIsSubmittingTeam] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [paymentInfo] = useState({
@@ -96,6 +99,17 @@ function Dashboard() {
     cardNumber: "6104-3387-4761-8581",
     bankName: "بانک ملت مهدی تقی دولابی",
   });
+  // تابع لغو فرآیند ثبت نهایی
+  const handleCancelSubmit = () => {
+    setShowFinalSubmitModal(false);
+    setSubmitStep(1);
+  };
+
+  // تابع شروع فرآیند تایید دو مرحله‌ای (همان قبلی)
+  const handleStartSubmitProcess = () => {
+    setShowFinalSubmitModal(true);
+    setSubmitStep(1);
+  };
 
   const formatPrice = (price: number) => {
     return (
@@ -432,9 +446,11 @@ function Dashboard() {
     }
 
     try {
-      setSubmitting(true);
+      // setIsSubmittingTeam(true);
       await submitTeamService(teamData.id);
       toast.success("تیم با موفقیت ثبت نهایی شد!");
+      setShowFinalSubmitModal(false);
+      setSubmitStep(1);
       await fetchTeamData();
     } catch (error: any) {
       console.error("Error submitting team:", error);
@@ -444,7 +460,10 @@ function Dashboard() {
         "خطا در ثبت نهایی تیم";
 
       toast.error(errorMessage);
+      setShowFinalSubmitModal(false);
+      setSubmitStep(1);
     } finally {
+      // setIsSubmittingTeam(false);
       setSubmitting(false);
     }
   };
@@ -464,7 +483,6 @@ function Dashboard() {
       navigate(`/invitemember/`);
     }
   };
-
 
   const menuItems = [
     { id: "overview", label: "خانه", icon: User },
@@ -629,7 +647,6 @@ function Dashboard() {
             </div>
           </div>
         </header>
-
         <div className="p-6">
           {activeTab === "overview" && (
             <div className="space-y-6">
@@ -1160,7 +1177,7 @@ function Dashboard() {
                       <div className="flex gap-3 flex-wrap">
                         {teamData.status === "draft" && (
                           <Button
-                            onClick={handleSubmitTeam}
+                            onClick={handleStartSubmitProcess}
                             disabled={submitting || !isCaptain}
                             className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border border-blue-500/30 disabled:opacity-50"
                           >
@@ -1295,6 +1312,88 @@ function Dashboard() {
                       </div>
                     </div>
                   )}
+                  {showFinalSubmitModal && (
+                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                      <div className="bg-[#00274D] border border-white/10 rounded-2xl p-6 max-w-md w-full shadow-xl">
+                        {submitStep === 1 ? (
+                          <>
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <AlertCircle className="w-6 h-6 text-blue-400" />
+                              </div>
+                              <h3 className="text-lg font-bold">
+                                تایید ثبت نهایی تیم
+                              </h3>
+                            </div>
+
+                            <div className="space-y-4 mb-6">
+                              <p className="text-gray-300">
+                                آیا از ثبت نهایی تیم{" "}
+                                <span className="text-[#FFD500] font-semibold">
+                                  {teamData?.name}
+                                </span>{" "}
+                                مطمئن هستید؟
+                              </p>
+
+                              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                                <div className="flex items-start gap-3">
+                                  <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5" />
+                                  <div>
+                                    <h4 className="font-bold text-yellow-400 text-sm mb-1">
+                                      توجه مهم!
+                                    </h4>
+                                    <ul className="text-xs text-yellow-300 space-y-1">
+                                      <li>
+                                        • پس از ثبت نهایی، امکان ویرایش تیم وجود
+                                        نخواهد داشت
+                                      </li>
+                                      <li>
+                                        • امکان دعوت عضو جدید غیرفعال می‌شود
+                                      </li>
+                                      <li>• این عمل غیرقابل بازگشت است</li>
+                                      <li>
+                                        • تیم را تکمیل و سپس برای نهایی کردن
+                                        اقدام کنید
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm text-gray-300">
+                                    اعضای فعلی:
+                                  </span>
+                                  <span className="font-bold">
+                                    {teamData?.members?.length || 0} نفر
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                              <Button
+                                onClick={handleCancelSubmit}
+                                className="flex-1 bg-white/10 hover:bg-white/20 text-white"
+                              >
+                                انصراف
+                              </Button>
+                              <Button
+                                onClick={handleSubmitTeam}
+                                disabled={invites?.length > 0}
+                                className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border border-blue-500/30 disabled:opacity-50"
+                              >
+                                {invites?.length > 0
+                                  ? "دعوت‌های در انتظار دارید"
+                                  : "ادامه"}
+                              </Button>
+                            </div>
+                          </>
+                        ) : null}
+                      </div>
+                    </div>
+                  )}
 
                   {teamData.status === "submitted" && (
                     <div className="bg-blue-500/10 backdrop-blur-md border border-blue-500/30 rounded-2xl p-6">
@@ -1342,7 +1441,6 @@ function Dashboard() {
                       </div>
                     </div>
                   )}
-
                   {teamData.status === "waiting_for_payment" && (
                     <div className="bg-orange-500/10 backdrop-blur-md border border-orange-500/30 rounded-2xl p-6">
                       <div className="flex items-start gap-4">
@@ -1392,7 +1490,6 @@ function Dashboard() {
                       </div>
                     </div>
                   )}
-
                   {teamData.status === "receipt_pending" && (
                     <div className="bg-purple-500/10 backdrop-blur-md border border-purple-500/30 rounded-2xl p-6">
                       <div className="flex items-start gap-4">
@@ -1490,7 +1587,6 @@ function Dashboard() {
                       </div>
                     </div>
                   )}
-
                   {teamData?.status === "accepted" && (
                     <div className="bg-green-500/10 backdrop-blur-md border border-green-500/30 rounded-2xl p-6">
                       <div className="flex items-start gap-4">
@@ -1516,7 +1612,8 @@ function Dashboard() {
                               <li className="flex items-center gap-2">
                                 <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                                 <span>
-                                 ۲۱ آذر ساعت ۸ صبح در محل مسابقه حضور داشته باشید
+                                  ۲۱ آذر ساعت ۸ صبح در محل مسابقه حضور داشته
+                                  باشید
                                 </span>
                               </li>
                               <li className="flex items-center gap-2">
@@ -1536,7 +1633,6 @@ function Dashboard() {
                       </div>
                     </div>
                   )}
-
                   {teamData?.status === "rejected" && (
                     <div className="bg-red-500/10 backdrop-blur-md border border-red-500/30 rounded-2xl p-6">
                       <div className="flex items-start gap-4">
@@ -1577,7 +1673,6 @@ function Dashboard() {
                       </div>
                     </div>
                   )}
-
                   {showDeleteModal && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                       <div className="bg-[#00274D] border border-white/10 rounded-2xl p-6 max-w-md w-full">
@@ -1675,7 +1770,6 @@ function Dashboard() {
                       </div>
                     </div>
                   )}
-
                   {invitesLoading ? (
                     <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 md:p-6">
                       <div className="flex items-center justify-center py-4">
@@ -1745,7 +1839,6 @@ function Dashboard() {
                       </div>
                     )
                   )}
-
                   <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
                     <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-[#FFD500]">
                       <Users className="w-6 h-6" />
@@ -1789,7 +1882,6 @@ function Dashboard() {
                       ))}
                     </div>
                   </div>
-
                   {/* دکمه رفرش */}
                   <div className="text-center">
                     <Button
@@ -1995,12 +2087,10 @@ function Dashboard() {
             </div>
           )}
         </div>
-
         {/* <div className="fixed bottom-4 right-4 left-4 flex justify-between items-center pointer-events-none">
           <img src={CESA} alt="CESA Logo" className="w-16 opacity-50" />
           <img src={ELMOCPC} alt="ELMOCPC Logo" className="w-24 opacity-50" />
         </div> */}
-
         {showUploadModal && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div className="bg-[#00274D] border border-white/10 rounded-2xl p-6 max-w-md w-full shadow-xl">
