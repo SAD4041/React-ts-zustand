@@ -1,15 +1,15 @@
 // CustomerReviewsSection.tsx
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getBrandReviews, submitBrandReview } from '@/services/brandProfile';
+
 import starIcon from '@/assets/brand-profile/Star.png';
 import thumbsUpIcon from '@/assets/brand-profile/Vector.png';
 import thumbsDownIcon from '@/assets/brand-profile/Vector.png';
-import LoadingSpinner from '../LoadingSpinner';
+import LoadingSpinner from '../Custom/LoadingSpinner';
 
 const CustomerReviewsSection = () => {
-  const { brandId } = useParams();
+  const { brandId, brandName } = useParams<{ brandId: string; brandName: string }>();
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [newReview, setNewReview] = useState('');
@@ -19,7 +19,7 @@ const CustomerReviewsSection = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const data = await getBrandReviews(brandId);
+        const data = await getBrandReviews(brandId, brandName);
         setReviews(data);
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -37,7 +37,7 @@ const CustomerReviewsSection = () => {
     e.preventDefault();
     if (newReview.trim()) {
       try {
-        await submitBrandReview(brandId, { text: newReview, rating: 5 });
+        await submitBrandReview(brandId, brandName, { text: newReview, rating: 5 });
         setNewReview('');
       } catch (error) {
         console.error("Error submitting review:", error);
@@ -64,6 +64,7 @@ const CustomerReviewsSection = () => {
         <span className="text-xl font-bold">۴.۸</span>
         <img src={starIcon} alt="امتیاز" className="h-5 w-5 text-yellow-500" />
         <span className="text-sm text-gray-600">از ۱,۲۳۴ نظر</span>
+        {/* use data from api */}
       </div>
 
       <div className="my-6 mx-10 p-4 rounded-lg border border-gray-500 dir-ltr text-left">
@@ -91,6 +92,7 @@ const CustomerReviewsSection = () => {
           >
             ثبت نظر جدید
           </button>
+          {/* add action for this */}
         </form>
       </div>
 
@@ -151,6 +153,7 @@ const CustomerReviewsSection = () => {
         <button className="border border-gray-300 text-gray-700 text-sm font-medium py-2 px-4 rounded-xl hover:bg-gray-100 transition cursor-pointer">
           مشاهده نظرات بیشتر
         </button>
+        {/* add action for this */}
       </div>
     </div>
   );
