@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Landing from "@/pages/Landing";
 import Temp from "@/pages/Temp";
-import ContactUs from "@/pages/ContactUs";
+import 	FAQ from "@/pages/FAQ";
 
 export const router = createBrowserRouter([
 	{
@@ -21,9 +21,10 @@ export const router = createBrowserRouter([
 				element: <Temp />,
 			},
 			{
-				path: "/ContactUs",
-				element: <ContactUs />,
+				path: "/FAQ",
+				element: <FAQ />,
 			},
+			
 			// {
 			// 	path: "/AboutUs",
 			// 	element: <AboutUs />,
