@@ -3,10 +3,9 @@ import { Star } from "lucide-react";
 import tuman from "../../../assets/tuman.png";
 import { toPersianDigits } from "../../../utils/PersianDigits.tsx";
 import type { Product } from '@/types/productListingTypes';
+import type { ProductProps } from '@/types/productCardTypes.ts';
 
-interface ProductProps {
-  product: Product;
-}
+
 
 const ProductDetails: React.FC<ProductProps> = ({product}) => {
   

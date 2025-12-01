@@ -1,11 +1,8 @@
 import React from 'react';
 import { productData } from '@/data/data';
 import { toPersianDigits } from "../../../utils/PersianDigits.tsx";
+import type { ProductImageProps } from '@/types/productCardTypes.ts'
 
-interface ProductImageProps {
-  imageUrl: string;
-  discount: number;
-}
 
 const ProductImage: React.FC<ProductImageProps> = ({ imageUrl, discount }) => {
 

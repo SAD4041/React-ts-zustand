@@ -4,10 +4,8 @@ import SizeSelector from './productCardComponents/SizeSelector.tsx';
 import ColorSelector from './productCardComponents/ColorSelector.tsx';
 import { toPersianDigits } from "../../utils/PersianDigits.tsx";
 import type { Product } from '@/types/productListingTypes';
+import type { ProductCardProps } from '@/types/productCardTypes.ts';
 
-interface ProductCardProps {
-  product: Product;
-}
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (

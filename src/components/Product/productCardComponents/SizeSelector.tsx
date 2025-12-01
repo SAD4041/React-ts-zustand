@@ -1,10 +1,8 @@
 import React from 'react';
 import type { Size } from '@/types/productCardTypes.ts'
 import type { Product } from '@/types/productListingTypes.ts';
+import type { SizeSelectorProps } from '@/types/productCardTypes';
 
-interface SizeSelectorProps {
-  product : Product
-}
 
 const SizeSelector: React.FC<SizeSelectorProps> = ({product}) => {
 

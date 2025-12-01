@@ -28,3 +28,24 @@ export interface ImageData {
   title: string;
   image: string;
 }
+
+export interface ProductCardProps {
+  product: Product;
+}
+
+export interface ColorSelectorProps {
+  product:Product
+}
+
+export interface ProductProps {
+  product: Product;
+}
+
+export interface ProductImageProps {
+  imageUrl: string;
+  discount: number;
+}
+
+export interface SizeSelectorProps {
+  product : Product
+}

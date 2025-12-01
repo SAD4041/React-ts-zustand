@@ -1,10 +1,8 @@
 import React from 'react';
 import type { Color } from '@/types/productCardTypes.ts'
 import type { Product } from '@/types/productListingTypes.ts';
+import type { ColorSelectorProps } from '@/types/productCardTypes';
 
-interface ColorSelectorProps {
-  product:Product
-}
 
 const ColorSelector: React.FC<ColorSelectorProps> = ({product}) => {
 
