@@ -1,11 +1,5 @@
-import type { ReactNode } from 'react';
 import Sidebar from '@/components/Sidebar/Sidebar';
-import type { NavItem } from '@/types/sidebarTypes';
-
-interface SidebarLayoutProps {
-  children: ReactNode;
-  sidebarItems: NavItem[];
-}
+import type { SidebarLayoutProps } from '@/types/sidebarTypes';
 
 export default function SidebarLayout({
   children,

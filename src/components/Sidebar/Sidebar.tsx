@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import type { NavItem } from '@/types/sidebarTypes';
-
-interface SidebarProps {
-  items: NavItem[];
-}
+import type { NavItem, SidebarProps } from '@/types/sidebarTypes';
 
 export default function Sidebar({ items }: SidebarProps) {
   const [isHovered, setIsHovered] = useState(false);
@@ -20,7 +16,7 @@ export default function Sidebar({ items }: SidebarProps) {
   return (
     <div
       className={`fixed top-0 right-0 h-screen bg-sidebar shadow-lg transition-all duration-300 ease-in-out z-50 ${
-        isHovered ? 'w-[300px]' : 'w-[110px]'
+        isHovered ? 'w-sidebar' : 'w-sidebar-collapsed'
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
