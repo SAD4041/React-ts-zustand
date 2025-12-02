@@ -174,7 +174,8 @@ html body[data-scroll-locked] {
 	--sidebar-accent-foreground: oklch(0.205 0 0);
 	--sidebar-border: oklch(0.922 0 0);
 	--sidebar-ring: oklch(0.708 0 0);
-
+	--admin-sidebar: #5249FC; 
+ 	--admin-sidebar-foreground: #ffffff;
 	--drop-shadow-lg: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -259,6 +260,8 @@ html body[data-scroll-locked] {
 	--color-charcoal-700: var(--charcoal-700);
 	--color-charcoal-800: var(--charcoal-800);
 	--color-charcoal-900: var(--charcoal-900);
+	--color-admin-sidebar: var(--admin-sidebar);
+  	--color-admin-sidebar-foreground: var(--admin-sidebar-foreground);
 }
 
 .dark {
