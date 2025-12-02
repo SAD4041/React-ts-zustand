@@ -1,11 +1,6 @@
 import React from 'react';
-import type { ColorOption } from '@/types/productListingTypes';
+import type { ColorOption, ColorFilterProps } from '@/types/productListingTypes';
 
-interface ColorFilterProps {
-  colors: ColorOption[];
-  selectedColors: string[];
-  onToggleColor: (code: string) => void;
-}
 
 const ColorFilter: React.FC<ColorFilterProps> = ({ colors, selectedColors, onToggleColor }) => {
   return (

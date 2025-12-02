@@ -1,11 +1,7 @@
 import React from 'react';
-import type { Brand } from '@/types/productListingTypes';
+import type { Brand, BrandFilterProps } from '@/types/productListingTypes';
 
-interface BrandFilterProps {
-  brands: Brand[];
-  selectedBrands: string[];
-  onToggleBrand: (slug: string) => void;
-}
+
 
 const BrandFilter: React.FC<BrandFilterProps> = ({ brands, selectedBrands, onToggleBrand }) => {
   return (

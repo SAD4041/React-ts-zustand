@@ -1,9 +1,6 @@
 import React from 'react';
-import type { SubCategory } from '@/types/productListingTypes';
+import type { SubCategory, Props } from '@/types/productListingTypes';
 
-interface Props {
-  category: SubCategory;
-}
 
 const SubCategoryCard: React.FC<Props> = ({ category }) => {
   return (

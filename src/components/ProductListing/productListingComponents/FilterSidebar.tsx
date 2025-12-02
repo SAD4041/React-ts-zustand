@@ -4,19 +4,8 @@ import BrandFilter from './BrandFilters';
 import SizeFilter from './SizeFilter';
 import ColorFilter from './ColorFilter';
 import PriceRangeFilter from './PriceRange';
+import type { FilterSidebarProps } from '@/types/productListingTypes';
 
-interface FilterSidebarProps {
-  selectedBrands: string[];
-  selectedSizes: string[];
-  selectedColors: string[];
-  priceRange: { min: number; max: number };
-  globalMaxPrice: number;
-  onBrandToggle: (slug: string) => void;
-  onSizeToggle: (size: string) => void;
-  onColorToggle: (code: string) => void;
-  onPriceChange: (range: { min: number; max: number }) => void;
-  onClearFilters: () => void;
-}
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({
   selectedBrands,

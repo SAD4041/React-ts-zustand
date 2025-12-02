@@ -1,12 +1,9 @@
 import React from 'react';
 import sortIcon from '@/assets/Listing Icon.png'
+import type { SortOptionsProps } from '@/types/productListingTypes';
 
 export type SortOption = 'newest' | 'cheapest' | 'expensive' | 'most-salled' | 'most-revelent';
 
-interface SortOptionsProps {
-  currentSort: SortOption | null;
-  onSortChange: (sort: SortOption) => void;
-}
 
 const SortOptions: React.FC<SortOptionsProps> = ({ currentSort, onSortChange }) => {
   const sorts = [
