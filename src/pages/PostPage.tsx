@@ -128,7 +128,7 @@ const PostPage = () => {
             </div>
 
             {/* Card Skeleton */}
-            <Card className="w-full max-w-md rounded-[12.5px] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] border-2 border-black overflow-hidden">
+            <Card className="w-full max-w-md rounded-[12.5px] shadow-shadow-strong border-2 border-black overflow-hidden">
               {/* Image Carousel Skeleton */}
               <div className="w-full">
                 <Skeleton className="w-full h-[350px] sm:h-[400px] md:h-[450px]" />
@@ -222,7 +222,7 @@ const PostPage = () => {
               </p>
             </div>
           </div>
-          <Card className="w-full max-w-md rounded-[12.5px] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] border-2 border-black overflow-hidden">
+          <Card className="w-full max-w-md rounded-[12.5px]  border-2 border-black overflow-hidden">
             {/* Image */}
             <div className="w-full">
               {/* {post.imageUrl && <img

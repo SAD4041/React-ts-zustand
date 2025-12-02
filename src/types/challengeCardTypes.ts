@@ -6,6 +6,7 @@ interface Profile {
 }
 
 export interface ChallengeCardProps {
+  id: number;
   title: string;
   description?: string;
   startDate: string;
@@ -16,6 +17,7 @@ export interface ChallengeCardProps {
   coverImage?: string;
   isPrivate?: boolean;
   isJoined?: boolean;
+  onClick?: () => void; 
 
   creator?: {
     name: string;
