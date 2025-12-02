@@ -16,6 +16,7 @@ import useUserStore from "@/store/userStore/userStore";
 
 export const baseURL = "http://localhost:8080"; // backend URL
 export const AUTH_BASE = "/api/v1";
+export const PROTECTED_BASE = "/api/v1";
 
 const apiClient: AxiosInstance = axios.create({
 	baseURL,

@@ -2,7 +2,7 @@ import CustomButton from "@/components/Custom/CustomButton";
 import CustomToast from "@/components/Custom/CustomToast";
 import useUserStore from "@/store/userStore/userStore";
 import { ArrowLeft, ArrowRight, Upload } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomInput from "@/components/Custom/CustomInput";
 import CustomDropdown from "@/components/Custom/CustomDropdown";
@@ -17,12 +17,25 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import type {
+  CreatePostFormValues,
+  SimpleChallenge,
+} from "@/types/createPostFormTypes";
+import {
+  createPostService,
+  getParticipatingChallengesService,
+} from "@/services/postService";
+import type { ChallengePreview, PostResponse } from "@/types/postTypes";
 const PostCreation = () => {
   const { token, userId } = useUserStore.getState();
   const [imageURLs, setImageURLs] = useState<string[]>([]);
   if (!token) {
-    CustomToast("you need to login first!", "error");
-    return <div>you need to login first!</div>;
+    CustomToast("باید اول به اکانت خود وارد شوید", "error");
+    return (
+      <div className="text-center text-primary mt-8 text-lg font-medium">
+        باید اول به اکانت خود وارد شوید
+      </div>
+    );
   }
 
   const navigate = useNavigate();
@@ -42,20 +55,53 @@ const PostCreation = () => {
     setImages((prev) => prev.filter((_, i) => i !== index));
     setImageURLs((prev) => prev.filter((_, i) => i !== index));
   };
-  const handleSubmit = (values: any) => {
-    if (images.length === 0) {
-      CustomToast("لطفا تصویر را بارگذاری کنید", "error");
-      return;
-    }
-    console.log("Post submitted:", values);
+
+  const [challenges, setChallenges] = useState<SimpleChallenge[]>([]);
+
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        const fullChallenges = await getParticipatingChallengesService();
+
+        const simpleChallenges: SimpleChallenge[] = fullChallenges.map(
+          (c: ChallengePreview) => ({
+            id: c.id,
+            name: c.title,
+          })
+        );
+
+        setChallenges(simpleChallenges);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchChallenges();
+    // console.log("challenges state:", challenges);
+  }, []);
+
+  const handleSubmit = async (values: CreatePostFormValues) => {
+    // if (images.length === 0 ) {
+    //   CustomToast("لطفا تصویر را بارگذاری کنید", "error");
+    //   return;
+    // }
+    console.log("Submitting post with values:", values);
+    const response: PostResponse = await createPostService({
+      description: values.description,
+      challenge_id: values.challengeID,
+      // pictures: images,
+      pictures: ["images_placeholder"], // Placeholder since actual file upload isn't implemented :( ----------------------------------------------------
+    });
+    CustomToast("پست با موفقیت ایجاد شد!", "success");
+    console.log("Post submitted:", response);
   };
-  const challenges = [
-    { id: 1, name: "چالش روزی 8 لیوان آب خوردن" },
-    { id: 2, name: "چالش پیاده‌روی هفتگی" },
-    { id: 3, name: "چالش سلام دادن با افراد غریبه" },
-    { id: 4, name: "چالش شنا کردن" },
-    { id: 5, name: "چالش میو میو کردن" },
-  ];
+  // const challengess = [
+  //   { id: 1, name: "چالش روزی 8 لیوان آب خوردن" },
+  //   { id: 2, name: "چالش پیاده‌روی هفتگی" },
+  //   { id: 3, name: "چالش سلام دادن با افراد غریبه" },
+  //   { id: 4, name: "چالش شنا کردن" },
+  //   { id: 5, name: "چالش میو میو کردن" },
+  // ];
 
   return (
     <>
@@ -76,7 +122,7 @@ const PostCreation = () => {
       <Formik
         initialValues={{
           description: "",
-          challenge: "",
+          challengeID: null,
         }}
         onSubmit={handleSubmit}
       >
@@ -84,7 +130,7 @@ const PostCreation = () => {
           <Form>
             {/* Image preview + Upload */}
             <div className="flex flex-col items-center gap-2 mr-[24px] ml-[24px] mt-[20px]">
-              <label className="w-full h-64 border-2 border-gray-400 rounded-xl flex items-center justify-center cursor-pointer relative overflow-hidden">
+              <label className="w-full h-64 border-2 border-neutral-gray rounded-xl flex items-center justify-center cursor-pointer relative overflow-hidden">
                 {images.length > 0 ? (
                   <Carousel className="w-full h-full relative">
                     <CarouselContent className="h-full">
@@ -154,10 +200,13 @@ const PostCreation = () => {
               </p>
               <AutocompleteSingleSelect
                 items={challenges}
-                value={values.challenge}
-                onChange={(val) => {
-                  setFieldValue("challenge", val);
-                  console.log("Challenge selected:", val);
+                value={
+                  challenges.find((c) => c.id === values.challengeID)?.name ||
+                  ""
+                }
+                onChange={(item) => {
+                  setFieldValue("challengeID", item.id);
+                  console.log("Selected challenge ID:", values.challengeID);
                 }}
                 placeHolder="انتخاب چالش"
               />
