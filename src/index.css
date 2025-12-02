@@ -266,6 +266,8 @@
   --profile-paragraph-size: 16px;
   --login-from-h: 410px;
   --login-from-w: 420px;
+  --shadow-strong: 3px 3px 0px 0px rgba(0, 0, 0, 1);
+  --save-color: #fffbbb;
 }
 
 @theme inline {
@@ -330,6 +332,8 @@
   --color-neutral-gray: var(--neutral-gray);
   --color-neutral-gray-bold: var(--neutral-gray-bold);
   --color-primary-picture-background : var(--primary-picture-background);
+  --color-save-color : var(--save-color);
+  --shadow-shadow-strong: var(--shadow-strong);
   --shadow-button: var(--shadow-button);
   --shadow-button-active: var(--shadow-button-active);
   --text-title: var(--title-size);
