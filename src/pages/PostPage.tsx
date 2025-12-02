@@ -5,9 +5,9 @@ import useUserStore from "@/store/userStore/userStore";
 import convertToPersianDigits from "@/utils/convertToPersianDigits";
 import formatFollowBarNumber from "@/utils/formatFollowBarNumber";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { ClipboardCheck, Heart, MessageCircle } from "lucide-react";
+import { ClipboardCheck, Heart, MessageCircle, Pencil } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getUserInitials } from "@/components/Profile/ProfileHeader/ProfileHeader";
 import {
   Carousel,
@@ -27,11 +27,14 @@ import { set } from "react-hook-form";
 import type { ChallengePreview, PostResponse } from "@/types/postTypes";
 import { timeAgo } from "@/utils/timeAgoDiff";
 import { Skeleton } from "@/components/ui/skeleton";
+import CustomBtn from "@/components/Custom/CustomBtn";
 
 const PostPage = () => {
   const { id } = useParams();
   const postId = Number(id);
   const postmock = mockposts.find((p) => p.id === postId);
+  const navigate = useNavigate();
+
   if (!postmock) {
     return <div>No post found with this id!</div>;
   }
@@ -104,7 +107,6 @@ const PostPage = () => {
     fetchChallenge();
   }, [postData?.challenge_id]);
 
-  
   const isLikeMode = mutualLikers.length > 0;
   const activeProfiles = isLikeMode ? mutualLikers : mutualCommenters;
 
@@ -124,6 +126,12 @@ const PostPage = () => {
               <div className="flex flex-col gap-2 translate-y-[2px] w-1/2">
                 <Skeleton className="h-4 w-1/2" /> {/* username */}
                 <Skeleton className="h-3 w-2/3" /> {/* time */}
+              </div>
+              <div className="">
+                {/* Placeholder for potential action buttons */}
+                <TertiaryCustomButton className="text-primary">
+                  loading..
+                </TertiaryCustomButton>
               </div>
             </div>
 
@@ -220,6 +228,15 @@ const PostPage = () => {
               >
                 {convertToPersianDigits(timeAgo(postData?.created_at || ""))}
               </p>
+            </div>
+            <div className="ms-auto">
+              <TertiaryCustomButton
+                onClick={() => navigate(`/editpost/${postId}`)}
+                className="text-primary"
+              >
+                ویرایش پست
+                <Pencil />
+              </TertiaryCustomButton>
             </div>
           </div>
           <Card className="w-full max-w-md rounded-[12.5px] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] border-2 border-black overflow-hidden">

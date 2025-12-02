@@ -12,14 +12,13 @@ import Test from "@/pages/test";
 import Edit from "@/pages/EditProfile";
 import PostCreation from "@/pages/PostCreation";
 import PostPage from "@/pages/PostPage";
-import EditPost from "@/pages/EditPost"
+import EditPost from "@/pages/EditPost";
 
 // import { LogIn } from "lucide-react";
 import Challenge from "@/pages/ChallengeInfo";
 import ChallengeEdit from "@/pages/ChallengeEdit";
 import ChallengeCreate from "@/pages/ChallengeCreate";
 import ProgressCalendar from "@/components/ProgressCalendar";
-
 
 export const router = createBrowserRouter([
   {
@@ -54,10 +53,6 @@ export const router = createBrowserRouter([
         path: "/challenge",
         element: <Challenge />,
       },
-      {
-        path: "/editpost",
-        element: <EditPost />,
-      },
     ],
   },
   {
@@ -86,6 +81,10 @@ export const router = createBrowserRouter([
       {
         path: "/createChallenge",
         element: <ChallengeCreate />,
+      },
+      {
+        path: "/editpost/:id",
+        element: <EditPost />,
       },
     ],
   },

@@ -89,7 +89,7 @@ export const verifyEmailChangeService = async ({
   });
 };
 
-export const updatePostService = async (postId: number, dto: { description?: string; pictures?: string[] }) => {
-  return await putData({ endPoint: `/api/v1/posts/${postId}`, data: dto });
-};
+// export const updatePostService = async (postId: number, dto: { description?: string; pictures?: string[] }) => {
+//   return await putData({ endPoint: `/api/v1/posts/${postId}`, data: dto });
+// };
 

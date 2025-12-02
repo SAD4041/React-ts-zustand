@@ -20,7 +20,7 @@ export const updatePostService = async ({
   pictures,
 }: UpdatePostPayload) => {
   const data = await putData({
-    endPoint: `${PROTECTED_BASE}/posts/${id}`, 
+    endPoint: `${PROTECTED_BASE}/posts/${id}`,
     data: { description, pictures },
   });
   return data;
