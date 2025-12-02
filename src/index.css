@@ -336,4 +336,13 @@ html body[data-scroll-locked] {
 	.text-small {
 		@apply text-sm md:text-base;
 	}
+
+	.card-shell {
+		@apply rounded-xl border border-border bg-card shadow-lg;
+	}
+
+	.card-shell {
+		@apply flex h-full flex-col p-4 rounded-xl border border-border bg-card shadow-lg;
+	}
+	
 }
