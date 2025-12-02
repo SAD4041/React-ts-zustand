@@ -1,10 +1,7 @@
 import React from 'react';
 import ProductCard from '@/components/Product/ProductCard';
-import type { Product } from '@/types/productListingTypes';
+import type { Product, ProductGridProps } from '@/types/productListingTypes';
 
-interface ProductGridProps {
-  products: Product[];
-}
 
 const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
 

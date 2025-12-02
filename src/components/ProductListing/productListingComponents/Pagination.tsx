@@ -1,12 +1,7 @@
 import React from 'react';
 import { toPersianDigits } from '@/utils/PersianDigits';
+import type { PaginationProps } from '@/types/productListingTypes'
 
-interface PaginationProps {
-  currentGroup: number;
-  totalGroups: number;
-  onGroupChange: (group: number) => void;
-  pagesPerGroup: number;
-}
 
 const Pagination: React.FC<PaginationProps> = ({ 
   currentGroup, 

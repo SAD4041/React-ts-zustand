@@ -1,10 +1,6 @@
+import type { SizeFilterProps } from '@/types/productListingTypes';
 import React from 'react';
 
-interface SizeFilterProps {
-  sizes: string[];
-  selectedSizes: string[];
-  onToggleSize: (size: string) => void;
-}
 
 const SizeFilter: React.FC<SizeFilterProps> = ({ sizes, selectedSizes, onToggleSize }) => {
   return (
