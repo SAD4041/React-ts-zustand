@@ -24,7 +24,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white">
+    <div className="w-full min-h-screen bg-background">
     <div className="w-full max-w-6xl mx-auto rtl">
       {/* --- Top Profile Header --- */}
       <div className="flex justify-start items-start mb-6 gap-4">
