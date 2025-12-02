@@ -1,18 +1,11 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
+import type { Props } from "@/types/tertiaryCustomButtonProp";
 
 //onClick={() => handleClickEdit()} className={`w-40 h-8.5 rounded-[12.5px] bg-[var(--color-blue-side)] text-white font-bold ${pressedEdit ? "shadow-none translate-y-[3px]" : "shadow-[0_3px_0px_0px_rgba(0,0,0,1)]"} transition-all duration-200 border-2 border-black `
 
-interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-  backgroundColor?: string;
-  pageAddress?: string;
-  width?: string;
-  onClick?: () => void;
-  className?: string;
-  isGray?: boolean;
-}
+
 
 const TertiaryCustomButton = ({
   children,

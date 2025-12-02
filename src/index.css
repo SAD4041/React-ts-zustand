@@ -243,6 +243,7 @@
   --borderInvalid: oklch(0.5347 0.2194 29.23);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
+  --heart: oklch(0.627 0.214 25.885);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -369,7 +370,9 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
-
+.shadow-border-default {
+  box-shadow: 0px 1px 0px var(--borderDefault);
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;
