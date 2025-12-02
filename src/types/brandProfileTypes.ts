@@ -23,3 +23,13 @@ export interface BrandData {
   logoUrl: string;
   bannerUrl: string;
 }
+
+export interface BrandProfilePayload {
+  maket_name: string;
+  description: string;
+  mobile: string;
+  email: string;
+  address: string;
+  logo?: string;
+  banner?: string;
+}

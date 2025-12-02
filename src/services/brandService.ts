@@ -1,15 +1,7 @@
 // src/services/brandService.ts
 import { getData, patchData, postImageData } from "@/services/services";
+import type { BrandProfilePayload } from "@/types/brandProfileTypes";
 
-export interface BrandProfilePayload {
-  maket_name: string;
-  description: string;
-  mobile: string;
-  email: string;
-  address: string;
-  logo?: string;
-  banner?: string;
-}
 
 /** Get brand profile */
 export const getBrandProfile = () => {
