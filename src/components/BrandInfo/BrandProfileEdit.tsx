@@ -1,46 +1,14 @@
-// src/components/BrandInfo/BrandProfileEdit.tsx
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { uploadBrandImage } from "@/services/brandService";
-
-interface BrandFormValues {
-  maket_name: string;
-  description: string;
-  mobile: string;
-  email: string;
-  address: string;
-  logoUrl: string;
-  bannerUrl: string;
-}
-
-const validationSchema = Yup.object({
-  maket_name: Yup.string().required("نام فروشگاه الزامی است"),
-  description: Yup.string().max(500, "حداکثر 500 کاراکتر مجاز است").required("درباره فروشگاه الزامی است"),
-  mobile: Yup.string()
-    .matches(/^09\d{9}$/, "شماره تلفن باید معتبر و با 09 شروع شود")
-    .required("شماره تماس الزامی است"),
-  email: Yup.string().email("ایمیل نامعتبر است").required("ایمیل الزامی است"),
-  address: Yup.string().required("آدرس الزامی است"),
-});
-
-interface BrandProfileEditProps {
-  brandData: BrandFormValues;
-  onSave: (values: BrandFormValues) => Promise<void>;
-}
+import type { BrandFormValues, BrandProfileEditProps } from "@/types/brandProfileTypes";
+import { ValidationSchema } from "@/schemas/brandValidationSchema";
+import { Input, Textarea } from "@/components/ui/Input";
 
 const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
   const formik = useFormik<BrandFormValues>({
-    initialValues: {
-      maket_name: brandData?.maket_name || "",
-      description: brandData?.description || "",
-      mobile: brandData?.mobile || "",
-      email: brandData?.email || "",
-      address: brandData?.address || "",
-      logoUrl: brandData?.logoUrl || "/placeholder-logo.png",
-      bannerUrl: brandData?.bannerUrl || "/placeholder-banner.png",
-    },
+    initialValues: brandData,
     enableReinitialize: true,
-    validationSchema,
+    validationSchema: ValidationSchema,
     onSubmit: (values) => {
       onSave(values);
     },
@@ -51,139 +19,204 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
       const res = await uploadBrandImage(file, type);
       formik.setFieldValue(`${type}Url`, res.url);
     } catch (err) {
-      console.error(`آپلود ${type} ناموفق بود:`, err);
+      console.error(`آپلود ${type} ناموفق بود`, err);
     }
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-6 bg-white rounded-2xl shadow">
-      <h2 className="text-2xl font-bold mb-6 text-center">
-        مدیریت اطلاعات برند — {formik.values.maket_name}
-      </h2>
-
-      {/* ✅ فرم اضافه شد */}
-      <form onSubmit={formik.handleSubmit}>
-        <div className="bg-gray-50 p-6 rounded-xl shadow-sm">
-          <div className="flex flex-col items-center mb-6">
+    <div className="w-full max-w-6xl mx-auto rtl">
+      {/* --- Top Profile Header --- */}
+      <div className="flex justify-start items-start mb-6 gap-4">
+        {/* Profile Image */}
+        <div className="w-12 h-12 rounded-full border border-border overflow-hidden shrink-0">
+          {formik.values.logoUrl ? (
             <img
               src={formik.values.logoUrl}
-              className="w-28 h-28 rounded-full object-cover"
+              alt="Profile"
+              className="w-full h-full object-cover"
             />
-            <input
-              type="file"
-              className="mt-3"
-              onChange={(e) =>
-                e.target.files &&
-                handleImageUpload(e.target.files[0], "logo")
-              }
-            />
+          ) : (
+            <div className="w-full h-full bg-muted flex items-center justify-center text-muted-foreground text-sm font-semibold">
+              LOGO
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col items-start">
+          <h3 className="font-extrabold text-foreground text-xl">
+            {formik.values.maket_name || "نام برند"}
+          </h3>
+          <p className="text-muted-foreground text-sm mt-0.5">
+            مدیریت اطلاعات برند
+          </p>
+        </div>
+      </div>
+
+      {/* --- Card --- */}
+      <div className="bg-card rounded-lg border border-border p-8 shadow-md">
+        {/* Title */}
+        <div className="flex justify-between items-center mb-10">
+          <h2 className="text-2xl font-bold text-foreground">اطلاعات برند</h2>
+        </div>
+
+        <form onSubmit={formik.handleSubmit}>
+          {/* Images */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-8">
+            {/* Logo */}
+            <div className="flex flex-col items-center">
+              <label className="font-bold mb-4 text-foreground text-xl">لوگو برند</label>
+
+              <div className="mb-6">
+                {formik.values.logoUrl ? (
+                  <img
+                    src={formik.values.logoUrl}
+                    alt="Logo"
+                    className="w-40 h-40 rounded-full object-cover shadow-lg border border-border"
+                  />
+                ) : (
+                  <div className="w-40 h-40 rounded-full bg-muted flex items-center justify-center text-muted-foreground border border-border">
+                    <span className="text-4xl">📷</span>
+                  </div>
+                )}
+              </div>
+
+              <label className="cursor-pointer">
+                <span className="bg-primary hover:bg-primary/90 text-primary-foreground px-10 py-2 rounded-full text-base font-medium transition-colors shadow-lg">
+                  تغییر لوگو برند
+                </span>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={(e) =>
+                    e.target.files && handleImageUpload(e.target.files[0], "logo")
+                  }
+                />
+              </label>
+            </div>
+
+            {/* Banner */}
+            <div className="flex flex-col items-center">
+              <label className="font-bold mb-4 text-foreground text-xl">
+                بنر برند
+              </label>
+
+              <div className="w-full h-40 rounded-xl bg-muted overflow-hidden mb-4 flex items-center justify-center border border-border">
+                {formik.values.bannerUrl ? (
+                  <img
+                    src={formik.values.bannerUrl}
+                    alt="Banner"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-muted flex items-center justify-center text-muted-foreground">
+                    <span className="text-4xl">🖼️</span>
+                  </div>
+                )}
+              </div>
+
+              <label className="cursor-pointer">
+                <span className="bg-primary hover:bg-primary/90 text-primary-foreground px-12 py-2 rounded-full text-base font-medium transition-colors shadow-lg">
+                  آپلود بنر
+                </span>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={(e) =>
+                    e.target.files && handleImageUpload(e.target.files[0], "banner")
+                  }
+                />
+              </label>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label>نام فروشگاه</label>
-              <input
-                name="maket_name"
-                value={formik.values.maket_name}
-                onChange={formik.handleChange}
-                className="input"
-              />
-              {formik.touched.maket_name && formik.errors.maket_name && (
-                <div className="text-red-500 text-xs mt-1">{formik.errors.maket_name}</div>
-              )}
-            </div>
+          {/* Divider */}
+          <div className="border-t border-border my-10"></div>
 
-            <div>
-              <label>نام برند (نمایشی)</label>
-              <input
-                name="maket_name"
-                value={formik.values.maket_name}
-                onChange={formik.handleChange}
-                className="input"
-              />
-              {formik.touched.maket_name && formik.errors.maket_name && (
-                <div className="text-red-500 text-xs mt-1">{formik.errors.maket_name}</div>
-              )}
-            </div>
+          {/* Text Inputs */}
+          <div className="space-y-8">
+            {/* Brand Name */}
+            <Input
+              label="نام برند"
+              id="maket_name"
+              name="maket_name"
+              value={formik.values.maket_name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder="نام کامل برند یا فروشگاه"
+              error={formik.touched.maket_name ? formik.errors.maket_name : undefined}
+              className="h-14 rounded-xl bg-muted border-border"
+            />
 
-            <div className="sm:col-span-2">
-              <label>درباره برند</label>
-              <textarea
-                name="description"
-                value={formik.values.description}
-                onChange={formik.handleChange}
-                className="input h-28"
-              />
-              {formik.touched.description && formik.errors.description && (
-                <div className="text-red-500 text-xs mt-1">{formik.errors.description}</div>
-              )}
-            </div>
+            {/* Description */}
+            <Textarea
+              label="درباره برند"
+              id="description"
+              name="description"
+              rows={5}
+              value={formik.values.description}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder="توضیحاتی درباره فعالیت‌ها و محصولات برند شما"
+              error={formik.touched.description ? formik.errors.description : undefined}
+              className="rounded-xl bg-muted border-border resize-none"
+            />
 
-            <div>
-              <label>شماره تماس</label>
-              <input
+            {/* Mobile + Email */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <Input
+                label="تلفن تماس"
+                id="mobile"
                 name="mobile"
                 value={formik.values.mobile}
                 onChange={formik.handleChange}
-                className="input"
+                onBlur={formik.handleBlur}
+                placeholder="09xxxxxxxxx"
+                error={formik.touched.mobile ? formik.errors.mobile : undefined}
+                className="h-14 rounded-xl bg-muted border-border"
               />
-              {formik.touched.mobile && formik.errors.mobile && (
-                <div className="text-red-500 text-xs mt-1">{formik.errors.mobile}</div>
-              )}
-            </div>
-
-            <div>
-              <label>ایمیل</label>
-              <input
+              <Input
+                label="ایمیل"
+                id="email"
                 name="email"
+                type="email"
                 value={formik.values.email}
                 onChange={formik.handleChange}
-                className="input"
+                onBlur={formik.handleBlur}
+                placeholder="example@domain.com"
+                error={formik.touched.email ? formik.errors.email : undefined}
+                className="h-14 rounded-xl bg-muted border-border"
               />
-              {formik.touched.email && formik.errors.email && (
-                <div className="text-red-500 text-xs mt-1">{formik.errors.email}</div>
-              )}
             </div>
 
-            <div className="sm:col-span-2">
-              <label>آدرس</label>
-              <input
-                name="address"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                className="input"
-              />
-              {formik.touched.address && formik.errors.address && (
-                <div className="text-red-500 text-xs mt-1">{formik.errors.address}</div>
-              )}
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <label>بنر برند</label>
-            <img
-              src={formik.values.bannerUrl}
-              className="w-full rounded-xl mt-2 object-cover h-40"
-            />
-            <input
-              type="file"
-              className="mt-3"
-              onChange={(e) =>
-                e.target.files &&
-                handleImageUpload(e.target.files[0], "banner")
-              }
+            {/* Address */}
+            <Textarea
+              label="آدرس"
+              id="address"
+              name="address"
+              rows={3}
+              value={formik.values.address}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder="آدرس کامل فیزیکی برند/فروشگاه"
+              error={formik.touched.address ? formik.errors.address : undefined}
+              className="rounded-xl bg-muted border-border resize-none"
             />
           </div>
 
-          {/* ✅ تغییر: دکمه submit شد */}
-          <button
-            type="submit"
-            className="btn-primary w-full mt-6"
-          >
-            اعمال تغییرات
-          </button>
-        </div>
-      </form>
+          {/* Submit Button */}
+          <div className="mt-12 flex justify-start" dir="ltr">
+            <button
+              type="submit"
+              disabled={formik.isSubmitting}
+              className="bg-secondary hover:bg-secondary/90 text-primary-foreground px-8 py-3 rounded-xl font-bold text-lg transition-colors shadow-xl min-w-[160px] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {formik.isSubmitting ? "در حال ذخیره..." : "ذخیره تغییرات"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

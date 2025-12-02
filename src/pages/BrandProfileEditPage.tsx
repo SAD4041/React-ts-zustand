@@ -1,19 +1,12 @@
 // src/pages/BrandProfileEditPage.tsx
 import { useState, useEffect, useCallback } from "react"; 
 import BrandProfileEdit from "@/components/BrandInfo/BrandProfileEdit";
-import { getBrandProfile, updateBrandProfile } from "@/services/brandService";
+// import { getBrandProfile, updateBrandProfile } from "@/services/brandService";
+import { getBrandProfile, updateBrandProfile } from "@/services/brandService.mock";
 import { Spinner } from "@/components/ui/Spinner";
+import type { BrandData } from "@/types/brandProfileTypes";
 
-// Define brand type
-interface BrandData {
-  maket_name: string;
-  description: string;
-  mobile: string;
-  email: string;
-  address: string;
-  logo: string;
-  banner: string;
-}
+
 
 const BrandProfileEditPage = () => {
   const [brand, setBrand] = useState<BrandData | null>(null);
@@ -31,8 +24,8 @@ const BrandProfileEditPage = () => {
         mobile: res.mobile || "",
         email: res.email || "",
         address: res.address || "",
-        logo: res.logo || "/placeholder-logo.png", // ⚠️ placeholder
-        banner: res.banner || "/placeholder-banner.png", // ⚠️ placeholder
+        logoUrl: res.logo || "/placeholder-logo.png", // ⚠️ placeholder
+        bannerUrl: res.banner || "/placeholder-banner.png", // ⚠️ placeholder
       });
     } catch (err) {
       console.error("Error fetching brand profile:", err);

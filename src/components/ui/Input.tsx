@@ -1,15 +1,6 @@
 // src/components/ui/Input.tsx
-import { forwardRef, InputHTMLAttributes, TextareaHTMLAttributes } from "react";
-
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
-  label?: string;
-  error?: string;
-};
-
-type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
-  label?: string;
-  error?: string;
-};
+import { forwardRef } from "react";
+import type { InputProps, TextareaProps } from "@/types/inputTypes";
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, className = "", ...props }, ref) => {
