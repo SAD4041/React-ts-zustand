@@ -3,6 +3,7 @@ import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Landing from "@/pages/Landing";
 import Temp from "@/pages/Temp";
 import BrandProfile from "@/pages/BrandProfile";
+import Sidebar from "@/pages/Dash";
 
 export const router = createBrowserRouter([
 	{
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
 			{
 				path: "/brandProfile/:brandId/:brandName",
 				element: <BrandProfile />,
+			},
+			{
+				path: "/dash",
+				element: <Sidebar />,
 			},
 			// {
 		],
