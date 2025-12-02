@@ -41,7 +41,7 @@ export default function App() {
 
   return (
     <div className="py-16 bg-white">
-
+       <div className='h-[700px]'>salam</div> {/* delete this */}
       {/* Hero */}
       <div className="container mx-auto px-4 mb-20">
         <div className="max-w-4xl mx-auto text-center">
