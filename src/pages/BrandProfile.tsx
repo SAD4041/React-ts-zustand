@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getBrandProfile, getBrandProducts } from '@/services/brandProfile';
 
-import LoadingSpinner from '@/components/Custom/LoadingSpinner';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import BrandHeader from '@/components/BrandProfile/BrandHeaderSection';
 import BrandInfo from '@/components/BrandProfile/BrandInfoSection';
 import BestSell from '@/components/BrandProfile/BestSellSection';

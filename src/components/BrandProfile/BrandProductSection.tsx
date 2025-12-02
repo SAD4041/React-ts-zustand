@@ -8,7 +8,7 @@ import SortOptions from '@/components/ProductListing/productListingComponents/So
 import type { SortOption } from '@/components/ProductListing/productListingComponents/SortOptions';
 import filterIcon from '@/assets/brand-profile/Filter_alt.png';
 import { categories } from '@/data/brandProfile/data';
-import LoadingSpinner from '../Custom/LoadingSpinner';
+import LoadingSpinner from '../ui/LoadingSpinner';
 
 const FilterOptions: React.FC<{ options: any[]; currentFilter: string; onFilterChange: (filter: string) => void }> = ({ options, currentFilter, onFilterChange }) => {
   return (

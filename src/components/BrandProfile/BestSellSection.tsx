@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { getBrandProfile, getBrandProducts } from '@/services/brandProfile';
 
 import ProductCard from '../Product/ProductCard';
-import LoadingSpinner from "../Custom/LoadingSpinner";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const BestSell = () => {
     const { brandId, brandName } = useParams<{ brandId: string; brandName: string }>();

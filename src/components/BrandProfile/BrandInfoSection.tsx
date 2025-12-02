@@ -7,7 +7,7 @@ import phoneIcon from '@/assets/brand-profile/Phone.png';
 import emailIcon from '@/assets/brand-profile/Message.png';
 import calendarIcon from '@/assets/brand-profile/Date_today.png';
 
-import LoadingSpinner from '../Custom/LoadingSpinner';
+import LoadingSpinner from '../ui/LoadingSpinner';
 
 const BrandInfo = () => {
     const { brandId, brandName } = useParams<{ brandId: string; brandName: string }>();

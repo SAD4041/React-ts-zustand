@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getBrandProfile } from '@/services/brandProfile';
-import LoadingSpinner from '@/components/Custom/LoadingSpinner';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 import starIcon from '@/assets/brand-profile/Star.png';
 import shareIcon from '@/assets/brand-profile/Send_light.png';

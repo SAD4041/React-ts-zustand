@@ -6,7 +6,7 @@ import { getBrandReviews, submitBrandReview } from '@/services/brandProfile';
 import starIcon from '@/assets/brand-profile/Star.png';
 import thumbsUpIcon from '@/assets/brand-profile/Vector.png';
 import thumbsDownIcon from '@/assets/brand-profile/Vector.png';
-import LoadingSpinner from '../Custom/LoadingSpinner';
+import LoadingSpinner from '../ui/LoadingSpinner';
 
 const CustomerReviewsSection = () => {
   const { brandId, brandName } = useParams<{ brandId: string; brandName: string }>();
