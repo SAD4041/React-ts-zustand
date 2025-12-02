@@ -98,7 +98,7 @@ export default function ChallengeCard({
 
   return (
     <Card
-      className="w-full max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-xl transition-shadow duration-300 border-2 border-black bg-white"
+      className="w-full max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-shadow-strong hover:shadow-xl transition-shadow duration-300 border-2 border-black bg-white"
       dir="rtl"
     >
       <div className="flex flex-col md:flex-row">
