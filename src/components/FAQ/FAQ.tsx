@@ -47,7 +47,7 @@ const FAQ: React.FC = () => {
           (category: string, index: number) => (
             <button
               key={index}
-              className={`px-5 py-2 rounded-xl text-sm ${
+              className={`px-5 py-2 rounded-xl text-sm cursor-pointer ${
                 category === "عمومی"
                   ? "bg-[#7EC5F4] text-white shadow-xl shadow-[#7EC5F4]/40"
                   : "bg-white text-gray-700 border border-blue-100 shadow-xl shadow-blue-100/60"
