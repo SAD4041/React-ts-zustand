@@ -980,12 +980,7 @@ function Dashboard() {
                               تیم شما برای شرکت در مسابقه تایید شده است
                             </span>
                           </li>
-                          <li className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                            <span>
-                              می‌توانید کارت شرکت در مسابقه را دانلود کنید
-                            </span>
-                          </li>
+                        
                           <li className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                             <span>
@@ -1274,7 +1269,7 @@ function Dashboard() {
                               <li className="flex items-center gap-2">
                                 <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
                                 <span>
-                                  اعضای تیم را دعوت کنید (حداقل ۳ نفر)
+                                  اعضای تیم را دعوت کنید (حداکثر ۳ نفر)
                                 </span>
                               </li>
                               <li className="flex items-center gap-2">
