@@ -4,14 +4,16 @@ import Landing from "@/pages/Landing";
 import Temp from "@/pages/Temp";
 import BrandProfile from "@/pages/BrandProfile";
 import Sidebar from "@/pages/Dash";
+import Error404 from "@/pages/Error404";
+import Error500 from "@/pages/Error500";
 
 export const router = createBrowserRouter([
 	{
-		path: "/",
+ 		path: "/",
 		element: <PublicLayout />,
-		// errorElement: (
-		// 	<Error404 />
-		// ),
+		 errorElement: (
+			<Error404 />
+		 ), 
 		children: [
 			{
 				index: true,
@@ -29,6 +31,14 @@ export const router = createBrowserRouter([
 				path: "/dash",
 				element: <Sidebar />,
 			},
+			{
+				path: "/error500",
+				element: <Error500 />
+			}
+			// {
+			// 	path: "/AboutUs",
+			// 	element: <AboutUs />,
+			// },
 			// {
 		],
 	},

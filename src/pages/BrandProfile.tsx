@@ -9,6 +9,7 @@ import BrandInfo from '@/components/BrandProfile/BrandInfoSection';
 import BestSell from '@/components/BrandProfile/BestSellSection';
 import BrandProductsSection from '@/components/BrandProfile/BrandProductSection';
 import Comments from '@/components/BrandProfile/CommentsSection';
+import Error500 from './Error500';
 
 
 const BrandProfile = () => {
@@ -43,7 +44,7 @@ const BrandProfile = () => {
 
   if (loading) return <LoadingSpinner />;
 
-  if (!brandData) return <div>.داده‌ای یافت نشد</div>;
+  if (!brandData) return <Error500 />;
 
 
   return (
