@@ -3,8 +3,9 @@ import { Card } from '@/components/ui/userDashInfo/card';
 import { Button } from '@/components/ui/userDashInfo/button';
 import { Input } from '@/components/ui/userDashInfo/input';
 import { Label } from '@/components/ui/userDashInfo/label';
-import { z } from 'zod';
 import { Eye, EyeOff } from 'lucide-react';
+import { z } from 'zod';
+import Separator from '@/components/ui/userDashInfo/separator';
 
 const passwordSchema = z
   .string()
@@ -14,135 +15,145 @@ const passwordSchema = z
   .regex(/\d/, 'حداقل یک عدد')
   .regex(/[^A-Za-z0-9]/, 'حداقل یک کاراکتر خاص (!@#$%)');
 
-const ChangePasswordSection: React.FC = () => {
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showCurrent, setShowCurrent] = useState(false);
-  const [showNew, setShowNew] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [currentError, setCurrentError] = useState('');
-  const [newError, setNewError] = useState('');
-  const [confirmError, setConfirmError] = useState('');
+interface ChangePasswordProps {
+  currentPassword: string;
+  onSave: (newPassword: string) => void;
+}
 
-  const mockCurrent = 'OldPass123!';
+const ChangePassword: React.FC<ChangePasswordProps> = ({ currentPassword, onSave }) => {
+  const [pwd, setPwd] = useState({
+    current: '',
+    new: '',
+    confirm: '',
+  });
+  const [show, setShow] = useState({ current: false, new: false, confirm: false });
+  const [errors, setErrors] = useState({ current: '', new: '', confirm: '' });
 
   const validateCurrent = (value: string) => {
-    if (value !== mockCurrent) {
-      setCurrentError('رمز عبور فعلی اشتباه است.');
+    if (value !== currentPassword) {
+      setErrors(prev => ({ ...prev, current: 'رمز عبور فعلی اشتباه است.' }));
     } else {
-      setCurrentError('');
+      setErrors(prev => ({ ...prev, current: '' }));
     }
   };
 
   const validateNew = (value: string) => {
     try {
       passwordSchema.parse(value);
-      setNewError('');
-    } catch (e: any) {
-      setNewError(e.errors[0]?.message || 'خطا در رمز عبور');
+      setErrors(prev => ({ ...prev, new: '' }));
+    } catch (error: any) {
+      const message =
+        error?.errors?.[0]?.message ||
+        error?.message ||
+        'خطا در رمز عبور';
+      setErrors(prev => ({ ...prev, new: message }));
     }
   };
 
   const validateConfirm = (value: string) => {
-    if (value !== newPassword) {
-      setConfirmError('رمز عبور‌ها مطابقت ندارند.');
+    if (value !== pwd.new) {
+      setErrors(prev => ({ ...prev, confirm: 'رمز عبور‌ها مطابقت ندارند.' }));
     } else {
-      setConfirmError('');
+      setErrors(prev => ({ ...prev, confirm: '' }));
     }
   };
 
-  const handleChange = (
-    setter: React.Dispatch<React.SetStateAction<string>>,
-    validator: (v: string) => void
-  ) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setter(val);
-    validator(val);
+  const handleChange = (field: keyof typeof pwd) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPwd(prev => ({ ...prev, [field]: value }));
+    if (field === 'current') validateCurrent(value);
+    if (field === 'new') validateNew(value);
+    if (field === 'confirm') validateConfirm(value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    validateCurrent(currentPassword);
-    validateNew(newPassword);
-    validateConfirm(confirmPassword);
-
-    if (!currentError && !newError && !confirmError && newPassword) {
-      console.log('رمز عبور جدید:', newPassword);
+  const handleSubmit = () => {
+    validateCurrent(pwd.current);
+    validateNew(pwd.new);
+    validateConfirm(pwd.confirm);
+    if (!errors.current && !errors.new && !errors.confirm && pwd.new) {
+      onSave(pwd.new);
     }
   };
+
+  const isValid = !errors.current && !errors.new && !errors.confirm && pwd.new;
 
   return (
     <Card className="p-6">
-      <h3 className="mb-4 text-right text-lg font-semibold">تغییر رمز عبور</h3>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="text-right mb-3">
+        <h3 className="text-xl font-semibold">تغییر رمز عبور</h3>
+      </div>
+      <Separator className="mb-6" />
+      <div className="space-y-4 pb-10 px-10">
         <div className="space-y-2 text-right relative">
           <Label className="block">رمز عبور فعلی</Label>
           <div className="relative">
             <Input
-              type={showCurrent ? "text" : "password"}
-              value={currentPassword}
-              onChange={handleChange(setCurrentPassword, validateCurrent)}
+              type={show.current ? "text" : "password"}
+              value={pwd.current}
+              onChange={handleChange('current')}
               className="text-right dir-rtl pl-10"
             />
             <button
               type="button"
-              onClick={() => setShowCurrent(!showCurrent)}
+              onClick={() => setShow(prev => ({ ...prev, current: !prev.current }))}
               className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
             >
-              {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {show.current ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
-          {currentError && <p className="text-sm text-red-500">{currentError}</p>}
+          {errors.current && <p className="text-sm text-red-500">{errors.current}</p>}
         </div>
         <div className="space-y-2 text-right relative">
           <Label className="block">رمز عبور جدید</Label>
           <div className="relative">
             <Input
-              type={showNew ? "text" : "password"}
-              value={newPassword}
-              onChange={handleChange(setNewPassword, validateNew)}
+              type={show.new ? "text" : "password"}
+              value={pwd.new}
+              onChange={handleChange('new')}
               className="text-right dir-rtl pl-10"
             />
             <button
               type="button"
-              onClick={() => setShowNew(!showNew)}
+              onClick={() => setShow(prev => ({ ...prev, new: !prev.new }))}
               className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
             >
-              {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {show.new ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
-          {newError && <p className="text-sm text-red-500">{newError}</p>}
+          {errors.new && <p className="text-sm text-red-500">{errors.new}</p>}
         </div>
         <div className="space-y-2 text-right relative">
           <Label className="block">تکرار رمز عبور جدید</Label>
           <div className="relative">
             <Input
-              type={showConfirm ? "text" : "password"}
-              value={confirmPassword}
-              onChange={handleChange(setConfirmPassword, validateConfirm)}
+              type={show.confirm ? "text" : "password"}
+              value={pwd.confirm}
+              onChange={handleChange('confirm')}
               className="text-right dir-rtl pl-10"
             />
             <button
               type="button"
-              onClick={() => setShowConfirm(!showConfirm)}
+              onClick={() => setShow(prev => ({ ...prev, confirm: !prev.confirm }))}
               className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
             >
-              {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {show.confirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
-          {confirmError && <p className="text-sm text-red-500">{confirmError}</p>}
+          {errors.confirm && <p className="text-sm text-red-500">{errors.confirm}</p>}
         </div>
-        <div className="flex justify-end">
-          <Button 
-            type="submit" 
-            className="bg-[#007BFF] hover:bg-[#0069d9] text-white">
-            تغییر رمز عبور
-          </Button>
-        </div>
-      </form>
+      </div>
+
+      <div className="mt-6 px-10">
+        <Button
+          onClick={handleSubmit}
+          disabled={!isValid}
+          className="bg-[#00A6D4] hover:bg-[#00A6D4]/60 text-white"
+        >
+          تغییر رمز عبور
+        </Button>
+      </div>
     </Card>
   );
 };
 
-export default ChangePasswordSection;
+export default ChangePassword;
