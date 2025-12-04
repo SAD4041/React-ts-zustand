@@ -1,17 +1,7 @@
 import { useRef, useEffect, forwardRef } from "react";
 import { useField } from "formik";
-import type { TextareaHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
-
-export interface FormikTextareaProps
-  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  name: string;
-  label?: string;
-  errorClassName?: string;
-  containerClassName?: string;
-  inputClassName?: string;
-  autoGrow?: boolean; // allow disabling auto-grow if needed
-}
+import type { FormikTextareaProps } from "@/types/inputTypes";
 
 export const Textarea = forwardRef<HTMLTextAreaElement, FormikTextareaProps>(
   (
