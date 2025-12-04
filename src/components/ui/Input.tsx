@@ -9,13 +9,17 @@ const isRTL = (text: string | undefined): boolean => {
   return rtlChars.test(text);
 };
 
-export const Input = forwardRef<HTMLInputElement, FormikInputProps>(
+export const Input = forwardRef<
+  HTMLInputElement,
+  FormikInputProps & { forceRTL?: boolean }
+>(
   (
     {
       label,
       icon: Icon,
       onIconClick,
       onlyNumbers = false,
+      forceRTL = false,
       containerClassName = "",
       inputClassName = "",
       iconClassName = "",
@@ -28,6 +32,8 @@ export const Input = forwardRef<HTMLInputElement, FormikInputProps>(
     const [field, meta] = useField(props.name);
     const hasError = meta.touched && meta.error;
     const value = field.value ?? "";
+
+    const isRightToLeft = forceRTL || isRTL(value);
 
     return (
       <div className={cn("flex flex-col gap-1", containerClassName)}>
@@ -50,7 +56,7 @@ export const Input = forwardRef<HTMLInputElement, FormikInputProps>(
             {...field}
             {...props}
             ref={ref}
-            dir={isRTL(value) ? "rtl" : "ltr"}
+            dir={isRightToLeft ? "rtl" : "ltr"}
             onChange={(e) => {
               const newValue = e.target.value;
               if (onlyNumbers && !/^\d*$/.test(newValue)) return;
@@ -61,9 +67,9 @@ export const Input = forwardRef<HTMLInputElement, FormikInputProps>(
                placeholder:text-muted-foreground focus:outline-none 
                focus:ring-2 focus:ring-ring/50 focus:border-primary transition`,
               Icon ? "pl-10" : "",
+              isRightToLeft ? "text-right" : "text-left",
               className,
-              inputClassName,
-              isRTL(value) ? "text-right" : "text-left"
+              inputClassName
             )}
           />
         </div>

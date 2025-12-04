@@ -1,8 +1,8 @@
 // src/pages/BrandProfileEditPage.tsx
 import { useState, useEffect, useCallback } from "react"; 
 import BrandProfileEdit from "@/components/BrandInfo/BrandProfileEdit";
-import { getBrandProfile, updateBrandProfile } from "@/services/brandService";
-// import { getBrandProfile, updateBrandProfile } from "@/services/brandService.mock";
+// import { getBrandProfile, updateBrandProfile } from "@/services/brandService";
+import { getBrandProfile, updateBrandProfile } from "@/services/brandService.mock";
 import { Spinner } from "@/components/ui/Spinner";
 import type { BrandData } from "@/types/brandProfileTypes";
 

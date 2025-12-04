@@ -1,4 +1,4 @@
-import { useFormik } from "formik";
+import { useFormik, FormikProvider } from "formik";
 import { uploadBrandImage } from "@/services/brandService";
 import type { BrandFormValues, BrandProfileEditProps } from "@/types/brandProfileTypes";
 import { ValidationSchema } from "@/schemas/brandValidationSchema";
@@ -59,7 +59,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
           <div className="flex justify-between items-center mb-10">
             <h2 className="text-2xl font-bold text-foreground">اطلاعات برند</h2>
           </div>
-
+          <FormikProvider value={formik}>
           <form onSubmit={formik.handleSubmit}>
             {/* Images */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-8">
@@ -140,6 +140,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                 name="maket_name"
                 placeholder="نام کامل برند یا فروشگاه"
                 className="h-14 rounded-xl bg-muted border-border"
+                forceRTL
               />
 
               {/* Description */}
@@ -148,7 +149,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                 name="description"
                 rows={5}
                 placeholder="توضیحاتی درباره فعالیت‌ها و محصولات برند شما"
-                className="rounded-xl bg-muted border-border resize-none"
+                className="rounded-xl bg-muted border-border resize-y"
               />
 
               {/* Mobile + Email */}
@@ -158,6 +159,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                   name="mobile"
                   placeholder="09xxxxxxxxx"
                   className="h-14 rounded-xl bg-muted border-border"
+                  forceRTL
                 />
 
                 <Input
@@ -166,6 +168,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                   type="email"
                   placeholder="example@domain.com"
                   className="h-14 rounded-xl bg-muted border-border"
+                  forceRTL
                 />
               </div>
 
@@ -175,7 +178,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                 name="address"
                 rows={3}
                 placeholder="آدرس کامل فیزیکی برند/فروشگاه"
-                className="rounded-xl bg-muted border-border resize-none"
+                className="rounded-xl bg-muted border-border resize-y"
               />
             </div>
 
@@ -190,6 +193,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
               </button>
             </div>
           </form>
+          </FormikProvider>
         </div>
       </div>
     </div>
