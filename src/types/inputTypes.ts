@@ -1,11 +1,13 @@
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
-
-export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+import type { InputHTMLAttributes } from "react";
+import type { LucideIcon } from "lucide-react";
+export interface FormikInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  name: string;
   label?: string;
-  error?: string;
-};
-
-export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
-  label?: string;
-  error?: string;
-};
+  icon?: LucideIcon;
+  onIconClick?: () => void;
+  onlyNumbers?: boolean;
+  containerClassName?: string;
+  inputClassName?: string;
+  iconClassName?: string;
+  errorClassName?: string;
+}
