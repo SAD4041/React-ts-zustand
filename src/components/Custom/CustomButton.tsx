@@ -35,7 +35,7 @@ const CustomButton = ({
       {...props}
       onClick={handleClick}
       className={cn(
-        "bg-white hover:bg-gray-300 cursor-pointer rounded-xl shadow transition-all border border-gray-300 text-[20px]",
+        "bg-white hover:bg-[#EDEDED] cursor-pointer rounded-xl shadow transition-all border border-gray-300 text-[20px]",
         height, 
         width,
         'mx-auto',
