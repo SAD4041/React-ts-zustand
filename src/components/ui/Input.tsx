@@ -24,7 +24,6 @@ export const Input = forwardRef<
       inputClassName = "",
       iconClassName = "",
       errorClassName = "",
-      className = "",
       ...props
     },
     ref
@@ -68,7 +67,6 @@ export const Input = forwardRef<
                focus:ring-2 focus:ring-ring/50 focus:border-primary transition`,
               Icon ? "pl-10" : "",
               isRightToLeft ? "text-right" : "text-left",
-              className,
               inputClassName
             )}
           />
