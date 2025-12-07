@@ -95,7 +95,7 @@ function Dashboard() {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [paymentInfo] = useState({
-    ticketPrice: 450000,
+    ticketPrice: 660000,
     cardNumber: "6104-3387-4761-8581",
     bankName: "بانک ملت مهدی تقی دولابی",
   });
