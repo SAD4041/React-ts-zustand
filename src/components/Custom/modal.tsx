@@ -1,76 +1,96 @@
-import React from "react";
-import { cn } from "@/lib/utils";
-import type { 
-  ModalImageProps, 
-  ModalButtonProps, 
-  ModalActionsProps 
-} from "@/types/modalTypes";
+// src/components/Custom/modal.tsx
+import React, { useEffect } from "react";
 
-export const ModalImage: React.FC<ModalImageProps> = ({ 
-  src, 
-  alt = "modal-image", 
-  className 
-}) => {
-  return (
-    <div className="flex justify-center mb-4">
-      <img 
-        src={src} 
-        alt={alt} 
-        className={cn("w-28 h-auto", className)} 
-      />
-    </div>
-  );
+type ModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  title?: string;
+  message?: string;
+  buttonText?: string;
+  onButtonClick?: () => void;
+  imageSrc?: string;
 };
 
-export const ModalButton: React.FC<ModalButtonProps> = ({ 
-  children,
-  onClick,
-  variant = "default",
-  className,
-  disabled = false
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  message,
+  buttonText = "باشه",
+  onButtonClick,
+  imageSrc,
 }) => {
-  const variantStyles = {
-    default: "bg-black text-white hover:bg-gray-800",
-    destructive: "bg-red-600 text-white hover:bg-red-700",
-    outline: "border border-gray-300 bg-white text-gray-900 hover:bg-gray-50",
-    secondary: "bg-gray-600 text-white hover:bg-gray-700",
-    ghost: "hover:bg-gray-100 text-gray-900",
-  };
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) onClose();
+    };
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", onKey);
+    }
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
 
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={cn(
-        "inline-flex items-center justify-center rounded-lg px-6 py-2.5 text-sm font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-        variantStyles[variant],
-        className
-      )}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      aria-modal="true"
+      role="dialog"
     >
-      {children}
-    </button>
-  );
-};
+      <div
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+      />
 
-export const ModalActions: React.FC<ModalActionsProps> = ({ 
-  children, 
-  className,
-  alignment = "center"
-}) => {
-  const alignmentStyles = {
-    left: "justify-start",
-    center: "justify-center",
-    right: "justify-end",
-    between: "justify-between",
-  };
+      <div className="relative z-50 w-full max-w-md">
+        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+          <div className="p-6">
+            {imageSrc && (
+              <div className="flex justify-center mb-4">
+                <img src={imageSrc} alt="modal-icon" className="w-28 h-auto" />
+              </div>
+            )}
 
-  return (
-    <div className={cn(
-      "mt-4 flex gap-2",
-      alignmentStyles[alignment],
-      className
-    )}>
-      {children}
+            {title && (
+              <h3 className="text-center text-lg font-semibold text-slate-900 mb-2">
+                {title}
+              </h3>
+            )}
+
+            {message && (
+              <p className="text-center text-sm text-slate-600 mb-4">
+                {message}
+              </p>
+            )}
+
+            <div className="mt-2 flex justify-center">
+              <button
+                onClick={() => {
+                  onButtonClick?.();
+                }}
+                className="w-3/4 inline-flex items-center justify-center rounded-md bg-black text-white px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-800 transition"
+              >
+                {buttonText}
+              </button>
+            </div>
+          </div>
+
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="absolute top-3 right-3 text-slate-500 hover:text-slate-700"
+          >
+            ×
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
+
+export default Modal;

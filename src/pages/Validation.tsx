@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Formik } from 'formik';
 import { validationSchema } from '../schemas/ValidationSchemas';
@@ -7,23 +7,27 @@ import logo from '../assets/logo.png';
 import buck from '../assets/buck.png';
 import successCat from '../assets/success.png';
 import errorCat from '../assets/error.png';
-import { ModalImage, ModalButton, ModalActions } from "@/components/Custom/modal";
-import type { ValidationFormValues, ModalConfig } from '../types/authTypes';
-import type { ReactNode } from 'react';
+import CustomModal from '../components/Custom/modal';
+
+interface ValidationFormValues {
+  code: string;
+}
 
 const Validation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState('۰۹۱۲۳۴۵۶۷۸۹');
+  const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
+  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
-  const [modalConfig, setModalConfig] = useState<ModalConfig>({
+  const [modalConfig, setModalConfig] = useState({
     isOpen: false,
-    title: undefined,
-    message: undefined,
-    image: undefined,
-    buttonText: undefined,
-    onButtonClick: undefined,
+    title: '',
+    message: '',
+    buttonText: '',
+    onButtonClick: () => { },
+    imageSrc: ''
   });
 
   useEffect(() => {
@@ -33,23 +37,6 @@ const Validation: React.FC = () => {
     }
   }, [location]);
 
-  const showModal = (opts: {
-    title?: ReactNode;
-    message?: ReactNode;
-    image?: string | ReactNode;
-    buttonText?: ReactNode;
-    onConfirm?: () => void;
-  }) => {
-    setModalConfig({
-      isOpen: true,
-      title: opts.title,
-      message: opts.message,
-      image: opts.image,
-      buttonText: opts.buttonText ?? 'باشه',
-      onButtonClick: opts.onConfirm,
-    });
-  };
-
   const handleVerify = async (values: ValidationFormValues) => {
     setLoading(true);
     try {
@@ -57,41 +44,55 @@ const Validation: React.FC = () => {
 
       if (result.success) {
         if (result.data?.valid === true) {
-          showModal({
+          setModalConfig({
+            isOpen: true,
             title: 'ورود موفق',
             message: 'کد تأیید صحیح است. خوش آمدید!',
-            image: successCat,
             buttonText: 'ادامه',
-            onConfirm: () => {
-              if (result.data?.token) localStorage.setItem('authToken', result.data.token);
+            imageSrc: successCat,
+            onButtonClick: () => {
+              if (result.data?.token) {
+                localStorage.setItem('authToken', result.data.token);
+              }
               setModalConfig(prev => ({ ...prev, isOpen: false }));
               navigate('/');
             }
           });
         } else {
-          showModal({
+          setModalConfig({
+            isOpen: true,
             title: 'کد نامعتبر',
             message: 'کد تایید وارد شده نامعتبر است. لطفاً دوباره تلاش کنید.',
-            image: errorCat,
             buttonText: 'تلاش مجدد',
-            onConfirm: () => {
+            imageSrc: errorCat,
+            onButtonClick: () => {
               setModalConfig(prev => ({ ...prev, isOpen: false }));
             }
           });
         }
       } else {
-        showModal({
+        setModalConfig({
+          isOpen: true,
           title: 'خطا',
           message: result.message || 'خطای سرور. لطفاً دوباره تلاش کنید.',
-          image: errorCat,
+          buttonText: 'باشه',
+          imageSrc: errorCat,
+          onButtonClick: () => {
+            setModalConfig(prev => ({ ...prev, isOpen: false }));
+          }
         });
       }
     } catch (err) {
       console.error('خطا در تایید کد:', err);
-      showModal({
+      setModalConfig({
+        isOpen: true,
         title: 'خطا',
         message: 'خطای غیرمنتظره رخ داد. لطفاً دوباره تلاش کنید.',
-        image: errorCat,
+        buttonText: 'باشه',
+        imageSrc: errorCat,
+        onButtonClick: () => {
+          setModalConfig(prev => ({ ...prev, isOpen: false }));
+        }
       });
     } finally {
       setLoading(false);
@@ -103,29 +104,65 @@ const Validation: React.FC = () => {
     try {
       const result = await checkPhone(phone);
       if (result.success) {
-        showModal({
+        setModalConfig({
+          isOpen: true,
           title: 'ارسال مجدد',
           message: 'کد تأیید مجدداً ارسال شد.',
-          image: successCat,
+          buttonText: 'باشه',
+          imageSrc: successCat,
+          onButtonClick: () => {
+            setModalConfig(prev => ({ ...prev, isOpen: false }));
+          }
         });
       } else {
-        showModal({
+        setModalConfig({
+          isOpen: true,
           title: 'خطا',
           message: result.message || 'ارسال مجدد با خطا مواجه شد.',
-          image: errorCat
+          buttonText: 'باشه',
+          imageSrc: errorCat,
+          onButtonClick: () => {
+            setModalConfig(prev => ({ ...prev, isOpen: false }));
+          }
         });
       }
     } catch (err) {
       console.error('خطا در ارسال مجدد:', err);
-      showModal({
+      setModalConfig({
+        isOpen: true,
         title: 'خطا',
         message: 'خطا در ارسال مجدد کد. لطفاً بعداً تلاش کنید.',
-        image: errorCat
+        buttonText: 'باشه',
+        imageSrc: errorCat,
+        onButtonClick: () => {
+          setModalConfig(prev => ({ ...prev, isOpen: false }));
+        }
       });
     } finally {
       setLoading(false);
     }
   };
+
+  const handleOtpChange = (value: string, index: number) => {
+    if (!/^\d?$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+    if (e.key === 'Backspace') {
+      if (otp[index] === '' && index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
+    }
+  };
+
 
   const initialValues: ValidationFormValues = { code: '' };
 
@@ -138,7 +175,9 @@ const Validation: React.FC = () => {
             href="/login"
             className="absolute top-4 right-4 bg-black text-white w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors duration-200 z-10"
           >
-            ←
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+            </svg>
           </a>
 
           <div className="text-center mb-8">
@@ -158,20 +197,27 @@ const Validation: React.FC = () => {
           >
             {({ values, handleChange, handleSubmit, errors, touched, isSubmitting }) => (
               <form onSubmit={handleSubmit} className="space-y-6 px-6">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-3 items-center">
                   <label className="text-sm font-medium">کد تأیید</label>
-                  <input
-                    name="code"
-                    value={values.code}
-                    onChange={handleChange}
-                    placeholder="کد ۶ رقمی"
-                    maxLength={6}
-                    inputMode="numeric"
-                    disabled={loading || isSubmitting}
-                    className="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
-                  />
+
+                  <div className="flex gap-2 justify-center">
+                    {otp.map((digit, index) => (
+                      <input
+                        key={index}
+                        ref={(el) => (inputRefs.current[index] = el)}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        onChange={(e) => handleOtpChange(e.target.value, index)}
+                        onKeyDown={(e) => handleOtpKeyDown(e, index)}
+                        className="w-12 h-12 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                      />
+                    ))}
+                  </div>
+
                   {touched.code && errors.code && (
-                    <div className="text-red-500 text-xs">{errors.code}</div>
+                    <div className="text-red-500 text-xs text-center">{errors.code}</div>
                   )}
                 </div>
 
@@ -206,38 +252,15 @@ const Validation: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal ساده بدون shadcn */}
-      {modalConfig.isOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl w-[90%] max-w-sm p-6 text-center">
-            {modalConfig.image && typeof modalConfig.image === 'string' && (
-              <ModalImage src={modalConfig.image} />
-            )}
-
-            <h3 className="text-lg font-bold mt-4">
-              {modalConfig.title}
-            </h3>
-            <p className="text-sm text-gray-600 mt-2">
-              {modalConfig.message}
-            </p>
-
-            <ModalActions>
-              <ModalButton
-                onClick={() => {
-                  if (typeof modalConfig.onButtonClick === 'function') {
-                    modalConfig.onButtonClick();
-                  } else {
-                    setModalConfig(prev => ({ ...prev, isOpen: false }));
-                  }
-                }}
-                className="w-3/4"
-              >
-                {modalConfig.buttonText ?? 'باشه'}
-              </ModalButton>
-            </ModalActions>
-          </div>
-        </div>
-      )}
+      <CustomModal
+        isOpen={modalConfig.isOpen}
+        onClose={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        buttonText={modalConfig.buttonText}
+        onButtonClick={modalConfig.onButtonClick}
+        imageSrc={modalConfig.imageSrc}
+      />
     </div>
   );
 };

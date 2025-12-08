@@ -1,8 +1,10 @@
 import * as yup from 'yup';
+import { translateNumber } from '../utils/translateNumber';
 
 export const loginSchema = yup.object({
   phone: yup
     .string()
     .required('شماره تلفن اجباری است.')
-    .matches(/^09[0-9]{9}$/, 'شماره تلفن معتبر نیست (مثال: 09123456789)'),
+    .transform((value) => translateNumber(value))
+    .matches(/^09[0-9]{9}$/, 'شماره تلفن معتبر نیست (مثال: ۰۹۱۲۳۴۵۶۷۸۹)'),
 });
