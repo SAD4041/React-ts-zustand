@@ -1,5 +1,4 @@
 import CustomButton from "@/components/Custom/CustomButton";
-import CustomInput from "@/components/Custom/CustomInput";
 import { Formik, Form } from "formik";
 import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
@@ -37,34 +36,7 @@ function Landing() {
 				>salam</CustomButton>
 
 			</div>
-			<div className="p-8 bg-white">
-				<Formik
-					initialValues={{ email: '' }}
-					validationSchema={validationSchema}
-					onSubmit={(values) => {
-						console.log('Form submitted:', values);
-					}}
-				>
-					{() => (
-						<Form>
-							<CustomInput
-								name="email"
-								label="ایمیل شما"
-								type="email"
-								placeholder="example@email.com"
-								width="w-full"
-								className="!border-[#BFBFBF]" 
-								// you can change this items
-							/>
-
-							<CustomButton
-								type="submit"
-								className="m-10" // add your custom style
-							>ارسال</CustomButton>
-						</Form>
-					)}
-				</Formik>
-			</div>
+			
 		</div>
 	);
 }

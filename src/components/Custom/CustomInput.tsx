@@ -1,143 +1,85 @@
-import { Input } from "@/components/ui/input";
-import type { InputHTMLAttributes, ReactNode } from "react";
-import { useState, useEffect } from "react";
-import { Field, type FieldProps } from "formik";
+import { forwardRef } from "react";
+import { useField } from "formik";
+import { cn } from "@/lib/utils";
+import type { FormikInputProps } from "@/types/CustomInputTypes";
 
-type CustomInputProps = InputHTMLAttributes<
-  HTMLInputElement | HTMLTextAreaElement
-> & {
-  label?: string;
-  name: string;
-  icon?: ReactNode;
-  onIconClick?: () => void;
-  width?: string;
-  as?: "input" | "textarea"; // New 'as' prop to handle either input or textarea
-  rows?: number; // For controlling the number of rows in textarea
+const isRTL = (text: string | undefined): boolean => {
+  if (!text) return true;
+  const rtlChars = /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/;
+  return rtlChars.test(text);
 };
 
-export default function CustomInput({
-  label = "",
-  name,
-  icon = null,
-  onIconClick,
-  type = "text",
-  width = "",
-  as = "input", // Default to 'input'
-  rows = 3, // Default number of rows for textarea
-  ...props
-}: CustomInputProps) {
-  const [isFocused, setIsFocused] = useState(false);
-  const [isRTL, setIsRTL] = useState(true);
-
-  const inputType = type;
-
-  const detectRTL = (text: string) => /[\u0600-\u06FF]/.test(text);
-
-  useEffect(() => {
-    if (props.value !== undefined && props.value !== null) {
-      setIsRTL(detectRTL(String(props.value)));
-    }
-  }, [props.value]);
-
-  const handleFocus = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+export const Input = forwardRef<
+  HTMLInputElement,
+  FormikInputProps & { forceRTL?: boolean }
+>(
+  (
+    {
+      label,
+      icon: Icon,
+      onIconClick,
+      onlyNumbers = false,
+      forceRTL = false,
+      containerClassName = "",
+      inputClassName = "",
+      iconClassName = "",
+      errorClassName = "",
+      ...props
+    },
+    ref
   ) => {
-    setIsFocused(true);
-    props.onFocus?.(e);
-  };
+    const [field, meta] = useField(props.name);
+    const hasError = meta.touched && meta.error;
+    const value = field.value ?? "";
 
-  const handleBlur = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setIsFocused(false);
-    props.onBlur?.(e);
-  };
+    const isRightToLeft = forceRTL || isRTL(value);
 
-  return (
-    <Field name={name}>
-      {({ field, meta }: FieldProps) => {
-        const hasValue = field.value?.length > 0;
-        const isFloating = isFocused || hasValue;
-        const hasError = meta.touched && meta.error;
+    return (
+      <div className={cn("flex flex-col gap-1", containerClassName)}>
+        {label && (
+          <label className="text-sm font-medium text-foreground">{label}</label>
+        )}
 
-        return (
-          <div className={"flex flex-col " + width}>
-            <div className="relative">
-              {as === "textarea" ? (
-                <textarea
-                  {...field}
-                  {...props}
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
-                  dir={isRTL ? "rtl" : "ltr"}
-                  rows={rows}
-                  className={`border !border-[var(--borderDefault)] shadow-[0px_1px_0px_var(--borderDefault)] focus:!border-[var(--borderFoucus)] focus:!shadow-[0px_1px_0px_var(--borderFoucusShadow)] focus:!ring-0 focus-visible:!ring-0 p-2 rounded-primary-radius w-full resize-none
-                    ${isRTL ? "text-right pr-4" : "text-left pl-4"}
-                    ${icon ? "pl-12" : ""}
-                    transition-all duration-200 ease-in-out
-                    ${
-                      hasError
-                        ? "!border-[var(--borderInvalid)] shadow-[0px_1px_0px_var(--borderInvalidShadow)]"
-                        : ""
-                    }
-                    ${props.className ?? ""}`}
-                />
-              ) : (
-                <Input
-                  {...field}
-                  {...props}
-                  type={inputType}
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
-                  dir={isRTL ? "rtl" : "ltr"}
-                  className={`border !border-[var(--borderDefault)] shadow-[0px_1px_0px_var(--borderDefault)] focus:!border-[var(--borderFoucus)] focus:!shadow-[0px_1px_0px_var(--borderFoucusShadow)] focus:!ring-0 focus-visible:!ring-0 p-0 rounded-primary-radius h-10 w-full
-                    ${isRTL ? "text-right pr-4" : "text-left pl-4"}
-                    ${icon ? "pl-12"  : ""}
-                    transition-all duration-200 ease-in-out
-                    ${
-                      hasError
-                        ? "!border-[var(--borderInvalid)] shadow-[0px_1px_0px_var(--borderInvalidShadow)]"
-                        : ""
-                    }
-                    ${props.className ?? ""}`}
-                />
+        <div className="relative">
+          {Icon && (
+            <Icon
+              className={cn(
+                "absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground cursor-pointer",
+                iconClassName
               )}
+              onClick={onIconClick}
+            />
+          )}
 
-              {icon && (
-                <div
-                  className={`absolute top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer
-                    ${isRTL ? "left-4" : "right-4"}`}
-                  onClick={onIconClick}
-                >
-                  {icon}
-                </div>
-              )}
-
-              <label
-                className={`
-                  absolute pointer-events-none transition-all duration-200 ease-in-out font-bold
-                  ${"right-4"}
-                  ${
-                    isFloating
-                      ? "top-[-10px] text-xs bg-white px-1 text-black"
-                      : as === "textarea"
-                        ? "top-2 text-sm text-gray-500"
-                        : "top-1/2 -translate-y-1/2 text-sm text-gray-500"
-                  }
-                `}
-              >
-                {label}
-              </label>
-            </div>
-
-            {hasError && (
-              <div className={`mt-1 text-xs ${"pr-4 text-right"}`}>
-                <p className="text-red-500">{meta.error}</p>
-              </div>
+          <input
+            {...field}
+            {...props}
+            ref={ref}
+            dir={isRightToLeft ? "rtl" : "ltr"}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              if (onlyNumbers && !/^\d*$/.test(newValue)) return;
+              field.onChange(e);
+            }}
+            className={cn(
+              `w-full px-4 py-2 rounded-md border border-input bg-card text-foreground 
+               placeholder:text-muted-foreground focus:outline-none 
+               focus:ring-2 focus:ring-ring/50 focus:border-primary transition`,
+              Icon ? "pl-10" : "",
+              isRightToLeft ? "text-right" : "text-left",
+              inputClassName
             )}
-          </div>
-        );
-      }}
-    </Field>
-  );
-}
+          />
+        </div>
+
+        {hasError && (
+          <span className={cn("text-sm text-destructive", errorClassName)}>
+            {meta.error}
+          </span>
+        )}
+      </div>
+    );
+  }
+);
+
+Input.displayName = "Input";
