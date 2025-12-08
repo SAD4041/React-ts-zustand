@@ -9,10 +9,7 @@ import successCat from '../assets/success.png';
 import errorCat from '../assets/error.png';
 import CustomModal from '../components/Custom/modal';
 import { translateNumber } from '@/utils/translateNumber'
-
-interface ValidationFormValues {
-  code: string;
-}
+import type ValidationFormValues from '@/types/loginTypes';
 
 const Validation: React.FC = () => {
   const navigate = useNavigate();
