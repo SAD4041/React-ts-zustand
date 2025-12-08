@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import type { ColorFilterProps } from '@/types/productListingTypes';
+import ExtendIcon from '../icon loader/extended';
+import ShortenIcon from '../icon loader/shorten';
 
 const ColorFilter: React.FC<ColorFilterProps> = ({ colors, selectedColors, onToggleColor }) => {
   const [showAllColors, setShowAllColors] = useState(false);
@@ -33,13 +35,13 @@ const ColorFilter: React.FC<ColorFilterProps> = ({ colors, selectedColors, onTog
           className="mt-2 flex justify-center w-full text-xs text-muted-foreground hover:text-foreground transition"
         >
           {showAllColors ? (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-            </svg>
+            <>
+              <ExtendIcon/>
+            </>
           ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+            <>
+              <ShortenIcon/>
+            </>
           )}
         </button>
       )}
