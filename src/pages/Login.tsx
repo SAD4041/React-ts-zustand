@@ -8,6 +8,8 @@ import logo from '../assets/logo.png';
 import buck from '../assets/buck.png';
 import successCat from '../assets/success.png';
 import errorCat from '../assets/error.png';
+import { translateNumber } from '../utils/translateNumber';
+
 
 const SUCCESS_CAT = successCat;
 const ERROR_CAT = errorCat;
@@ -24,7 +26,7 @@ const LoginForm: React.FC = () => {
     title: '',
     message: '',
     buttonText: '',
-    onButtonClick: () => {},
+    onButtonClick: () => { },
     imageSrc: ''
   });
 
@@ -101,13 +103,28 @@ const LoginForm: React.FC = () => {
               <Form className="space-y-6 px-6">
                 <div className="flex justify-center">
                   <div className="w-full max-w-xs">
-                    <Field
-                      name="phone"
-                      type="text"
-                      placeholder="۰۹۱۲۳۴۵۶۷۸۹"
-                      disabled={loading || isSubmitting}
-                      className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none disabled:bg-slate-100 disabled:cursor-not-allowed text-center text-sm"
-                    />
+                    <Field name="phone">
+                      {({ field, form }: any) => (
+                        <input
+                          type="text"
+                          placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+                          disabled={loading}
+                          inputMode="numeric"
+                          className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none disabled:bg-slate-100 disabled:cursor-not-allowed text-center text-sm"
+                          value={translateNumber(field.value || '')}
+                          onChange={(e) => {
+                            const inputValue = e.target.value;
+                            const persianToEnglish = inputValue.replace(/[۰-۹]/g, (d) =>
+                              '۰۱۲۳۴۵۶۷۸۹'.indexOf(d).toString()
+                            );
+                            const englishValue = persianToEnglish
+                              .replace(/[^0-9]/g, '')
+                              .slice(0, 11);
+                            form.setFieldValue('phone', englishValue);
+                          }}
+                        />
+                      )}
+                    </Field>
                     <ErrorMessage name="phone">
                       {(msg) => (
                         <p className="mt-2 text-xs text-red-600 flex items-center gap-1 justify-center">

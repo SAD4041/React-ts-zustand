@@ -8,6 +8,7 @@ import buck from '../assets/buck.png';
 import successCat from '../assets/success.png';
 import errorCat from '../assets/error.png';
 import CustomModal from '../components/Custom/modal';
+import { translateNumber } from '@/utils/translateNumber'
 
 interface ValidationFormValues {
   code: string;
@@ -196,35 +197,39 @@ const Validation: React.FC = () => {
             onSubmit={handleVerify}
           >
             {({ values, handleChange, handleSubmit, errors, touched, isSubmitting }) => (
-              <form onSubmit={handleSubmit} className="space-y-6 px-6">
-                <div className="flex flex-col gap-3 items-center">
-                  <label className="text-sm font-medium">کد تأیید</label>
-
-                  <div className="flex gap-2 justify-center">
-                    {otp.map((digit, index) => (
-                      <input
-                        key={index}
-                        ref={(el) => (inputRefs.current[index] = el)}
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={1}
-                        value={digit}
-                        onChange={(e) => handleOtpChange(e.target.value, index)}
-                        onKeyDown={(e) => handleOtpKeyDown(e, index)}
-                        className="w-12 h-12 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                      />
-                    ))}
-                  </div>
-
-                  {touched.code && errors.code && (
-                    <div className="text-red-500 text-xs text-center">{errors.code}</div>
-                  )}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleVerify({ code: otp.join('') });
+                }}
+                className="space-y-6 px-6"
+              >
+                <div className="flex gap-2 justify-center" dir="ltr">
+                  {otp.map((digit, index) => (
+                    <input
+                      key={index}
+                      ref={(el) => (inputRefs.current[index] = el)}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={translateNumber(digit)}
+                      onChange={(e) => {
+                        const persianToEnglish = e.target.value.replace(/[۰-۹]/g, (d) =>
+                          '۰۱۲۳۴۵۶۷۸۹'.indexOf(d).toString()
+                        );
+                        const englishValue = persianToEnglish.replace(/[^0-9]/g, '');
+                        handleOtpChange(englishValue, index);
+                      }}
+                      onKeyDown={(e) => handleOtpKeyDown(e, index)}
+                      className="w-12 h-12 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                  ))}
                 </div>
 
                 <div className="flex justify-center">
                   <button
                     type="submit"
-                    disabled={loading || isSubmitting || values.code.length !== 6}
+                    disabled={loading || isSubmitting || otp.join('').length !== 6}
                     className="w-[320px] h-10 bg-black text-white rounded-md disabled:opacity-50"
                   >
                     {(loading || isSubmitting) ? 'در حال بررسی...' : 'ورود'}
