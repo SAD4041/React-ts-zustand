@@ -1,26 +1,32 @@
-// CustomerReviewsSection.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getBrandReviews, submitBrandReview } from '@/services/brandProfile';
+import { getData, postData } from '@/services/services';
 
 import starIcon from '@/assets/brand-profile/Star.png';
 import thumbsUpIcon from '@/assets/brand-profile/Vector.png';
 import thumbsDownIcon from '@/assets/brand-profile/Vector.png';
 import LoadingSpinner from '../ui/LoadingSpinner';
+import type {Review} from '@/types/commentApiType';
+
 
 const CustomerReviewsSection = () => {
   const { brandId, brandName } = useParams<{ brandId: string; brandName: string }>();
-  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [newReview, setNewReview] = useState('');
-  const [helpfulVote, setHelpfulVote] = useState({});
-  const [notHelpfulVote, setNotHelpfulVote] = useState({});
+  const [helpfulVote, setHelpfulVote] = useState<Record<number, boolean>>({});
+  const [notHelpfulVote, setNotHelpfulVote] = useState<Record<number, boolean>>({});
+  const REVIEWS_ENDPOINT = `/brands/${brandId}/reviews`;
 
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const data = await getBrandReviews(brandId, brandName);
-        setReviews(data);
+        const data = await getData({
+          endPoint: REVIEWS_ENDPOINT,
+          headers: {},
+          params: { brandName },
+        });
+        setReviews(data || []);
       } catch (error) {
         console.error("Error fetching reviews:", error);
       } finally {
@@ -31,14 +37,19 @@ const CustomerReviewsSection = () => {
     if (brandId) {
       fetchReviews();
     }
-  }, [brandId]);
+  }, [brandId, brandName]);
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newReview.trim()) {
       try {
-        await submitBrandReview(brandId, brandName, { text: newReview, rating: 5 });
+        await postData({
+          endPoint: REVIEWS_ENDPOINT,
+          data: { text: newReview, rating: 5, brandName },
+          headers: {},
+        });
         setNewReview('');
+        window.location.reload();
       } catch (error) {
         console.error("Error submitting review:", error);
       }
@@ -56,15 +67,18 @@ const CustomerReviewsSection = () => {
   };
 
   if (loading) return <LoadingSpinner />;
+  const averageRating = reviews.length > 0 
+    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1) 
+    : '4.8';
+  const totalReviews = reviews.length;
 
   return (
     <div className="mx-section mt-12 p-4 bg-white rounded-xl shadow-sm border border-gray-200">
       <h1 className="text-lg font-semibold text-gray-800">نظرات مشتریان</h1>
       <div className="flex items-center gap-2 mt-5">
-        <span className="text-xl font-bold">۴.۸</span>
+        <span className="text-xl font-bold">{averageRating}</span>
         <img src={starIcon} alt="امتیاز" className="h-5 w-5 text-product-rating" />
-        <span className="text-sm text-gray-600">از ۱,۲۳۴ نظر</span>
-        {/* use data from api */}
+        <span className="text-sm text-gray-600">از {totalReviews.toLocaleString()} نظر</span>
       </div>
 
       <div className="my-6 mx-10 p-4 rounded-lg border border-review-border dir-ltr text-left">
@@ -92,7 +106,6 @@ const CustomerReviewsSection = () => {
           >
             ثبت نظر جدید
           </button>
-          {/* add action for this */}
         </form>
       </div>
 
@@ -101,7 +114,7 @@ const CustomerReviewsSection = () => {
           <div key={review.id} className="p-4 mx-10 my-6 rounded-lg border border-review-border">
             <div className="flex items-start gap-3 mb-2">
               <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                <span className="text-sm font-medium">{review.avatar.charAt(1)}</span>
+                <span className="text-sm font-medium">{review.avatar.charAt(0).toUpperCase()}</span>
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
@@ -153,7 +166,7 @@ const CustomerReviewsSection = () => {
         <button className="border border-gray-300 text-gray-700 text-sm font-medium py-2 px-4 rounded-xl hover:bg-gray-100 transition cursor-pointer">
           مشاهده نظرات بیشتر
         </button>
-        {/* add action for this */}
+        {/* extend comment section */}
       </div>
     </div>
   );
