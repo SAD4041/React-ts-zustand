@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getBrandProfile, getBrandProducts } from '@/services/brandProfile';
@@ -38,13 +37,13 @@ const BestSell = () => {
 
     if (loading) return <LoadingSpinner />;
 
-    if (!brandData) return <div>.داده‌ای یافت نشد</div>;
+    if (!brandData) return <div>داده‌ای یافت نشد.</div>;
 
     return (
-        <div className="mt-[100px] mx-[150px] p-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl text-white">
+        <div className="mt-component mx-section p-4 bg-gradient-to-r from-promo-gradient-from to-promo-gradient-to rounded-2xl text-white">
             <div className='flex'>
                 <div className="items-start my-3 mx-7">
-                    <div className="mb-4 w-25 bg-white text-red-500 text-l font-bold px-2 py-2 rounded-full">
+                    <div className="mb-4 w-25 bg-promo-badge-bg text-promo-badge-text text-lg font-bold px-2 py-2 rounded-full">
                         فروش ویژه!
                     </div>
                     <div className="my-4 text-xl font-bold">{brandData.promotion.title}</div>
@@ -64,7 +63,7 @@ const BestSell = () => {
             </div>
             <a href='/'>
                 {/* change it to brand's products offer */}
-                <button className="w-3/4 mt-3 mx-auto block bg-white text-red-500 font-medium py-2 rounded-md hover:bg-gray-100 transition-colors text-center cursor-pointer">
+                <button className="w-3/4 mt-3 mx-auto block bg-promo-button-bg text-promo-button-text font-medium py-2 rounded-md hover:bg-promo-button-hover transition-colors text-center cursor-pointer">
                     مشاهده محصولات
                 </button>
             </a>

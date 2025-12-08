@@ -58,16 +58,16 @@ const CustomerReviewsSection = () => {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="mx-[150px] mt-12 p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+    <div className="mx-section mt-12 p-4 bg-white rounded-xl shadow-sm border border-gray-200">
       <h1 className="text-lg font-semibold text-gray-800">نظرات مشتریان</h1>
       <div className="flex items-center gap-2 mt-5">
         <span className="text-xl font-bold">۴.۸</span>
-        <img src={starIcon} alt="امتیاز" className="h-5 w-5 text-yellow-500" />
+        <img src={starIcon} alt="امتیاز" className="h-5 w-5 text-product-rating" />
         <span className="text-sm text-gray-600">از ۱,۲۳۴ نظر</span>
         {/* use data from api */}
       </div>
 
-      <div className="my-6 mx-10 p-4 rounded-lg border border-gray-500 dir-ltr text-left">
+      <div className="my-6 mx-10 p-4 rounded-lg border border-review-border dir-ltr text-left">
         <form onSubmit={handleReviewSubmit}>
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
@@ -82,13 +82,13 @@ const CustomerReviewsSection = () => {
                 value={newReview}
                 onChange={(e) => setNewReview(e.target.value)}
                 placeholder="نظر خود را بنویسید..."
-                className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 bg-review-input-bg border border-review-input-border rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
           <button
             type="submit"
-            className="mt-6 bg-black text-white text-xs font-medium py-2 px-4 rounded-md hover:bg-gray-800 transition cursor-pointer"
+            className="mt-6 bg-review-submit-bg text-white text-xs font-medium py-2 px-4 rounded-md hover:bg-review-submit-hover transition cursor-pointer"
           >
             ثبت نظر جدید
           </button>
@@ -98,7 +98,7 @@ const CustomerReviewsSection = () => {
 
       <div className="space-y-4">
         {reviews.map((review) => (
-          <div key={review.id} className="p-4 mx-10 my-6 rounded-lg border border-gray-500">
+          <div key={review.id} className="p-4 mx-10 my-6 rounded-lg border border-review-border">
             <div className="flex items-start gap-3 mb-2">
               <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
                 <span className="text-sm font-medium">{review.avatar.charAt(1)}</span>
@@ -113,7 +113,7 @@ const CustomerReviewsSection = () => {
                       key={i}
                       src={starIcon}
                       alt="ستاره"
-                      className={`h-4 w-4 ${i < review.rating ? 'text-yellow-500' : 'text-gray-300'}`}
+                      className={`h-4 w-4 ${i < review.rating ? 'text-product-rating' : 'text-gray-300'}`}
                     />
                   ))}
                 </div>
@@ -126,8 +126,8 @@ const CustomerReviewsSection = () => {
                 onClick={() => handleNotHelpfulClick(review.id)}
                 className={`flex items-center gap-1 text-xs font-medium py-1 px-2 rounded-md transition cursor-pointer ${
                   notHelpfulVote[review.id]
-                    ? 'bg-red-500 text-white'
-                    : 'bg-white text-gray-700 hover:bg-red-50 hover:text-red-700 border border-gray-300'
+                    ? 'bg-review-not-helpful text-white'
+                    : 'bg-white text-gray-700 hover:bg-review-not-helpful-hover hover:text-review-not-helpful border border-gray-300'
                 }`}
               >
                 مفید نبود ({review.notHelpfulCount})
@@ -137,8 +137,8 @@ const CustomerReviewsSection = () => {
                 onClick={() => handleHelpfulClick(review.id)}
                 className={`flex items-center gap-2 text-xs font-medium py-1 px-2 rounded-md transition cursor-pointer ${
                   helpfulVote[review.id]
-                    ? 'bg-green-500 text-white'
-                    : 'bg-white text-gray-700 hover:bg-green-50 hover:text-green-700 border border-gray-300'
+                    ? 'bg-review-helpful text-white'
+                    : 'bg-white text-gray-700 hover:bg-review-helpful-hover hover:text-review-helpful border border-gray-300'
                 }`}
               >
                 مفید بود ({review.helpfulCount})

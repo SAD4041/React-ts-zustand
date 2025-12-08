@@ -12,8 +12,6 @@ body {
   }
 }
 
-
-
 @layer utilities {
   .rtl {
     direction: rtl;
@@ -40,6 +38,8 @@ body {
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+
+	/* Base Variables */
 	--radius: 0.625rem;
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.145 0 0);
@@ -72,6 +72,45 @@ body {
 	--sidebar-accent-foreground: oklch(0.205 0 0);
 	--sidebar-border: oklch(0.922 0 0);
 	--sidebar-ring: oklch(0.708 0 0);
+
+	/* Brand Profile Colors */
+	--brand-badge-bg: 0 0% 95%;
+	--brand-badge-text: 224 76% 48%;
+	--brand-official-bg: 221 83% 53%;
+	--brand-official-text: 0 0% 100%;
+	--brand-follow-bg: 221 83% 53%;
+	--brand-follow-hover: 221 83% 43%;
+	--brand-share-border: 0 0% 80%;
+	--brand-info-bg: 0 0% 95%;
+	--brand-icon-bg: 0 0% 95%;
+	--promo-gradient-from: 0 84% 60%;
+	--promo-gradient-to: 25 95% 53%;
+	--promo-badge-bg: 0 0% 100%;
+	--promo-badge-text: 0 84% 60%;
+	--promo-button-bg: 0 0% 100%;
+	--promo-button-text: 0 84% 60%;
+	--promo-button-hover: 0 0% 98%;
+	--product-discounted: 142 76% 36%;
+	--product-rating: 45 93% 47%;
+	--product-rating-count: 0 0% 62%;
+	--product-tuman-icon: 0 0% 0%;
+	--review-helpful: 142 76% 36%;
+	--review-helpful-hover: 142 76% 96%;
+	--review-not-helpful: 0 84% 60%;
+	--review-not-helpful-hover: 0 84% 96%;
+	--review-border: 0 0% 50%;
+	--review-input-bg: 0 0% 96%;
+	--review-input-border: 0 0% 80%;
+	--review-submit-bg: 0 0% 0%;
+	--review-submit-hover: 0 0% 20%;
+	--text-xs: 0.75rem;
+	--text-sm: 0.875rem;
+	--text-base: 1rem;
+	--text-lg: 1.125rem;
+	--text-xl: 1.25rem;
+	--text-2xl: 1.5rem;
+	--spacing-section: 150px;
+	--spacing-component: 100px;
 }
 
 @theme inline {
@@ -151,7 +190,6 @@ body {
     @apply border-border outline-ring/50;
   }
 }
-
 
 .loader {
   width: 50px;

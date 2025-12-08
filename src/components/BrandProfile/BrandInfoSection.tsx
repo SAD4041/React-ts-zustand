@@ -37,35 +37,35 @@ const BrandInfo = () => {
     return (
         <div className="mx-[150px] mt-6 rounded-2xl overflow-hidden border shadow-lg">
 
-        <div className="bg-[#F2F2F2] px-5 py-5 border-b border-gray-200 height-[200px]">
+        <div className="bg-brand-badge-bg px-5 py-5 border-b border-gray-200 height-[200px]">
           <h2 className="text-lg text-center font-semibold text-gray-800">درباره برند و اطلاعات تماس</h2>
         </div>
 
         <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="mt-8 text-gray-700 leading-relaxed col-span-2">
+          <div className="mt-8 px-6 text-gray-700 leading-relaxed col-span-2">
             <p>{brandData.description}</p>
           </div>
-          <div className="space-y-3 col-span-1">
+          <div className="px-6 space-y-3 col-span-1">
             <div className="flex items-center gap-3 py-3">
-              <div className="bg-[#F2F2F2] p-2 rounded-full">
+              <div className="bg-brand-icon-bg p-2 rounded-full">
                 <img src={locationIcon} alt="موقعیت" className="h-7 w-7 text-gray-600" />
               </div>
               <span className="text-gray-700">{brandData.location}</span>
             </div>
             <div className="flex items-center gap-3 py-3">
-              <div className="bg-[#F2F2F2] p-2 rounded-full">
+              <div className="bg-brand-icon-bg p-2 rounded-full">
                 <img src={phoneIcon} alt="تلفن" className="h-7 w-7 text-gray-600" />
               </div>
               <span className="text-gray-700">{brandData.phone}</span>
             </div>
             <div className="flex items-center gap-3 py-3">
-              <div className="bg-[#F2F2F2] p-2 rounded-full">
+              <div className="bg-brand-icon-bg p-2 rounded-full">
                 <img src={emailIcon} alt="ایمیل" className="h-7 w-7 text-gray-600" />
               </div>
               <span className="text-gray-700">{brandData.email}</span>
             </div>
             <div className="flex items-center gap-3 py-3">
-              <div className="bg-[#F2F2F2] p-2 rounded-full">
+              <div className="bg-brand-icon-bg p-2 rounded-full">
                 <img src={calendarIcon} alt="تاریخ" className="h-7 w-7 text-gray-600" />
               </div>
               <span className="text-gray-700">{brandData.since}</span>

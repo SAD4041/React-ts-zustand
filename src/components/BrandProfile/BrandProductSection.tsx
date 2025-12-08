@@ -63,11 +63,11 @@ const BrandProductsSection = () => {
   };
 
   return (
-    <div className="mx-[150px] mt-12 p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+    <div className="mx-section mt-12 p-4 bg-white rounded-xl shadow-sm border border-gray-200">
       <div className="flex justify-between items-center my-4 px-4">
         <h2 className="px-10 text-2xl font-semibold text-gray-800">محصولات برند</h2>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 hover:bg-gray-200 text-gray-800 text-l font-medium py-2 px-4 rounded-lg border">
+          <div className="flex items-center gap-1 hover:bg-gray-200 text-gray-800 text-lg font-medium py-2 px-4 rounded-lg border">
             <img src={filterIcon} alt="فیلتر" className="h-7 w-7" />
             فیلتر
           </div>
@@ -88,7 +88,7 @@ const BrandProductsSection = () => {
         ))}
       </div>
 
-      <div className="mt-[60px] text-center">
+      <div className="mt-14 text-center">
         <button className="border border-gray-300 text-gray-700 text-sm font-medium py-2 px-4 rounded-xl hover:bg-gray-100 transition cursor-pointer">
           مشاهده محصولات بیشتر
         </button>

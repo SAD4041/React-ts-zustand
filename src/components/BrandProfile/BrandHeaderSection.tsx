@@ -29,8 +29,7 @@ const BrandHeader = () => {
 
     if (loading) return <LoadingSpinner />;
 
-    if (!brandData) return <div>.داده‌ای یافت نشد</div>;
-
+    if (!brandData) return <div>داده‌ای یافت نشد.</div>;
 
     return (
         <div>
@@ -42,7 +41,7 @@ const BrandHeader = () => {
               />
           </div>
 
-          <div className="mb-[50px] px-6 py-4 border relative">
+          <div className="mb-12 px-6 py-4 border relative">
             <div className="absolute -top-14 right-6">
               <img
                 src={brandData.avatar}
@@ -50,7 +49,7 @@ const BrandHeader = () => {
                 className="w-25 h-25 rounded-full border-4 border-white shadow-lg"
               />
               {brandData.isOfficial && (
-                <div className="absolute bottom-0 right-0 bg-blue-500 text-white p-1 rounded-full">
+                <div className="absolute bottom-0 right-0 bg-brand-official-bg text-brand-official-text p-1 rounded-full">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
@@ -63,7 +62,7 @@ const BrandHeader = () => {
                 <div className="flex items-center gap-2 mb-1">
                   <h1 className="text-xl font-bold text-gray-800">{brandData.name}</h1>
                   {brandData.isOfficial && (
-                    <span className="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded-full">برند رسمی</span>
+                    <span className="bg-brand-badge-bg text-brand-badge-text text-xs px-2 py-1 rounded-full">برند رسمی</span>
                   )}
                 </div>
                 <p className="text-sm text-gray-600 italic mb-3">{brandData.slogan}</p>
@@ -90,11 +89,11 @@ const BrandHeader = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-full flex items-center gap-1 text-sm">
+                <button className="bg-brand-follow-bg hover:bg-brand-follow-hover text-white font-medium py-2 px-4 rounded-full flex items-center gap-1 text-sm">
                   <img src={shopIcon} alt="دنبال کردن" className="h-7 w-7" />
                   دنبال کردن
                 </button>
-                <button className="font-medium py-2 px-4 rounded-full border flex items-center gap-1 text-sm">
+                <button className="font-medium py-2 px-4 rounded-full border border-brand-share-border flex items-center gap-1 text-sm">
                   <img src={shareIcon} alt="اشتراک" className="h-7 w-7" />
                   اشتراک گذاری
                 </button>
