@@ -4,13 +4,11 @@ import Landing from "@/pages/Landing";
 import Temp from "@/pages/Temp";
 import LoginForm from "@/pages/Login";
 import { Validation } from "@/pages/Validation";
-import { SignupForm } from "@/pages/SignUp";
-import Home from "@/pages/Home";
 
 export const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Home />,
+		element: <PublicLayout />,
 		// errorElement: (
 		// 	<Error404 />
 		// ),
@@ -28,15 +26,7 @@ export const router = createBrowserRouter([
 				element: <LoginForm />,
 			},
 			{
-				path: "/validation",
-				element: <Validation />,
-			},
-			{
-				path: "/signUp",
-				element: <SignupForm />,
-			},
-			{
-				path: "/validation",
+				path: "/verify",
 				element: <Validation />,
 			},
 			
