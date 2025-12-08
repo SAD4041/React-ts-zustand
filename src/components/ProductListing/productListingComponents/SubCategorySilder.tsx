@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import SubCategoryCard from './SubCategoryCard';
-import { subCategories } from '@/data/data';
+import { subCategories } from '@/data/productListingData';
 
 const SubCategorySlider: React.FC = () => {
   const sliderRef = useRef<HTMLDivElement>(null);

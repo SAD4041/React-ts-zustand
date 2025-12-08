@@ -1,5 +1,5 @@
 import React from 'react';
-import { brands, sizes, colors } from '@/data/data';
+import { brands, sizes, colors } from '@/data/productListingData';
 import type { FilterSidebarProps } from '@/types/productListingTypes';
 import BrandFilter from './BrandFilters';
 import SizeFilter from './SizeFilter';
@@ -52,7 +52,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
       <button
         onClick={onClearFilters}
-        className="w-full mt-2 py-1 text-sm bg-primary text-primary-foreground rounded hover:bg-primary/90 transition"
+        className="w-full mt-2 py-1 text-sm bg-primary text-primary-foreground rounded hover:bg-primary-hover transition"
       >
         پاک کردن فیلترها
       </button>

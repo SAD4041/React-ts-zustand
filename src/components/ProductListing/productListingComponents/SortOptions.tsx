@@ -1,6 +1,6 @@
 import React from 'react';
 import sortIcon from '@/assets/Listing Icon.png';
-import { sorts } from '@/data/data';
+import { sorts } from '@/data/productListingData';
 import type { SortOptionsProps, SortOption } from '@/types/productListingTypes';
 
 const SortOptions: React.FC<SortOptionsProps> = ({ currentSort, onSortChange }) => {
@@ -20,7 +20,7 @@ const SortOptions: React.FC<SortOptionsProps> = ({ currentSort, onSortChange }) 
             onClick={() => onSortChange(sort.value as SortOption)}
             className={`px-3 py-1 rounded-md transition ${
               isActive
-                ? 'bg-primary/10 text-primary border border-primary/30'
+                ? 'bg-primary-bg-subtle text-primary border border-primary-border-subtle'
                 : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             }`}
           >
