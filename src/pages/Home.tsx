@@ -113,7 +113,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="py-8 px-4 max-w-7xl mx-auto">
+      <div className="mx-8 py-8 px-[60px] max-w-7xl mx-auto">
         <h2 className="text-xl font-bold text-gray-800 mb-6 text-right">خرید بر اساس دسته‌بندی</h2>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
           {categories.map((cat) => (
@@ -123,7 +123,7 @@ export default function Home() {
               className="flex flex-col items-center gap-2 group cursor-pointer"
               onClick={() => logUserAction({ action: "click", target_type: "category", target_id: cat.id })}
             >
-              <div className="w-20 h-20 rounded-full p-2 flex items-center justify-center transition-colors">
+              <div className="w-25 h-25 rounded-full p-2 flex items-center justify-center transition-colors">
                 <img
                   src={cat.image_url || bannerFallback}
                   alt={cat.name}
