@@ -1,55 +1,59 @@
-import React from 'react';
+import React from "react";
 import { Star } from "lucide-react";
 import tuman from "../../../assets/tuman.png";
 import { toPersianDigits } from "../../../utils/PersianDigits";
-import type { ProductProps } from '@/types/productCardTypes';
+import type { ProductProps } from "@/types/productCardTypes";
+
 
 const ProductDetails: React.FC<ProductProps> = ({ product }) => {
-  const formatPrice = (num: number): string => {
-    return toPersianDigits(num.toLocaleString('en-US'));
-  };
+    const formatPrice = (num: number): string => {
+        return toPersianDigits(num.toLocaleString("en-US"));
+    };
 
-  return (
-    <div className="text-right mt-product-details-gap">
-      <p dir="rtl" className="text-product-title text-foreground font-semibold mb-1">
-        تیشرت {product.model} مدل
-      </p>
 
-      <h3 className="text-product-title font-semibold text-foreground mb-2">
-        {product.name}
-      </h3>
+    return (
+        <div dir="rtl" className="flex flex-col gap-2 text-right select-none">
+            <p className="text-sm font-semibold text-foreground truncate">
+                تیشرت {product.model} مدل
+            </p>
 
-      <div className="flex items-center justify-end space-x-1">
-        <Star className="w-4 h-4 text-chart-4 fill-chart-4" />
-        <span className="text-product-rating text-foreground font-medium">{toPersianDigits(product.rating)}</span>
-        <span className="text-product-rating-count text-muted-foreground">({toPersianDigits(product.ratingCount)})</span>
-      </div>
 
-      <div className="flex flex-grow justify-end items-baseline space-x-2 flex-row-reverse">
-        {product.hasDiscount ? (
-          <>
-            <div className="font-semibold flex items-center text-product-discounted text-foreground gap-2 mr-3">
-              <span className="tight-digits">{formatPrice(product.discountedPrice)}</span>
-              <span className="ml-1">
-                <img src={tuman} alt="تومان" className="w-product-tuman-icon h-product-tuman-icon" />
-              </span>
+            <h3 className="text-sm font-semibold text-foreground leading-tight line-clamp-2">
+                {product.name}
+            </h3>
+
+
+            <div className="flex flex-wrap items-center justify-end gap-1 text-xs">
+                <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
+                <span className="font-medium">{toPersianDigits(product.rating)}</span>
+                <span className="text-muted-foreground">({toPersianDigits(product.ratingCount)})</span>
             </div>
 
-            <span className="text-product-price text-muted-foreground line-through decoration-primary decoration-2">
-              {formatPrice(product.price)} 
-            </span>
-          </>
-        ) : (
-          <div className="flex flex-row-reverse items-center text-product-price text-foreground gap-1.5">
-            <span>{formatPrice(product.price)}</span>
-            <span className="ml-1">
-              <img src={tuman} alt="تومان" className="w-product-tuman-icon h-product-tuman-icon" />
-            </span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+
+
+            <div className="flex flex-wrap justify-end items-baseline gap-2">
+                {product.hasDiscount ? (
+                    <>
+                        <div className="flex items-center gap-1 font-semibold text-foreground whitespace-nowrap">
+                            <span className="text-base">{formatPrice(product.discountedPrice)}</span>
+                            <img src={tuman} alt="تومان" className="w-3 h-3 object-contain" />
+                        </div>
+
+
+                        <span className="text-xs text-muted-foreground line-through decoration-primary whitespace-nowrap">
+                            {formatPrice(product.price)}
+                        </span>
+                    </>
+                ) : (
+                    <div className="flex items-center gap-1 font-semibold text-foreground whitespace-nowrap">
+                        <span className="text-base">{formatPrice(product.price)}</span>
+                        <img src={tuman} alt="تومان" className="w-3 h-3 object-contain" />
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 };
+
 
 export default ProductDetails;

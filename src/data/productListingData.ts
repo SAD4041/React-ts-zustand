@@ -2,7 +2,7 @@ import shortTshirt from '@/assets/shortTshirt.jpg';
 import longTshirt from '@/assets/longTshirt.png';
 import image1 from '@/assets/image1.png';
 import type { Brand, ColorOption, SubCategory, Product } from '@/types/productListingTypes';
-import {productData} from "@/data/data";
+import {productData} from "@/data/productcardData";
 
 export  const productsPerPage = 4;
 export  const pagesPerGroup = 5;

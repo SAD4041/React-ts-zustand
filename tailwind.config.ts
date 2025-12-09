@@ -10,6 +10,14 @@ const config: Config = {
 	],
 	darkMode: "class",
 	theme: {
+		screens: {
+			'xs': '475px',
+			'sm': '640px',
+			'md': '768px',
+			'lg': '1024px',
+			'xl': '1280px',
+			'2xl': '1536px',
+    	},
 		extend: {
 			fontFamily: {
 				sans: ["Vazirmatn", 'sans-serif'],
@@ -101,7 +109,10 @@ const config: Config = {
 			},
 		},
 	},
-	plugins: [tailwindcssAnimate],
+	plugins: [
+		tailwindcssAnimate,
+		require('@tailwindcss/line-clamp'),
+	],
 };
 
 export default config;
