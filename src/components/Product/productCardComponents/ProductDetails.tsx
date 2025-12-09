@@ -3,13 +3,9 @@ import { Star } from "lucide-react";
 import tuman from "../../../assets/tuman.png";
 import { toPersianDigits } from "../../../utils/PersianDigits";
 import type { ProductProps } from "@/types/productCardTypes";
-
+import { formatPrice } from "@/utils/toLocalPrice"
 
 const ProductDetails: React.FC<ProductProps> = ({ product }) => {
-    const formatPrice = (num: number): string => {
-        return toPersianDigits(num.toLocaleString("en-US"));
-    };
-
 
     return (
         <div dir="rtl" className="flex flex-col gap-2 text-right select-none">
@@ -24,7 +20,7 @@ const ProductDetails: React.FC<ProductProps> = ({ product }) => {
 
 
             <div className="flex flex-wrap items-center justify-end gap-1 text-xs">
-                <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
+                <Star className="w-3.5 h-3.5 text-yellow fill-yellow" />
                 <span className="font-medium">{toPersianDigits(product.rating)}</span>
                 <span className="text-muted-foreground">({toPersianDigits(product.ratingCount)})</span>
             </div>

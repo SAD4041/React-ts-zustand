@@ -9,9 +9,9 @@ import type { ProductCardProps } from "@/types/productCardTypes";
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     return (
         <div className="
-w-full bg-card rounded-xl shadow-sm border border-border
-p-3 flex flex-col gap-3 transition hover:shadow-md
-">
+            w-full bg-card rounded-xl shadow-sm border border-border
+            p-3 flex flex-col gap-3 transition hover:shadow-md
+            ">
             <ProductImage imageUrl={product.image} discount={product.discount} />
             <ProductDetails product={product} />
             <SizeSelector product={product} />
@@ -19,7 +19,7 @@ p-3 flex flex-col gap-3 transition hover:shadow-md
 
             <div
                 dir="rtl"
-                className="flex flex-wrap items-center justify-between gap-2 text-[10px]"
+                className="flex flex-wrap items-center justify-between gap-2 text-xs"
             >
                 <ColorSelector product={product} />
 
