@@ -7,7 +7,15 @@ import logo from '../assets/logo.png';
 import buck from '../assets/buck.png';
 import successCat from '../assets/success.png';
 import errorCat from '../assets/error.png';
-import CustomModal from '../components/Custom/modal';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../components/ui/dialog';
+import { Button } from '../components/ui/button';
 import { translateNumber } from '@/utils/translateNumber'
 import type ValidationFormValues from '@/types/loginTypes';
 
@@ -254,15 +262,34 @@ const Validation: React.FC = () => {
         </div>
       </div>
 
-      <CustomModal
-        isOpen={modalConfig.isOpen}
-        onClose={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
-        title={modalConfig.title}
-        message={modalConfig.message}
-        buttonText={modalConfig.buttonText}
-        onButtonClick={modalConfig.onButtonClick}
-        imageSrc={modalConfig.imageSrc}
-      />
+      <Dialog open={modalConfig.isOpen} onOpenChange={(open) => !open && setModalConfig(prev => ({ ...prev, isOpen: false }))}>
+        <DialogContent className="sm:max-w-md" dir="rtl">
+          <DialogHeader>
+            <div className="flex justify-center mb-4">
+              <img 
+                src={modalConfig.imageSrc} 
+                alt={modalConfig.title} 
+                className="w-45 h-45 object-contain"
+              />
+            </div>
+            <DialogTitle className="text-center text-xl font-bold">
+              {modalConfig.title}
+            </DialogTitle>
+            <DialogDescription className="text-center text-base pt-2">
+              {modalConfig.message}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-center">
+            <Button
+              type="button"
+              onClick={modalConfig.onButtonClick}
+              className="w-full sm:w-auto min-w-[120px]"
+            >
+              {modalConfig.buttonText}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

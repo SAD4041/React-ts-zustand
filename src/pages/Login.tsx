@@ -3,7 +3,15 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { loginSchema } from '../schemas/LoginSchemas';
 import { checkPhone } from '../services/apiLogin';
-import CustomModal from '../components/Custom/modal';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../components/ui/dialog';
+import { Button } from '../components/ui/button';
 import logo from '../assets/logo.png';
 import buck from '../assets/buck.png';
 import successCat from '../assets/success.png';
@@ -11,10 +19,8 @@ import errorCat from '../assets/error.png';
 import { translateNumber } from '../utils/translateNumber';
 import type LoginFormValues from '@/types/loginTypes';
 
-
 const SUCCESS_CAT = successCat;
 const ERROR_CAT = errorCat;
-
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -24,7 +30,7 @@ const LoginForm: React.FC = () => {
     title: '',
     message: '',
     buttonText: '',
-    onButtonClick: () => { },
+    onButtonClick: () => {},
     imageSrc: ''
   });
 
@@ -69,7 +75,7 @@ const LoginForm: React.FC = () => {
       setModalConfig({
         isOpen: true,
         title: 'خطا!',
-        message: 'خطای غیرمنتظره رخ داد. لطفاً دوباره تلاش کنید.',
+        message: 'خطایی غیرمنتظره رخ داد. لطفاً دوباره تلاش کنید.',
         buttonText: 'بازگشت',
         onButtonClick: () => {
           setModalConfig(prev => ({ ...prev, isOpen: false }));
@@ -105,7 +111,7 @@ const LoginForm: React.FC = () => {
                       {({ field, form }: any) => (
                         <input
                           type="text"
-                          placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+                          placeholder="۰۱۲۳۴۵۶۷۸۹"
                           disabled={loading}
                           inputMode="numeric"
                           className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none disabled:bg-slate-100 disabled:cursor-not-allowed text-center text-sm"
@@ -182,15 +188,35 @@ const LoginForm: React.FC = () => {
         </div>
       </div>
 
-      <CustomModal
-        isOpen={modalConfig.isOpen}
-        onClose={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
-        title={modalConfig.title}
-        message={modalConfig.message}
-        buttonText={modalConfig.buttonText}
-        onButtonClick={modalConfig.onButtonClick}
-        imageSrc={modalConfig.imageSrc}
-      />
+      {/* shadcn Dialog Component */}
+      <Dialog open={modalConfig.isOpen} onOpenChange={(open) => !open && setModalConfig(prev => ({ ...prev, isOpen: false }))}>
+        <DialogContent className="sm:max-w-md" dir="rtl">
+          <DialogHeader>
+            <div className="flex justify-center mb-4">
+              <img 
+                src={modalConfig.imageSrc} 
+                alt={modalConfig.title} 
+                className="w-45 h-45 object-contain"
+              />
+            </div>
+            <DialogTitle className="text-center text-xl font-bold">
+              {modalConfig.title}
+            </DialogTitle>
+            <DialogDescription className="text-center text-base pt-2">
+              {modalConfig.message}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-center">
+            <Button
+              type="button"
+              onClick={modalConfig.onButtonClick}
+              className="w-full sm:w-auto min-w-[120px]"
+            >
+              {modalConfig.buttonText}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
