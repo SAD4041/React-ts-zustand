@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import catPic from '@/assets/Gemini_Generated_Image_muba2rmuba2rmuba 1.png';
 import { useNavigate } from "react-router-dom";
+import { MotionButton } from "@/components/ui/motion-bottun";
 
 export default function Errors404() {
   const navigate = useNavigate();
@@ -27,14 +28,13 @@ export default function Errors404() {
           !مثل اینکه گم شدی، این مسیر به جایی نمی‌رسه
         </p>
 
-        <motion.button
+        <MotionButton
           onClick={() => navigate("/")}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold py-3 px-6 rounded-lg transition-colors duration-300 shadow-md"
+          variant="default"
+          className="px-6 py-3 font-semibold text-lg"
         >
           بازگشت به خانه اصلی
-        </motion.button>
+        </MotionButton>
       </motion.div>
     </div>
   );
