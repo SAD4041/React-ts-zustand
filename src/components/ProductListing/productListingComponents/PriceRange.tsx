@@ -3,7 +3,7 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { formatPrice } from '@/utils/FormatPrice';
 import { toPersianDigits } from '@/utils/PersianDigits';
-import type { PriceRangeFilterProps} from '@/types/productListingTypes';
+import type { PriceRangeFilterProps } from '@/types/productListingTypes';
 
 const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
   minPrice,
@@ -24,7 +24,7 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
   return (
     <div className="mb-10 ml-4">
       <h3 className="font-bold mb-3">محدوده قیمت</h3>
-      
+
       <div className="px-2 py-2">
         <Slider
           range
