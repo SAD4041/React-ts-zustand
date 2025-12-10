@@ -90,11 +90,11 @@ const LoginForm: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-white" dir="rtl">
       <div className="w-full flex items-center justify-center p-6 md:p-10">
-        <div className="w-full max-w-xl h-[600px] bg-gray-100 rounded-3xl border-2 border-gray-200 shadow-2xl p-8 relative overflow-hidden">
+        <div className="w-full max-w-xl h-5/6 bg-login-card rounded-3xl border-2 border-gray-200 shadow-2xl p-8 relative overflow-hidden">
           <div className="text-center mb-8">
             <img src={logo} alt="CB Buck Gallery" className="mx-auto w-32 h-auto" />
             <h2 className="text-3xl font-bold text-slate-800">عضویت/ورود</h2>
-            <p className="text-sm text-slate-600 mt-2">خوش آمدید،</p>
+            <p className="text-sm text-slate-600 mt-2">خوش آمدید!</p>
             <p className="text-sm text-slate-600">لطفا شماره موبایل خود را وارد کنید.</p>
           </div>
 
@@ -111,7 +111,7 @@ const LoginForm: React.FC = () => {
                       {({ field, form }: any) => (
                         <input
                           type="text"
-                          placeholder="۰۱۲۳۴۵۶۷۸۹"
+                          placeholder="۰۹۱۲۳۴۵۶۷۸۹"
                           disabled={loading}
                           inputMode="numeric"
                           className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none disabled:bg-slate-100 disabled:cursor-not-allowed text-center text-sm"
@@ -119,7 +119,7 @@ const LoginForm: React.FC = () => {
                           onChange={(e) => {
                             const inputValue = e.target.value;
                             const persianToEnglish = inputValue.replace(/[۰-۹]/g, (d) =>
-                              '۰۱۲۳۴۵۶۷۸۹'.indexOf(d).toString()
+                              '۰۹۱۲۳۴۵۶۷۸۹'.indexOf(d).toString()
                             );
                             const englishValue = persianToEnglish
                               .replace(/[^0-9]/g, '')
@@ -147,10 +147,10 @@ const LoginForm: React.FC = () => {
                 </div>
 
                 <div className="flex justify-center">
-                  <button
+                  <Button
                     type="submit"
                     disabled={loading || isSubmitting}
-                    className="w-full max-w-xs bg-black text-white py-2.5 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium shadow-md hover:shadow-lg disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
+                    className="w-full max-w-xs bg-black text-white text-md py-2.5 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium shadow-md hover:shadow-lg disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer"
                   >
                     {loading || isSubmitting ? (
                       <>
@@ -168,7 +168,7 @@ const LoginForm: React.FC = () => {
                     ) : (
                       'ثبت'
                     )}
-                  </button>
+                  </Button>
                 </div>
 
                 <div className="text-center text-xs mt-4">
@@ -188,7 +188,6 @@ const LoginForm: React.FC = () => {
         </div>
       </div>
 
-      {/* shadcn Dialog Component */}
       <Dialog open={modalConfig.isOpen} onOpenChange={(open) => !open && setModalConfig(prev => ({ ...prev, isOpen: false }))}>
         <DialogContent className="sm:max-w-md" dir="rtl">
           <DialogHeader>
@@ -210,7 +209,7 @@ const LoginForm: React.FC = () => {
             <Button
               type="button"
               onClick={modalConfig.onButtonClick}
-              className="w-full sm:w-auto min-w-[120px]"
+              className="w-full sm:w-auto min-w-[120px] cursor-pointer"
             >
               {modalConfig.buttonText}
             </Button>

@@ -18,6 +18,9 @@ import {
 import { Button } from '../components/ui/button';
 import { translateNumber } from '@/utils/translateNumber'
 import type ValidationFormValues from '@/types/loginTypes';
+import BackToLogin from '@/components/login/backToLogin';
+
+
 
 const Validation: React.FC = () => {
   const navigate = useNavigate();
@@ -175,16 +178,9 @@ const Validation: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-white" dir="rtl">
       <div className="w-full flex items-center justify-center p-6 md:p-10">
-        <div className="w-full max-w-xl h-[600px] bg-gray-100 rounded-3xl border-2 border-gray-200 shadow-2xl p-8 relative overflow-hidden">
+        <div className="w-full max-w-xl h-5/6 bg-login-card rounded-3xl border-2 border-gray-200 shadow-2xl p-8 relative overflow-hidden">
 
-          <a
-            href="/login"
-            className="absolute top-4 right-4 bg-black text-white w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors duration-200 z-10"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-            </svg>
-          </a>
+          <BackToLogin />
 
           <div className="text-center mb-8">
             <img src={logo} alt="CB Buck Gallery" className="mx-auto w-32 h-auto" />
@@ -226,19 +222,34 @@ const Validation: React.FC = () => {
                         handleOtpChange(englishValue, index);
                       }}
                       onKeyDown={(e) => handleOtpKeyDown(e, index)}
-                      className="w-12 h-12 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                      className="w-12 h-12 text-center text-lg bg-white shadow border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
                     />
                   ))}
                 </div>
 
                 <div className="flex justify-center">
-                  <button
+                  <Button
                     type="submit"
                     disabled={loading || isSubmitting || otp.join('').length !== 6}
-                    className="w-[320px] h-10 bg-black text-white rounded-md disabled:opacity-50"
+                    className="w-82 bg-black text-white text-md rounded-md disabled:opacity-50 cursor-pointer"
                   >
-                    {(loading || isSubmitting) ? 'در حال بررسی...' : 'ورود'}
-                  </button>
+                    {loading || isSubmitting ? (
+                      <>
+                        <svg
+                          className="animate-spin h-4 w-4 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        در حال بررسی...
+                      </>
+                    ) : (
+                      'ورود'
+                    )}
+                  </Button>
                 </div>
 
                 <div className="text-center text-sm mt-4">
@@ -247,7 +258,7 @@ const Validation: React.FC = () => {
                     type="button"
                     onClick={handleResendCode}
                     disabled={loading || isSubmitting}
-                    className="text-blue-600 hover:text-blue-700 font-medium disabled:text-slate-400"
+                    className="text-blue-600 hover:text-blue-700 font-medium disabled:text-slate-400 cursor-pointer"
                   >
                     ارسال مجدد
                   </button>
@@ -283,7 +294,7 @@ const Validation: React.FC = () => {
             <Button
               type="button"
               onClick={modalConfig.onButtonClick}
-              className="w-full sm:w-auto min-w-[120px]"
+              className="w-full sm:w-auto min-w-[120px] cursor-pointer"
             >
               {modalConfig.buttonText}
             </Button>
