@@ -87,4 +87,5 @@ export default function Sidebar({ items }: SidebarProps) {
       </nav>
     </div>
   );
+  
 }
