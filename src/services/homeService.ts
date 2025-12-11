@@ -4,7 +4,7 @@ import type { HomePageResponse } from "@/types/homeTypes";
 export const fetchHomePageData = async (): Promise<HomePageResponse> => {
   try {
     const data = await getData({
-      endPoint: "/api/home", // این مسیر را می‌توانید تغییر دهید
+      endPoint: "/api/home", 
     });
     return data;
   } catch (error) {
@@ -13,7 +13,6 @@ export const fetchHomePageData = async (): Promise<HomePageResponse> => {
   }
 };
 
-// سرویس ارسال اکشن کاربر (کلیک، سرچ و غیره)
 export interface UserAction {
   action: "click" | "search" | "view";
   target_type: "product" | "brand" | "category";
@@ -25,11 +24,10 @@ export interface UserAction {
 export const sendUserAction = async (action: UserAction): Promise<void> => {
   try {
     await postData({
-      endPoint: "/api/user-actions", // مسیری که بک از شما می‌خواهد
+      endPoint: "/api/user-actions",
       data: action,
     });
   } catch (error) {
     console.error("Error sending user action:", error);
-    // عدم نمایش خطا به کاربر — فقط لاگ
   }
 };

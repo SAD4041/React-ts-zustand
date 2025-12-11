@@ -1,13 +1,11 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/Product/ProductCard";
 import { fetchHomePageData, sendUserAction, type UserAction } from "@/services/homeService";
-import type { HomePageResponse } from "@/types/homeTypes";
-import SliderSection from "@/components/Home/SliderSection";
-import Header from "@/components/Header/Header";
-import Footer from "@/components/Footer/Footer";
+import type { HomePageResponse, Banner } from "@/types/homeTypes";
+import BannerSecton from "@/components/Home/BannerSection";
 import SurpriseSection from "@/components/Home/SupriseSection";
 import BestBrandsSection from "@/components/Home/BestBrand";
 import BrandSlider from "@/components/Home/BrandSlider";
@@ -23,7 +21,7 @@ import style1 from "@/assets/style1.jpg";
 import style2 from "@/assets/style2.jpg";
 import style3 from "@/assets/style3.jpg";
 import style4 from "@/assets/style4.jpg";
-import poshtibani from "@/assets/poshtibani.png"
+import poshtibani from "@/assets/poshtibani.png";
 
 export default function Home() {
   const [homeData, setHomeData] = useState<HomePageResponse | null>(null);
@@ -56,19 +54,20 @@ export default function Home() {
     );
   }
 
-  if (error) {
-    console.warn("Home page error fallback activated");
-  }
+  const fallbackBanners: Banner[] = [
+    { id: 1, image_url: bannerFallback },
+    { id: 2, image_url: bannerFallback },
+    { id: 3, image_url: bannerFallback },
+  ];
 
-  const data = homeData || {
-    banner: { id: 1, image_url: bannerFallback },
+  const fallbackData: HomePageResponse = {
     categories: [
-      { id: 1, name: "اکسسوری", slug: "accessories", image_url: category1 },
-      { id: 2, name: "لباس گرم", slug: "winter-wear", image_url: category2 },
-      { id: 3, name: "شلوار", slug: "pants", image_url: category3 },
-      { id: 4, name: "لباس زنانه", slug: "women", image_url: category4 },
-      { id: 5, name: "پلیور", slug: "sweater", image_url: category5 },
-      { id: 6, name: "تیشرت", slug: "tshirt", image_url: category6 },
+      { id: 1, name: "تیشرت", slug: "tshirt", image_url: category1 },
+      { id: 2, name: "پلیور", slug: "sweater", image_url: category2 },
+      { id: 3, name: "لباس زنانه", slug: "women", image_url: category3 },
+      { id: 4, name: "شلوار", slug: "pants", image_url: category4 },
+      { id: 5, name: "لباس گرم", slug: "winter-wear", image_url: category5 },
+      { id: 6, name: "اکسسوری", slug: "accessories", image_url: category6 },
     ],
     amazing_products: [],
     best_selling_brands: [],
@@ -80,7 +79,14 @@ export default function Home() {
     ],
   };
 
-  const { banner, categories, amazing_products, best_selling_brands, style_palettes } = data;
+  const data = homeData || fallbackData;
+  const {
+    banners = fallbackBanners,
+    categories = fallbackData.categories,
+    amazing_products = [],
+    best_selling_brands = [],
+    style_palettes = fallbackData.style_palettes,
+  } = data;
 
   const logUserAction = (action: Omit<UserAction, 'timestamp'>) => {
     const userAction: UserAction = {
@@ -92,36 +98,23 @@ export default function Home() {
 
   return (
     <div className="w-full min-h-screen bg-white font-vazir">
-
-      <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] overflow-hidden">
-        <div className="absolute inset-0 rounded-b-[50px] overflow-hidden">
-          <img
-            src={banner.image_url || bannerFallback}
-            alt="فروش ویژه"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="absolute bottom-6 left-6 z-10">
-          <Button variant="ghost" size="icon" className="bg-white/80 hover:bg-white shadow-md">
-            ←
-          </Button>
-        </div>
-        <div className="absolute bottom-6 right-6 z-10">
-          <Button variant="ghost" size="icon" className="bg-white/80 hover:bg-white shadow-md">
-            →
-          </Button>
-        </div>
-      </div>
+      <BannerSecton banners={banners} />
 
       <div className="mx-8 py-8 px-[40px] max-w-7xl mx-auto">
-        <h2 className="text-xl font-bold text-gray-800 mb-6 text-right">خرید بر اساس دسته‌بندی</h2>
+        <h2 className="text-xl font-bold mb-6 text-right">خرید بر اساس دسته‌بندی</h2>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
           {categories.map((cat) => (
             <Link
               key={cat.id}
               to={`/category/${cat.slug}`}
               className="flex flex-col items-center gap-2 group cursor-pointer"
-              onClick={() => logUserAction({ action: "click", target_type: "category", target_id: cat.id })}
+              onClick={() =>
+                logUserAction({
+                  action: "click",
+                  target_type: "category",
+                  target_id: cat.id,
+                })
+              }
             >
               <div className="w-25 h-25 rounded-full p-2 flex items-center justify-center transition-colors">
                 <img
@@ -147,14 +140,21 @@ export default function Home() {
             .تجربه‌ی خرید از آینده. لباس‌ها را قبل از خرید، آنلاین استایل کنید
           </p>
           <Link to="/style-pro">
-            <Button variant="primary" size="sm" className="bg-pink-600 hover:bg-pink-700 rounded-full text-white cursor-pointer">
+            <Button
+              variant="default"
+              size="sm"
+              className="bg-pink-600 hover:bg-pink-700 rounded-full text-white cursor-pointer"
+            >
               شروع استایل
             </Button>
           </Link>
         </div>
       </div>
 
-      <BestBrandsSection brands={best_selling_brands} onBrandClick={logUserAction} />
+      <BestBrandsSection
+        brands={best_selling_brands}
+        onBrandClick={logUserAction}
+      />
 
       <BrandSlider />
 
@@ -169,7 +169,9 @@ export default function Home() {
                   alt="کلاسیک"
                   className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                 />
-                <p className="absolute bottom-4 right-4 text-black text-xl font-bold">کلاسیک</p>
+                <p className="absolute bottom-4 right-4 text-black text-xl font-bold">
+                  کلاسیک
+                </p>
               </Link>
             </div>
             <div className="md:w-1/2 flex flex-col gap-4">
@@ -181,7 +183,9 @@ export default function Home() {
                       alt="اسپرت"
                       className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                     />
-                    <p className="absolute bottom-4 right-4 text-black text-lg font-bold">اسپرت</p>
+                    <p className="absolute bottom-4 right-4 text-black text-lg font-bold">
+                      اسپرت
+                    </p>
                   </Link>
                 </div>
                 <div className="w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
@@ -191,7 +195,9 @@ export default function Home() {
                       alt="استریت"
                       className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                     />
-                    <p className="absolute bottom-4 right-4 text-black text-lg font-bold">استریت</p>
+                    <p className="absolute bottom-4 right-4 text-black text-lg font-bold">
+                      استریت
+                    </p>
                   </Link>
                 </div>
               </div>
@@ -202,7 +208,9 @@ export default function Home() {
                     alt="وینتیج"
                     className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                   />
-                  <p className="absolute bottom-4 right-4 text-black text-xl font-bold">وینتیج</p>
+                  <p className="absolute bottom-4 right-4 text-black text-xl font-bold">
+                    وینتیج
+                  </p>
                 </Link>
               </div>
             </div>
@@ -216,11 +224,7 @@ export default function Home() {
           className="w-16 h-16 flex items-center justify-center rounded-full border-2 border-gray-800 bg-white shadow-lg cursor-pointer hover:shadow-xl transition"
           aria-label="پشتیبانی"
         >
-          <img
-            src={poshtibani}
-            alt="پشتیبانی"
-            className="w-10 h-10 object-contain"
-          />
+          <img src={poshtibani} alt="پشتیبانی" className="w-10 h-10 object-contain" />
         </a>
       </div>
     </div>

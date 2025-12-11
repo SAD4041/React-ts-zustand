@@ -2,7 +2,7 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import Button from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import ProductCard from "@/components/Product/ProductCard";
 import adidasFallback from "@/assets/shortTshirt.jpg";
 import {products} from '@/data/data.ts'

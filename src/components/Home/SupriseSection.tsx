@@ -43,9 +43,6 @@ const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
     <div dir="ltr" className="w-full py-6 px-4 md:px-8 bg-gradient-to-b from-[#FF6B6B] to-white rounded-xl shadow-sm">
       <div className="flex flex-col md:flex-row items-start gap-4">
         <div className="flex-grow relative">
-          <div className="md:hidden flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-red-700">شگفت انگیز</h2>
-          </div>
 
           <Swiper
             dir="rtl"
