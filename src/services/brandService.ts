@@ -1,30 +1,46 @@
 // src/services/brandService.ts
-import { getData, patchData, postImageData } from "@/services/services";
+
+import { getData, patchData, putImageData } from "@/services/services";
 import type { BrandProfilePayload } from "@/types/brandProfileTypes";
+localStorage.setItem("userId", "3");
 
+const getUserId = () => localStorage.getItem("userId");
 
-/** Get brand profile */
+// ---------- GET profile ----------
 export const getBrandProfile = () => {
-  // ⚠ backend hardcoded id = 3 — keep or replace with token-based ID
-  return getData({ endPoint: "/api/manager/profile/3" });
+  const userId = getUserId();
+  return getData({ endPoint: `/api/manager/profile/${userId}` });
 };
 
-/** Update brand profile */
+// ---------- UPDATE profile ----------
 export const updateBrandProfile = (data: BrandProfilePayload) => {
+  const userId = getUserId();
   return patchData({
-    endPoint: "/api/manager/profile/3/update",
+    endPoint: `/api/manager/profile/${userId}/update`,
     data,
   });
 };
 
-/** Upload brand images (logo/banner) */
-export const uploadBrandImage = (file: File, type: "logo" | "banner") => {
+// ---------- UPLOAD PROFILE IMAGE ----------
+export const uploadProfileImage = (file: File) => {
+  const userId = getUserId();
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("type", type);
 
-  return postImageData({
-    endPoint: "/api/upload",
+  return putImageData({
+    endPoint: `/api/manager/profile/${userId}/update/image`,
+    data: formData,
+  });
+};
+
+// ---------- UPLOAD BANNER IMAGE ----------
+export const uploadBannerImage = (file: File) => {
+  const userId = getUserId();
+  const formData = new FormData();
+  formData.append("file", file);
+
+  return putImageData({
+    endPoint: `/api/manager/profile/${userId}/update/banerimage`,
     data: formData,
   });
 };

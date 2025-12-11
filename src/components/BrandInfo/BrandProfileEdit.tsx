@@ -1,5 +1,5 @@
 import { useFormik, FormikProvider } from "formik";
-import { uploadBrandImage } from "@/services/brandService";
+import { uploadProfileImage, uploadBannerImage } from "@/services/brandService";
 import type { BrandFormValues, BrandProfileEditProps } from "@/types/brandProfileTypes";
 import { ValidationSchema } from "@/schemas/brandValidationSchema";
 import { Input } from "@/components/ui/Input";
@@ -16,13 +16,17 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
   });
 
   const handleImageUpload = async (file: File, type: "logo" | "banner") => {
-    try {
-      const res = await uploadBrandImage(file, type);
-      formik.setFieldValue(`${type}Url`, res.url);
-    } catch (err) {
-      console.error(`آپلود ${type} ناموفق بود`, err);
-    }
-  };
+  try {
+    const res =
+      type === "logo"
+        ? await uploadProfileImage(file)
+        : await uploadBannerImage(file);
+
+    formik.setFieldValue(`${type}Url`, res.url);
+  } catch (err) {
+    console.error(`آپلود ${type} ناموفق بود`, err);
+  }
+};
 
   return (
     <div className="w-full min-h-screen bg-background">
