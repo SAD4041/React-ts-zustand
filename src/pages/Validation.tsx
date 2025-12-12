@@ -19,6 +19,7 @@ import { Button } from '../components/ui/button';
 import { translateNumber } from '@/utils/translateNumber'
 import type ValidationFormValues from '@/types/loginTypes';
 import BackToLogin from '@/components/login/backToLogin';
+import SubmitSpinner from '@/components/login/submitSpinner';
 
 
 
@@ -26,7 +27,7 @@ const Validation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const [phone, setPhone] = useState('۰۹۱۲۳۴۵۶۷۸۹');
+  const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
@@ -40,11 +41,13 @@ const Validation: React.FC = () => {
   });
 
   useEffect(() => {
-    const st = (location as any).state;
-    if (st?.phone) {
-      setPhone(st.phone);
+    const { phone: receivedPhone } = (location.state || {}) as { phone?: string };
+    if (receivedPhone) {
+      setPhone(receivedPhone);
+    } else {
+      navigate('/login');
     }
-  }, [location]);
+  }, [location, navigate]);
 
   const handleVerify = async (values: ValidationFormValues) => {
     setLoading(true);
@@ -52,11 +55,11 @@ const Validation: React.FC = () => {
       const result = await verifyCode(phone, values.code);
 
       if (result.success) {
-        if (result.data?.valid === true) {
+        if (result.data?.userExist === true) {
           setModalConfig({
             isOpen: true,
             title: 'ورود موفق',
-            message: 'کد تأیید صحیح است. خوش آمدید!',
+            message: result.data?.message || 'کد تأیید صحیح است. خوش آمدید!',
             buttonText: 'ادامه',
             imageSrc: successCat,
             onButtonClick: () => {
@@ -83,7 +86,7 @@ const Validation: React.FC = () => {
         setModalConfig({
           isOpen: true,
           title: 'خطا',
-          message: result.message || 'خطای سرور. لطفاً دوباره تلاش کنید.',
+          message: result.message || 'خطایی سرور. لطفاً دوباره تلاش کنید.',
           buttonText: 'باشه',
           imageSrc: errorCat,
           onButtonClick: () => {
@@ -96,7 +99,7 @@ const Validation: React.FC = () => {
       setModalConfig({
         isOpen: true,
         title: 'خطا',
-        message: 'خطای غیرمنتظره رخ داد. لطفاً دوباره تلاش کنید.',
+        message: 'خطایی غیرمنتظره رخ داد. لطفاً دوباره تلاش کنید.',
         buttonText: 'باشه',
         imageSrc: errorCat,
         onButtonClick: () => {
@@ -176,18 +179,22 @@ const Validation: React.FC = () => {
   const initialValues: ValidationFormValues = { code: '' };
 
   return (
-    <div className="flex min-h-screen bg-white" dir="rtl">
+    <div className="flex min-h-screen" dir="rtl">
       <div className="w-full flex items-center justify-center p-6 md:p-10">
-        <div className="w-full max-w-xl h-5/6 bg-login-card rounded-3xl border-2 border-gray-200 shadow-2xl p-8 relative overflow-hidden">
+        <div className="w-full max-w-xl h-5/6 bg-light rounded-3xl border-2 border-gray-2 shadow-2xl p-8 relative overflow-hidden">
 
           <BackToLogin />
 
           <div className="text-center mb-8">
             <img src={logo} alt="CB Buck Gallery" className="mx-auto w-32 h-auto" />
-            <h2 className="text-3xl font-bold text-slate-800">عضویت/ورود</h2>
+            <h2 className="text-3xl font-bold text-gray-8">عضویت/ورود</h2>
             {phone && (
-              <p className="text-sm text-slate-600 mt-4">
-                لطفا کد ارسال شده برای شماره <span className="font-bold">{phone}</span> را وارد کنید.
+              <p className="text-sm text-gray-7 mt-4">
+                لطفا کد ارسال شده برای شماره{' '}
+                <span className="font-bold">
+                  {translateNumber(phone)}
+                </span>
+                را وارد کنید.
               </p>
             )}
           </div>
@@ -222,7 +229,7 @@ const Validation: React.FC = () => {
                         handleOtpChange(englishValue, index);
                       }}
                       onKeyDown={(e) => handleOtpKeyDown(e, index)}
-                      className="w-12 h-12 text-center text-lg bg-white shadow border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
+                      className="w-12 h-12 text-center text-lg bg-white shadow border border-gray-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
                     />
                   ))}
                 </div>
@@ -234,18 +241,8 @@ const Validation: React.FC = () => {
                     className="w-82 bg-black text-white text-md rounded-md disabled:opacity-50 cursor-pointer"
                   >
                     {loading || isSubmitting ? (
-                      <>
-                        <svg
-                          className="animate-spin h-4 w-4 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        در حال بررسی...
-                      </>
+
+                      <SubmitSpinner />
                     ) : (
                       'ورود'
                     )}
@@ -253,7 +250,7 @@ const Validation: React.FC = () => {
                 </div>
 
                 <div className="text-center text-sm mt-4">
-                  <span className="text-slate-600">کد را دریافت نکردید؟ </span>
+                  <span className="text-gray-7">کد را دریافت نکردید؟ </span>
                   <button
                     type="button"
                     onClick={handleResendCode}
@@ -277,9 +274,9 @@ const Validation: React.FC = () => {
         <DialogContent className="sm:max-w-md" dir="rtl">
           <DialogHeader>
             <div className="flex justify-center mb-4">
-              <img 
-                src={modalConfig.imageSrc} 
-                alt={modalConfig.title} 
+              <img
+                src={modalConfig.imageSrc}
+                alt={modalConfig.title}
                 className="w-45 h-45 object-contain"
               />
             </div>
@@ -294,7 +291,7 @@ const Validation: React.FC = () => {
             <Button
               type="button"
               onClick={modalConfig.onButtonClick}
-              className="w-full sm:w-auto min-w-[120px] cursor-pointer"
+              className="w-full sm:w-auto min-w-[220px] cursor-pointer"
             >
               {modalConfig.buttonText}
             </Button>

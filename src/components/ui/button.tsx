@@ -14,6 +14,7 @@ const variantStyles: Record<NonNullable<ButtonProps["variant"]>, string> = {
   secondary: "bg-gray-600 text-white hover:bg-gray-700",
   ghost: "hover:bg-gray-100 text-gray-900",
   link: "text-blue-600 underline-offset-4 hover:underline",
+  // add varient dialog
 };
 
 const sizeStyles: Record<NonNullable<ButtonProps["size"]>, string> = {
