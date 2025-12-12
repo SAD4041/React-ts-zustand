@@ -1,77 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import {getAddresses,getUserData,setAddressesData,setUserData,Addresses} from '@/data/userDashInfoData';
-import type { Address, UserInfo } from '@/types/UserDashInfoTypes';
+import React, { useState, useEffect, useCallback } from 'react';
+import type { UserInfo } from '@/types/UserDashInfoTypes';
 import ProfileHeader from './userDashInfoComponents/profileHeader';
 import ProfileInfo from './userDashInfoComponents/profileInfo';
-import ChangePassword from './userDashInfoComponents/changePassword';
-import AddressSection from './userDashInfoComponents/addressSection';
+import {
+  getUserProfile,
+  updateUserProfile,
+  uploadUserAvatar,
+} from '@/services/userDashInfoService';
+
+const Spinner = () => (
+  <div className="flex justify-center items-center p-6">
+    <div className="w-6 h-6 border-2 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
+  </div>
+);
 
 const UserDashInfo: React.FC = () => {
-  const [addresses, setAddresses] = useState<Address[]>(Addresses);
-  const [userData, setUserDataState] = useState<UserInfo | null>(null);
+  const [userData, setUserData] = useState<UserInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    setAddresses(getAddresses());
-    setUserDataState(getUserData());
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const user = await getUserProfile();
+      setUserData(user);
+    } catch (err) {
+      console.error('Failed to load user profile', err);
+      setError('خطا در بارگذاری اطلاعات پروفایل');
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  if (!userData) return <div>در حال بارگذاری...</div>;
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  const handleSavePersonal = (data: UserInfo) => {
-    setUserData(data);
-    setUserDataState(data);
-    window.location.reload();
-  };
+  if (loading) return <Spinner />;
+  if (error) return <div className="p-6 text-red-500 text-right">{error}</div>;
+  if (!userData) return <div className="p-6 text-right">داده‌ای یافت نشد.</div>;
 
-  const handleSavePassword = (newPassword: string) => {
-    const updated = { ...userData, password: newPassword };
-    setUserData(updated);
-    setUserDataState(updated);
-    window.location.reload();
-  };
-
-  const handleAddAddress = (newAddress: Omit<Address, 'id'>) => {
-    const newId = Date.now().toString(); // یا UUID
-    const addressWithId = { ...newAddress, id: newId };
-    const updated = [...addresses, addressWithId];
-    setAddressesData(updated);
-    setAddresses(updated);
-  };
-
-  const handleUpdateAddress = (id: string, updatedAddress: Omit<Address, 'id'>) => {
-    const updated = addresses.map(addr =>
-      addr.id === id ? { ...updatedAddress, id } : addr
-    );
-    setAddressesData(updated);
-    setAddresses(updated);
-  };
-
-  const handleDeleteAddress = (id: string) => {
-    const current = getAddresses();
-    const isDeletingDefault = current.find(a => a.id === id)?.isDefault;
-    const updated = current.filter(a => a.id !== id);
-
-    if (isDeletingDefault && updated.length > 0) {
-      updated[0] = { ...updated[0], isDefault: true };
+  const handleSavePersonal = async (updatedData: UserInfo) => {
+    try {
+      const dataWithId = { ...updatedData, id: userData.id || "1" };
+      const updated = await updateUserProfile(dataWithId);
+      setUserData(updated);
+      alert('اطلاعات شخصی با موفقیت ذخیره شد!');
+    } catch (err) {
+      alert('خطا در ذخیره اطلاعات');
     }
-
-    setAddressesData(updated);
-    setAddresses(updated);
   };
 
-  const handleAvatarChange = (avatarDataUrl: string | null) => {
-    const updated = { ...userData, avatar: avatarDataUrl };
-    setUserData(updated);
-    setUserDataState(updated);
-    window.location.reload();
+  const handleAvatarChange = async (file: File | null) => {
+    if (!file) return;
+    try {
+      const res = await uploadUserAvatar(file);
+      setUserData(prev => ({ ...prev!, avatar: res.avatar_url }));
+      alert('عکس پروفایل بروز شد.');
+    } catch (err) {
+      alert('خطا در آپلود عکس');
+    }
   };
 
   return (
-    <div className="space-y-6 py-6 px-30 max-w-6xl mx-auto bg-white">
+    <div className="space-y-6 py-6 px-6 max-w-6xl mx-auto bg-white">
       <div className="text-right mb-4">
         <h1 className="text-xl font-bold">پروفایل کاربری</h1>
         <p className="text-gray-500 text-sm">
-          مدیریت اطلاعات شخصی و آدرس‌های خود
+          مدیریت اطلاعات شخصی
         </p>
       </div>
 
@@ -80,13 +77,6 @@ const UserDashInfo: React.FC = () => {
         onAvatarChange={handleAvatarChange}
       />
       <ProfileInfo initialData={userData} onSave={handleSavePersonal} />
-      <ChangePassword currentPassword={userData.password} onSave={handleSavePassword} />
-      <AddressSection
-        addresses={addresses}
-        onAddAddress={handleAddAddress}
-        onUpdateAddress={handleUpdateAddress}
-        onDeleteAddress={handleDeleteAddress}
-      />
     </div>
   );
 };

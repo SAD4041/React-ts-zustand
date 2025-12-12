@@ -1,6 +1,6 @@
 
 export interface Address {
-  id: string;
+  id?: string;
   title: string; 
   province: string; 
   city: string;    
@@ -11,6 +11,7 @@ export interface Address {
 }
 
 export interface UserInfo {
+  id?: string;
   avatar: string | null;
   firstName: string;
   lastName: string;
@@ -18,7 +19,7 @@ export interface UserInfo {
   phone: string;
   nationalCode: string;
   birthDate: string;
-  password: string;
+  /* password: string; */
   shabaNumber: string;
 }
 
@@ -39,6 +40,7 @@ export interface ProfileHeaderProps {
     email: string;
     profileImage?: string | null;
   };
+  onAvatarChange?: (file: File | null) => void;
 }
 
 export interface AddressFormModalProps {

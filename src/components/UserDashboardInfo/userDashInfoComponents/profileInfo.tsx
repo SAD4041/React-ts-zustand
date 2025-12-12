@@ -14,7 +14,7 @@ const personalInfoSchema = z.object({
   phone: z.string().regex(/^09\d{9}$/, 'شماره تلفن باید ۱۱ رقمی و با 09 شروع شود.'),
   nationalCode: z.string().regex(/^\d{10}$/, 'کد ملی باید ۱۰ رقمی باشد.'),
   birthDate: z.string().regex(/^\d{4}\/\d{2}\/\d{2}$/, 'فرمت تاریخ باید YYYY/MM/DD باشد.'),
-  shabaNumber : z.string().regex(/^\d{10}$/, 'شماره شبا باید ۱۰ رقمی باشد.')
+  shabaNumber: z.string().regex(/^\d{10}$/, 'شماره شبا باید ۱۰ رقمی باشد.')
 });
 
 
@@ -27,7 +27,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
     phone: initialData.phone,
     nationalCode: initialData.nationalCode,
     birthDate: initialData.birthDate,
-    shabaNumber : initialData.shabaNumber,
+    shabaNumber: initialData.shabaNumber,
   });
   const [errors, setErrors] = useState<Partial<Record<keyof Omit<UserInfo, 'password'>, string>>>({});
 
@@ -48,7 +48,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
 
   const handleSave = () => {
     if (isValid) {
-      onSave({ ...formData, password: initialData.password });
+      onSave({ ...formData });
     }
   };
 

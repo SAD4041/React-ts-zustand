@@ -1,4 +1,3 @@
-// src/apiClient.ts
 import axios from "axios";
 import type {
 	AxiosInstance,
@@ -13,7 +12,7 @@ import type {
 	PutParams,
 } from "../types/apiTypes";
 
-export const baseURL = "http://1.2.3.4:8000"; // backend URL
+export const baseURL = "http://127.0.0.1:8000";
 
 const apiClient: AxiosInstance = axios.create({
 	baseURL,
@@ -23,10 +22,19 @@ const apiClient: AxiosInstance = axios.create({
 	},
 });
 
+const getTokenFromStore = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('authToken');
+  }
+  return null;
+};
+
 apiClient.interceptors.request.use(
 	(config: InternalAxiosRequestConfig) => {
-		// const token = getTokenFromStore();
-		// if (token) config.headers.Authorization = `Bearer ${token}`;
+		const token = getTokenFromStore();
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
+		}
 		return config;
 	},
 	(error) => Promise.reject(error)
@@ -35,7 +43,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
 	(response: AxiosResponse) => response,
 	(error) => {
-		console.error(error);
+		console.error("❌ API Error:", error);
 		return Promise.reject(error);
 	}
 );

@@ -2,13 +2,9 @@ import React, { useRef } from 'react';
 import { Card } from '@/components/ui/userDashInfo/card';
 import { Button } from '@/components/ui/userDashInfo/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/userDashInfo/avatar';
-import type { ProfileHeaderProps } from '@/types/UserDashInfoTypes';
+import type { ProfileHeaderProps } from "@/types/UserDashInfoTypes";
 
-interface ExtendedProfileHeaderProps extends ProfileHeaderProps {
-  onAvatarChange?: (avatar: string | null) => void;
-}
-
-const ProfileHeader: React.FC<ExtendedProfileHeaderProps> = ({ user, onAvatarChange }) => {
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onAvatarChange }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const getInitials = (firstName: string): string => {
@@ -17,21 +13,9 @@ const ProfileHeader: React.FC<ExtendedProfileHeaderProps> = ({ user, onAvatarCha
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      alert('لطفاً یک فایل تصویری انتخاب کنید.');
-      return;
+    if (file && onAvatarChange) {
+      onAvatarChange(file);
     }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = reader.result as string;
-      if (onAvatarChange) {
-        onAvatarChange(dataUrl);
-      }
-    };
-    reader.readAsDataURL(file);
   };
 
   return (
