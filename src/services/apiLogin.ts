@@ -1,11 +1,17 @@
-import { postData } from './services';
-import type { ApiResponse, CheckPhonePayload, VerifyCodePayload } from '@/types/apiTypes';
+import { postData, getData } from './services';
+import type { 
+    ApiResponse, 
+    CheckPhonePayload, 
+    VerifyCodePayload,
+    CheckPhoneResponse,
+    VerifyCodeResponse 
+} from '@/types/apiTypes';
 
-export const checkPhone = async (phone: string): Promise<ApiResponse> => {
+export const checkPhone = async (mobile: string): Promise<ApiResponse<CheckPhoneResponse>> => {
     try {
         const data = await postData({
             endPoint: '/api/login',
-            data: { phone } as CheckPhonePayload
+            data: { mobile } as CheckPhonePayload
         });
         return {
             success: true,
@@ -20,11 +26,11 @@ export const checkPhone = async (phone: string): Promise<ApiResponse> => {
     }
 };
 
-export const verifyCode = async (phone: string, code: string): Promise<ApiResponse> => {
+export const verifyCode = async (mobile: string, otp: string): Promise<ApiResponse<VerifyCodeResponse>> => {
     try {
         const data = await postData({
             endPoint: '/api/verify',
-            data: { phone, code } as VerifyCodePayload
+            data: { mobile, otp } as VerifyCodePayload
         });
         return {
             success: true,

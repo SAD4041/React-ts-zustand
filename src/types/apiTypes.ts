@@ -19,12 +19,23 @@ export interface DeleteParams extends BaseParams {
 }
 
 export interface CheckPhonePayload {
-	phone: string;
+	mobile: string;
 }
 
 export interface VerifyCodePayload {
-	phone: string;
-	code: string;
+	mobile: string;
+	otp: string;
+}
+
+export interface VerifyCodeResponse {
+	message: string;
+	userExist: boolean;
+	token: string;
+}
+
+export interface CheckPhoneResponse {
+	registered: boolean;
+	message?: string;
 }
 
 export interface ApiResponse<T = any> {
