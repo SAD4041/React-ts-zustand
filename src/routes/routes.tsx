@@ -8,11 +8,11 @@ import Error500 from "@/pages/Error500";
 
 export const router = createBrowserRouter([
 	{
- 		path: "/",
+		path: "/",
 		element: <PublicLayout />,
-		 errorElement: (
+		errorElement: (
 			<Error404 />
-		 ), 
+		),
 		children: [
 			{
 				index: true,
