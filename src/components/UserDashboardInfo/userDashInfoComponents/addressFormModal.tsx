@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/userDashInfo/input';
 import { Label } from '@/components/ui/userDashInfo/label';
 import ToggleSwitch from '@/components/ui/userDashInfo/toggleSwitch';
 import { X } from 'lucide-react';
-import type { Address,AddressFormModalProps } from '@/types/UserDashInfoTypes';
+import type { Address, AddressFormModalProps } from '@/types/UserDashInfoTypes';
 
 const AddressFormModal: React.FC<AddressFormModalProps> = ({
   isOpen,
@@ -68,7 +68,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
         </h2>
 
         <div className="space-y-4 text-right">
-        <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <div>
               <Label className='mb-3'>شهر</Label>
               <Input
@@ -96,33 +96,33 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
                 className="text-right dir-rtl"
               />
             </div>
-        </div>
-        <div className='grid grid-cols-3 gap-2'>
+          </div>
+          <div className='grid grid-cols-3 gap-2'>
             <div>
-                <Label className='mb-3'>شماره تماس</Label>
-                <Input
+              <Label className='mb-3'>شماره تماس</Label>
+              <Input
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 className="text-right dir-rtl"
-                />
+              />
             </div>
-                <div>
-                <Label className='mb-3'>عنوان</Label>
-                <Input
+            <div>
+              <Label className='mb-3'>عنوان</Label>
+              <Input
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
                 className="text-right dir-rtl"
-                />
+              />
             </div>
             <div className="flex items-center gap-2 mt-4">
-            <ToggleSwitch
-            checked={formData.isDefault}
-            onChange={() => setFormData(prev => ({ ...prev, isDefault: !prev.isDefault }))}
-            label="پیش‌فرض"
-            />
-          </div>
+              <ToggleSwitch
+                checked={formData.isDefault}
+                onChange={() => setFormData(prev => ({ ...prev, isDefault: !prev.isDefault }))}
+                label="پیش‌فرض"
+              />
+            </div>
           </div>
 
           <div>

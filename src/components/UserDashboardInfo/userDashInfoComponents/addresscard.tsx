@@ -19,7 +19,7 @@ const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete }) 
       </div>
 
       <p className="text-gray-600 mb-1 text-sm">
-        <span className="font-medium"></span> {address.province} 
+        <span className="font-medium"></span> {address.province}
         {address.province !== address.city && (
           <>
             <span className="font-medium">،</span> {address.city}
