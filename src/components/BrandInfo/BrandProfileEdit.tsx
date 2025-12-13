@@ -1,5 +1,5 @@
 import { useFormik, FormikProvider } from "formik";
-import { uploadProfileImage, uploadBannerImage } from "@/services/brandService";
+import { uploadProfileImage, uploadBannerImage } from "@/components/BrandInfo/brandUpload.ts";
 import type { BrandFormValues, BrandProfileEditProps } from "@/types/brandProfileTypes";
 import { ValidationSchema } from "@/schemas/brandValidationSchema";
 import { Input } from "@/components/ui/Input";
@@ -50,7 +50,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
 
           <div className="flex flex-col items-start">
             <h3 className="font-extrabold text-foreground text-xl">
-              {formik.values.maket_name || "نام برند"}
+              {formik.values.brand || "نام برند"}
             </h3>
             <p className="text-muted-foreground text-sm mt-0.5">
               مدیریت اطلاعات برند
@@ -193,8 +193,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                 disabled={formik.isSubmitting}
                 className="bg-secondary hover:bg-secondary/90 text-primary-foreground px-8 py-3 rounded-xl font-bold text-lg transition-colors shadow-xl min-w-[160px] disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {formik.isSubmitting ? "در حال ذخیره..." : "ذخیره تغییرات"}
-              </button>
+                 ذخیره تغییرات       </button>
             </div>
           </form>
           </FormikProvider>

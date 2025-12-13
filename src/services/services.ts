@@ -6,7 +6,17 @@ import type {
   InternalAxiosRequestConfig,
 } from "axios";
 
-export const baseURL = "http://127.0.0.1:8000"; // backend URL
+import type {
+  GetParams,
+  PostParams,
+  PatchParams,
+  PutParams,
+  DeleteParams,
+} from "@/types/apiTypes"; // ← اینجا مهم است
+
+import useAuthStore from "@/store/useAuthStore";
+
+export const baseURL = "http://127.0.0.1:8000";
 
 const apiClient: AxiosInstance = axios.create({
   baseURL,
@@ -16,22 +26,17 @@ const apiClient: AxiosInstance = axios.create({
   },
 });
 
-// ---- دریافت توکن ----
-const getTokenFromStore = () => {
-  return localStorage.getItem("token");
-};
-
-// ---- اینترسپتور درخواست ----
+// دریافت توکن
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = getTokenFromStore();
+    const token = useAuthStore.getState().token; // ← از store میگیری
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// ---- اینترسپتور پاسخ ----
+// Interceptor response
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error) => {
@@ -40,9 +45,8 @@ apiClient.interceptors.response.use(
   }
 );
 
-// ----------- متدهای عمومی API -----------
-
-export const getData = async ({ endPoint, headers, params }) => {
+// ------------ GET ------------
+export const getData = async ({ endPoint, headers, params }: GetParams) => {
   try {
     const response = await apiClient.get(endPoint, { headers, params });
     return response.data;
@@ -52,7 +56,8 @@ export const getData = async ({ endPoint, headers, params }) => {
   }
 };
 
-export const postData = async ({ endPoint, data, headers }) => {
+// ------------ POST ------------
+export const postData = async ({ endPoint, data, headers }: PostParams) => {
   try {
     const response = await apiClient.post(endPoint, data, { headers });
     return response.data;
@@ -62,19 +67,21 @@ export const postData = async ({ endPoint, data, headers }) => {
   }
 };
 
-export const postImageData = async ({ endPoint, data }) => {
+// ---- POST Image (multipart/form-data) ----
+export const postImageData = async ({ endPoint, data }: PostParams) => {
   try {
     const response = await apiClient.post(endPoint, data, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return response.data;
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
   } catch (error) {
     console.error("error in postImageData", error);
     throw error;
   }
 };
 
-export const patchData = async ({ endPoint, data, headers }) => {
+// ------------ PATCH ------------
+export const patchData = async ({ endPoint, data, headers }: PatchParams) => {
   try {
     const response = await apiClient.patch(endPoint, data, { headers });
     return response.data;
@@ -84,7 +91,8 @@ export const patchData = async ({ endPoint, data, headers }) => {
   }
 };
 
-export const putData = async ({ endPoint, data }) => {
+// ------------ PUT ------------
+export const putData = async ({ endPoint, data }: PutParams) => {
   try {
     const response = await apiClient.put(endPoint, data);
     return response.data;
@@ -94,7 +102,8 @@ export const putData = async ({ endPoint, data }) => {
   }
 };
 
-export const deleteData = async ({ endPoint, data, headers }) => {
+// ------------ DELETE ------------
+export const deleteData = async ({ endPoint, data, headers }: DeleteParams) => {
   try {
     const response = await apiClient.delete(endPoint, { data, headers });
     return response.data;
@@ -104,7 +113,8 @@ export const deleteData = async ({ endPoint, data, headers }) => {
   }
 };
 
-export const putImageData = async ({ endPoint, data }) => {
+// ---- PUT Image (multipart/form-data) ----
+export const putImageData = async ({ endPoint, data }: PutParams) => {
   try {
     const response = await apiClient.put(endPoint, data, {
       headers: { "Content-Type": "multipart/form-data" },

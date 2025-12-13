@@ -1,8 +1,7 @@
 // src/services/brandService.ts
 
-import { getData, patchData, putImageData } from "@/services/services";
+import { getData, patchData } from "@/services/services";
 import type { BrandProfilePayload } from "@/types/brandProfileTypes";
-localStorage.setItem("userId", "3");
 
 const getUserId = () => localStorage.getItem("userId");
 
@@ -21,26 +20,3 @@ export const updateBrandProfile = (data: BrandProfilePayload) => {
   });
 };
 
-// ---------- UPLOAD PROFILE IMAGE ----------
-export const uploadProfileImage = (file: File) => {
-  const userId = getUserId();
-  const formData = new FormData();
-  formData.append("file", file);
-
-  return putImageData({
-    endPoint: `/api/manager/profile/${userId}/update/image`,
-    data: formData,
-  });
-};
-
-// ---------- UPLOAD BANNER IMAGE ----------
-export const uploadBannerImage = (file: File) => {
-  const userId = getUserId();
-  const formData = new FormData();
-  formData.append("file", file);
-
-  return putImageData({
-    endPoint: `/api/manager/profile/${userId}/update/banerimage`,
-    data: formData,
-  });
-};

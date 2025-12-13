@@ -2,7 +2,7 @@
 
 export const getBrandProfile = async () => {
   return {
-    maket_name: "Test Market",
+    brand: "Test Market",
     description: "This is a mock description.",
     mobile: "09120000000",
     email: "test@example.com",
