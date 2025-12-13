@@ -1,4 +1,3 @@
-// src/components/ProductListing.tsx
 import React, { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProductGrid from "./productListingComponents/ProductGrid";
@@ -9,22 +8,9 @@ import { getData } from "@/services/services";
 import type { Product } from "@/types/productListingTypes";
 import type { SortOption } from "@/types/productListingTypes";
 import { toPersianDigits } from "@/utils/PersianDigits";
+import SubCategorySlider from "./productListingComponents/SubCategorySilder";
+import { categoryLabels, brandLabels } from "@/data/productListingData";
 
-const categoryLabels: Record<string, string> = {
-  tshirt: "تیشرت",
-  shirt: "پیراهن",
-  shoes: "کفش",
-  pants: "شلوار",
-  dress: "لباس مجلسی",
-  bag: "کیف",
-};
-
-const brandLabels: Record<string, string> = {
-  nike: "نایکی",
-  adidas: "آدیداس",
-  puma: "پوما",
-  reebok: "ریبوک",
-};
 
 const ProductListing: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -214,6 +200,9 @@ const ProductListing: React.FC = () => {
 
   return (
     <div dir="rtl" className="container mx-auto px-4 py-6 font-vazir">
+
+      <SubCategorySlider />
+
       <div className="flex gap-6 mt-6">
         <FilterSidebar
           selectedBrands={selectedBrands}
