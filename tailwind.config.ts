@@ -11,22 +11,12 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Vazirmatn", "sans-serif"],
         vazirmatn: ["Vazirmatn", "Roboto"],
-      },
-
-      width: {
-        sidebar: "300px",
-        "sidebar-collapsed": "110px",
-      },
-      height: {
-        sidebar: "100vh",
       },
 
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-
         sidebar: "hsl(var(--sidebar))",
 
         card: {
@@ -68,6 +58,38 @@ const config: Config = {
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))",
         },
+
+        'dropdown-selected-bg': 'hsl(var(--dropdown-selected-bg))',
+        'dropdown-selected-border': 'hsl(var(--dropdown-selected-border))',
+        'dropdown-hover-bg': 'hsl(var(--dropdown-hover-bg))',
+        'header-bg-blur': 'hsl(var(--header-bg-blur))',
+        'ring-primary-subtle': 'hsl(var(--ring-primary-subtle))',
+      },
+
+      width: {
+        sidebar: "300px",
+        "sidebar-collapsed": "110px",
+
+        'dropdown-menu': '600px',
+        'dropdown-image': '15rem',
+        'logo-container': '2.75rem',
+        'logo-container-md': '3.375rem',
+        'search-input': '15rem',
+        'search-input-md': '12rem',
+        'search-input-lg': '22.5rem',
+      },
+
+      minWidth: {
+        'dropdown-menu': '600px',
+      },
+
+      maxWidth: {
+        'dropdown-menu': '48rem',
+      },
+
+      height: {
+        sidebar: "100vh",
+        'logo-container': '3.5rem',
       },
 
       borderRadius: {
@@ -76,6 +98,7 @@ const config: Config = {
         lg: "var(--radius)",
         xl: "calc(var(--radius) + 4px)",
       },
+
     },
   },
   plugins: [tailwindcssAnimate],
