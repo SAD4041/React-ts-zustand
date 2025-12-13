@@ -12,7 +12,7 @@ import type {
 	PutParams,
 } from "../types/apiTypes";
 
-export const baseURL = "http://127.0.0.1:8000";
+export const baseURL = "http://185.60.136.225";
 
 const apiClient: AxiosInstance = axios.create({
 	baseURL,

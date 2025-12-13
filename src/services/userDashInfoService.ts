@@ -6,11 +6,9 @@ import {
 } from "./services";
 import type { UserInfo } from "@/types/UserDashInfoTypes";
 
-// --- 1. دریافت پروفایل ---
 export const getUserProfile = async (): Promise<UserInfo> => {
   const data = await getData({ endPoint: "/api/user/profile" });
 
-  // استخراج id اگر وجود داشت
   const id = data.id ? String(data.id) : undefined;
 
   return {
@@ -26,9 +24,7 @@ export const getUserProfile = async (): Promise<UserInfo> => {
   };
 };
 
-// --- 2. بروزرسانی پروفایل ---
 export const updateUserProfile = async (userInfo: Partial<UserInfo>): Promise<UserInfo> => {
-  // گرفتن ID — اگر نبود، فرض می‌کنیم ID=1 (یا باید از localStorage بخونی)
   const userId = userInfo.id || "1";
 
   const payload = {
@@ -56,12 +52,10 @@ export const updateUserProfile = async (userInfo: Partial<UserInfo>): Promise<Us
   };
 };
 
-// --- 3. آپلود آواتار ---
 export const uploadUserAvatar = async (file: File): Promise<{ avatar_url: string }> => {
   const formData = new FormData();
   formData.append("avatar", file);
 
-  // فرض: ID=1 — بعداً می‌تونی از context یا state بگیری
   const res = await postImageData({
     endPoint: `/api/user/profile/1/Imageupdate`,
     data: formData,

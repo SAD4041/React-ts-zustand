@@ -5,7 +5,7 @@ import { Plus } from 'lucide-react';
 import AddressCard from './addresscard';
 import type { Address } from '@/types/UserDashInfoTypes';
 import Separator from '@/components/ui/userDashInfo/separator';
-import AddressFormModal from './addressFormModal'; 
+import AddressFormModal from './addressFormModal';
 
 interface AddressSectionProps {
   addresses: Address[];
