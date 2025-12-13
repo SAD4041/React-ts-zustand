@@ -1,4 +1,4 @@
-import CustomButton from "@/components/Custom/CustomButton";
+import Button from "@/components/ui/button";
 import { Formik, Form } from "formik";
 import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
@@ -30,10 +30,10 @@ function Landing() {
 
 			{/* use the customButton like this: */}
 			<div className="flex justify-center items-center">
-				<CustomButton
+				<Button
 					type="button"
 					className="flex-none text-center bg-secondary border border-gray-600"
-				>salam</CustomButton>
+				>salam</Button>
 
 			</div>
 			
