@@ -14,8 +14,7 @@ import type {
   DeleteParams,
 } from "@/types/apiTypes"; // ← اینجا مهم است
 
-import useAuthStore from "@/store/useAuthStore";
-
+import useUserStore from "@/store/userStore/userStore.ts";
 export const baseURL = "http://127.0.0.1:8000";
 
 const apiClient: AxiosInstance = axios.create({
@@ -29,7 +28,7 @@ const apiClient: AxiosInstance = axios.create({
 // دریافت توکن
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = useAuthStore.getState().token; // ← از store میگیری
+    const token = useUserStore.getState().token; // ← از store میگیری
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
