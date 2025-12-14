@@ -5,7 +5,7 @@ import type {
     VerifyCodePayload,
     CheckPhoneResponse,
     VerifyCodeResponse 
-} from '@/types/apiTypes';
+} from '@/types/otpServiceTypes';
 
 export const checkPhone = async (mobile: string): Promise<ApiResponse<CheckPhoneResponse>> => {
     try {

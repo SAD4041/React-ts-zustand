@@ -1,10 +1,12 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import SubmitSpinner from "../login/submitSpinner";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "dialog";
   size?: "default" | "sm" | "lg" | "icon";
+  loading?: boolean;
 }
 
 const variantStyles: Record<NonNullable<ButtonProps["variant"]>, string> = {
@@ -14,7 +16,7 @@ const variantStyles: Record<NonNullable<ButtonProps["variant"]>, string> = {
   secondary: "bg-gray-600 text-white hover:bg-gray-700",
   ghost: "hover:bg-gray-100 text-gray-900",
   link: "text-blue-600 underline-offset-4 hover:underline",
-  // add varient dialog
+  dialog: "w-full max-w-xs bg-black text-white text-md py-2.5 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium shadow-md hover:shadow-lg disabled:bg-gray-4 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer", 
 };
 
 const sizeStyles: Record<NonNullable<ButtonProps["size"]>, string> = {
@@ -25,10 +27,26 @@ const sizeStyles: Record<NonNullable<ButtonProps["size"]>, string> = {
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "default", size = "default", ...props }, ref) => {
+  (
+    {
+      className,
+      variant = "default",
+      size = "default",
+      loading = false,
+      type,
+      disabled,
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const isSubmitLoading = type === "submit" && loading;
+
     return (
       <button
         ref={ref}
+        type={type}
+        disabled={disabled || isSubmitLoading}
         className={cn(
           "inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
           variantStyles[variant],
@@ -36,7 +54,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className
         )}
         {...props}
-      />
+      >
+        {isSubmitLoading ? <SubmitSpinner /> : children}
+      </button>
     );
   }
 );

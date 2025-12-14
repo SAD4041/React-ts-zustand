@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { loginSchema } from '../schemas/LoginSchemas';
-import { checkPhone } from '../services/apiLogin';
+import { checkPhone } from '../services/loginService';
 import {
   Dialog,
   DialogContent,
@@ -91,14 +91,14 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-white" dir="rtl">
+    <div className="flex min-h-screen bg-background-color" dir="rtl">
       <div className="w-full flex items-center justify-center p-6 md:p-10">
-        <div className="w-full max-w-xl h-5/6 bg-light rounded-3xl border-2 border-gray-2 shadow-2xl p-8 relative overflow-hidden">
+        <div className="w-full max-w-xl h-5/6 bg-card rounded-3xl border-2 border-border shadow-2xl p-8 relative overflow-hidden">
           <div className="text-center mb-8">
             <img src={logo} alt="CB Buck Gallery" className="mx-auto w-32 h-auto" />
-            <h2 className="text-3xl font-bold text-gray-8">عضویت/ورود</h2>
-            <p className="text-sm text-gray-7 mt-2">خوش آمدید!</p>
-            <p className="text-sm text-gray-7">لطفا شماره موبایل خود را وارد کنید.</p>
+            <h2 className="text-3xl font-bold text-titr">عضویت/ورود</h2>
+            <p className="text-sm text-text mt-2">خوش آمدید!</p>
+            <p className="text-sm text-text">لطفا شماره موبایل خود را وارد کنید.</p>
           </div>
 
           <Formik
@@ -117,7 +117,7 @@ const LoginForm: React.FC = () => {
                           placeholder="۰۹۱۲۳۴۵۶۷۸۹"
                           disabled={loading}
                           inputMode="numeric"
-                          className="w-full px-4 py-2.5 border border-gray-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none disabled:bg-light disabled:cursor-not-allowed text-center text-sm"
+                          className="w-full px-4 py-2.5 bg-white border border-gray-3 rounded-lg focus:ring-2 focus:form-ring focus:border-transparent transition-all duration-200 outline-none disabled:bg-card disabled:cursor-not-allowed text-center text-sm"
                           value={translateNumber(field.value || '')}
                           onChange={(e) => {
                             const inputValue = e.target.value;
@@ -153,22 +153,19 @@ const LoginForm: React.FC = () => {
                   <Button
                     type="submit"
                     disabled={loading || isSubmitting}
-                    className="w-full max-w-xs bg-black text-white text-md py-2.5 px-4 rounded-lg hover:bg-gray-8 transition-colors duration-200 font-medium shadow-md hover:shadow-lg disabled:bg-gray-4 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer"
+                    variant='dialog'
+                    loading={loading || isSubmitting}
                   >
-                    {loading || isSubmitting ? (
-                      <SubmitSpinner />
-                    ) : (
-                      'ثبت'
-                    )}
+                    ثبت
                   </Button>
                 </div>
 
                 <div className="text-center text-xs mt-4">
-                  <span className="text-slate-600">ایجاد حساب به معنای پذیرش </span>
+                  <span className="text-text">ایجاد حساب به معنای پذیرش </span>
                   <Link to="/terms" className="text-link">قوانین و مقررات</Link>
-                  <span className="text-slate-600"> و </span>
+                  <span className="text-text"> و </span>
                   <Link to="/privacy" className="text-link">حریم‌خصوصی</Link>
-                  <span className="text-slate-600"> است.</span>
+                  <span className="text-text"> است.</span>
                 </div>
               </Form>
             )}

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Formik } from 'formik';
 import { validationSchema } from '../schemas/ValidationSchemas';
-import { verifyCode, checkPhone } from '../services/apiLogin';
+import { verifyCode, checkPhone } from '../services/loginService';
 import logo from '../assets/logo.png';
 import buck from '../assets/buck.png';
 import successCat from '../assets/success.png';
@@ -181,15 +181,15 @@ const Validation: React.FC = () => {
   return (
     <div className="flex min-h-screen" dir="rtl">
       <div className="w-full flex items-center justify-center p-6 md:p-10">
-        <div className="w-full max-w-xl h-5/6 bg-light rounded-3xl border-2 border-gray-2 shadow-2xl p-8 relative overflow-hidden">
+        <div className="w-full max-w-xl h-5/6 bg-card rounded-3xl border-2 border-border shadow-2xl p-8 relative overflow-hidden">
 
           <BackToLogin />
 
           <div className="text-center mb-8">
             <img src={logo} alt="CB Buck Gallery" className="mx-auto w-32 h-auto" />
-            <h2 className="text-3xl font-bold text-gray-8">عضویت/ورود</h2>
+            <h2 className="text-3xl font-bold text-titr">عضویت/ورود</h2>
             {phone && (
-              <p className="text-sm text-gray-7 mt-4">
+              <p className="text-sm text-text mt-4">
                 لطفا کد ارسال شده برای شماره{' '}
                 <span className="font-bold">
                   {translateNumber(phone)}
@@ -229,7 +229,7 @@ const Validation: React.FC = () => {
                         handleOtpChange(englishValue, index);
                       }}
                       onKeyDown={(e) => handleOtpKeyDown(e, index)}
-                      className="w-12 h-12 text-center text-lg bg-white shadow border border-gray-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
+                      className="w-12 h-12 text-center text-lg bg-white shadow border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
                     />
                   ))}
                 </div>
@@ -250,12 +250,12 @@ const Validation: React.FC = () => {
                 </div>
 
                 <div className="text-center text-sm mt-4">
-                  <span className="text-gray-7">کد را دریافت نکردید؟ </span>
+                  <span className="text-text">کد را دریافت نکردید؟ </span>
                   <button
                     type="button"
                     onClick={handleResendCode}
                     disabled={loading || isSubmitting}
-                    className="text-blue-600 hover:text-blue-700 font-medium disabled:text-slate-400 cursor-pointer"
+                    className="text-link font-medium disabled:text-text cursor-pointer"
                   >
                     ارسال مجدد
                   </button>
