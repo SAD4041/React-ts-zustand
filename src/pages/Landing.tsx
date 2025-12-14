@@ -1,5 +1,16 @@
+import Button from "@/components/ui/button";
+import { Formik, Form } from "formik";
+import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
 import ProductListing from "@/components/ProductListing/productListing";
+
+
+const validationSchema = Yup.object({
+	email: Yup.string()
+		.email('ایمیل نامعتبر است')
+		.required('ایمیل الزامی است'),
+});
+
 
 function Landing() {
 	const Navigate = useNavigate();
