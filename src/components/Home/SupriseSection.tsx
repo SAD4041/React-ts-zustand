@@ -40,7 +40,7 @@ const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
   }, []);
 
   return (
-    <div dir="ltr" className="w-full py-6 px-4 md:px-8 bg-gradient-to-b from-[#FF6B6B] to-white rounded-xl shadow-sm">
+    <div dir="ltr" className="w-full py-6 px-4 md:px-8 bg-gradient-to-r from-[#ED775A] to-[#E4004B] rounded-xl shadow-sm">
       <div className="flex flex-col md:flex-row items-start gap-4">
         <div className="flex-grow relative">
 
@@ -63,7 +63,7 @@ const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
         </div>
 
         <div className="flex flex-col items-center gap-4">
-          <h2 className="text-xl font-bold text-red-700">شگفت انگیز</h2>
+          <h2 className="text-xl font-bold text-white">شگفت انگیز</h2>
           <div className="flex flex-col items-center gap-1">
             <span className="text-xl text-white">...تا پایان</span>
             <div className="flex flex-col items-center gap-1">

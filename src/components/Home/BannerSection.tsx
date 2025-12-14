@@ -1,4 +1,3 @@
-// src/components/Home/BannerCarousel.tsx
 import * as React from "react";
 import {
   Carousel,

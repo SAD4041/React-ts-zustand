@@ -22,6 +22,7 @@ import style2 from "@/assets/style2.jpg";
 import style3 from "@/assets/style3.jpg";
 import style4 from "@/assets/style4.jpg";
 import poshtibani from "@/assets/poshtibani.png";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function Home() {
   const [homeData, setHomeData] = useState<HomePageResponse | null>(null);
@@ -48,9 +49,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen flex items-center justify-center bg-white">
-        <div className="text-lg font-medium text-gray-600">...در حال بارگذاری صفحه اصلی</div>
-      </div>
+      <LoadingSpinner />
     );
   }
 

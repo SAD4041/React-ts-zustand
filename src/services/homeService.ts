@@ -4,7 +4,7 @@ import type { HomePageResponse } from "@/types/homeTypes";
 export const fetchHomePageData = async (): Promise<HomePageResponse> => {
   try {
     const data = await getData({
-      endPoint: "/api/home", 
+      endPoint: "/api/homepage", 
     });
     return data;
   } catch (error) {

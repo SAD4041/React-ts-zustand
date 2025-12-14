@@ -38,11 +38,14 @@ export interface Product {
 }
 
 export interface HomePageResponse {
-  banner: Banner;
-  categories: Category[];
-  amazing_products: Product[];
-  best_selling_brands: Brand[];
-  style_palettes: StylePalette[];
+  discount_ads?: any[];
+  special_offers?: any[];
+  market_ad_packages?: any[];
+  categories?: Category[];
+  amazing_products?: Product[];
+  best_selling_brands?: Brand[];
+  style_palettes?: StylePalette[];
+  banners?: Banner[];
 }
 
 export interface Timer {
