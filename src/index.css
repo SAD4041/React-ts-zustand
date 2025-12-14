@@ -1,8 +1,5 @@
 @import "tailwindcss";
 
-/* =========================
-   Base
-========================= */
 body {
   font-family: "Vazirmatn", sans-serif;
   font-feature-settings: "tnum";
@@ -16,9 +13,6 @@ body {
   display: none;
 }
 
-/* =========================
-   Utilities
-========================= */
 @layer utilities {
   .rtl {
     direction: rtl;
@@ -32,9 +26,6 @@ body {
   }
 }
 
-/* =========================
-   Root (Light)
-========================= */
 :root {
   font-family: "Vazirmatn", sans-serif;
   line-height: 1.5;
@@ -103,9 +94,6 @@ body {
   --yellow-foreground: oklch(0.2 0 0);
 }
 
-/* =========================
-   Theme mapping
-========================= */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -147,9 +135,6 @@ body {
   --color-yellow-foreground: var(--yellow-foreground);
 }
 
-/* =========================
-   Dark mode
-========================= */
 .dark {
   --background: oklch(0.12 0 0);
   --foreground: oklch(0.88 0 0);
@@ -192,9 +177,6 @@ body {
   --ring-primary-subtle: oklch(0.3 0.1 35);
 }
 
-/* =========================
-   Base layer
-========================= */
 @layer base {
   * {
     @apply border-border outline-ring/50;
