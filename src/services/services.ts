@@ -43,7 +43,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
 	(response: AxiosResponse) => response,
 	(error) => {
-		console.error("❌ API Error:", error);
+		console.error("API Error:", error);
 		return Promise.reject(error);
 	}
 );
