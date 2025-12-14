@@ -104,8 +104,12 @@
   --yellow-foreground: oklch(0.2 0 0);
 
   --text:  oklch(0.45 0 0);
+  --card-text: white;
   --titr:  oklch(0.25 0 0);
   /* --special-titr: ; */
+
+  --bg-section1: #ED775A;
+  --bg-section2: #E4004B;
 }
 
 @theme inline {
@@ -149,8 +153,11 @@
   --color-yellow: var(--yellow);
   --color-yellow-foreground: var(--yellow-foreground);
   --color-text: var(--text);
+  --color-card-text: var(--card-text);
   --color-titr: var(--titr);
   --color-form-ring: var(--form-ring);
+  --color-bg-section1: var(--bg-section1);
+  --color-bg-section2: var(--bg-section2);
   
 }
 

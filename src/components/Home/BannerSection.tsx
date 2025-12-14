@@ -124,8 +124,8 @@ export default function BannerCarousel({ banners }: BannerCarouselProps) {
                 onClick={() => apiRef.current?.scrollTo(index)}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   currentIndex === index
-                    ? "bg-white w-6" // فعال: طولانی‌تر = خط تیره
-                    : "bg-white/60"  // غیرفعال: نقطه
+                    ? "bg-white w-6" 
+                    : "bg-white/60"
                 }`}
                 aria-label={`رفتن به بنر ${index + 1}`}
               />

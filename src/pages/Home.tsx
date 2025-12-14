@@ -155,8 +155,6 @@ export default function Home() {
         onBrandClick={logUserAction}
       />
 
-      <BrandSlider />
-
       <div className="py-12 px-4 from-pink-50 to-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8">خرید بر اساس استایل</h2>
@@ -216,6 +214,8 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <BrandSlider />
 
       <div className="py-8 mx-6 flex justify-end">
         <a

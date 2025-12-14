@@ -5,13 +5,13 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/free-mode';
 import type { Brand, BestBrandsSectionProps } from '@/types/homeTypes';
+import { Button } from '../ui/button';
 
 const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBrandClick }) => {
   return (
-    <div className="w-full py-6 px-4 md:px-8 bg-white shadow-sm border border-gray-100">
+    <div className="w-full py-6 px-4 md:px-8 bg-bg-section1 shadow-sm rounded-3xl border border-border">
       <div className="flex flex-col md:flex-row items-start gap-4">
         <div className="flex-grow">
-          {/* Swiper با دکمه‌های پیش‌فرض */}
           <Swiper
             dir="rtl"
             modules={[Navigation, FreeMode]}
@@ -23,7 +23,7 @@ const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBr
               1024: { slidesPerView: 4 },
             }}
             freeMode={{ enabled: true }}
-            navigation={true} // ✅ فقط همین کافیه
+            navigation={true} 
             className="mySwiper !pb-4"
           >
             {brands.length > 0 ? (
@@ -37,7 +37,7 @@ const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBr
                       window.location.href = `/brand/${brand.slug}`;
                     }}
                   >
-                    <div className="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center mb-2 group-hover:bg-gray-400 transition-colors">
+                    <div className="w-20 h-20 rounded-full bg- flex items-center justify-center mb-2 group-hover:bg-section-2 transition-colors">
                       <img
                         src={brand.logo_url}
                         alt={brand.name}
@@ -57,16 +57,16 @@ const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBr
         </div>
 
         <div className="flex flex-col items-center gap-4">
-          <h2 className="text-xl font-bold text-gray-800 text-right">برند‌ها</h2>
-          <button
+          <h2 className="text-xl font-bold text-text text-right">برند‌ها</h2>
+          <Button
             onClick={() => window.location.href = '/brands'}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-700 border border-red-300 rounded-full hover:bg-red-50 transition cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-destructive hover:text-card-text border border-destructive hover:border-border rounded-full hover:bg-bg-section1 transition cursor-pointer"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
             مشاهده همه
-          </button>
+          </Button>
         </div>
       </div>
     </div>

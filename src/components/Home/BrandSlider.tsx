@@ -27,9 +27,7 @@ const BrandSlider = () => {
 
   return (
     <div className="py-6 ">
-      {/* پس‌زمینه گرادیان طوسی به سفید */}
-      <div className="bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 rounded-lg p-4">
-        {/* لیست لوگوها */}
+      <div className="bg-gradient-to-r from-background-color via-bg-section1 to-background-color rounded-lg p-4">
         <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">
           {brands.map((brand, index) => (
             <div key={index} className="flex-shrink-0">
@@ -37,7 +35,7 @@ const BrandSlider = () => {
                 <img
                   src={brand.logo}
                   alt={brand.name}
-                  className="h-10 w-auto object-contain cursor-pointer"
+                  className="h-17 w-auto object-contain cursor-pointer"
                 />
               </a>
             </div>
