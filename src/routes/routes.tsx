@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Home from "@/pages/Home";
-import Errors404 from "@/pages/Error404";
-import Errors500 from "@/pages/Error500";
+import Error404 from "@/pages/Error404";
+import Error500 from "@/pages/Error500";
 import ProductListing from "@/components/ProductListing/productListing";
 
 export const router = createBrowserRouter([
@@ -10,7 +10,7 @@ export const router = createBrowserRouter([
 		path: "/",
 		element: <PublicLayout />,
 		errorElement: (
-			<Errors404 />
+			<Error404 />
 		),
 		children: [
 			// {
@@ -23,12 +23,17 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: "/error500",
-				element: <Errors500 />
+				element: <Error500 />
 			},
 			{
 				path: "/products-list",
 				element: <ProductListing />
 			},
+			// {
+			// 	path: "/AboutUs",
+			// 	element: <AboutUs />,
+			// },
+			// {
 		],
 	},
 	// {
