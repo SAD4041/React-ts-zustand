@@ -18,7 +18,6 @@ import successCat from '../assets/success.png';
 import errorCat from '../assets/error.png';
 import { translateNumber } from '../utils/translateNumber';
 import type LoginFormValues from '@/types/loginTypes';
-import SubmitSpinner from '@/components/login/submitSpinner';
 
 const SUCCESS_CAT = successCat;
 const ERROR_CAT = errorCat;
