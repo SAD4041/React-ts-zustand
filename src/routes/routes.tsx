@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Landing from "@/pages/Landing";
 import ProductList from "@/pages/ProductListing"; // کاما اضافه شد
-import Temp from "@/pages/Temp";
+//import Temp from "@/pages/Temp";
 import Error404 from "@/pages/Error404";
 import Error500 from "@/pages/Error500";
 // فرض می‌کنیم کامپوننت‌های کامنت شده نیز وجود دارند و آن‌ها را وارد می‌کنیم.
@@ -28,7 +28,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/temp",
-                element: <Temp />,
+//                element: <Temp />,
             },
             {
                 path: "/productList",
