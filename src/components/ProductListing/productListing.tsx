@@ -203,6 +203,8 @@ const ProductListing: React.FC = () => {
 
       <SubCategorySlider />
 
+      <hr className="my-6 border-border border-1" />
+
       <div className="flex gap-6 mt-6">
         <FilterSidebar
           selectedBrands={selectedBrands}
@@ -228,11 +230,13 @@ const ProductListing: React.FC = () => {
             </div>
           </div>
 
-          <hr className="mb-4 border-border" />
+          <hr className="mb-4 border-border border-1" />
 
-          <div className="h-150 overflow-y-auto border border-border rounded-lg p-4 bg-card shadow-sm">
+          <div className="h-150 overflow-y-auto border-border border-1 rounded-lg p-4 bg-card shadow-sm">
             <ProductGrid products={productsToDisplay} />
           </div>
+
+          <hr className="my-6 border-border border-1" />
 
           <div className="mt-4 flex justify-center">
             <Pagination

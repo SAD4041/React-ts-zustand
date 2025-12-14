@@ -9,6 +9,22 @@ export  const pagesPerGroup = 5;
 export  const productsPerGroup = productsPerPage * pagesPerGroup;
 export  const currentCategory = "تیشرت زنانه";
 
+export const categoryLabels: Record<string, string> = {
+  tshirt: "تیشرت",
+  shirt: "پیراهن",
+  shoes: "کفش",
+  pants: "شلوار",
+  dress: "لباس مجلسی",
+  bag: "کیف",
+};
+
+export const brandLabels: Record<string, string> = {
+  nike: "نایکی",
+  adidas: "آدیداس",
+  puma: "پوما",
+  reebok: "ریبوک",
+};
+
 export const sorts = [
     { value: 'most-revelent', label: 'مرتبط ترین' },
     { value: 'newest', label: 'جدیدترین' },
