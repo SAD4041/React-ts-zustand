@@ -1,6 +1,6 @@
 
 export interface Address {
-  id?: string;
+  id: string;
   title: string; 
   province: string; 
   city: string;    
@@ -55,4 +55,16 @@ export interface ToggleSwitchProps {
   checked: boolean;
   onChange: () => void;
   label?: string;
+}
+
+export interface ChangePasswordProps {
+  currentPassword: string;
+  onSave: (newPassword: string) => void;
+}
+
+export interface AddressSectionProps {
+  addresses: Address[];
+  onAddAddress: (newAddress: Omit<Address, 'id'>) => void;
+  onUpdateAddress: (id: string, updatedAddress: Omit<Address, 'id'>) => void;
+  onDeleteAddress: (id: string) => void;
 }

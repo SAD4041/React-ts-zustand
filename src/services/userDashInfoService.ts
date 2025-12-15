@@ -6,12 +6,14 @@ import {
 import type { UserInfo } from "@/types/UserDashInfoTypes";
 
 export const getUserProfile = async (): Promise<UserInfo> => {
-  const data = await getData({ endPoint: "/api/user/profile" });
-
-  const id = data.id ? String(data.id) : undefined;
+  const data = await getData({
+    endPoint: "/api/user",
+  });
+  console.log("PROFILE RESPONSE 👉", data);
+  console.log("RAW API RESPONSE 👉", JSON.stringify(data, null, 2));
 
   return {
-    id,
+    id: String(data.id),
     firstName: data.name || "",
     lastName: data.Fname || "",
     email: data.email || "",

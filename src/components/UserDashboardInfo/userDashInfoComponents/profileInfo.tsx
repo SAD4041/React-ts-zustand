@@ -68,7 +68,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
               onChange={handleChange}
               className="text-right"
             />
-            {errors.firstName && <p className="text-sm text-red-500">{errors.firstName}</p>}
+            {errors.firstName && <p className="text-sm text-destructive"> {errors.firstName} </p>}
           </div>
           <div className="space-y-2 text-right">
             <Label className="block">نام خانوادگی</Label>
@@ -138,10 +138,11 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
         <Button
           onClick={handleSave}
           disabled={!isValid}
-          className="bg-[#00A6D4] hover:bg-[#00A6D4]/60 text-white"
-        >
+          variant="brand">
           ذخیره تغییرات
         </Button>
+
+
       </div>
     </Card>
   );

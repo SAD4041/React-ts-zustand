@@ -32,7 +32,6 @@ export let UserData: UserInfo = {
   phone: '09123456789',
   nationalCode: '1234567890',
   birthDate: '1370/01/15',
-  password: 'OldPass123!',
   shabaNumber: '1234567890',
 };
 

@@ -15,6 +15,8 @@ const config: Config = {
 			},
 
 			colors: {
+				'primary-light': 'hsl(var(--primary-light))',
+				'accent-hover': 'hsl(var(--accent-hover))',
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
 				card: {
@@ -44,6 +46,11 @@ const config: Config = {
 				destructive: {
 					DEFAULT: "hsl(var(--destructive))",
 					foreground: "hsl(var(--destructive-foreground))",
+				},
+				brand: {
+					DEFAULT: "hsl(var(--brand))",
+					foreground: "hsl(var(--brand-foreground))",
+					light: "hsl(var(--brand-light))",
 				},
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",

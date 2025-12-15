@@ -58,7 +58,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
         <button
           onClick={onClose}
-          className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
+          className="absolute top-4 left-4 text-muted-foreground hover:text-foreground"
         >
           <X className="w-6 h-6" />
         </button>
@@ -139,7 +139,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
         <div className="mt-6 flex justify-end">
           <Button
             size="sm"
-            className="bg-[#00A6D4] hover:bg-[#00A6D4]/60 text-white"
+            className="bg-brand text-brand-foreground hover:bg-brand-hover"
             onClick={handleSubmit}
           >
             {initialData ? 'ذخیره تغییرات' : 'افزودن'}

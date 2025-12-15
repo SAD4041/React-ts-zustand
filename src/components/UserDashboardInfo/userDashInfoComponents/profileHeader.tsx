@@ -1,3 +1,4 @@
+// components/userDashInfoComponents/profileHeader.tsx
 import React, { useRef } from 'react';
 import { Card } from '@/components/ui/userDashInfo/card';
 import { Button } from '@/components/ui/userDashInfo/button';
@@ -35,7 +36,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onAvatarChange }) =
               {user.profileImage ? (
                 <AvatarImage src={user.profileImage} alt="User" />
               ) : (
-                <AvatarFallback className="bg-[#00A6D4] text-white text-2xl">
+                <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
                   {getInitials(user.firstName)}
                 </AvatarFallback>
               )}
@@ -44,7 +45,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onAvatarChange }) =
 
           <Button
             size="sm"
-            className="bg-[#2CD1FF] text-white px-4 py-1 rounded-md text-sm hover:bg-[#00A6D4] mt-4"
+            variant="brand"
+            className="px-4 py-1 rounded-md text-sm mt-4"
             onClick={() => fileInputRef.current?.click()}
           >
             تغییر عکس پروفایل
@@ -53,7 +55,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onAvatarChange }) =
 
         <div className="text-right">
           <h3 className="text-lg font-bold">{user.firstName}</h3>
-          <p className="text-gray-600 text-sm">{user.email}</p>
+          <p className="text-muted-foreground text-sm">{user.email}</p>
         </div>
       </div>
     </Card>
