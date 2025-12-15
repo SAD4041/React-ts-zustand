@@ -1,3 +1,46 @@
+export interface Product {
+  id: number;
+  image: string;
+  discount: number;
+  hasDiscount?: boolean; 
+  model: string;
+  stock: number;
+  name: string;
+  price: number;
+  original_price?: number;
+  sizes: string[];
+  colors: string[];
+  slug?: string;
+  brand?: string;
+  rating?: number;
+}
+
+export interface HomePageResponse {
+  banners?: Banner[];
+  categories?: Category[];
+  style_palettes?: StylePalette[];
+  special_offers?: Product[];
+  best_selling_brands?: Brand[];
+  discount_ad?: any[];
+  market_ad_packages?: any[];
+}
+
+export interface UserAction {
+  action: "click" | "search" | "view";
+  target_type: "product" | "brand" | "category";
+  target_id: number;
+  query?: string;
+  timestamp: string;
+}
+
+export interface BestBrandsSectionProps {
+  brands: Brand[];
+  onBrandClick: (action: Omit<UserAction, 'timestamp'>) => void;
+}
+
+export interface SurpriseSectionProps {
+  products: Product[];
+}
 export interface Banner {
   id: number;
   title?: string;
@@ -26,27 +69,6 @@ export interface StylePalette {
   image_url: string;
 }
 
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  original_price?: number;
-  discount_percent?: number;
-  image_url: string;
-  category: string;
-  in_stock: boolean;
-}
-
-export interface HomePageResponse {
-  discount_ads?: any[];
-  special_offers?: any[];
-  market_ad_packages?: any[];
-  categories?: Category[];
-  amazing_products?: Product[];
-  best_selling_brands?: Brand[];
-  style_palettes?: StylePalette[];
-  banners?: Banner[];
-}
 
 export interface Timer {
   days: number;
@@ -55,9 +77,6 @@ export interface Timer {
   seconds: number;
 }
 
-export interface SurpriseSectionProps {
-  products: Product[];
-}
 
 export interface SliderItem {
   id: number;

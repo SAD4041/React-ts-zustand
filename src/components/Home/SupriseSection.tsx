@@ -6,7 +6,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/free-mode';
 import ProductCard from '@/components/Product/ProductCard';
 import { toPersianDigits } from '@/utils/PersianDigits';
-import type { Timer, Product, SurpriseSectionProps } from '@/types/homeTypes';
+import type { Timer, SurpriseSectionProps } from '@/types/homeTypes';
 import { Button } from '../ui/button';
 
 const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
@@ -58,7 +58,7 @@ const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
             >
               {products.map((product) => (
                 <SwiperSlide key={product.id}>
-                  <ProductCard product={product} />
+                  <ProductCard product={product as any} />
                 </SwiperSlide>
               ))}
             </Swiper>
