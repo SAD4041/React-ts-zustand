@@ -37,14 +37,30 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    try {
-      personalInfoSchema.pick({ [name]: true }).parse({ [name]: value });
-      setErrors(prev => ({ ...prev, [name]: undefined }));
-    } catch (e: any) {
-      setErrors(prev => ({ ...prev, [name]: e.errors?.[0]?.message || 'خطا' }));
+
+    const newFormData = { ...formData, [name]: value };
+    setFormData(newFormData);
+
+    const result = personalInfoSchema.safeParse(newFormData);
+
+    if (!result.success) {
+      const fieldIssue = result.error.issues.find(
+        issue => issue.path[0] === name
+      );
+
+      setErrors(prev => ({
+        ...prev,
+        [name]: fieldIssue?.message,
+      }));
+    } else {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined,
+      }));
     }
   };
+
+
 
   const handleSave = () => {
     if (isValid) {
@@ -78,7 +94,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
               onChange={handleChange}
               className="text-right"
             />
-            {errors.lastName && <p className="text-sm text-red-500">{errors.lastName}</p>}
+            {errors.lastName && <p className="text-sm text-danger">{errors.lastName}</p>}
           </div>
           <div className="space-y-2 text-right">
             <Label className="block">ایمیل</Label>
@@ -89,7 +105,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
               onChange={handleChange}
               className="text-left dir-ltr"
             />
-            {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
+            {errors.email && <p className="text-sm text-danger">{errors.email}</p>}
           </div>
           <div className="space-y-2 text-right">
             <Label className="block">شماره تماس</Label>
@@ -99,7 +115,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
               onChange={handleChange}
               className="text-right"
             />
-            {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
+            {errors.phone && <p className="text-sm text-danger">{errors.phone}</p>}
           </div>
           <div className="space-y-2 text-right">
             <Label className="block">تاریخ تولد</Label>
@@ -109,7 +125,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
               onChange={handleChange}
               className="text-right"
             />
-            {errors.birthDate && <p className="text-sm text-red-500">{errors.birthDate}</p>}
+            {errors.birthDate && <p className="text-sm text-danger">{errors.birthDate}</p>}
           </div>
           <div className="space-y-2 text-right">
             <Label className="block">کد ملی</Label>
@@ -119,7 +135,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
               onChange={handleChange}
               className="text-right"
             />
-            {errors.nationalCode && <p className="text-sm text-red-500">{errors.nationalCode}</p>}
+            {errors.nationalCode && <p className="text-sm text-danger">{errors.nationalCode}</p>}
           </div>
           <div className="space-y-2 text-right">
             <Label className="block">شماره شبا</Label>
@@ -129,7 +145,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
               onChange={handleChange}
               className="text-right"
             />
-            {errors.shabaNumber && <p className="text-sm text-red-500">{errors.shabaNumber}</p>}
+            {errors.shabaNumber && <p className="text-sm text-danger">{errors.shabaNumber}</p>}
           </div>
         </div>
       </div>

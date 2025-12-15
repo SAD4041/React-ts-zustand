@@ -5,25 +5,28 @@ import {
 } from "./services";
 import type { UserInfo } from "@/types/UserDashInfoTypes";
 
+
 export const getUserProfile = async (): Promise<UserInfo> => {
   const data = await getData({
     endPoint: "/api/user",
   });
+
   console.log("PROFILE RESPONSE 👉", data);
   console.log("RAW API RESPONSE 👉", JSON.stringify(data, null, 2));
 
   return {
     id: String(data.id),
-    firstName: data.name || "",
-    lastName: data.Fname || "",
-    email: data.email || "",
-    phone: data.user_mobile || "",
+    firstName: data.name ?? "",
+    lastName: data.Fname ?? "",
+    email: data.email ?? "",
+    phone: data.user_mobile ?? "",
     nationalCode: "",
     birthDate: "",
     shabaNumber: "",
-    avatar: data.avatar_url || data.avatar || null,
+    avatar: data.avatar_url ?? null,
   };
 };
+
 
 export const updateUserProfile = async (userInfo: Partial<UserInfo>): Promise<UserInfo> => {
   const userId = userInfo.id || "1";

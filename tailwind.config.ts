@@ -52,7 +52,11 @@ const config: Config = {
 					foreground: "hsl(var(--brand-foreground))",
 					light: "hsl(var(--brand-light))",
 				},
-				border: "hsl(var(--border))",
+				danger: {
+					DEFAULT: "hsl(var(--danger))",
+					foreground: "hsl(var(--danger-foreground))",
+				},
+								border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
 				chart: {
