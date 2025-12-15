@@ -4,7 +4,7 @@ import { Navigation, FreeMode } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/free-mode';
-import type { Brand, BestBrandsSectionProps } from '@/types/homeTypes';
+import type { BestBrandsSectionProps } from '@/types/homeTypes';
 import { Button } from '../ui/button';
 
 const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBrandClick }) => {

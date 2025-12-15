@@ -1,8 +1,6 @@
-import * as React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import ProductCard from "@/components/Product/ProductCard";
 import { fetchHomePageData, sendUserAction, type UserAction } from "@/services/homeService";
 import type { HomePageResponse, Banner } from "@/types/homeTypes";
 import BannerSecton from "@/components/Home/BannerSection";
@@ -53,39 +51,41 @@ export default function Home() {
     );
   }
 
+  if (error || !homeData) {
+    return (
+      <div className="w-full min-h-screen bg-white font-vazir text-center py-8 text-red-500">
+        {error || "داده‌ای موجود نیست"}
+      </div>
+    );
+  }
+
   const fallbackBanners: Banner[] = [
     { id: 1, image_url: bannerFallback },
     { id: 2, image_url: bannerFallback },
     { id: 3, image_url: bannerFallback },
   ];
 
-  const fallbackData: HomePageResponse = {
-    categories: [
-      { id: 1, name: "تیشرت", slug: "tshirt", image_url: category1 },
-      { id: 2, name: "پلیور", slug: "sweater", image_url: category2 },
-      { id: 3, name: "لباس زنانه", slug: "women", image_url: category3 },
-      { id: 4, name: "شلوار", slug: "pants", image_url: category4 },
-      { id: 5, name: "لباس گرم", slug: "winter-wear", image_url: category5 },
-      { id: 6, name: "اکسسوری", slug: "accessories", image_url: category6 },
-    ],
-    amazing_products: [],
-    best_selling_brands: [],
-    style_palettes: [
-      { id: 1, title: "کلاسیک", slug: "classic", image_url: style1 },
-      { id: 2, title: "اسپرت", slug: "sport", image_url: style2 },
-      { id: 3, title: "وینتیج", slug: "vintage", image_url: style3 },
-      { id: 4, title: "بوهو", slug: "boho", image_url: style4 },
-    ],
-  };
+  const fallbackCategories = [
+    { id: 1, name: "تیشرت", slug: "tshirt", image_url: category1 },
+    { id: 2, name: "پلیور", slug: "sweater", image_url: category2 },
+    { id: 3, name: "لباس زنانه", slug: "women", image_url: category3 },
+    { id: 4, name: "شلوار", slug: "pants", image_url: category4 },
+    { id: 5, name: "لباس گرم", slug: "winter-wear", image_url: category5 },
+    { id: 6, name: "اکسسوری", slug: "accessories", image_url: category6 },
+  ];
 
-  const data = homeData || fallbackData;
-  const {
-    banners = fallbackBanners,
-    categories = fallbackData.categories,
-    amazing_products = [],
-    best_selling_brands = [],
-    style_palettes = fallbackData.style_palettes,
-  } = data;
+  const fallbackStylePalettes = [
+    { id: 1, title: "کلاسیک", slug: "classic", image_url: style1 },
+    { id: 2, title: "اسپرت", slug: "sport", image_url: style2 },
+    { id: 3, title: "وینتیج", slug: "vintage", image_url: style3 },
+    { id: 4, title: "بوهو", slug: "boho", image_url: style4 },
+  ];
+
+  const banners = homeData.banners ?? fallbackBanners;
+  const categories = fallbackCategories; // همیشه از mock استفاده می‌شود
+  const style_palettes = fallbackStylePalettes; // همیشه از mock استفاده می‌شود
+  const amazing_products = homeData.special_offers ?? [];
+  const best_selling_brands = homeData.best_selling_brands ?? [];
 
   const logUserAction = (action: Omit<UserAction, 'timestamp'>) => {
     const userAction: UserAction = {
@@ -130,7 +130,7 @@ export default function Home() {
         </div>
       </div>
 
-      <SurpriseSection />
+      <SurpriseSection products={amazing_products}/>
 
       <div className="py-12 px-4 bg-white">
         <div className="max-w-7xl mx-auto text-center">

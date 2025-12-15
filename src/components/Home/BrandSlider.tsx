@@ -1,5 +1,3 @@
-import React from 'react';
-
 import adidas from '@/assets/brands/Adidas-Logo.wine.png';
 import dior from '@/assets/brands/Christian_Dior_(fashion_house)-Logo.wine.png';
 import balenciaga from '@/assets/brands/Balenciaga-Logo.wine.png';

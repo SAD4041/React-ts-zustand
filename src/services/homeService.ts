@@ -1,4 +1,4 @@
-import { getData } from "./services";
+import { getData, postData } from "./services";
 import type { HomePageResponse } from "@/types/homeTypes";
 
 export const fetchHomePageData = async (): Promise<HomePageResponse> => {
