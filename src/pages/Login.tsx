@@ -18,6 +18,7 @@ import successCat from '../assets/success.png';
 import errorCat from '../assets/error.png';
 import { translateNumber } from '../utils/translateNumber';
 import type LoginFormValues from '@/types/loginTypes';
+import ErrorForm from '@/components/login/errorForm';
 
 const SUCCESS_CAT = successCat;
 const ERROR_CAT = errorCat;
@@ -42,9 +43,11 @@ const LoginForm: React.FC = () => {
     try {
       const result = await checkPhone(values.phone);
 
-      console.log(result)  // delete this
-
       if (result.success) {
+
+        const otpCode = result.data?.message;
+        console.log('OTP Code:', otpCode);
+
         if (result.data.registered === true) {
           setModalConfig({
             isOpen: true,
@@ -89,6 +92,21 @@ const LoginForm: React.FC = () => {
     }
   };
 
+  const handlePhoneChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: (field: string, value: any) => void
+  ) => {
+    const inputValue = e.target.value;
+
+    const persianToEnglish = inputValue.replace(/[۰-۹]/g, (d) =>
+      '۰۱۲۳۴۵۶۷۸۹'.indexOf(d).toString()
+    );
+
+    const englishValue = persianToEnglish.replace(/[^0-9]/g, '').slice(0, 11);
+
+    setFieldValue('phone', englishValue);
+  };
+
   return (
     <div className="flex min-h-screen bg-background-color" dir="rtl">
       <div className="w-full flex items-center justify-center p-6 md:p-10">
@@ -116,31 +134,16 @@ const LoginForm: React.FC = () => {
                           placeholder="۰۹۱۲۳۴۵۶۷۸۹"
                           disabled={loading}
                           inputMode="numeric"
-                          className="w-full px-4 py-2.5 bg-white border border-gray-3 rounded-lg focus:ring-2 focus:form-ring focus:border-transparent transition-all duration-200 outline-none disabled:bg-card disabled:cursor-not-allowed text-center text-sm"
+                          className="w-full px-4 py-2.5 bg-white border border-border rounded-lg focus:ring-2 focus:form-ring focus:border-transparent transition-all duration-200 outline-none disabled:bg-card disabled:cursor-not-allowed text-center text-sm"
                           value={translateNumber(field.value || '')}
-                          onChange={(e) => {
-                            const inputValue = e.target.value;
-                            const persianToEnglish = inputValue.replace(/[۰-۹]/g, (d) =>
-                              '۰۱۲۳۴۵۶۷۸۹'.indexOf(d).toString()
-                            );
-                            const englishValue = persianToEnglish
-                              .replace(/[^0-9]/g, '')
-                              .slice(0, 11);
-                            form.setFieldValue('phone', englishValue);
-                          }}
+                          onChange={(e) => handlePhoneChange(e, form.setFieldValue)}
                         />
                       )}
                     </Field>
                     <ErrorMessage name="phone">
                       {(msg) => (
                         <p className="mt-2 text-xs text-destructive flex items-center gap-1 justify-center">
-                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                              fillRule="evenodd"
-                              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
+                          <ErrorForm />
                           {msg}
                         </p>
                       )}
@@ -197,6 +200,7 @@ const LoginForm: React.FC = () => {
             <Button
               type="button"
               onClick={modalConfig.onButtonClick}
+              variant='dialog'
               className="w-full sm:w-auto min-w-[120px] cursor-pointer"
             >
               {modalConfig.buttonText}
