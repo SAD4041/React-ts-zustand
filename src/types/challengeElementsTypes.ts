@@ -1,4 +1,5 @@
 import type { FetchedUserProfile, UserProfile } from "@/types/userTypes";
+import type { ChallengeCategoryType } from "@/types/challengeCreateTypes";
 
 export interface DateAndLocationInputProps {
   challengeDate: string;
@@ -97,6 +98,21 @@ export interface UserCardListProps {
   disabled?: boolean; // NEW: disables all add buttons
 }
 
+export interface CategorySelectEditProps {
+  categories: ChallengeCategoryType[];
+  loading?: boolean;
+  selectedCategory: string;
+  onCategoryChange: (name: string) => void;
+}
+
+export interface FormValues {
+  startDate: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
+  location: string;
+}
+
 export interface ChallengeUserCardProps {
   id: string;
   username: string;
@@ -109,4 +125,10 @@ export interface ChallengeUserCardProps {
   onAdd?: () => void;
   isOwner: boolean;
   className: string;
+}
+
+
+export interface TitleAndDescriptionFormValues {
+  challengeTitle: string;
+  challengeDescription: string;
 }

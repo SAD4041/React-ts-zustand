@@ -23,6 +23,20 @@ export interface StepTwoProps {
   setFieldValue: (field: string, value: any) => void;
 }
 
+export interface Step2DetailsProps {
+  categories: ChallengeCategoryType[];
+  loadingCategories?: boolean;
+  values: any;
+  setFieldValue: any;
+  errors?: any;
+  touched?: any;
+}
+
+export interface ChallengeCategoryType {
+  id: number;
+  name: string;
+}
+
 export interface StepThreeProps {
   values: any;
   userSearch: string;
@@ -34,7 +48,6 @@ export interface StepThreeProps {
   canAddMore: boolean;
   memberLimitError: boolean;
 }
-
 
 export interface DateAndLocationInputProps {
   startDate: string;
@@ -69,4 +82,20 @@ export interface ChallengeData {
 export interface SelectedCategoryTagProps {
   category: string;
   onRemove: (category: string) => void;
+}
+
+export interface createFormValues {
+  title: string;
+  description: string;
+  image: string | null;
+  selectedCategory: string;
+  startDate: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
+  challengeLocation: string;
+  challengeType: "عمومی" | "شخصی";
+  isCommentsEnabled: boolean;
+  memberCount: string;
+  selectedUsers: UserProfile[];
 }

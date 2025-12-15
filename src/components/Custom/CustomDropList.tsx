@@ -4,9 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { create } from "zustand";
 import type { CustomSelectProps } from "@/types/dropListTypes";
 
-/* -------------------------------------------------------------------------- */
-/*  Close other dropdowns when one opens                                      */
-/* -------------------------------------------------------------------------- */
 const useDropdownStore = create<{
   openName: string | null;
   setOpen: (name: string | null) => void;
@@ -22,6 +19,7 @@ export default function CustomSelect({
   icon = <ChevronDown className="w-5 h-5" />,
   onIconClick,
   width = "",
+  error: propError, // ← prop جدید برای دریافت خطا از بیرون
 }: CustomSelectProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [isRTL, setIsRTL] = useState(true);
@@ -36,16 +34,20 @@ export default function CustomSelect({
       {({ field, meta }: FieldProps) => {
         const hasValue = field.value?.length > 0;
         const isFloating = isFocused || hasValue;
-        const hasError = meta.touched && meta.error;
+
+        // اولویت با propError (اگر از بیرون پاس داده شد)، در غیر این صورت از meta.error
+        const displayError =
+          propError ?? (meta.touched && meta.error ? meta.error : undefined);
+
+        const hasError = !!displayError;
+
         const selectedLabel =
           options.find((o) => o.value === field.value)?.label || "";
 
-        /* -------------------------- Detect RTL -------------------------- */
         useEffect(() => {
           if (field.value) setIsRTL(detectRTL(field.value));
         }, [field.value]);
 
-        /* ----------------------- Click-outside close --------------------- */
         useEffect(() => {
           const handleClickOutside = (e: MouseEvent) => {
             if (
@@ -88,13 +90,13 @@ export default function CustomSelect({
                   focus:!border-[var(--borderFoucus)]
                   focus:!shadow-[0px_1px_0px_var(--borderFoucusShadow)]
                   focus:!ring-0 focus-visible:!ring-0
-                  p-2 rounded-[8px] w-full h-10
+                  p-2 rounded-primary-radius w-full h-10
                   bg-white cursor-pointer
                   transition-all duration-200 ease-in-out
                   relative flex items-center
                   ${
                     hasError
-                      ? "!border-[var(--borderInvalid)] shadow-[0px_1px_0px_var(--borderInvalidShadow)]"
+                      ? "!border-[var(--borderInvalid)] !shadow-[0px_1px_0px_var(--borderInvalidShadow)]"
                       : ""
                   }
                   ${
@@ -110,18 +112,18 @@ export default function CustomSelect({
                     block truncate
                     absolute right-4 left-12 top-1/2 -translate-y-1/2
                     text-right
-                    ${!hasValue ? "text-gray-500" : "text-black"}
+                    ${!hasValue ? "text-gray-text" : "text-black"}
                   `}
                   style={{ direction: isRTL ? "rtl" : "ltr" }}
                 >
-                  {hasValue ? selectedLabel : label}
+                  {hasValue ? selectedLabel : ""}
                 </span>
 
                 {/* ICON – left side in RTL, right side in LTR */}
                 {icon && (
                   <div
                     className={`
-                      absolute top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none
+                      absolute top-1/2 -translate-y-1/2 text-gray-text pointer-events-none
                       transition-transform duration-200
                       ${isRTL ? "left-4" : "right-4"}
                       ${isOpen ? "rotate-180" : ""}
@@ -140,7 +142,7 @@ export default function CustomSelect({
                   ${
                     isFloating
                       ? "top-[-10px] text-xs bg-white px-1 text-black"
-                      : "top-1/2 -translate-y-1/2 text-sm text-gray-500"
+                      : "top-1/2 -translate-y-1/2 text-sm text-gray-text"
                   }
                 `}
               >
@@ -154,7 +156,7 @@ export default function CustomSelect({
                     absolute top-full mt-1 w-full
                     border !border-[var(--borderDefault)]
                     shadow-[0px_1px_0px_var(--borderDefault)]
-                    bg-white rounded-[8px]
+                    bg-white rounded-primary-radius
                     overflow-hidden z-50
                     animate-in fade-in slide-in-from-top-1 duration-200
                   `}
@@ -169,8 +171,8 @@ export default function CustomSelect({
                       onClick={() => selectOption(opt.value)}
                       className={`
                         px-4 py-2 text-right cursor-pointer transition-colors
-                        hover:bg-gray-50
-                        ${field.value === opt.value ? "bg-gray-100 font-medium" : ""}
+                        hover:bg-neutral-gray
+                        ${field.value === opt.value ? "bg-neutral-gray font-medium" : ""}
                       `}
                     >
                       {opt.label}
@@ -181,10 +183,10 @@ export default function CustomSelect({
             </div>
 
             {/* ────────────────────── ERROR MESSAGE ────────────────────── */}
-            {hasError && (
-              <div className="mt-1 text-xs pr-4 text-right">
-                <p className="text-red-500">{meta.error}</p>
-              </div>
+            {displayError && (
+              <p className="mt-1 text-sm text-error text-right">
+                {displayError}
+              </p>
             )}
           </div>
         );
