@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Landing from "@/pages/Landing";
 import ProductList from "@/pages/ProductListing"
-import Temp from "@/pages/Temp";
+// import Temp from "@/pages/Temp";
 import Error404 from "@/pages/Error404";
 import Error500 from "@/pages/Error500";
 
@@ -19,14 +19,15 @@ export const router = createBrowserRouter([
 				index: true,
 				element: <Landing />,
 			},
-			{
-				path: "/temp",
-				element: <Temp />,
-			},
+			// {
+			// 	path: "/temp",
+			// 	element: <Temp />,
+			// },
 			{
 				path: "/productList",
-				element: <ProductList/>
+				element: <ProductList />
 			},
+			{
 				path: "/error500",
 				element: <Error500 />
 			}

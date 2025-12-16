@@ -1,24 +1,26 @@
-// src/services/productListingService.ts
 import { getData } from "@/services/services";
 import type { Product } from "@/types/productListingTypes";
 
-const END_POINT = "/products";
+export const fetchProductsByCategory = async (categorySlug: string): Promise<Product[]> => {
+  return await getData({
+    endPoint: `/api/product/CA/${categorySlug}`,
+  });
+};
 
-export const fetchAllProducts = async (): Promise<Product[]> => {
-  try {
-    const data = await getData({
-      endPoint: END_POINT,
-      headers: {
-        "Cache-Control": "no-cache",
-        Pragma: "no-cache",
-        Accept: "*/*",
-      },
-    });
-    console.log("✅ PROFILE RESPONSE 👉", data);
-    console.log("✅ RAW API RESPONSE 👉", JSON.stringify(data, null, 2));
-    return data;
-  } catch (error) {
-    console.error("❌ Error fetching products:", error);
-    return [];
-  }
+export const fetchProductsByBrand = async (brandSlug: string): Promise<Product[]> => {
+  return await getData({
+    endPoint: `/api/product/BR/${brandSlug}`,
+  });
+};
+
+export const fetchProductsBySearch = async (searchSlug: string): Promise<Product[]> => {
+  return await getData({
+    endPoint: `/api/product/SE/${searchSlug}`,
+  });
+};
+
+export const fetchProductsByStyle = async (styleSlug: string): Promise<Product[]> => {
+  return await getData({
+    endPoint: `/api/product/CM/${styleSlug}`,
+  });
 };

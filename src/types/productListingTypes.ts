@@ -90,3 +90,5 @@ export interface SizeFilterProps {
 export interface SubCategoryProps {
   category: SubCategory;
 }
+
+export type ProductQueryType = "SE" | "CA" | "CM" | "BR";

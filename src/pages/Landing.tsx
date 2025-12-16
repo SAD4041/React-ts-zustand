@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import App from "@/components/testing";
 
 function Landing() {
 	const Navigate = useNavigate();
@@ -16,6 +17,7 @@ function Landing() {
 				</button>
 			</div>
 			<p className="text-5xl text-center ">This is your landing</p> */}
+			{/* <App /> */}
 		</div>
 	);
 }

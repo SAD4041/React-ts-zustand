@@ -1,3 +1,4 @@
+// import { number } from "framer-motion";
 import type { Product } from "./productListingTypes";
 
 export interface Size {
@@ -16,7 +17,6 @@ export interface ProductData {
   model: string;
   name: string;
   price: number;
-  discountedPrice: number;
   sizes: Size[];
   colors: Color[];
   rating: number;
@@ -24,6 +24,7 @@ export interface ProductData {
   ratingCount: number;
   sales: number;
   category: string;
+  discountedPrice: number;
 }
 
 export interface ImageData {

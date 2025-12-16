@@ -10,10 +10,22 @@ import type { SortOption } from "@/types/productListingTypes";
 import { toPersianDigits } from "@/utils/PersianDigits";
 import SubCategorySlider from "./productListingComponents/SubCategorySilder";
 import { categoryLabels, brandLabels } from "@/data/productListingData";
-import { fetchAllProducts } from "@/services/productListingService";
+import type { ProductQueryType } from "@/types/productListingTypes";
+import {
+  fetchProductsByCategory,
+  fetchProductsByBrand,
+  fetchProductsBySearch,
+  fetchProductsByStyle,
+} from "@/services/productListingService";
+
+type FetchMode = "category" | "brand" | "search" | "style";
+interface ProductListingProps {
+  mode: FetchMode;
+  slug: string;
+}
 
 
-const ProductListing: React.FC = () => {
+const ProductListing: React.FC<ProductListingProps> = ({ mode, slug }) => {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
   const brand = searchParams.get("brand");
@@ -23,17 +35,28 @@ const ProductListing: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // ✅ فقط یکبار محصولات رو بگیر — بدون فیلتر
   useEffect(() => {
+    if (!slug) return;
+
     const loadProducts = async () => {
       setLoading(true);
-      setError(null);
+
       try {
-        const data = await fetchAllProducts();
+        let data: Product[] = [];
+
+        if (mode === "category") {
+          data = await fetchProductsByCategory(slug);
+        } else if (mode === "brand") {
+          data = await fetchProductsByBrand(slug);
+        } else if (mode === "search") {
+          data = await fetchProductsBySearch(slug);
+        } else if (mode === "style") {
+          data = await fetchProductsByStyle(slug);
+        }
+
         setProducts(data);
-      } catch (err) {
-        setError("خطا در بارگذاری محصولات");
-        console.error(err);
+      } catch (error) {
+        console.error("❌ Failed to load products", error);
         setProducts([]);
       } finally {
         setLoading(false);
@@ -41,9 +64,9 @@ const ProductListing: React.FC = () => {
     };
 
     loadProducts();
-  }, []);
+  }, [mode, slug]);
 
-  // ✅ تشخیص نوع لیست برای نمایش عنوان
+
   let listingType: "category" | "brand" | "search" | null = null;
   let listingValue = "";
 
@@ -64,7 +87,6 @@ const ProductListing: React.FC = () => {
     return categoryLabels[listingValue] || listingValue;
   };
 
-  // --- فیلترهای فرانت‌اند ---
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
@@ -76,17 +98,14 @@ const ProductListing: React.FC = () => {
   const productsWithoutPriceFilter = useMemo(() => {
     let result = [...products];
 
-    // ✅ فیلتر بر اساس دسته (اگر category در URL باشه)
     if (category && listingType === "category") {
-      result = result.filter((p) => p.category === category); // ⚠️ فرض: محصول داره فیلد `category`
+      result = result.filter((p) => p.category === category);
     }
 
-    // ✅ فیلتر بر اساس برند (اگر brand در URL باشه)
     if (brand && listingType === "brand") {
-      result = result.filter((p) => p.model === brand); // ⚠️ فرض: `model` = برند
+      result = result.filter((p) => p.model === brand);
     }
 
-    // ✅ فیلتر بر اساس جستجو (اگر q در URL باشه)
     if (searchQuery && listingType === "search") {
       const queryLower = searchQuery.toLowerCase();
       result = result.filter(
@@ -96,7 +115,6 @@ const ProductListing: React.FC = () => {
       );
     }
 
-    // ✅ فیلتر بر اساس انتخاب کاربر (برند، سایز، رنگ)
     if (selectedBrands.length > 0) {
       result = result.filter((p) => selectedBrands.includes(p.model));
     }
@@ -137,7 +155,7 @@ const ProductListing: React.FC = () => {
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...productsWithoutPriceFilter];
     result = result.filter(
-      (p) => p.discountedPrice >= priceRange.min && p.discountedPrice <= priceRange.max
+      (p) => Number(p.discountedPrice) >= priceRange.min && Number(p.discountedPrice) <= priceRange.max
     );
     if (currentSort) {
       result.sort((a, b) => {
@@ -210,8 +228,6 @@ const ProductListing: React.FC = () => {
       </div>
     );
   }
-
-  console.log("🔍 productsToDisplay:", productsToDisplay);
 
   return (
     <div dir="rtl" className="container mx-auto px-4 py-6 font-vazir">
