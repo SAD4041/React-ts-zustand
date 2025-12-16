@@ -20,7 +20,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         let newWishlist: number[];
 
         if (isWishlisted) {
-            newWishlist = wishlist.filter((id: number) => id !== product.id);
+            newWishlist = wishlist.filter((id: string) => id !== product.id);
         } else {
             newWishlist = [...wishlist, product.id];
         }

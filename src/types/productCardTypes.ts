@@ -23,6 +23,7 @@ export interface ProductData {
   stock: number;
   ratingCount: number;
   sales: number;
+  category: string;
 }
 
 export interface ImageData {

@@ -11,11 +11,10 @@ const SizeFilter: React.FC<SizeFilterProps> = ({ sizes, selectedSizes, onToggleS
             key={size}
             type="button"
             onClick={() => onToggleSize(size)}
-            className={`px-3 py-1 rounded-md text-sm transition ${
-              selectedSizes.includes(size)
-                ? 'bg-primary text-primary-foreground border border-primary-border'
-                : 'bg-muted text-foreground border border-border hover:border-primary-border-hover hover:bg-border-hover'
-            }`}
+            className={`px-3 py-1 rounded-md text-sm transition ${selectedSizes.includes(size)
+              ? 'bg-primary text-primary-foreground border border-primary-border'
+              : 'bg-muted text-foreground border border-border hover:border-primary-border-hover hover:bg-border-hover'
+              }`}
           >
             {size}
           </button>

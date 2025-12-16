@@ -28,7 +28,7 @@ export interface Filters {
 }
 
 export interface Product extends ProductData {
-  id: number;
+  id: string;
 }
 
 export type SortOption = 'newest' | 'cheapest' | 'expensive' | 'most-salled' | 'most-revelent';

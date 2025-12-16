@@ -2,6 +2,7 @@ import image1 from '@/assets/image1.png';
 import type { ProductData } from '@/types/productCardTypes';
 
 export const productData: ProductData = {
+  category: "تیشرت زنانه",
   discount: 24,
   hasDiscount: true,
   image : image1,

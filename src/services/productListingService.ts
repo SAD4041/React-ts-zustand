@@ -1,27 +1,24 @@
+// src/services/productListingService.ts
 import { getData } from "@/services/services";
 import type { Product } from "@/types/productListingTypes";
 
+const END_POINT = "/products";
 
-export const fetchProductsByCategory = async (categorySlug: string): Promise<Product[]> => {
-  const data = await getData({
-    endPoint: "/api/category/",
-    params: { category: categorySlug },
-  });
-  return data;
-};
-
-export const fetchProductsByBrand = async (brandSlug: string): Promise<Product[]> => {
-  const data = await getData({
-    endPoint: "/api/brand/",
-    params: { brand: brandSlug },
-  });
-  return data;
-};
-
-export const fetchProductsBySearch = async (query: string): Promise<Product[]> => {
-  const data = await getData({
-    endPoint: "/api/search/",
-    params: { q: query },
-  });
-  return data;
+export const fetchAllProducts = async (): Promise<Product[]> => {
+  try {
+    const data = await getData({
+      endPoint: END_POINT,
+      headers: {
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        Accept: "*/*",
+      },
+    });
+    console.log("✅ PROFILE RESPONSE 👉", data);
+    console.log("✅ RAW API RESPONSE 👉", JSON.stringify(data, null, 2));
+    return data;
+  } catch (error) {
+    console.error("❌ Error fetching products:", error);
+    return [];
+  }
 };

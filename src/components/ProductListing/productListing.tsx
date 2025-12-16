@@ -10,6 +10,7 @@ import type { SortOption } from "@/types/productListingTypes";
 import { toPersianDigits } from "@/utils/PersianDigits";
 import SubCategorySlider from "./productListingComponents/SubCategorySilder";
 import { categoryLabels, brandLabels } from "@/data/productListingData";
+import { fetchAllProducts } from "@/services/productListingService";
 
 
 const ProductListing: React.FC = () => {
@@ -22,6 +23,27 @@ const ProductListing: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // ✅ فقط یکبار محصولات رو بگیر — بدون فیلتر
+  useEffect(() => {
+    const loadProducts = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchAllProducts();
+        setProducts(data);
+      } catch (err) {
+        setError("خطا در بارگذاری محصولات");
+        console.error(err);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
+
+  // ✅ تشخیص نوع لیست برای نمایش عنوان
   let listingType: "category" | "brand" | "search" | null = null;
   let listingValue = "";
 
@@ -36,54 +58,13 @@ const ProductListing: React.FC = () => {
     listingValue = brand;
   }
 
-  useEffect(() => {
-    if (!listingType || !listingValue) {
-      setProducts([]);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    let fetchPromise: Promise<any>;
-
-    if (listingType === "category") {
-      fetchPromise = getData({
-        endPoint: "/api/category/",
-        params: { category: listingValue },
-        headers: { "Cache-Control": "no-cache", Pragma: "no-cache", Accept: "*/*" },
-      });
-    } else if (listingType === "brand") {
-      fetchPromise = getData({
-        endPoint: "/api/brand/",
-        params: { brand: listingValue },
-        headers: { "Cache-Control": "no-cache", Pragma: "no-cache", Accept: "*/*" },
-      });
-    } else {
-      fetchPromise = getData({
-        endPoint: "/api/search/",
-        params: { q: listingValue },
-        headers: { "Cache-Control": "no-cache", Pragma: "no-cache", Accept: "*/*" },
-      });
-    }
-
-    fetchPromise
-      .then((data) => setProducts(Array.isArray(data) ? data : []))
-      .catch((err) => {
-        setError("خطا در بارگذاری محصولات");
-        console.error(err);
-        setProducts([]);
-      })
-      .finally(() => setLoading(false));
-  }, [listingType, listingValue]);
-
   const getDisplayName = () => {
     if (listingType === "search") return `جستجوی «${listingValue}»`;
     if (listingType === "brand") return brandLabels[listingValue] || listingValue;
     return categoryLabels[listingValue] || listingValue;
   };
 
+  // --- فیلترهای فرانت‌اند ---
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
@@ -94,6 +75,28 @@ const ProductListing: React.FC = () => {
 
   const productsWithoutPriceFilter = useMemo(() => {
     let result = [...products];
+
+    // ✅ فیلتر بر اساس دسته (اگر category در URL باشه)
+    if (category && listingType === "category") {
+      result = result.filter((p) => p.category === category); // ⚠️ فرض: محصول داره فیلد `category`
+    }
+
+    // ✅ فیلتر بر اساس برند (اگر brand در URL باشه)
+    if (brand && listingType === "brand") {
+      result = result.filter((p) => p.model === brand); // ⚠️ فرض: `model` = برند
+    }
+
+    // ✅ فیلتر بر اساس جستجو (اگر q در URL باشه)
+    if (searchQuery && listingType === "search") {
+      const queryLower = searchQuery.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(queryLower) ||
+          p.model.toLowerCase().includes(queryLower)
+      );
+    }
+
+    // ✅ فیلتر بر اساس انتخاب کاربر (برند، سایز، رنگ)
     if (selectedBrands.length > 0) {
       result = result.filter((p) => selectedBrands.includes(p.model));
     }
@@ -107,8 +110,18 @@ const ProductListing: React.FC = () => {
         p.colors.some((colorObj) => selectedColors.includes(colorObj.hex))
       );
     }
+
     return result;
-  }, [products, selectedBrands, selectedSizes, selectedColors]);
+  }, [
+    products,
+    category,
+    brand,
+    searchQuery,
+    listingType,
+    selectedBrands,
+    selectedSizes,
+    selectedColors,
+  ]);
 
   const globalMaxPrice = useMemo(() => {
     if (productsWithoutPriceFilter.length === 0) return 100000;
@@ -129,7 +142,7 @@ const ProductListing: React.FC = () => {
     if (currentSort) {
       result.sort((a, b) => {
         switch (currentSort) {
-          case "newest": return b.id - a.id;
+          case "newest": return Number(b.id) - Number(a.id);
           case "cheapest": return a.discountedPrice - b.discountedPrice;
           case "expensive": return b.discountedPrice - a.discountedPrice;
           case "most-salled": return (b.sales || 0) - (a.sales || 0);
@@ -198,12 +211,13 @@ const ProductListing: React.FC = () => {
     );
   }
 
+  console.log("🔍 productsToDisplay:", productsToDisplay);
+
   return (
     <div dir="rtl" className="container mx-auto px-4 py-6 font-vazir">
-
       <SubCategorySlider />
 
-      <hr className="my-6 border-border border-1" />
+      <hr className="my-6 border-border" />
 
       <div className="flex gap-6 mt-6">
         <FilterSidebar
@@ -230,13 +244,11 @@ const ProductListing: React.FC = () => {
             </div>
           </div>
 
-          <hr className="mb-4 border-border border-1" />
+          <hr className="mb-4 border-border" />
 
-          <div className="h-150 overflow-y-auto border-border border-1 rounded-lg p-4 bg-card shadow-sm">
+          <div className="h-150 overflow-y-auto border border-border rounded-lg p-4 bg-card shadow-sm">
             <ProductGrid products={productsToDisplay} />
           </div>
-
-          <hr className="my-6 border-border border-1" />
 
           <div className="mt-4 flex justify-center">
             <Pagination
