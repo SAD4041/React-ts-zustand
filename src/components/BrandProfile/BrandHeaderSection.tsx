@@ -2,9 +2,17 @@ import React from 'react';
 import starIcon from '@/assets/brand-profile/Star.png';
 import shareIcon from '@/assets/brand-profile/Send_light.png';
 import shopIcon from '@/assets/brand-profile/Shop.png';
+import banner from '@/assets/brand-profile/banner.png';
+import avatar from '@/assets/avatar.png';
 import type { BrandHeaderProps } from "@/types/homeTypes";
+import LoadingSpinner from '../ui/LoadingSpinner';
 
 const BrandHeader: React.FC<BrandHeaderProps> = ({ brandData }) => {
+
+  if (!brandData) {
+    <LoadingSpinner />
+  }
+
   const handleFollow = () => {
     // TODO: Implement follow functionality
     console.log('Follow brand:', brandData.id);
@@ -29,7 +37,7 @@ const BrandHeader: React.FC<BrandHeaderProps> = ({ brandData }) => {
     <div>
       <div className="relative h-50 bg-gray-200">
         <img
-          src={brandData.coverImage}
+          src={brandData.coverImage || banner}
           alt="Cover Image"
           className="w-full h-full object-cover"
         />
@@ -38,8 +46,8 @@ const BrandHeader: React.FC<BrandHeaderProps> = ({ brandData }) => {
       <div className="mb-12 px-6 py-4 border relative">
         <div className="absolute -top-14 right-6">
           <img
-            src={brandData.avatar}
-            alt={brandData.name}
+            src={brandData?.avatar || avatar}
+            alt={brandData?.name}
             className="w-25 h-25 rounded-full border-4 border-white shadow-lg"
           />
           {brandData.isOfficial && (

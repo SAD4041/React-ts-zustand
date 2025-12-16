@@ -8,7 +8,7 @@ export const getBrandProfile = async (brandId: string) => {
   }
 
   return await getData({
-    endPoint: `/brands/${brandId}`,
+    endPoint: `api/brands/${brandId}`,
   });
 };
 
@@ -18,7 +18,7 @@ export const getBrandProducts = async (brandId: string, params?: any) => {
   }
 
   return await getData({
-    endPoint: `/brands/${brandId}/products`,
+    endPoint: `api/brands/${brandId}/products`,
     params,
   });
 };
@@ -29,7 +29,7 @@ export const getBrandReviews = async (brandId: string, params?: any) => {
   }
 
   return await getData({
-    endPoint: `/brands/${brandId}/reviews`,
+    endPoint: `api/brands/${brandId}/reviews`,
     params,
   });
 };
@@ -40,7 +40,7 @@ export const submitBrandReview = async (brandId: string, data: any) => {
   }
 
   return await postData({
-    endPoint: `/brands/${brandId}/reviews`,
+    endPoint: `api/brands/${brandId}/reviews`,
     data,
   });
 };

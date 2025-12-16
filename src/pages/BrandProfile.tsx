@@ -9,7 +9,6 @@ import BrandInfo from '@/components/BrandProfile/BrandInfoSection';
 import BestSell from '@/components/BrandProfile/BestSellSection';
 import BrandProductsSection from '@/components/BrandProfile/BrandProductSection';
 import Comments from '@/components/BrandProfile/CommentsSection';
-import Error500 from './Error500';
 import Error404 from './Error404';
 
 const BrandProfile = () => {
@@ -18,81 +17,74 @@ const BrandProfile = () => {
   const [brandData, setBrandData] = useState<any>(null);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<{ type: '404' | '500' | null; message: string }>({
-    type: null,
-    message: ''
-  });
+  const [error, setError] = useState<string | null>(null); // فقط برای لاگ/توست — صفحه crash نمی‌کند
 
   useEffect(() => {
-    // ✅ بررسی اولیه brandId
     if (!brandId) {
-      setError({
-        type: '404',
-        message: 'شناسه برند یافت نشد'
-      });
-      setLoading(false);
+      // ❗ فقط redirect یا نمایش صفحه 404 برای عدم وجود brandId
+      navigate('/not-found'); // یا نمایش <Error404 /> در render
       return;
     }
 
-    const fetchBrandData = async () => {
+    const fetchData = async () => {
       try {
-        console.log('🔄 Fetching brand profile for ID:', brandId);
-        const brand = await getBrandProfile(brandId); // ✅ حذف ! چون بالا چک شد
-        console.log('✅ Brand data received:', brand);
-        setBrandData(brand);
-      } catch (error: any) {
-        console.error("❌ Error fetching brand data:", error);
-        
-        const statusCode = error.response?.status;
-        
-        if (statusCode === 404 || statusCode === 500) {
-          setError({
-            type: '404',
-            message: 'برند مورد نظر یافت نشد!'
-          });
+        // ✅ درخواست‌ها parallel اما مستقل
+        const [brandRes, productsRes] = await Promise.allSettled([
+          getBrandProfile(brandId),
+          getBrandProducts(brandId)
+        ]);
+
+        if (brandRes.status === 'fulfilled') {
+          setBrandData(brandRes.value);
         } else {
-          setError({
-            type: '500',
-            message: 'خطا در دریافت اطلاعات برند'
-          });
+          console.error('❌ Brand data fetch failed:', brandRes.reason);
+          setError('اطلاعات برند در دسترس نیست.');
+          // ولی brandData = null می‌ماند → کامپوننت‌ها باید با این حالت کار کنند
         }
+
+        if (productsRes.status === 'fulfilled') {
+          setProducts(productsRes.value);
+        } else {
+          console.error('❌ Products fetch failed:', productsRes.reason);
+          setProducts([]); // خالی بماند
+        }
+      } finally {
+        setLoading(false);
       }
     };
 
-    const fetchProducts = async () => {
-      try {
-        console.log('🔄 Fetching brand products for ID:', brandId);
-        const prods = await getBrandProducts(brandId); // ✅ حذف ! چون بالا چک شد
-        console.log('✅ Products received:', prods);
-        setProducts(prods);
-      } catch (error: any) {
-        console.error("❌ Error fetching brand products:", error);
-      }
-    };
+    fetchData();
+  }, [brandId, navigate]);
 
-    // ✅ حالا مطمئنیم brandId وجود دارد
-    Promise.all([fetchBrandData(), fetchProducts()]).finally(() => setLoading(false));
-  }, [brandId]);
-
-  if (loading) return <LoadingSpinner />;
-
-  if (error.type === '404') {
-    return (
-      <Error404 />
-    );
+  // 🔹 فقط در صورت عدم وجود brandId اصلاً — نه خطای API — 404 نشان داده شود
+  if (!brandId) {
+    return <Error404 />;
   }
 
-  if (error.type === '500' || !brandData) {
-    return <Error500 message={error.message} />;
+  if (loading) {
+    return <LoadingSpinner />;
   }
 
+  // ✅ اینجا دیگر error منجر به render کردن صفحه خطا نمی‌شود
+  // فقط می‌توانید یک توست/پیام هشدار نمایش دهید (اختیاری)
   return (
     <div dir="rtl" className="bg-white rounded-lg shadow-sm overflow-hidden">
+      {/* مثلاً یک پیام خطا در بالای صفحه (اختیاری) */}
+      {error && (
+        <div className="p-3 bg-yellow-50 text-yellow-700 text-sm text-center">
+          {error}
+        </div>
+      )}
+
+      {/* همیشه رندر شوند — حتی اگر brandData null باشد */}
       <BrandHeader brandData={brandData} />
       <BrandInfo brandData={brandData} />
+      
+      {/* فقط اگر محصولی وجود داشت */}
       {products.length > 0 && <BestSell brandData={brandData} products={products} />}
+      
       <BrandProductsSection products={products} brandId={brandId} />
-      <Comments brandId={brandId!} />
+      <Comments brandId={brandId} />
     </div>
   );
 };

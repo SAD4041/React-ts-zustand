@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
 				element: <Temp />,
 			},
 			{
-				path: "/brandProfile/:brandId",
+				path: "/brands/:brandId",
 				element: <BrandProfile />,
 			},
 			{
