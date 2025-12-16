@@ -22,17 +22,10 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
   }, [localMin, localMax, onPriceChange]);
 
   return (
-<<<<<<< HEAD
-    <div className="mb-6 ml-4">
-      <h3 className="font-bold mb-3">محدوده قیمت</h3>
-      
-      <div className="px-2 py-4">
-=======
     <div className="mb-10 ml-4">
       <h3 className="font-bold mb-3">محدوده قیمت</h3>
 
       <div className="px-2 py-2">
->>>>>>> origin/develop
         <Slider
           range
           min={0}
@@ -44,34 +37,19 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
               setLocalMax(value[1]);
             }
           }}
-<<<<<<< HEAD
-          trackStyle={[{ backgroundColor: '#F97316', height: 6 }]}
-          handleStyle={[
-            { borderColor: '#F97316', height: 20, width: 20, marginLeft: -10, marginTop: -7 },
-            { borderColor: '#F97316', height: 20, width: 20, marginLeft: -10, marginTop: -7 }
-=======
           trackStyle={[{ backgroundColor: 'var(--slider-track)', height: 6 }]}
           handleStyle={[
             { borderColor: 'var(--slider-handle)', height: 20, width: 20, marginLeft: -8, marginTop: -7 },
             { borderColor: 'var(--slider-handle)', height: 20, width: 20, marginLeft: -10, marginTop: -7 }
->>>>>>> origin/develop
           ]}
         />
       </div>
 
-<<<<<<< HEAD
-      <div className="flex justify-between text-sm mt-2">
-        <span className="bg-gray-100 px-2 py-1 rounded">
-          {toPersianDigits(formatPrice(localMax))}
-        </span>
-        <span className="bg-gray-100 px-2 py-1 rounded">
-=======
       <div className="flex justify-between text-sm mt-0">
         <span className="bg-muted px-2 py-1 rounded">
           {toPersianDigits(formatPrice(localMax))}
         </span>
         <span className="bg-muted px-2 py-1 rounded">
->>>>>>> origin/develop
           {toPersianDigits(formatPrice(localMin))}
         </span>
       </div>

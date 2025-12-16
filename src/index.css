@@ -1,14 +1,13 @@
 @import "tailwindcss";
 
-<<<<<<< HEAD
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-=======
 body {
   font-family: "Vazirmatn", sans-serif;
   font-feature-settings: "tnum";
->>>>>>> origin/develop
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none;

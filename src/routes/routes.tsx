@@ -12,12 +12,10 @@ export const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <PublicLayout />,
-		
+		errorElement: (
+            <Error404 />
+        ),
 		children: [
-			// {
-			// 	path: "/temp",
-			// 	element: <Temp />,
-			// },
 			{
 				index: true,
 				element: <Home />
