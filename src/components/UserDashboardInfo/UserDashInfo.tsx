@@ -156,7 +156,7 @@ const UserDashInfo: React.FC = () => {
       <div className="text-right mb-4">
         <h1 className="text-xl font-bold">پروفایل کاربری</h1>
         <p className="text-muted-foreground text-sm">
-          مدیریت اطلاعات شخصی
+          مدیریت اطلاعات شخصی و ادرس های خود
         </p>
       </div>
 
