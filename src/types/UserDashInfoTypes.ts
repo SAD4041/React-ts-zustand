@@ -1,14 +1,15 @@
 
-export interface Address {
+export type Address = {
   id: string;
-  title: string; 
-  province: string; 
-  city: string;    
-  postalCode: string; 
-  phone: string;    
-  fullAddress: string; 
+  userId: string;
+  title: string;
+  province: string;
+  city: string;
+  fullAddress: string;
+  postalCode: string;
+  phone: string;
   isDefault: boolean;
-}
+};
 
 export interface UserInfo {
   id?: string;
@@ -17,10 +18,8 @@ export interface UserInfo {
   lastName: string;
   email: string;
   phone: string;
-  nationalCode: string;
   birthDate: string;
   /* password: string; */
-  shabaNumber: string;
 }
 
 export interface ProfileInfoProps {

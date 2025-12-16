@@ -1,29 +1,31 @@
+import { data } from "react-router-dom";
 import {
   getData,
   putData,
   postImageData,
 } from "./services";
 import type { UserInfo } from "@/types/UserDashInfoTypes";
-
+const END_POINT = "/userInfo";
 
 export const getUserProfile = async (): Promise<UserInfo> => {
   const data = await getData({
-    endPoint: "/api/user",
+    // endPoint: "/api/user",
+    endPoint: END_POINT,
   });
 
   console.log("PROFILE RESPONSE 👉", data);
   console.log("RAW API RESPONSE 👉", JSON.stringify(data, null, 2));
 
+  const user = data.find((u:UserInfo) => u.id === "1");
+
   return {
-    id: String(data.id),
-    firstName: data.name ?? "",
-    lastName: data.Fname ?? "",
-    email: data.email ?? "",
-    phone: data.user_mobile ?? "",
-    nationalCode: "",
-    birthDate: "",
-    shabaNumber: "",
-    avatar: data.avatar_url ?? null,
+    id: String(user.id),
+    firstName: user.name ?? "",
+    lastName: user.Fname ?? "",
+    email: user.email ?? "",
+    phone: user.user_mobile ?? "",
+    birthDate: user.birthdate ?? "",
+    avatar: user.avatar_url ?? null,
   };
 };
 
@@ -38,8 +40,9 @@ export const updateUserProfile = async (userInfo: Partial<UserInfo>): Promise<Us
     user_mobile: userInfo.phone,
   };
 
+
   const res = await putData({
-    endPoint: `/api/user/profile/${userId}/update`,
+    endPoint: `${END_POINT}/${userId}`,
     data: payload,
   });
 
@@ -49,9 +52,7 @@ export const updateUserProfile = async (userInfo: Partial<UserInfo>): Promise<Us
     lastName: res.Fname || "",
     email: res.email || "",
     phone: res.user_mobile || "",
-    nationalCode: "",
     birthDate: "",
-    shabaNumber: "",
     avatar: res.avatar_url || res.avatar || null,
   };
 };
@@ -61,7 +62,7 @@ export const uploadUserAvatar = async (file: File): Promise<{ avatar_url: string
   formData.append("avatar", file);
 
   const res = await postImageData({
-    endPoint: `/api/user/profile/1/Imageupdate`,
+    endPoint: END_POINT,
     data: formData,
   });
 

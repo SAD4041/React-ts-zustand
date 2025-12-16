@@ -8,12 +8,12 @@ const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete }) 
     <div dir="rtl" className="p-4 rounded-md border border-border">
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-accent-foreground" />
+          <MapPin className="w-4 h-4 text-brand-light" />
           <span className="text-sm font-semibold">{address.title}</span>
         </div>
 
         {address.isDefault && (
-          <span className="px-2 py-1 rounded bg-accent text-accent-foreground text-xs">
+          <span className="px-2 py-1 rounded bg-brand-light text-brand text-xs">
             پیش‌فرض
           </span>
         )}
@@ -37,7 +37,7 @@ const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete }) 
           variant="outline"
           size="sm"
           onClick={() => onDelete(address.id)}
-          className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+          className="hover:bg-destructive hover:text-destructive-foreground"
         >
           <Trash2 className="w-3 h-3 ml-1" />
           حذف

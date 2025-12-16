@@ -2,14 +2,19 @@
 import React, { useRef } from 'react';
 import { Card } from '@/components/ui/userDashInfo/card';
 import { Button } from '@/components/ui/userDashInfo/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/userDashInfo/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/components/ui/userDashInfo/avatar';
 import type { ProfileHeaderProps } from "@/types/UserDashInfoTypes";
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onAvatarChange }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const getInitials = (firstName: string): string => {
-    return firstName[0]?.toUpperCase() || '?';
+  const getInitials = (name?: string) => {
+    if (!name) return '?';
+    return name.charAt(0).toUpperCase();
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,14 +37,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onAvatarChange }) =
       <div className="flex justify-between items-start">
         <div className="flex flex-col items-center">
           <div className="h-3 relative w-full flex justify-center">
-            <Avatar className="w-18 h-18 absolute -top-13">
-              {user.profileImage ? (
-                <AvatarImage src={user.profileImage} alt="User" />
-              ) : (
-                <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
-                  {getInitials(user.firstName)}
-                </AvatarFallback>
-              )}
+            <Avatar className="w-18 h-18 absolute -top-13 ring-2 ring-brand">
+              <AvatarImage
+                src={user.profileImage || undefined}
+                alt={user.firstName || "User"}
+              />
+              <AvatarFallback className="bg-brand text-brand-foreground text-2xl ">
+                {getInitials(user.firstName)}
+              </AvatarFallback>
             </Avatar>
           </div>
 
@@ -54,8 +59,12 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onAvatarChange }) =
         </div>
 
         <div className="text-right">
-          <h3 className="text-lg font-bold">{user.firstName}</h3>
-          <p className="text-muted-foreground text-sm">{user.email}</p>
+          <h3 className="text-lg font-bold">
+            {user.firstName || "—"}
+          </h3>
+          <p className="text-muted-foreground text-sm">
+            {user.email || ""}
+          </p>
         </div>
       </div>
     </Card>

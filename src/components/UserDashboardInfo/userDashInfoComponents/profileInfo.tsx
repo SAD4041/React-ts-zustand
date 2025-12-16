@@ -12,9 +12,7 @@ const personalInfoSchema = z.object({
   lastName: z.string().min(1, 'نام خانوادگی نباید خالی باشد.'),
   email: z.string().email('فرمت ایمیل نامعتبر است.'),
   phone: z.string().regex(/^09\d{9}$/, 'شماره تلفن باید ۱۱ رقمی و با 09 شروع شود.'),
-  nationalCode: z.string().regex(/^\d{10}$/, 'کد ملی باید ۱۰ رقمی باشد.'),
   birthDate: z.string().regex(/^\d{4}\/\d{2}\/\d{2}$/, 'فرمت تاریخ باید YYYY/MM/DD باشد.'),
-  shabaNumber: z.string().regex(/^\d{10}$/, 'شماره شبا باید ۱۰ رقمی باشد.')
 });
 
 
@@ -25,9 +23,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
     avatar: initialData.avatar,
     email: initialData.email,
     phone: initialData.phone,
-    nationalCode: initialData.nationalCode,
     birthDate: initialData.birthDate,
-    shabaNumber: initialData.shabaNumber,
   });
   const [errors, setErrors] = useState<Partial<Record<keyof Omit<UserInfo, 'password'>, string>>>({});
 
@@ -126,26 +122,6 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
               className="text-right"
             />
             {errors.birthDate && <p className="text-sm text-danger">{errors.birthDate}</p>}
-          </div>
-          <div className="space-y-2 text-right">
-            <Label className="block">کد ملی</Label>
-            <Input
-              name="nationalCode"
-              value={formData.nationalCode}
-              onChange={handleChange}
-              className="text-right"
-            />
-            {errors.nationalCode && <p className="text-sm text-danger">{errors.nationalCode}</p>}
-          </div>
-          <div className="space-y-2 text-right">
-            <Label className="block">شماره شبا</Label>
-            <Input
-              name="shabaNumber"
-              value={formData.shabaNumber}
-              onChange={handleChange}
-              className="text-right"
-            />
-            {errors.shabaNumber && <p className="text-sm text-danger">{errors.shabaNumber}</p>}
           </div>
         </div>
       </div>

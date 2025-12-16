@@ -1,12 +1,20 @@
 import React, { useState, useEffect, useCallback } from "react";
-import type { UserInfo } from "@/types/UserDashInfoTypes";
+import type { Address, UserInfo } from "@/types/UserDashInfoTypes";
 import ProfileHeader from "./userDashInfoComponents/profileHeader";
 import ProfileInfo from "./userDashInfoComponents/profileInfo";
+import AddressSection from "./userDashInfoComponents/addressSection";
 import {
   getUserProfile,
   updateUserProfile,
   uploadUserAvatar,
 } from "@/services/userDashInfoService";
+import {
+  getUserAddresses,
+  addAddress,
+  updateAddress,
+  deleteAddress,
+} from "@/services/addressService";
+
 
 const Spinner = () => (
   <div className="flex justify-center items-center p-6">
@@ -19,7 +27,8 @@ const UserDashInfo: React.FC = () => {
   const [userData, setUserData] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [addressesLoading, setAddressesLoading] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("authToken")) {
@@ -44,9 +53,25 @@ const UserDashInfo: React.FC = () => {
     }
   }, []);
 
+  const fetchAddresses = useCallback(async () => {
+    try {
+      setAddressesLoading(true);
+      const res = await getUserAddresses();
+      setAddresses(res);
+    } catch (e) {
+      console.error("Failed to load addresses", e);
+    } finally {
+      setAddressesLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    fetchAddresses();
+  }, [fetchAddresses]);
 
   if (loading) return <Spinner />;
   if (error)
@@ -76,6 +101,56 @@ const UserDashInfo: React.FC = () => {
     }
   };
 
+  const handleAddAddress = async (data: Omit<Address, "id">) => {
+    if (data.isDefault) {
+      await Promise.all(
+        addresses
+          .filter(a => a.isDefault)
+          .map(a => updateAddress(a.id, { isDefault: false }))
+      );
+    }
+
+    const newAddress = await addAddress(data);
+
+    setAddresses(prev => [
+      ...(data.isDefault
+        ? prev.map(a => ({ ...a, isDefault: false }))
+        : prev),
+      newAddress,
+    ]);
+  };
+
+  const handleUpdateAddress = async (
+    id: string,
+    data: Partial<Address>
+  ) => {
+    if (data.isDefault) {
+      await Promise.all(
+        addresses
+          .filter(a => a.isDefault && a.id !== id)
+          .map(a => updateAddress(a.id, { isDefault: false }))
+      );
+    }
+
+    const updated = await updateAddress(id, data);
+
+    setAddresses(prev =>
+      prev.map(addr => {
+        if (addr.id === id) return updated;
+        if (data.isDefault) return { ...addr, isDefault: false };
+        return addr;
+      })
+    );
+  };
+
+
+  const handleDeleteAddress = async (id: string) => {
+    await deleteAddress(id);
+    setAddresses(prev => prev.filter(addr => addr.id !== id));
+  };
+
+
+
   return (
     <div className="space-y-6 py-6 px-6 max-w-6xl mx-auto bg-background">
       <div className="text-right mb-4">
@@ -90,6 +165,14 @@ const UserDashInfo: React.FC = () => {
         onAvatarChange={handleAvatarChange}
       />
       <ProfileInfo initialData={userData} onSave={handleSavePersonal} />
+
+      <AddressSection
+        addresses={addresses}
+        onAddAddress={handleAddAddress}
+        onUpdateAddress={handleUpdateAddress}
+        onDeleteAddress={handleDeleteAddress}
+      />
+
     </div>
   );
 };

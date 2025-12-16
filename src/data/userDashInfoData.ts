@@ -4,6 +4,7 @@ import type { UserInfo } from '@/types/UserDashInfoTypes';
 export let Addresses: Address[] = [
   {
     id: '1',
+    userId: '1',
     title: 'خانه',
     province: 'تهران',
     city: 'تهران',
@@ -14,6 +15,7 @@ export let Addresses: Address[] = [
   },
   {
     id: '2',
+    userId: '1',
     title: 'محل کار',
     province: 'تهران',
     city: 'تهران',
@@ -25,14 +27,13 @@ export let Addresses: Address[] = [
 ];
 
 export let UserData: UserInfo = {
+  id: '1',
   firstName: 'علی',
   lastName: 'احمدی',
   avatar: null,
   email: 'ali.ahmadi@example.com',
   phone: '09123456789',
-  nationalCode: '1234567890',
   birthDate: '1370/01/15',
-  shabaNumber: '1234567890',
 };
 
 export const getUserData = () => ({ ...UserData });
