@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/userDashInfo/label';
 import { z } from 'zod';
 import type { UserInfo, ProfileInfoProps } from '@/types/UserDashInfoTypes';
 import Separator from '@/components/ui/userDashInfo/separator';
+import { translateNumber } from '@/utils/translateNumber';
 
 const personalInfoSchema = z.object({
   firstName: z.string().min(1, 'نام نباید خالی باشد.'),
@@ -107,7 +108,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
             <Label className="block">شماره تماس</Label>
             <Input
               name="phone"
-              value={formData.phone}
+              value={translateNumber(formData.phone)}
               onChange={handleChange}
               className="text-right"
             />
@@ -117,7 +118,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
             <Label className="block">تاریخ تولد</Label>
             <Input
               name="birthDate"
-              value={formData.birthDate}
+              value={translateNumber(formData.birthDate)}
               onChange={handleChange}
               className="text-right"
             />
