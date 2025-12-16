@@ -4,6 +4,8 @@ import Home from "@/pages/Home";
 import Error404 from "@/pages/Error404";
 import Error500 from "@/pages/Error500";
 import ProductListing from "@/components/ProductListing/productListing";
+import LoginForm from "@/pages/Login";
+import Validation from "@/pages/Validation";
 
 export const router = createBrowserRouter([
 	{
@@ -29,11 +31,15 @@ export const router = createBrowserRouter([
 				path: "/products-list",
 				element: <ProductListing />
 			},
-			// {
-			// 	path: "/AboutUs",
-			// 	element: <AboutUs />,
-			// },
-			// {
+			{
+				path: "/login",
+				element: <LoginForm />,
+			},
+			{
+				path: "/verify",
+				element: <Validation />,
+			},
+			
 		],
 	},
 	// {
