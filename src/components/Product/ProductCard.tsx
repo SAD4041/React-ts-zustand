@@ -1,44 +1,70 @@
-import ProductImage from './productCardComponents/ProductImages.tsx';
-import ProductDetails from './productCardComponents/ProductDetails.tsx';
-import SizeSelector from './productCardComponents/SizeSelector.tsx';
-import ColorSelector from './productCardComponents/ColorSelector.tsx';
-import { toPersianDigits } from "../../utils/PersianDigits.tsx";
-import type { Product } from '@/types/productListingTypes';
-
-interface ProductCardProps {
-  product: Product;
-}
+import React, { useState, useEffect } from "react";
+import ProductImage from "./productCardComponents/ProductImages";
+import ProductDetails from "./productCardComponents/ProductDetails";
+import SizeSelector from "./productCardComponents/SizeSelector";
+import ColorSelector from "./productCardComponents/ColorSelector";
+import { toPersianDigits } from "../../utils/PersianDigits";
+import type { ProductCardProps } from "@/types/productCardTypes";
+import { Heart } from "lucide-react";
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  return (
-<div className="w-full max-w-[220px] bg-white rounded-xl shadow-sm overflow-hidden transition hover:shadow-md border border-gray-100 p-2 flex flex-col">
-      <div className="flex-shrink-0 mb-2">
-        <ProductImage
-          key={product.id}
-          imageUrl={product.image}
-          discount={product.discount ?? 0}
-        />
-      </div>
+    const [isWishlisted, setIsWishlisted] = useState(false);
 
-      <div className="flex-grow overflow-hidden">
-        <ProductDetails product={product} />
-      </div>
+    useEffect(() => {
+        const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+        setIsWishlisted(wishlist.includes(product.id));
+    }, [product.id]);
 
-      <div className="mt-0 ">
-        <SizeSelector product={product} />
-      </div>
+    const handleToggleWishlist = () => {
+        const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+        let newWishlist: number[];
 
-      <div dir='rtl' className="mt-1 flex items-center justify-between text-[10px] ">
-        <ColorSelector product={product} />
-        {product.stock < 10 && (
-          <p className="text-[#FE621F] font-medium truncate">
-           ⚠️ تنها  {toPersianDigits(product.stock.toString())} عدد باقی مانده 
-          </p>
-        )}
-        
-      </div>
-    </div>
-  );
+        if (isWishlisted) {
+            newWishlist = wishlist.filter((id: number) => id !== product.id);
+        } else {
+            newWishlist = [...wishlist, product.id];
+        }
+
+        localStorage.setItem("wishlist", JSON.stringify(newWishlist));
+        setIsWishlisted(!isWishlisted);
+    };
+
+    return (
+        <div className="
+        w-full bg-card rounded-xl shadow-sm border border-border
+        p-3 flex flex-col gap-3 transition hover:shadow-md relative
+        ">
+            <button
+                onClick={handleToggleWishlist}
+                className="absolute top-2 right-2 z-10 p-1 bg-background rounded-full"
+                aria-label={isWishlisted ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
+            >
+                <Heart
+                    className={`w-5 h-5 transition-colors ${isWishlisted
+                        ? "fill-primary text-primary"
+                        : "fill-none text-muted-foreground"
+                        }`}
+                />
+            </button>
+
+            <ProductImage imageUrl={product.image} discount={product.discount} />
+            <ProductDetails product={product} />
+            <SizeSelector product={product} />
+
+            <div
+                dir="rtl"
+                className="flex flex-wrap items-center justify-between gap-2 text-xs"
+            >
+                <ColorSelector product={product} />
+
+                {product.stock < 10 && (
+                    <p className="text-primary font-medium whitespace-normal leading-tight">
+                        ⚠️ تنها {toPersianDigits(product.stock.toString())} عدد باقی مانده
+                    </p>
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default ProductCard;

@@ -1,23 +1,35 @@
 import React, { useRef, useState, useEffect } from 'react';
 import SubCategoryCard from './SubCategoryCard';
-import { subCategories } from '@/data/data';
+import { subCategories } from '@/data/productListingData';
+import LeftScroll from '../icon loader/leftscroll';
+import RightScroll from '../icon loader/rightscroll';
 
 const SubCategorySlider: React.FC = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true); 
-
-  useEffect(() => {
-    updateScrollButtons();
-  }, []);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [isScrollable, setIsScrollable] = useState(false);
 
   const updateScrollButtons = () => {
     if (!sliderRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
     const maxScroll = scrollWidth - clientWidth;
-    setCanScrollLeft(scrollLeft > 0);
-    setCanScrollRight(scrollLeft < maxScroll - 1);
+
+    const scrollable = scrollWidth > clientWidth;
+    setIsScrollable(scrollable);
+
+    if (scrollable) {
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < maxScroll - 1);
+    } else {
+      setCanScrollLeft(false);
+      setCanScrollRight(false);
+    }
   };
+
+  useEffect(() => {
+    updateScrollButtons();
+  }, []);
 
   const scroll = (direction: 'left' | 'right') => {
     if (!sliderRef.current) return;
@@ -35,39 +47,41 @@ const SubCategorySlider: React.FC = () => {
 
   return (
     <div className="relative mb-6">
-      <button
-        onClick={() => scroll('left')}
-        disabled={!canScrollLeft}
-        className={`absolute left-0 top-1/2 z-10 p-2 bg-white rounded-full shadow-md transition ${
-          !canScrollLeft ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'
-        }`}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
+      {isScrollable && (
+        <button
+          onClick={() => scroll('left')}
+          disabled={!canScrollLeft}
+          className={`absolute left-0 top-1/2 z-10 p-2 bg-background rounded-full shadow-md transition-colors ${!canScrollLeft
+            ? 'opacity-50 cursor-not-allowed text-muted-foreground'
+            : 'text-foreground hover:bg-muted'
+            }`}
+        >
+          <LeftScroll />
+        </button>
+      )}
 
       <div
         ref={sliderRef}
         onScroll={updateScrollButtons}
         className="flex items-start space-x-10 space-x-reverse overflow-x-auto py-3 px-6 hide-scrollbar gap-6"
       >
-        {subCategories.map(cat => (
+        {subCategories.map((cat) => (
           <SubCategoryCard key={cat.id} category={cat} />
         ))}
       </div>
 
-      <button
-        onClick={() => scroll('right')}
-        disabled={!canScrollRight}
-        className={`absolute right-0 top-1/2 transform -translate-y-1/2 z-10 p-2 bg-white rounded-full shadow-md transition ${
-          !canScrollRight ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'
-        }`}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
+      {isScrollable && (
+        <button
+          onClick={() => scroll('right')}
+          disabled={!canScrollRight}
+          className={`absolute right-0 top-1/2 z-10 p-2 bg-background rounded-full shadow-md transition-colors ${!canScrollRight
+            ? 'opacity-50 cursor-not-allowed text-muted-foreground'
+            : 'text-foreground hover:bg-muted'
+            }`}
+        >
+          <RightScroll />
+        </button>
+      )}
     </div>
   );
 };
