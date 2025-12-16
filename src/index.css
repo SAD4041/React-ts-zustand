@@ -12,6 +12,27 @@ body {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+.text-link {
+  color: var(--link);
+  text-decoration: none;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+.text-link:hover {
+  text-decoration-thickness: 2px;
+  opacity: 0.9;
+}
+.vazir {
+		font-family: "Vazir", sans-serif;
+	}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 
 @layer utilities {
   .rtl {
@@ -27,7 +48,7 @@ body {
 }
 
 :root {
-  font-family: "Vazirmatn", sans-serif;
+  font-family: "Vazir","Vazirmatn", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -68,6 +89,8 @@ body {
   --border: oklch(0.92 0 0);
   --input: oklch(0.94 0 0);
   --ring: oklch(0.72 0.19 35 / 0.3);
+  --form-ring: oklch(46.849% 0.30212 264.226);
+  --card: #F6F6F6;
 
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -92,6 +115,14 @@ body {
 
   --yellow: oklch(0.87 0.17 100);
   --yellow-foreground: oklch(0.2 0 0);
+
+  --text:  oklch(0.45 0 0);
+  --card-text: white;
+  --titr:  oklch(0.25 0 0);
+  /* --special-titr: ; */
+
+  --bg-section1: #ED775A;
+  --bg-section2: #E4004B;
 }
 
 @theme inline {
@@ -118,6 +149,7 @@ body {
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-card: var(--card);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -133,6 +165,13 @@ body {
   --color-sidebar-ring: var(--sidebar-ring);
   --color-yellow: var(--yellow);
   --color-yellow-foreground: var(--yellow-foreground);
+  --color-text: var(--text);
+  --color-card-text: var(--card-text);
+  --color-titr: var(--titr);
+  --color-form-ring: var(--form-ring);
+  --color-bg-section1: var(--bg-section1);
+  --color-bg-section2: var(--bg-section2);
+  
 }
 
 .dark {
@@ -176,6 +215,7 @@ body {
   --header-bg-blur: oklch(0.18 0 0);
   --ring-primary-subtle: oklch(0.3 0.1 35);
 }
+
 
 @layer base {
   * {

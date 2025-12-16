@@ -1,18 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
-import Landing from "@/pages/Landing";
-import ProductList from "@/pages/ProductListing"; // کاما اضافه شد
-//import Temp from "@/pages/Temp";
+import LoginLayout from "@/layouts/PublicLayout/LoginLayout";
+import Home from "@/pages/Home";
 import Error404 from "@/pages/Error404";
 import Error500 from "@/pages/Error500";
-// فرض می‌کنیم کامپوننت‌های کامنت شده نیز وجود دارند و آن‌ها را وارد می‌کنیم.
-// import PrivateLayout from "@/layouts/PrivateLayout/PrivateLayout";
-// import AnotherLayout from "@/layouts/AnotherLayout/AnotherLayout";
-// import EditProfile from "@/pages/EditProfile";
-// import DashBoard from "@/pages/DashBoard";
-// import Login from "@/pages/Login";
-// import AboutUs from "@/pages/AboutUs";
-
+import ProductListing from "@/components/ProductListing/productListing";
+import LoginForm from "@/pages/Login";
+import Validation from "@/pages/Validation";
+import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 
 export const router = createBrowserRouter([
     {
@@ -24,51 +19,54 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Landing />,
+                element: <Home />
             },
-            {
-                path: "/temp",
-//                element: <Temp />,
-            },
-            {
-                path: "/productList",
-                element: <ProductList/>
-            },
-            // شیء مسیریابی زیر برای /error500 اصلاح شد و در داخل آرایه children قرار گرفت
             {
                 path: "/error500",
                 element: <Error500 />
             },
-            // {
-            //  path: "/AboutUs",
-            //  element: <AboutUs />,
-            // },
+            {
+                path: "/products-list",
+                element: <ProductListing />
+            },
+
         ],
     },
-    // {
-    //  element: <PrivateLayout />,
-    //  children: [
-    //      {
-    //          path: "/EditProfile",
-    //          element: <EditProfile />,
-    //      },
-    //      {
-    //          path: "/DashBoard",
-    //          element: <DashBoard />,
-    //      },
-    //  ],
-    // },
-    // {
-    //  element: <AnotherLayout />,
-    //  children: [
-    //      {
-    //          path: "/login",
-    //          element: <Login />,
-    //      },
-    //      {
-    //          path: "/temp",
-    //          element: <Temp />,
-    //      },
-    //  ],
-    // },
+
+    {
+        path: "/login",
+        element: <LoginLayout />,
+        errorElement: (
+            <Error404 />
+        ),
+        children: [
+            {
+                index: true,
+                element: <LoginForm />,
+            },
+            {
+                path: "/login/verify",
+                element: <Validation />,
+            },
+        ],
+    },
+    {
+        path: "/dash",
+        element: <SidebarLayout />,
+        errorElement: <Error404 />,
+        children: [
+            // {
+            //     index: true,
+            //     element: <DashboardHome />,
+            // },
+            // {
+            //     path: "profile",
+            //     element: <Profile />,
+            // },
+            // {
+            //     path: "settings",
+            //     element: <Settings />,
+            // },
+        ],
+    }
 ]);
