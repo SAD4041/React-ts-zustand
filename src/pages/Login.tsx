@@ -61,7 +61,7 @@ const LoginForm: React.FC = () => {
             imageSrc: SUCCESS_CAT
           });
         } else {
-          navigate('/verify', { state: { phone: values.phone } });
+          navigate('/login/verify', { state: { phone: values.phone } });
         }
       } else {
         setModalConfig({

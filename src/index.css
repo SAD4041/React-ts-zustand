@@ -104,17 +104,12 @@
   --yellow-foreground: oklch(0.2 0 0);
 
   --text:  oklch(0.45 0 0);
-<<<<<<< HEAD
   --card-text: white;
   --titr:  oklch(0.25 0 0);
   /* --special-titr: ; */
 
   --bg-section1: #ED775A;
   --bg-section2: #E4004B;
-=======
-  --titr:  oklch(0.25 0 0);
-  /* --special-titr: ; */
->>>>>>> feat/login-signUp
 }
 
 @theme inline {

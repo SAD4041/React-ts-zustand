@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
+import LoginLayout from "@/layouts/PublicLayout/LoginLayout";
 import Home from "@/pages/Home";
 import Error404 from "@/pages/Error404";
 import Error500 from "@/pages/Error500";
@@ -11,9 +12,7 @@ export const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <PublicLayout />,
-		errorElement: (
-			<Error404 />
-		),
+		
 		children: [
 			// {
 			// 	path: "/temp",
@@ -31,41 +30,25 @@ export const router = createBrowserRouter([
 				path: "/products-list",
 				element: <ProductListing />
 			},
-			{
-				path: "/login",
-				element: <LoginForm />,
-			},
-			{
-				path: "/verify",
-				element: <Validation />,
-			},
 			
 		],
 	},
-	// {
-	// 	element: <PrivateLayout />,
-	// 	children: [
-	// 		{
-	// 			path: "/EditProfile",
-	// 			element: <EditProfile />,
-	// 		},
-	// 		{
-	// 			path: "/DashBoard",
-	// 			element: <DashBoard />,
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	element: <AnotherLayout />,
-	// 	children: [
-	// 		{
-	// 			path: "/login",
-	// 			element: <Login />,
-	// 		},
-	// 		{
-	// 			path: "/temp",
-	// 			element: <Temp />,
-	// 		},
-	// 	],
-	// },
+
+	{
+		path: "/login",
+		element: <LoginLayout />,
+		errorElement: (
+			<Error404 />
+		),
+		children: [
+			{
+				index: true,
+				element: <LoginForm />,
+			},
+			{
+				path: "/login/verify",
+				element: <Validation />,
+			},
+		],
+	},
 ]);

@@ -116,6 +116,10 @@ const Validation: React.FC = () => {
     try {
       const result = await checkPhone(phone);
       if (result.success) {
+
+        const otpCode = result.data?.message;
+        console.log('OTP Code:', otpCode);
+        
         setModalConfig({
           isOpen: true,
           title: 'ارسال مجدد',
@@ -290,6 +294,7 @@ const Validation: React.FC = () => {
           <DialogFooter className="sm:justify-center">
             <Button
               type="button"
+              variant='dialog'
               onClick={modalConfig.onButtonClick}
               className="w-full sm:w-auto min-w-[220px] cursor-pointer"
             >
