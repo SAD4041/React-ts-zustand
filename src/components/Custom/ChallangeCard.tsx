@@ -252,7 +252,7 @@ export default function ChallengeCard({
           </div>
 
           {/* لایک و اشتراک */}
-          <div className="flex items-center gap-3">
+          {/* <div className="flex items-center gap-3">
             <CustomBtn onClick={toggleLike}>
               <ThumbsUp className={`h-4 w-4 ${isLiked ? "fill-white" : ""}`} />
               <span>{likes}</span>
@@ -261,7 +261,7 @@ export default function ChallengeCard({
             <CustomBtn onClick={handleShare}>
               <Share className="h-4 w-4" />
             </CustomBtn>
-          </div>
+          </div> */}
         </div>
       </div>
     </Card>

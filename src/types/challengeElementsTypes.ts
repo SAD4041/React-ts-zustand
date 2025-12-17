@@ -1,4 +1,5 @@
-import type { UserProfile } from "@/types/userTypes";
+import type { FetchedUserProfile, UserProfile } from "@/types/userTypes";
+import type { ChallengeCategoryType } from "@/types/challengeCreateTypes";
 
 export interface DateAndLocationInputProps {
   challengeDate: string;
@@ -33,7 +34,7 @@ export interface DateAndLocationProps {
 }
 
 export interface ImageContainerWithShadowProps {
-  imageUrl: string;
+  imageUrl: string | undefined;
 }
 
 export interface LikeSaveButtonsProps {
@@ -72,6 +73,23 @@ export interface ChallengeData {
   members: UserProfile[];
 }
 
+export interface ChallengeDataDetails {
+  title: string;
+  description: string;
+  dateRange: string;
+  location: string;
+  Img: string | null;
+  commentsEnabled: boolean;
+  categories: string[];
+  type: string;
+  memberCount: string;
+  participants: FetchedUserProfile[];
+  like_count: number;
+  start_time: string;
+  end_time: string;
+  visibility: string;
+}
+
 export interface UserCardListProps {
   users: UserProfile[];
   searchTerm: string;
@@ -80,6 +98,20 @@ export interface UserCardListProps {
   disabled?: boolean; // NEW: disables all add buttons
 }
 
+export interface CategorySelectEditProps {
+  categories: ChallengeCategoryType[];
+  loading?: boolean;
+  selectedCategory: string;
+  onCategoryChange: (name: string) => void;
+}
+
+export interface FormValues {
+  startDate: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
+  location: string;
+}
 
 export interface ChallengeUserCardProps {
   id: string;
@@ -90,7 +122,13 @@ export interface ChallengeUserCardProps {
   followingCount: number;
   doneChallengesCount: number;
   onDelete: (id: string, username: string) => void;
-  onAdd?: () => void;                
+  onAdd?: () => void;
   isOwner: boolean;
   className: string;
+}
+
+
+export interface TitleAndDescriptionFormValues {
+  challengeTitle: string;
+  challengeDescription: string;
 }

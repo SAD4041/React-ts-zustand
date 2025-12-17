@@ -175,6 +175,15 @@
   .rounded-xl {
     border-radius: 12.5px;
   }
+  .bg-light-blue-challengestats {
+    background-color: rgba(56, 114, 221, 0.06);
+  }
+  .bg-light-orange {
+    background-color: #fff8f5;
+  }
+  .bg-calendar {
+    background-color: #ffebe3;
+  }
 }
 @font-face {
   font-family: "Peyda";
@@ -216,7 +225,7 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: #ff7700;
   --primary-hover: #ffca9b;
-  --primary-picture-background : #FFF1E5;
+  --primary-picture-background: #fff1e5;
   --secondary: #3871dd;
   --secondary-hover: #6c96e6;
   --error: #c30025;
@@ -257,8 +266,11 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --rightFeeling: #00cf8b;
+  --leftFeeling: #e01507;
   --shadow-button: 0 4px 0 #461f06;
   --shadow-button-active: 0px 2px 2px #a08060;
+  --shadow-card: 4px 4px 0px 0px rgba(0, 0, 0, 1);
   --walking-man-width: 233px;
   --walking-man-height: 320px;
   --title-size: 30px;
@@ -267,7 +279,13 @@
   --login-from-h: 410px;
   --login-from-w: 420px;
   --shadow-strong: 3px 3px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-light: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-medium: 2px 2px 0px 0px rgba(0, 0, 0, 1);
   --save-color: #fffbbb;
+  --side-page: 24px;
+  --top-page: 20px;
+  --comment-gap: 10px;
+  --profpic: 50px;
 }
 
 @theme inline {
@@ -331,11 +349,16 @@
   --color-disable: var(--disable);
   --color-neutral-gray: var(--neutral-gray);
   --color-neutral-gray-bold: var(--neutral-gray-bold);
-  --color-primary-picture-background : var(--primary-picture-background);
+  --color-primary-picture-background: var(--primary-picture-background);
+  --color-rightFeeling: var(--rightFeeling);
+  --color-leftFeeling: var(--leftFeeling);
   --color-save-color : var(--save-color);
   --shadow-shadow-strong: var(--shadow-strong);
+  --shadow-shadow-light: var(--shadow-light);
+  --shadow-shadow-medium: var(--shadow-medium);
   --shadow-button: var(--shadow-button);
   --shadow-button-active: var(--shadow-button-active);
+  --shadow-card: var(--shadow-card);
   --text-title: var(--title-size);
   --text-profile-paragraph-size: var(--profile-paragraph-size);
   --text-profile-title-size: var(--profile-title-size);

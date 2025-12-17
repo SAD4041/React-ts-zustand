@@ -1,101 +1,59 @@
 // components/ChallengeManagement/create/CreationStepTwo.tsx
 import React from "react";
-import { Search } from "lucide-react";
 import CustomInput from "@/components/Custom/CustomInput";
 import CustomSelect from "@/components/Custom/CustomDropList";
 import CustomCheckbox from "@/components/Custom/CustomCheckbox";
-import AllSelectedCategoryTag from "@/components/Custom/selectedCategoryTags";
 import { Field } from "formik";
 import type { FieldProps } from "formik";
-import type { StepTwoProps } from "@/types/challengeCreateTypes";
-
-interface Step2DetailsProps extends StepTwoProps {
-  onCategoriesChange: (categories: string[]) => void;
-  errors?: {
-    selectedCategories?: string;
-    startDate?: string;
-    startTime?: string;
-    endDate?: string;
-    endTime?: string;
-    challengeLocation?: string;
-  };
-  touched?: {
-    selectedCategories?: boolean;
-    startDate?: boolean;
-    startTime?: boolean;
-    endDate?: boolean;
-    endTime?: boolean;
-    challengeLocation?: boolean;
-  };
-}
+import type { Step2DetailsProps } from "@/types/challengeCreateTypes";
 
 const Step2Details: React.FC<Step2DetailsProps> = ({
-  selectedCategories,
-  onCategoriesChange,
-  categorySearch,
-  setCategorySearch,
-  filteredCategories,
+  categories,
+  loadingCategories = false,
   values,
   setFieldValue,
   errors,
   touched,
 }) => {
-  const handleRemoveCategory = (categoryToRemove: string) => {
-    onCategoriesChange(selectedCategories.filter((c) => c !== categoryToRemove));
-  };
+  if (loadingCategories) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-gray-text">
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-gray-400 border-r-transparent align-[-0.125em]" 
+             role="status" 
+             aria-label="در حال بارگذاری">
+          <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+            Loading...
+          </span>
+        </div>
+        <p className="mt-4">در حال بارگذاری...</p>
+      </div>
+    );
+  }
+
+  if (!categories?.length) {
+    return (
+      <div className="text-center py-12 text-error">
+        دسته‌بندی موجود نیست
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full max-w-xl mt-7 mb-5 space-y-8">
-      {/* دسته‌بندی */}
-      <div>
-        <div className="relative">
-          <CustomInput
-            name="category"
-            type="text"
-            label="دسته"
-            value={categorySearch}
-            onChange={(e) => setCategorySearch(e.target.value)}
-            className="w-full p-3 pr-10 border rounded-primary-radius focus:ring-2 outline-none text-right"
-          />
-          <Search className="absolute right-3 top-10 -translate-y-1/2 text-gray-text w-5 h-5 pointer-events-none" />
-        </div>
-
-        {categorySearch && filteredCategories.length > 0 && (
-          <div className="mt-2 border rounded-md bg-white shadow-lg max-h-48 overflow-y-auto z-10">
-            {filteredCategories.map((cat) => (
-              <div
-                key={cat}
-                onClick={() => {
-                  onCategoriesChange([...selectedCategories, cat]);
-                  setCategorySearch("");
-                }}
-                className="px-4 py-2 cursor-pointer text-sm text-right"
-              >
-                {cat}
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div className="flex flex-wrap gap-2 mt-3">
-          {selectedCategories.map((cat) => (
-            <AllSelectedCategoryTag
-              key={cat}
-              category={cat}
-              onRemove={handleRemoveCategory}
-            />
-          ))}
-        </div>
-
-        {/* فقط یک بار خطا نمایش بده — اینجا! */}
-        {touched?.selectedCategories && errors?.selectedCategories && (
-          <p className="mt-2 text-sm text-error text-right">
-            {errors.selectedCategories}
-          </p>
-        )}
+    <div className="w-full max-w-xl mt-7 mb-5 space-y-10">
+      {/* دسته‌بندی چالش */}
+      <div className="space-y-3">
+        <CustomSelect
+          name="selectedCategory"
+          label="دسته بندی چالش"
+          options={categories.map((cat) => ({
+            value: cat.name,
+            label: cat.name,
+          }))}
+          error={touched.selectedCategory && errors.selectedCategory} // ← خطا رو به کامپوننت پاس می‌دیم
+        />
       </div>
 
-      {/* تاریخ و ساعت */}
+      {/* تاریخ و ساعت شروع و پایان */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field name="startDate">
           {({ field, meta }: FieldProps) => (
@@ -142,12 +100,12 @@ const Step2Details: React.FC<Step2DetailsProps> = ({
         </Field>
       </div>
 
-      {/* مکان */}
+      {/* مکان چالش */}
       <Field name="challengeLocation">
         {({ field, meta }: FieldProps) => (
           <CustomInput
             {...field}
-            label="مکان "
+            label="مکان چالش"
             error={meta.touched && meta.error}
           />
         )}
@@ -165,13 +123,15 @@ const Step2Details: React.FC<Step2DetailsProps> = ({
         />
       </div>
 
-      {/* کامنت‌ها */}
-      <div className="mt-6">
+      {/* چک‌باکس کامنت‌ها */}
+      <div className="mt-6 flex justify-end">
         <CustomCheckbox
           name="isCommentsEnabled"
           labelText="اجازه دادن به کامنت‌ها"
           checked={values.isCommentsEnabled}
-          onChange={() => setFieldValue("isCommentsEnabled", !values.isCommentsEnabled)}
+          onChange={() =>
+            setFieldValue("isCommentsEnabled", !values.isCommentsEnabled)
+          }
         />
       </div>
     </div>

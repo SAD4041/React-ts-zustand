@@ -1,7 +1,45 @@
 // src/services/challengeService.ts
-
+import type { Payload } from "@/types/payloadChallengeService";
 import { getData, postData, putData, deleteData } from "./services";
-import type { UserProfile } from "@/types/userTypes";
+import { getUserById } from "./userService";
+
+export const createChallenge = async (payload: Payload) => {
+import CustomToast from "@/components/Custom/CustomToast";
+import type { ChallengeCategoryType } from "@/types/challengeCreateTypes";
+
+let cachedCategories: ChallengeCategoryType[] | null = null;
+
+export const fetchChallengeCategories = async (): Promise<
+  ChallengeCategoryType[]
+> => {
+  if (cachedCategories) return cachedCategories;
+
+  try {
+    const response = await getData({
+      endPoint: "/api/v1/challenges/categories",
+    });
+
+    const raw = response?.data || response;
+    const list = Array.isArray(raw) ? raw : raw?.data || [];
+
+    const categories: ChallengeCategoryType[] = list.map((item: any) => ({
+      id: Number(item.ID),
+      name: item.Name || "Unknown",
+    }));
+
+    cachedCategories = categories;
+    return categories;
+  } catch (error) {
+    console.error("Failed to fetch categories:", error);
+    CustomToast("خطا در دریافت دسته‌بندی‌ها", "error");
+    cachedCategories = [];
+    return [];
+  }
+};
+
+// ================================
+// Create Challenge
+// ================================
 
 export const createChallenge = async (payload: {
   title: string;
@@ -28,17 +66,25 @@ export const createChallenge = async (payload: {
   }
 };
 
+// ================================
+// Fetch Challenge by ID
+// ================================
+
 export const fetchChallengeById = async (challengeId: string | number) => {
   try {
     const response = await getData({
       endPoint: `/api/v1/challenges/${challengeId}`,
     });
-    return response.data; // اطلاعات کامل چالش
+    return response.data;
   } catch (error) {
     console.error("Failed to fetch challenge:", error);
     throw error;
   }
 };
+
+// ================================
+// Update Challenge
+// ================================
 
 export const updateChallenge = async (
   challengeId: string | number,
@@ -64,6 +110,10 @@ export const updateChallenge = async (
   }
 };
 
+// ================================
+// Remove Participant
+// ================================
+
 export const removeParticipantFromChallenge = async (
   challengeId: string | number,
   participantId: string | number
@@ -83,6 +133,10 @@ export const removeParticipantFromChallenge = async (
   }
 };
 
+// ================================
+// Invite Single User
+// ================================
+
 export const inviteUserToChallenge = async (
   challengeId: number | string,
   inviteeId: number | string
@@ -99,15 +153,26 @@ export const inviteUserToChallenge = async (
     });
     return response;
   } catch (error) {
-    console.error(`Failed to invite user ${inviteeId} to challenge ${challengeId}:`, error);
+    console.error(
+      `Failed to invite user ${inviteeId} to challenge ${challengeId}:`,
+      error
+    );
     throw error;
   }
 };
+
+// ================================
+// Invite Multiple Users
+// ================================
 
 export const inviteMultipleUsersToChallenge = async (
   challengeId: number | string,
   userIds: (number | string)[]
 ) => {
+  console.log("challengeId: ", challengeId);
+
+  console.log("ids: ", userIds);
+
   const promises = userIds.map((userId) =>
     inviteUserToChallenge(challengeId, userId).catch((err) => ({
       userId,
@@ -128,8 +193,8 @@ export const inviteMultipleUsersToChallenge = async (
         typeof reason === "object" && reason?.error
           ? reason.error
           : typeof reason === "string"
-          ? reason
-          : "Unknown error";
+            ? reason
+            : "Unknown error";
 
       return {
         userId: userIds[index],
@@ -138,4 +203,107 @@ export const inviteMultipleUsersToChallenge = async (
       };
     }
   });
+};
+export const joinPublicChallenge = async (challengeId: number) => {
+  try {
+    const response = await postData({
+      endPoint: `/api/v1/challenges/${challengeId}/join`,
+      data: {},
+    });
+    return response.data;
+  } catch (error) {
+    throw Error("could not join the challenge");
+  }
+};
+export const joinPrivateChallenge = async (challengeId: number) => {
+  try {
+    const response = await postData({
+      endPoint: `/api/v1/challenges/${challengeId}/request`,
+      data: {},
+    });
+    return response.data;
+  } catch (error) {
+    throw Error("could not join the challenge");
+  }
+};
+
+export const leaveChallenge = async (challengeId: number) => {
+  try {
+    const response = await postData({
+      endPoint: `/api/v1/challenges/${challengeId}/leave`,
+      data: {},
+    });
+    return response.data;
+  } catch (error) {
+    throw Error("could not join the challenge");
+  }
+};
+
+export const showRequestingUsers = async (challengeId: number) => {
+  try {
+    const response = await getData({
+      endPoint: `/api/v1/challenges/${challengeId}/requests`,
+    });
+    console.log("data: ", response.data);
+
+    const userIds = response.data
+      .filter((req) => req.Status == "pending")
+      .map((req) => [req.RequesterID, req.ID]);
+    const users = [];
+    for (let [reqester, req] of userIds) {
+      const user = await getUserById(reqester);
+      users.push({ user: user, requestId: req });
+    }
+    console.log("users: ", users);
+    return users;
+  } catch (error) {
+    throw Error("could not join the challenge");
+  }
+};
+
+export const acceptReq = async (requestId: number) => {
+  try {
+    const response = await postData({
+      endPoint: `/api/v1/challenges/requests/${requestId}/accept`,
+      data: {},
+    });
+    return response.data;
+  } catch (error) {
+    throw Error("could not join the challenge");
+  }
+};
+export const deleteReq = async (requestId: number) => {
+  try {
+    const response = await postData({
+      endPoint: `/api/v1/challenges/requests/${requestId}/decline`,
+      data: {},
+    });
+    return response.data;
+  } catch (error) {
+    throw Error("could not join the challenge");
+  }
+};
+
+// export const fetchChallengeById = async (challengeId: string | number) => {
+//   try {
+//     const response = await getData({
+//       endPoint: `/api/v1/challenges/${challengeId}`,
+//     });
+//     return response.data; // اطلاعات کامل چالش
+//   } catch (error) {
+//     console.error("Failed to fetch challenge:", error);
+//     throw error;
+//   }
+// };
+export const dateLocationDefaultValues = {
+  startDate: "",
+  startTime: "",
+  endDate: "",
+  endTime: "",
+  location: "",
+};
+
+export const titleAndDescriptionDefaultValues = {
+  challengeTitle: "",
+  challengeDescription: "",
 };

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ProfileBody from "./ProfileBody";
 import useUserStore from "@/store/userStore/userStore";
 import ProfileHeader from "./ProfileHeader/ProfileHeader";
+import BottomNav from "../Custom/BottomNav";
 
 const DashBoard: React.FC = () => {
-  const [selectedPage, setSelectedPage] = useState("post");
   const { userId } = useUserStore(); // کاربر لاگین شده
   const navigate = useNavigate();
   const params = useParams<{ userId: string }>();
@@ -16,7 +16,15 @@ const DashBoard: React.FC = () => {
     if (!userId) {
       navigate("/");
     }
+
+    return () => {
+      document.removeEventListener("dblclick", preventZoom);
+    };
   }, [userId, navigate]);
+
+  const preventZoom = (e: MouseEvent) => {
+    e.preventDefault();
+  };
 
   if (!userId) return <p dir="rtl">در حال بارگذاری...</p>;
 
@@ -27,12 +35,21 @@ const DashBoard: React.FC = () => {
   const isOwner = profileId === userId;
 
   return (
-    <>
+    <div
+      className="min-h-screen"
+      style={{
+        touchAction: "pan-y", // جلوگیری از زوم پینچ در موبایل
+        maxWidth: "100vw",
+        overflowX: "hidden",
+      }}
+    >
       <ProfileHeader userId={profileId} isOwner={isOwner} />
       <ProfileBody />
-      {/* <ProfileHeader userId={profileId} isOwner={isOwner} />
-      <ProfileBody userId={profileId} /> */}
-    </>
+      <div className="mt-20 h-fit"
+       dir="rtl">
+        <BottomNav />
+      </div>
+    </div>
   );
 };
 

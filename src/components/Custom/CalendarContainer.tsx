@@ -4,12 +4,23 @@ import arrowRight from "@/assets/Img/Icon/ArrRight.svg";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { CalendarDayProps } from "@/types/calendarDay";
+import { set } from "react-hook-form";
 
 export interface CalendarContainerProps {
   arr2: CalendarDayProps[]; // or DateObject[] if you have your own type
+  setPercentage: (percentage: number) => void;
+  classname?: string;
+  setUp: (up: number) => void;
+  freq: number;
 }
 
-const CalendarContainer = ({ arr2 }: CalendarContainerProps) => {
+const CalendarContainer = ({
+  arr2,
+  setPercentage,
+  classname,
+  setUp,
+  freq,
+}: CalendarContainerProps) => {
   const [day, setDay] = useState<number | null>(null);
   const [startDay, setStartDay] = useState(arr2[0].day);
   const [currentDays, setCurrenctDays] = useState<CalendarDayProps[]>(() =>
@@ -35,6 +46,22 @@ const CalendarContainer = ({ arr2 }: CalendarContainerProps) => {
     }
     return [];
   }
+  useEffect(() => {
+    if (day === null) {
+      let sum = 0;
+      let count = 0;
+      for (let x of currentDays) {
+        sum += x.percentage;
+        if (x.percentage == 100) count++;
+      }
+      setUp(count);
+      setPercentage(Math.floor((count * 100) / 7));
+      return;
+    }
+    for (let x of currentDays) {
+      if (x.day == day) setPercentage(x.percentage);
+    }
+  }, [day, currentDays]);
 
   const goNext = () => {
     if (isAnimating) return;
@@ -75,7 +102,12 @@ const CalendarContainer = ({ arr2 }: CalendarContainerProps) => {
   };
 
   return (
-    <div className="relative flex items-center overflow-hidden justify-between bg-[#FFEBE3] mx-2 rounded-[8px] h-[90px] my-[100px] py-3 border-2 border-black">
+    <div
+      className={cn(
+        "relative flex items-center overflow-hidden justify-between bg-calendar  rounded-xl h-[90px] py-3 border-2 border-black",
+        classname
+      )}
+    >
       {/* Arrows */}
       <img
         onClick={goPrev}

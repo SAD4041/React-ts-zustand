@@ -1,0 +1,26 @@
+<svg width="27" height="36" viewBox="0 0 27 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.7327 22.4673L15.1041 24.3176L8.25788 35.5901L6.29287 31.4241L11.7327 22.4673Z" fill="#CE4444"/>
+<path d="M11.7327 22.4673L8.36131 20.6169L1.51511 31.8894L6.29287 31.4241L11.7327 22.4673Z" fill="#983535"/>
+<path d="M16.5425 22.4673L13.1711 24.3176L20.0173 35.5901L21.9823 31.4241L16.5425 22.4673Z" fill="#983535"/>
+<path d="M16.5425 22.4673L19.9139 20.6169L26.7601 31.8894L21.9823 31.4241L16.5425 22.4673Z" fill="#CE4444"/>
+<path d="M14.0346 3.17212C20.6968 3.17233 26.141 8.31289 26.141 14.7063C26.1408 21.0996 20.6966 26.2393 14.0346 26.2395C7.37233 26.2395 1.92733 21.0997 1.92715 14.7063C1.92715 8.31276 7.37222 3.17212 14.0346 3.17212Z" fill="url(#paint0_linear_1231_7124)" stroke="#765C00"/>
+<ellipse cx="14.0342" cy="14.7062" rx="9.06033" ry="8.61293" fill="#A88300"/>
+<mask id="mask0_1231_7124" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="5" y="6" width="19" height="19">
+<ellipse cx="14.5178" cy="15.6252" rx="9.08142" ry="8.63298" fill="#C28B37"/>
+</mask>
+<g mask="url(#mask0_1231_7124)">
+<ellipse cx="14.0342" cy="14.706" rx="9.08142" ry="8.63298" fill="#C09525"/>
+</g>
+<path d="M14.0831 8.69995L16.0421 12.4245L19.9601 12.89L17.2697 15.7579L18.0011 19.8735L14.0831 18.0112L10.1651 19.8735L10.903 15.7579L8.20615 12.89L12.1241 12.4245L14.0831 8.69995Z" fill="url(#paint1_linear_1231_7124)"/>
+<path d="M2.81115 8.01695L4.08846 5.34463L2.81115 2.67232L5.62228 3.88655L8.43341 2.67232L7.15611 5.34463L8.43341 8.01695L5.62228 6.80272L2.81115 8.01695Z" fill="white"/>
+<defs>
+<linearGradient id="paint0_linear_1231_7124" x1="14.0342" y1="3.67212" x2="14.0342" y2="25.7398" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFC600"/>
+<stop offset="1" stop-color="#FFDE69"/>
+</linearGradient>
+<linearGradient id="paint1_linear_1231_7124" x1="14.0831" y1="8.69995" x2="14.0831" y2="19.8735" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFFCDD"/>
+<stop offset="1" stop-color="#FFE896"/>
+</linearGradient>
+</defs>
+</svg>

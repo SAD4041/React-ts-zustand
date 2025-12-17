@@ -106,7 +106,7 @@ export default function CustomInput({
               {icon && (
                 <div
                   className={`absolute top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer
-                    ${isRTL ? "left-4" : "right-4"}`}
+                    ${"left-4"}`}
                   onClick={onIconClick}
                 >
                   {icon}

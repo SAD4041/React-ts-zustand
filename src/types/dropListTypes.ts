@@ -1,8 +1,9 @@
-export type CustomSelectProps = {
-    label?: string;
-    name: string;
-    options: { value: string; label: string }[];
-    icon?: React.ReactNode;
-    onIconClick?: () => void;
-    width?: string;
-  };
+export interface CustomSelectProps {
+  label?: string;
+  name: string;
+  options: { value: string; label: string }[];
+  icon?: React.ReactNode;
+  onIconClick?: () => void;
+  width?: string;
+  error?: string;
+}

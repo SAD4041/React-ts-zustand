@@ -1,3 +1,5 @@
+import { number } from "yup";
+
 interface Profile {
   id: number;
   name: string;
@@ -18,6 +20,8 @@ export interface ChallengeCardProps {
   isPrivate?: boolean;
   isJoined?: boolean;
   onClick?: () => void; 
+  start_time?: string | number;
+  end_time?: string;
 
   creator?: {
     name: string;

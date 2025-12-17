@@ -1,0 +1,18 @@
+export const mockCalendarDays = [
+  { month: "Jul", day: 12, percentage: 50 },
+  { month: "Jul", day: 13, percentage: 100 },
+  { month: "Jul", day: 14, percentage: 20 },
+  { month: "Jul", day: 15, percentage: 60 },
+  { month: "Jul", day: 16, percentage: 50 },
+  { month: "Jul", day: 17, percentage: 70 },
+  { month: "Jul", day: 18, percentage: 50 },
+  { month: "Jul", day: 19, percentage: 70 },
+  { month: "Jul", day: 20, percentage: 40 },
+  { month: "Jul", day: 21, percentage: 40 },
+  { month: "Jul", day: 22, percentage: 50 },
+  { month: "Jul", day: 23, percentage: 80 },
+  { month: "Jul", day: 24, percentage: 90 },
+  { month: "Jul", day: 25, percentage: 70 },
+  { month: "Jul", day: 26, percentage: 58 },
+  { month: "Jul", day: 27, percentage: 54 },
+];
