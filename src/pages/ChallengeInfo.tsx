@@ -60,8 +60,8 @@ const defaultChallenge: ChallengeDataDetails = {
 const ChallengeInfo: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const challengeId = Number(id);
+  const { challengeId } = useParams();
+  const challenge_Id = Number(challengeId);
   const payload: ChallengeDataDetails =
     (location.state?.challenge as ChallengeDataDetails) ?? defaultChallenge;
 
@@ -125,12 +125,12 @@ const ChallengeInfo: React.FC = () => {
 
   useEffect(() => {
     const fetchChallenge = async () => {
-      const fetchedChallenge = await fetchChallengeById(String(challengeId));
+      const fetchedChallenge = await fetchChallengeById(String(challenge_Id));
       setChallenge(fetchedChallenge);
     };
 
     fetchChallenge();
-  }, [challengeId]);
+  }, [challenge_Id]);
   useEffect(() => {
     const fetchUsers = async () => {
       let users = [];
@@ -186,18 +186,18 @@ const ChallengeInfo: React.FC = () => {
   // }, [isParticipated]);
   const joinChallengeHandler = async () => {
     if (challenge.visibility == "public") {
-      if (challengeId) {
+      if (challenge_Id) {
         try {
-          const data = await joinPublicChallenge(Number(challengeId));
+          const data = await joinPublicChallenge(Number(challenge_Id));
           console.log(data);
         } catch (e) {
           console.log("error: ", e);
         }
       }
     } else if (challenge.visibility == "private") {
-      if (challengeId) {
+      if (challenge_Id) {
         try {
-          const data = await joinPrivateChallenge(Number(challengeId));
+          const data = await joinPrivateChallenge(Number(challenge_Id));
           console.log(data);
         } catch (e) {
           console.log("error: ", e);
@@ -206,9 +206,9 @@ const ChallengeInfo: React.FC = () => {
     }
   };
   const leaveChallengeHandler = async () => {
-    if (challengeId) {
+    if (challenge_Id) {
       try {
-        const data = await leaveChallenge(Number(challengeId));
+        const data = await leaveChallenge(Number(challenge_Id));
         setIsParticipated(false);
         console.log(data);
       } catch (e) {
@@ -305,7 +305,7 @@ const ChallengeInfo: React.FC = () => {
           className="w-full mt-[var(--top-page)]"
           onClick={() => {
             setTimeout(() => {
-              navigate(`/challenge/${challengeId}/posts`);
+              navigate(`/challenge/${challenge_Id}/posts`);
             }, 200);
           }}
         >
