@@ -79,9 +79,9 @@ const ChallengeInfo: React.FC = () => {
     payload as ChallengeDataDetails
   );
   const [participants, setParticipants] = useState<UserProfile[]>([]);
-  const [challengeId, setChallengeId] = useState<string | undefined>(
-    useParams().challengeId
-  );
+  // const [challengeId, setChallengeId] = useState<string | undefined>(
+  //   useParams().challengeId
+  // );
   const [searchTerm, setSearchTerm] = useState("");
   const [likeCount, setLikeCount] = useState(10);
   const [currentSlide, setCurrentSlide] = useState(0);

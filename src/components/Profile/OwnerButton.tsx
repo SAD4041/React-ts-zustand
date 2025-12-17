@@ -54,7 +54,7 @@ const OwnerButton = () => {
                 done.
               </SheetDescription> */}
           </SheetHeader>
-          <div className="grid flex-1 justify-center auto-rows-min gap-6 px-1 mt-6 ">
+          <div className="grid flex-1 justify-center auto-rows-min gap-6 px-1 mt-6 mb-15">
             <CustomButton
               pageAddress="/create-post"
               className="bg-primary hover:bg-primary"

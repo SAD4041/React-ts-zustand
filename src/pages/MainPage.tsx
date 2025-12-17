@@ -30,8 +30,6 @@ import SocialIcon from "@/assets/Icon/Social.svg";
 import { CreatorCard } from "@/components/Custom/CreatorCard";
 import BottomNav from "@/components/Custom/BottomNav";
 
-
-
 function CategoryGrid({
   categories,
 }: {
@@ -307,7 +305,13 @@ export default function HomeScreen() {
                     <HorizontalScroller>
                       {popularChallenges.map((item) => (
                         <div key={item.id} className="w-[280px] shrink-0">
-                          <ChallengeCard {...item} startDate={convertToJalali(item.start_time)} endDate={convertToJalali(item.end_time)} variant="compact" />
+                          <ChallengeCard
+                            {...item}
+                            startDate={convertToJalali(item.start_time)}
+                            endDate={convertToJalali(item.end_time)}
+                            variant="compact"
+                            onClick={() => navigate(`/challenge/${item.id}`)}
+                          />
                         </div>
                       ))}
                     </HorizontalScroller>
@@ -327,7 +331,12 @@ export default function HomeScreen() {
                     <HorizontalScroller>
                       {nearbyChallenges.map((item) => (
                         <div key={item.id} className="w-[280px] shrink-0">
-                          <ChallengeCard {...item} startDate={convertToJalali(item.start_time)} endDate={convertToJalali(item.end_time)} />
+                          <ChallengeCard
+                            {...item}
+                            startDate={convertToJalali(item.start_time)}
+                            endDate={convertToJalali(item.end_time)}
+                            onClick={() => navigate(`/challenge/${item.id}`)}
+                          />
                         </div>
                       ))}
                     </HorizontalScroller>
@@ -362,7 +371,12 @@ export default function HomeScreen() {
                       <HorizontalScroller>
                         {followingChallenges.map((item) => (
                           <div key={item.id} className="w-[280px] shrink-0">
-                            <ChallengeCard {...item} startDate={convertToJalali(item.start_time)} endDate={convertToJalali(item.end_time)}  />
+                            <ChallengeCard
+                              {...item}
+                              startDate={convertToJalali(item.start_time)}
+                              endDate={convertToJalali(item.end_time)}
+                              onClick={() => navigate(`/challenge/${item.id}`)}
+                            />
                           </div>
                         ))}
                       </HorizontalScroller>

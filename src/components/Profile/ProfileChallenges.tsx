@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 import {
   getParticipatingChallengesService,
-  getCreatedChallengesService,
   getMutualFollowersService,
+  searchChallengesService,
 } from "@/services/userService";
 
 import type { Challenge } from "@/types/challengeTypes";
@@ -17,9 +17,13 @@ import { convertToJalali } from "../Custom/ConvertToJalali";
 
 const ProfileChallenges = () => {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
-  const [allChallenges, setAllChallenges] = useState<Challenge[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [checkedCategories, setCheckedCategories] = useState<{
+    [key: number]: boolean;
+  }>({});
+  const [searchQuery, setSearchQuery] = useState("");
+
   const navigate = useNavigate();
 
   const categories = [
@@ -27,13 +31,8 @@ const ProfileChallenges = () => {
     { id: 2, name: "هنری" },
     { id: 3, name: "علمی" },
     { id: 4, name: "تفریحی" },
-    { id: 0, name: "چالش‌های من" },
+    { id: 0, name: "چالش‌های من" }, // فقط UI ـه، سرچ/لیست اینجا طبق خواسته تو فقط participating هست
   ];
-
-  const [checkedCategories, setCheckedCategories] = useState<{
-    [key: number]: boolean;
-  }>({});
-  const [search, setSearch] = useState("");
 
   // ----- تابع گرفتن mutual followers برای یک چالش -----
   const fetchMutualFollowers = async (challengeId: number) => {
@@ -46,24 +45,25 @@ const ProfileChallenges = () => {
     }
   };
 
-  // ----- گرفتن چالش‌هایی که کاربر در آن شرکت کرده -----
-  const fetchChallenges = async () => {
+  const hydrateChallenges = async (list: Challenge[]) => {
+    return Promise.all(
+      list.map(async (ch) => {
+        const mutualFollowers = await fetchMutualFollowers(ch.id);
+        return { ...ch, mutualFollowers };
+      })
+    );
+  };
+
+  // ----- اگر سرچ خالی بود: getParticipatingChallengesService -----
+  const fetchParticipatingChallenges = async () => {
     try {
       setLoading(true);
       setError(null);
 
       const response = await getParticipatingChallengesService();
-      let challengesData = response;
+      const data = await hydrateChallenges(response);
 
-      challengesData = await Promise.all(
-        challengesData.map(async (ch) => {
-          const mutualFollowers = await fetchMutualFollowers(ch.id);
-          return { ...ch, mutualFollowers };
-        })
-      );
-
-      setChallenges(challengesData);
-      setAllChallenges(challengesData);
+      setChallenges(data);
     } catch (err) {
       setError("خطا در دریافت چالش‌ها");
       console.error("Error fetching challenges:", err);
@@ -72,63 +72,34 @@ const ProfileChallenges = () => {
     }
   };
 
-  // ----- گرفتن چالش‌هایی که کاربر خودش ساخته -----
-  const fetchMyChallenges = async () => {
+  // ----- اگر سرچ داشت: searchChallengesService (بدون فیلتر/سورت فرانت) -----
+  const fetchSearchedChallenges = async (query: string) => {
     try {
       setLoading(true);
       setError(null);
 
-      const currentUserId = 2;
+      const response = await searchChallengesService(query);
+      const list: Challenge[] = response?.data ?? response ?? [];
+      const data = await hydrateChallenges(list);
 
-      const response = await getCreatedChallengesService(currentUserId);
-      let myChallengesData = response;
-
-      myChallengesData = await Promise.all(
-        myChallengesData.map(async (ch) => {
-          const mutualFollowers = await fetchMutualFollowers(ch.id);
-          return { ...ch, mutualFollowers };
-        })
-      );
-
-      setChallenges(myChallengesData);
-      setAllChallenges(myChallengesData);
-    } catch (err) {
-      setError("خطا در دریافت چالش‌های شما");
-      console.error("Error fetching my challenges:", err);
+      setChallenges(data);
+    } catch (error) {
+      console.error("Error searching challenges:", error);
+      setChallenges([]);
     } finally {
       setLoading(false);
     }
   };
 
+  // ----- تصمیم‌گیری: اگر چیزی سرچ نشده بود participating، اگر سرچ شده بود search ----- 
   useEffect(() => {
-    fetchChallenges();
-  }, []);
+    const q = searchQuery.trim();
+    if (q) fetchSearchedChallenges(q);
+    else fetchParticipatingChallenges();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
 
-  const getCategoryId = (categoryName: string): number => {
-    const map: { [key: string]: number } = {
-      Fitness: 1,
-      Art: 2,
-      Science: 3,
-      Entertainment: 4,
-      ورزشی: 1,
-      هنری: 2,
-      علمی: 3,
-      تفریحی: 4,
-    };
-    return map[categoryName] || 1;
-  };
-
-  const selectedCategoryIds = Object.keys(checkedCategories)
-    .filter((key) => checkedCategories[Number(key)])
-    .map(Number);
-
-  const isMyChallengesSelected = checkedCategories[0];
-
-  useEffect(() => {
-    if (isMyChallengesSelected) fetchMyChallenges();
-    else fetchChallenges();
-  }, [isMyChallengesSelected]);
-
+  // ----- منطق چک‌باکس دسته‌بندی‌ها (مثل کد خودت) -----
   const handleCategoryChange = (newChecked: { [key: number]: boolean }) => {
     if (newChecked[0] && !checkedCategories[0]) {
       setCheckedCategories({ 0: true });
@@ -144,24 +115,8 @@ const ProfileChallenges = () => {
     } else setCheckedCategories(newChecked);
   };
 
-  const searchedChallenges = search
-    ? allChallenges
-        .filter((c) => c.title.toLowerCase().includes(search.toLowerCase()))
-        .sort((a, b) => {
-          const s = search.toLowerCase();
-          const score = (t: string) => (t === s ? 3 : t.startsWith(s) ? 2 : 1);
-          return score(b.title.toLowerCase()) - score(a.title.toLowerCase());
-        })
-    : allChallenges;
-
-  const categoryFilteredChallenges =
-    selectedCategoryIds.length === 0 || isMyChallengesSelected
-      ? searchedChallenges
-      : searchedChallenges.filter((c) =>
-          selectedCategoryIds.includes(getCategoryId(c.category_name))
-        );
-
-  const filteredChallenges = categoryFilteredChallenges;
+  // ✅ طبق خواسته تو سرچ/لیست از بک میاد و روی فرانت فیلتر/سورت انجام نمی‌دیم
+  const filteredChallenges = challenges;
 
   if (error) {
     return (
@@ -169,9 +124,11 @@ const ProfileChallenges = () => {
         <div className="text-error text-center">
           <p>{error}</p>
           <button
-            onClick={
-              isMyChallengesSelected ? fetchMyChallenges : fetchChallenges
-            }
+            onClick={() => {
+              const q = searchQuery.trim();
+              if (q) fetchSearchedChallenges(q);
+              else fetchParticipatingChallenges();
+            }}
             className="mt-2 px-4 py-2 bg-secondry text-white rounded hover:bg-secondry"
           >
             تلاش مجدد
@@ -188,7 +145,7 @@ const ProfileChallenges = () => {
         <div className="w-2/3">
           <Formik
             initialValues={{ challengeSearch: "" }}
-            onSubmit={(v) => setSearch(v.challengeSearch)}
+            onSubmit={(v) => setSearchQuery(v.challengeSearch || "")}
           >
             {({ handleSubmit }) => (
               <Form
@@ -262,11 +219,9 @@ const ProfileChallenges = () => {
       {!loading && filteredChallenges.length === 0 && (
         <div className="flex justify-center items-center h-40">
           <p className="text-neutral-gray">
-            {search || selectedCategoryIds.length > 0
-              ? "چالشی با این فیلترها یافت نشد"
-              : isMyChallengesSelected
-                ? "شما هیچ چالشی نساخته‌اید"
-                : "شما در هیچ چالشی شرکت نکرده‌اید"}
+            {searchQuery
+              ? "چالشی با این عبارت یافت نشد"
+              : "شما در هیچ چالشی شرکت نکرده‌اید"}
           </p>
         </div>
       )}
@@ -274,7 +229,10 @@ const ProfileChallenges = () => {
       {loading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 m-2.5">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="animate-pulse bg-neutral-gray rounded-lg h-80">
+            <div
+              key={i}
+              className="animate-pulse bg-neutral-gray rounded-lg h-80"
+            >
               <div className="h-40 bg-neutral-gray rounded-t-lg"></div>
               <div className="p-4 space-y-3">
                 <div className="h-4 bg-neutral-gray rounded w-3/4"></div>

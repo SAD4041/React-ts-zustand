@@ -5,6 +5,7 @@ import ChallengeCard from "@/components/Custom/ChallangeCard";
 import CustomInput from "@/components/Custom/CustomInput";
 import { searchChallengesService } from "@/services/userService";
 import { convertToJalali } from "./ConvertToJalali";
+import { useNavigate } from "react-router-dom";
 
 interface ActiveFilters {
   selectedCategory: string | null;
@@ -45,7 +46,10 @@ function SearchTopBar({
   onFilter: () => void;
 }) {
   return (
-    <div className="sticky top-0 z-10 flex items-center justify-between bg-white px-4 pt-4 pb-2 shadow-sm" dir="rtl">
+    <div
+      className="sticky top-0 z-10 flex items-center justify-between bg-white px-4 pt-4 pb-2 shadow-sm"
+      dir="rtl"
+    >
       <button
         type="button"
         onClick={onFilter}
@@ -110,8 +114,8 @@ function EmptyState({
         {hasFilters
           ? "فیلترها را تغییر دهید یا پاک کنید."
           : searchQuery
-          ? `هیچ چالشی با عبارت "${searchQuery}" پیدا نشد`
-          : "نام چالش مورد نظر خود را جستجو کنید"}
+            ? `هیچ چالشی با عبارت "${searchQuery}" پیدا نشد`
+            : "نام چالش مورد نظر خود را جستجو کنید"}
       </p>
       {searchQuery && (
         <button
@@ -148,6 +152,7 @@ export function SearchModal({
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const searchTimeoutRef = useRef<NodeJS.Timeout>();
+  const navigate = useNavigate();
 
   const performSearch = useCallback(async (query: string) => {
     if (!query.trim()) {
@@ -205,18 +210,18 @@ export function SearchModal({
   const hasSort = activeFilters?.sortBy && activeFilters.sortBy !== "newest";
 
   const categoryLabel = hasCategory
-    ? categoryTitleById?.[String(activeFilters?.selectedCategory)] ??
-      `دسته‌بندی: ${activeFilters?.selectedCategory}`
+    ? (categoryTitleById?.[String(activeFilters?.selectedCategory)] ??
+      `دسته‌بندی: ${activeFilters?.selectedCategory}`)
     : null;
 
   const sortLabel = hasSort
     ? activeFilters?.sortBy === "popular"
       ? "مرتب‌سازی: محبوب‌ترین"
       : activeFilters?.sortBy === "trending"
-      ? "مرتب‌سازی: پرطرفدار"
-      : activeFilters?.sortBy === "oldest"
-      ? "مرتب‌سازی: قدیمی‌ترین"
-      : "مرتب‌سازی: جدیدترین"
+        ? "مرتب‌سازی: پرطرفدار"
+        : activeFilters?.sortBy === "oldest"
+          ? "مرتب‌سازی: قدیمی‌ترین"
+          : "مرتب‌سازی: جدیدترین"
     : null;
 
   const hasAnyVisibleFilter = !!categoryLabel || !!sortLabel;
@@ -281,16 +286,18 @@ export function SearchModal({
                   {isSearching && <LoadingSpinner />}
 
                   {/* تعداد نتایج */}
-                  {!isSearching && values.q.trim() && displayResults.length > 0 && (
-                    <div className="mb-4 mt-6 flex items-center justify-between">
-                      <h2 className="text-lg font-bold text-slate-900">
-                        نتایج جستجو
-                      </h2>
-                      <span className="text-sm text-slate-500">
-                        {displayResults.length} چالش یافت شد
-                      </span>
-                    </div>
-                  )}
+                  {!isSearching &&
+                    values.q.trim() &&
+                    displayResults.length > 0 && (
+                      <div className="mb-4 mt-6 flex items-center justify-between">
+                        <h2 className="text-lg font-bold text-slate-900">
+                          نتایج جستجو
+                        </h2>
+                        <span className="text-sm text-slate-500">
+                          {displayResults.length} چالش یافت شد
+                        </span>
+                      </div>
+                    )}
 
                   {/* لیست نتایج */}
                   {!isSearching && displayResults.length > 0 ? (
@@ -310,9 +317,9 @@ export function SearchModal({
                         >
                           <ChallengeCard
                             {...item}
-                            startDate={convertToJalali(item.startDate)}
-                            endDate={convertToJalali(item.endDate)}
-                            variant="normal"
+                            startDate={convertToJalali(item.start_date)}
+                            endDate={convertToJalali(item.end_date)}
+                            onClick={() => navigate(`/challenge/${item.id}`)}
                           />
                         </div>
                       ))}

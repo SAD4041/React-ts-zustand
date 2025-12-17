@@ -109,6 +109,20 @@ export const searchChallengesService = async (query: string): Promise<{ data: Ch
   };
 };
 
+export const searchMyChallengesService = async (query: string): Promise<{ data: Challenge[] }> => {
+  if (!query.trim()) {
+    throw new Error("Search query is required");
+  }
+  
+  const response = await getData({
+    endPoint: `/api/v1/challenges/my/search?query=${encodeURIComponent(query)}`,
+  });
+  
+  return {
+    data: response.data || []
+  };
+};
+
 // آپدیت پروفایل
 export const putUserProfileService = async ({
   userId,

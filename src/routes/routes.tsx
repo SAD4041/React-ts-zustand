@@ -69,7 +69,9 @@ export const router = createBrowserRouter([
       },
       {
         path: "/category/:categoryId", // نمایش چالش‌های دسته‌بندی (مثلاً سلامت)
-        element: <SectionChallengesScreen />, // همون صفحه، فقط مسیر فرق داره
+        element: <SectionChallengesScreen />,
+      },
+      {
         path: "/challenge/:challengeId/acceptlist",
         element: <AcceptList />,
       },

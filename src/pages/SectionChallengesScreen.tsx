@@ -171,7 +171,8 @@ export default function SectionChallengesScreen() {
     fetchData();
   }, [sectionType, categoryId, type, isCategory]);
 
-  const handleChallengeClick = (challenge: Challenge) => {ب
+  const handleChallengeClick = (challenge: Challenge) => {
+    ب;
     // ناوبری به صفحه جزئیات چالش
     navigate(`/challenge/${challenge.id}`);
   };
@@ -229,6 +230,7 @@ export default function SectionChallengesScreen() {
                     {...item}
                     startDate={convertToJalali(item.start_time)}
                     endDate={convertToJalali(item.end_time)}
+                    onClick={() => navigate(`/challenge/${item.id}`)}
                   />
                 </div>
               ))}
