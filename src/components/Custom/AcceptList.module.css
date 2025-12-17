@@ -1,0 +1,82 @@
+.container {
+  padding: 1rem;
+  background-color: var(--light-orange);
+}
+
+.scrollContainer {
+  background-color: #fff8f5;
+  height: calc(100vh);
+  overflow-y: scroll;
+  padding-right: 8px;
+}
+
+/* Custom scrollbar styles */
+.scrollContainer::-webkit-scrollbar {
+  width: 16px;
+}
+
+.scrollContainer::-webkit-scrollbar-track {
+  background: #e5e7eb;
+  border-radius: 100px;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb {
+  background: #7cb5e8 center/50% no-repeat;
+  border-radius: 100px;
+  border: 3px solid white;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb:hover {
+  background-color: #6ba5d8;
+}
+
+.scrollContainer::-webkit-scrollbar-button {
+  display: none;
+}
+
+.usersList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.userCard {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.userInfo {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.profileImage {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 9999px;
+  border: 1px solid black;
+}
+
+.username {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actionButton {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}

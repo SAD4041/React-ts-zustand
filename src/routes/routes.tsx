@@ -2,54 +2,124 @@ import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Landing from "@/pages/Landing";
 import Temp from "@/pages/Temp";
+import FollowerFollowing from "@/pages/FollowerFollowing";
+import PrivateLayout from "@/layouts/PrivateLayout/PrivateLayout";
+import DashBoard from "@/components/Profile/DashBoard";
+import FollowBar from "@/components/Profile/FollowBar";
+import SignUp from "@/pages/SignUp";
+import Login from "@/pages/LogIn";
+import Test from "@/pages/test";
+import Edit from "@/pages/EditProfile";
+import PostCreation from "@/pages/PostCreation";
+import PostPage from "@/pages/PostPage";
+import EditPost from "@/pages/EditPost";
+import MainPage from "@/pages/MainPage";
+import SectionChallengesScreen from "@/pages/SectionChallengesScreen";
+
+// import { LogIn } from "lucide-react";
+import Challenge from "@/pages/ChallengeInfo";
+import ChallengeEdit from "@/pages/ChallengeEdit";
+import ChallengeCreate from "@/pages/ChallengeCreate";
+import ProgressCalendar from "@/components/ProgressCalendar";
+import PostComments from "@/pages/PostComments";
+import ChallengePosts from "@/pages/ChallengePosts";
+import AcceptList from "@/components/Custom/AcceptList";
+import InviteList from "@/components/Custom/InviteList";
 
 export const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <PublicLayout />,
-		// errorElement: (
-		// 	<Error404 />
-		// ),
-		children: [
-			{
-				index: true,
-				element: <Landing />,
-			},
-			{
-				path: "/temp",
-				element: <Temp />,
-			},
-			// {
-			// 	path: "/AboutUs",
-			// 	element: <AboutUs />,
-			// },
-			// {
-		],
-	},
-	// {
-	// 	element: <PrivateLayout />,
-	// 	children: [
-	// 		{
-	// 			path: "/EditProfile",
-	// 			element: <EditProfile />,
-	// 		},
-	// 		{
-	// 			path: "/DashBoard",
-	// 			element: <DashBoard />,
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	element: <AnotherLayout />,
-	// 	children: [
-	// 		{
-	// 			path: "/login",
-	// 			element: <Login />,
-	// 		},
-	// 		{
-	// 			path: "/temp",
-	// 			element: <Temp />,
-	// 		},
-	// 	],
-	// },
+  {
+    path: "/",
+    element: <PublicLayout />,
+    children: [
+      {
+        index: true,
+        element: <Login />,
+      },
+      {
+        path: "/temp",
+        element: <Temp />,
+      },
+      {
+        path: "/signup",
+        element: <SignUp />,
+      },
+      {
+        path: "/test",
+        element: <Test />,
+      },
+      {
+        path: "/x",
+        element: <ProgressCalendar />,
+      },
+      {
+        path: "/editprofile",
+        element: <Edit />,
+      },
+      {
+        path: "/challenge/:challengeId",
+        element: <Challenge />,
+      },
+      {
+        path: "/main",
+        element: <MainPage />,
+      },
+      {
+        path: "/section/:type", // نمایش چالش‌های محبوب یا نزدیک و ...
+        element: <SectionChallengesScreen />,
+      },
+      {
+        path: "/category/:categoryId", // نمایش چالش‌های دسته‌بندی (مثلاً سلامت)
+        element: <SectionChallengesScreen />,
+      },
+      {
+        path: "/challenge/:challengeId/acceptlist",
+        element: <AcceptList />,
+      },
+      {
+        path: "/challenge/:challengeId/invitelist",
+        element: <InviteList />,
+      },
+    ],
+  },
+  {
+    element: <PrivateLayout />,
+    children: [
+      {
+        path: "/dashboard/:userId", // Dynamic route for user profile
+        element: <DashBoard />,
+      },
+      {
+        path: "/follow/:userId", // Route to the FollowBar or FollowerFollowing page
+        element: <FollowerFollowing />, // Follower/Following page
+      },
+      {
+        path: "/create-post",
+        element: <PostCreation />,
+      },
+      {
+        path: "/post/:id",
+        element: <PostPage />,
+      },
+      {
+      path: "/post/:id/comments", 
+      element: <PostComments/>,
+      },
+      {
+        path: "/editChallenge/:challengeId",
+        element: <ChallengeEdit />,
+      },
+      {
+        path: "/createChallenge",
+        element: <ChallengeCreate />,
+      },
+      {
+        path: "/editpost/:id",
+        element: <EditPost />,
+      },
+      {
+        path: "/challenge/:id/posts",
+        element: <ChallengePosts />,
+      },
+    ],
+  },
 ]);
