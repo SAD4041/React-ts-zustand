@@ -17,6 +17,8 @@ import type {
 } from "@/types/challengeElementsTypes";
 import { mockUsers } from "@/data/mockUsers";
 import { mockChallenges } from "@/data/mockChallenges";
+import { ArrowLeft } from "lucide-react";
+import { OverlappingCards } from "@/components/Custom/OverlappingCards";
 import {
   fetchChallengeById,
   joinPrivateChallenge,
@@ -58,6 +60,8 @@ const defaultChallenge: ChallengeDataDetails = {
 const ChallengeInfo: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const challengeId = Number(id);
   const payload: ChallengeDataDetails =
     (location.state?.challenge as ChallengeDataDetails) ?? defaultChallenge;
 
@@ -295,6 +299,49 @@ const ChallengeInfo: React.FC = () => {
             nextSlide={nextSlide}
             prevSlide={prevSlide}
           />
+        </div>
+        {/* this from saman */}
+        <div
+          className="w-full mt-[var(--top-page)]"
+          onClick={() => {
+            setTimeout(() => {
+              navigate(`/challenge/${challengeId}/posts`);
+            }, 200);
+          }}
+        >
+          <div
+            className="
+          relative
+          flex
+          items-center
+          justify-between
+          rounded-2xl
+          border-2
+          shadow-shadow-strong
+          border-black
+          px-10
+          py-8
+          active:shadow-none
+          active:translate-y-[3px]
+          active:translate-x-[3px]
+          transition-all duration-25
+        "
+            style={{
+              background: "linear-gradient(135deg, var(--primary), #ff8f33)",
+            }}
+          >
+            <div className="text-white text-right">
+              <h2 className="text-2xl font-bold mb-2">مشاهده پست‌های چالش</h2>
+
+              <p className="text-sm opacity-90">
+                دیدن تمام پست‌های ثبت شده توسط شرکت‌کنندگان
+              </p>
+            </div>
+
+            <div className="relative">
+              <OverlappingCards />
+            </div>
+          </div>
         </div>
       </div>
     </div>

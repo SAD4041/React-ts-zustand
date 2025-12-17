@@ -78,3 +78,10 @@ export const getUserPostsService = async (id: number) => {
     endPoint: `${PROTECTED_BASE}/posts/user/${id}`,
   });
 };
+
+export const getChallengePostsService = async (id: number) => {
+  return await getData({
+    endPoint: `${PROTECTED_BASE}/posts/challenge/${id}`,
+  });
+};
+

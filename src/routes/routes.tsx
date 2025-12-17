@@ -19,6 +19,8 @@ import Challenge from "@/pages/ChallengeInfo";
 import ChallengeEdit from "@/pages/ChallengeEdit";
 import ChallengeCreate from "@/pages/ChallengeCreate";
 import ProgressCalendar from "@/components/ProgressCalendar";
+import PostComments from "@/pages/PostComments";
+import ChallengePosts from "@/pages/ChallengePosts";
 import AcceptList from "@/components/Custom/AcceptList";
 import InviteList from "@/components/Custom/InviteList";
 
@@ -85,6 +87,10 @@ export const router = createBrowserRouter([
         element: <PostPage />,
       },
       {
+      path: "/post/:id/comments", 
+      element: <PostComments/>,
+      },
+      {
         path: "/editChallenge/:challengeId",
         element: <ChallengeEdit />,
       },
@@ -95,6 +101,10 @@ export const router = createBrowserRouter([
       {
         path: "/editpost/:id",
         element: <EditPost />,
+      },
+      {
+        path: "/challenge/:id/posts",
+        element: <ChallengePosts />,
       },
     ],
   },
