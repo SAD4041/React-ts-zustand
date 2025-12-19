@@ -2,12 +2,12 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
 } from "@/components/ui/carousel";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
 import bannerFallback from "@/assets/banner.jpg";
+import ToRight from "../ui/toRightSvg";
+import ToLeft from "../ui/toLeftSvg";
 
 export interface Banner {
   id: number;
@@ -21,26 +21,51 @@ interface BannerCarouselProps {
 export default function BannerCarousel({ banners }: BannerCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const apiRef = useRef<CarouselApi | null>(null);
-  const autoplayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoplayRef = useRef<NodeJS.Timeout | null>(null);
   const isHoveredRef = useRef(false);
+  const currentIndexRef = useRef(0);
 
-  // Autoplay + dot sync
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
+
   useEffect(() => {
     if (banners.length <= 1) return;
 
-    const handleSelect = () => {
-      const api = apiRef.current;
-      if (!api) return;
-      setCurrentIndex(api.selectedScrollSnap());
+    const api = apiRef.current;
+    if (!api) return;
+
+    const onSelect = () => {
+      requestAnimationFrame(() => {
+        const snap = api.selectedScrollSnap();
+        setCurrentIndex(snap);
+      });
     };
 
+    api.on("select", onSelect);
+    setCurrentIndex(api.selectedScrollSnap());
+
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [banners.length]);
+
+  useEffect(() => {
+    if (banners.length <= 1) return;
+
     const startAutoplay = () => {
-      stopAutoplay(); // اول توقف اطمینانی
+      stopAutoplay();
       autoplayRef.current = setInterval(() => {
         if (!isHoveredRef.current && apiRef.current) {
           apiRef.current.scrollNext();
+          requestAnimationFrame(() => {
+            const snap = apiRef.current?.selectedScrollSnap() ?? 0;
+            if (snap !== currentIndexRef.current) {
+              setCurrentIndex(snap);
+            }
+          });
         }
-      }, 5000); // هر 5 ثانیه
+      }, 10000);
     };
 
     const stopAutoplay = () => {
@@ -50,17 +75,10 @@ export default function BannerCarousel({ banners }: BannerCarouselProps) {
       }
     };
 
-    // متصل کردن event listener و شروع autoplay
-    const api = apiRef.current;
-    if (api) {
-      api.on("select", handleSelect);
-      setCurrentIndex(api.selectedScrollSnap());
-      startAutoplay();
-    }
+    startAutoplay();
 
     return () => {
       stopAutoplay();
-      api?.off("select", handleSelect);
     };
   }, [banners.length]);
 
@@ -72,6 +90,35 @@ export default function BannerCarousel({ banners }: BannerCarouselProps) {
     isHoveredRef.current = false;
   };
 
+  // ✅ دکمه‌های کاستوم برای اطمینان از sync currentIndex
+  const scrollPrev = useCallback(() => {
+    if (apiRef.current) {
+      apiRef.current.scrollPrev();
+      requestAnimationFrame(() => {
+        const snap = apiRef.current!.selectedScrollSnap();
+        setCurrentIndex(snap);
+      });
+    }
+  }, []);
+
+  const scrollNext = useCallback(() => {
+    if (apiRef.current) {
+      apiRef.current.scrollNext();
+      requestAnimationFrame(() => {
+        const snap = apiRef.current!.selectedScrollSnap();
+        setCurrentIndex(snap);
+      });
+    }
+  }, []);
+
+  const scrollTo = useCallback((index: number) => {
+    if (apiRef.current) {
+      apiRef.current.scrollTo(index);
+      setCurrentIndex(index); // ✅ اینجا می‌تونیم مستقیم ست کنیم
+    }
+  }, []);
+
+  // --- render ---
   if (banners.length === 0) {
     return (
       <div className="relative w-full pt-[40%] sm:pt-[45%] md:pt-[50%] rounded-b-[50px] overflow-hidden">
@@ -97,6 +144,9 @@ export default function BannerCarousel({ banners }: BannerCarouselProps) {
         }}
         setApi={(api) => {
           apiRef.current = api;
+          if (api && banners.length > 1) {
+            setCurrentIndex(api.selectedScrollSnap());
+          }
         }}
         className="w-full"
       >
@@ -113,41 +163,43 @@ export default function BannerCarousel({ banners }: BannerCarouselProps) {
             </CarouselItem>
           ))}
         </CarouselContent>
-
-        {/* Dots */}
-        {banners.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
-            {banners.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => apiRef.current?.scrollTo(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  currentIndex === index
-                    ? "bg-white w-6" 
-                    : "bg-white/60"
-                }`}
-                aria-label={`رفتن به بنر ${index + 1}`}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Navigation Buttons */}
-        {banners.length > 1 && (
-          <>
-            <div className="mb-6 absolute bottom-4 left-18 z-20">
-              <CarouselPrevious className="bg-white/90 hover:bg-white shadow-md w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
-                ←
-              </CarouselPrevious>
-            </div>
-            <div className="mb-6 absolute bottom-4 right-18 z-20">
-              <CarouselNext className="bg-white/90 hover:bg-white shadow-md w-10 h-10 rounded-full flex items-center justify-center cursor-pointer">
-                →
-              </CarouselNext>
-            </div>
-          </>
-        )}
       </Carousel>
+
+      {/* Dots */}
+      {banners.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
+          {banners.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => scrollTo(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                currentIndex === index ? "bg-white w-6" : "bg-white/60"
+              }`}
+              aria-label={`رفتن به بنر ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* 🔘 دکمه‌های کاستوم (به جای CarouselPrevious/Next) */}
+      {banners.length > 1 && (
+        <>
+          <button
+            onClick={scrollPrev}
+            className="absolute bottom-4 left-6 z-20 bg-white/90 hover:bg-white shadow-md w-10 h-10 rounded-full flex items-center justify-center cursor-pointer"
+            aria-label="بنر قبلی"
+          >
+            <ToLeft />
+          </button>
+          <button
+            onClick={scrollNext}
+            className="absolute bottom-4 right-6 z-20 bg-white/90 hover:bg-white shadow-md w-10 h-10 rounded-full flex items-center justify-center cursor-pointer"
+            aria-label="بنر بعدی"
+          >
+            <ToRight />
+          </button>
+        </>
+      )}
     </div>
   );
 }

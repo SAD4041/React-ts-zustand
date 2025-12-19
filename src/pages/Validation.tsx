@@ -18,8 +18,9 @@ import {
 import { Button } from '../components/ui/button';
 import { translateNumber } from '@/utils/translateNumber'
 import type ValidationFormValues from '@/types/loginTypes';
-import BackToLogin from '@/components/login/backToLogin';
+import BackToLogin from '@/components/ui/toLeftSvg';
 import SubmitSpinner from '@/components/login/submitSpinner';
+import ToRight from '@/components/ui/toRightSvg';
 
 
 
@@ -187,7 +188,12 @@ const Validation: React.FC = () => {
       <div className="w-full flex items-center justify-center p-6 md:p-10">
         <div className="w-full max-w-xl h-5/6 bg-card rounded-3xl border-2 border-border shadow-2xl p-8 relative overflow-hidden">
 
-          <BackToLogin />
+          <a
+            href="/login"
+            className="absolute top-4 right-4 bg-black text-white w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors duration-200 z-10"
+          >
+            <ToRight />
+          </a>
 
           <div className="text-center mb-8">
             <img src={logo} alt="CB Buck Gallery" className="mx-auto w-32 h-auto" />

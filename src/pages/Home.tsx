@@ -132,7 +132,7 @@ export default function Home() {
 
       <SurpriseSection products={amazing_products}/>
 
-      <div className="py-12 px-4 bg-white">
+      <div className="py-12 px-4 mb-10 bg-white">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-2">!استایل خود را، مجازی پرو کنید</h2>
           <p className="text-sm text-pink-600 mb-6">
