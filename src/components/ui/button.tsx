@@ -16,7 +16,7 @@ const variantStyles: Record<NonNullable<ButtonProps["variant"]>, string> = {
   secondary: "bg-gray-600 text-white hover:bg-gray-700",
   ghost: "hover:bg-gray-100 text-gray-900",
   link: "text-blue-600 underline-offset-4 hover:underline",
-  dialog: "w-full max-w-xs bg-black text-white text-md py-2.5 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium shadow-md hover:shadow-lg disabled:bg-gray-4 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer", 
+  dialog: "w-full max-w-xs bg-bg-section1 text-white text-md py-2.5 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium shadow-md hover:shadow-lg disabled:bg-gray-4 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer", 
   slider: "text-white bg-gradient-to-r from-bg-section1 to-bg-section2 rounded-full shadow-sm hover:opacity-90 transition cursor-pointer",
 };
 
