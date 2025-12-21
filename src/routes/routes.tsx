@@ -8,6 +8,7 @@ import ProductListing from "@/components/ProductListing/productListing";
 import LoginForm from "@/pages/Login";
 import Validation from "@/pages/Validation";
 import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
+import WishlistPage from "@/pages/WishList";
 
 export const router = createBrowserRouter([
     {
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
             {
                 path: "/products-list",
                 element: <ProductListing />
+            },
+            {
+                path: "/dash/wishList",
+                element: <WishlistPage />,
             },
 
         ],
@@ -60,8 +65,8 @@ export const router = createBrowserRouter([
             //     element: <DashboardHome />,
             // },
             // {
-            //     path: "profile",
-            //     element: <Profile />,
+            //     path: "/dash/wishList",
+            //     element: <WishlistPage />,
             // },
             // {
             //     path: "settings",

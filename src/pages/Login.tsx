@@ -45,10 +45,6 @@ const LoginForm: React.FC = () => {
       const result = await checkPhone(values.phone);
 
       if (result.success) {
-
-        const otpCode = result.data?.message;
-        console.log('OTP Code:', otpCode);
-
         if (result.data.registered === true) {
           setModalConfig({
             isOpen: true,

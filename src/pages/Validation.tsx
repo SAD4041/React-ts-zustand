@@ -117,11 +117,7 @@ const Validation: React.FC = () => {
     try {
       const result = await checkPhone(phone);
       if (result.success) {
-
-        const otpCode = result.data?.message;
-        console.log('OTP Code:', otpCode);
-        
-        setModalConfig({
+          setModalConfig({
           isOpen: true,
           title: 'ارسال مجدد',
           message: 'کد تأیید مجدداً ارسال شد.',
