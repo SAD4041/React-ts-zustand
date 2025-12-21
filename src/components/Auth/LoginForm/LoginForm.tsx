@@ -17,7 +17,7 @@ export default function LoginForm() {
 		navigate("/signup");
 	}
 	function navigateToDashboard() {
-		navigate("/test");
+		navigate("/Dashboard/pets");
 	}
 
 	return (

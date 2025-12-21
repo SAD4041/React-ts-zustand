@@ -10,6 +10,7 @@ import { Form, Formik, useFormikContext } from "formik";
 import * as Yup from "yup";
 
 import {
+
   Select,
   SelectContent,
   SelectGroup,
@@ -35,6 +36,7 @@ import PawIcon from "@/components/Custom/PetRegister/PawIcon";
 import { BabyIcon, Bird, Cat, Dog, Mars, Rabbit, Venus } from "lucide-react";
 import IsAdultToggleGroup from "@/components/PetRegister/IsAdultToggleGroup";
 import PetKindToggleGroup from "@/components/PetRegister/PetKindToggleGroup";
+import DashboardPetCard from "@/components/Pet/DashboardPetCard";
 
 import Toggle from "@/components/Custom/Toggle/Toggle";
 import { useState } from "react";
@@ -358,6 +360,28 @@ function Test() {
           <TabsContent value="password">naaaaa</TabsContent>
           <TabsContent value="salam">naaaaa</TabsContent>
         </Tabs>
+      </div>
+
+
+      <div className="flex gap-2">
+        <DashboardPetCard
+          name="فندق"
+          kind="سگ"
+          species="ژرمن"
+          age="۱۲"
+          isAdult={false}
+          gender="male"
+          id={1}
+        ></DashboardPetCard>
+        <DashboardPetCard
+          name="فندق"
+          kind="سگ"
+          species="ژرمن"
+          age="۱۲"
+          isAdult={false}
+          gender="male"
+          id={1}
+        ></DashboardPetCard>
       </div>
     </div>
   );

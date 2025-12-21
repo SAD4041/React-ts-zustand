@@ -13,6 +13,9 @@ import AuthLayout from "@/layouts/PublicLayout/AuthLayout";
 import RegisterPetMobile from "@/pages/RegisterPetMobile";
 import MobileLayout from "@/layouts/MobileLayout/MobileLayout";
 import AdminDashboard from "@/pages/AdminDashboard";
+import Dashboard from "@/pages/PetDashboard";
+import PetDashboard from "@/pages/PetDashboard";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -56,21 +59,53 @@ export const router = createBrowserRouter([
 				path: "/admin",
 				element: <AdminDashboard />,
 			},
-    ],
-  },
-  {
-    element: <AuthLayout />,
-    children: [
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/signup",
-        element: <Signup />,
-      },
-    ],
-  },
+			{
+				path: "/Dashboard/pets",
+				element: <PetDashboard/>
+			}
+		],
+	},
+	{
+		element: <AuthLayout />,
+		children: [
+			{
+				path: "/login",
+				element: <Login />,
+			},
+			{
+				path: "/signup",
+				element: <Signup />,
+			},
+		],
+	},
+	// {
+	// 	element: <PrivateLayout />,
+	// 	children: [
+	// 		{
+	// 			path: "/EditProfile",
+	// 			element: <EditProfile />,
+	// 		},
+	// 		{
+	// 			path: "/DashBoard",
+	// 			element: <DashBoard />,
+	// 		},
+	// 	],
+	// },
+	// {
+	// 	element: <AnotherLayout />,
+	// 	children: [
+	// 		{
+	// 			path: "/login",
+	// 			element: <Login />,
+	// 		},
+	// 		{
+	// 			path: "/temp",
+	// 			element: <Temp />,
+	// 		},
+	// 	],
+	// },
+
+  
   {
     element: <MobileLayout />,
     children: [

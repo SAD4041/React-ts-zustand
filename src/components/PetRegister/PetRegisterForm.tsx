@@ -24,13 +24,21 @@ import { PetDatePicker } from "../Custom/PetDatePicker/PetDatePicker";
 import { useMobile } from "@/hooks/ResponsiveHooks";
 import { Button } from "../Custom/Button/Button";
 import CustomToast from "../Custom/CustomToast";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import { PETS_QUERY_KEY } from "@/queryKeys/pets";
+import type { PetRegisterFormProps } from "@/types/PetRegister/multistageProps";
 
-export default function PetRegisterForm() {
+
+
+export default function PetRegisterForm({ closeModal }: PetRegisterFormProps) {
   const [genderDontKnow, setGenderDontKnow] = useState(false);
   const [weightDontKnow, setWeightDontKnow] = useState(false);
   const [birthDontKnow, setBirthDontKnow] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
+  const queryClient = useQueryClient();
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -78,8 +86,14 @@ export default function PetRegisterForm() {
     console.log(name);
   }
 
-  const showToast = (message:string) => {
+  const showToast = (message: string) => {
     CustomToast(message);
+  };
+
+  function navigateToDashboard() {
+    queryClient.invalidateQueries({ queryKey: PETS_QUERY_KEY });
+    closeModal?.();
+    navigate("/Dashboard/pets");
   }
 
   return (
@@ -159,13 +173,20 @@ export default function PetRegisterForm() {
               {registerErrorMessage && (
                 <p className="text-lg mb-6">{registerErrorMessage}</p>
               )}
-              <Button onClick={() => {}}> بازگشت به داشبورد</Button>
+              <Button
+                onClick={() => {
+                  navigateToDashboard();
+                }}
+                type={"button"}
+              >
+                بازگشت به داشبورد
+              </Button>
             </div>
           ) : (
             <Stepper
               canProceed={(step) => {
                 if (step === 1 && !values.petName) {
-                  showToast("لطفا نام پت خود را وارد کنید.")
+                  showToast("لطفا نام پت خود را وارد کنید.");
                   return false;
                 }
 
@@ -174,13 +195,14 @@ export default function PetRegisterForm() {
 
                   if (!values.petKind) {
                     valid = false;
-                    showToast("لطفا نوع پت را انتخاب کنید.")
+                    showToast("لطفا نوع پت را انتخاب کنید.");
                   }
 
                   if (!values.species) {
-
                     valid = false;
-                    showToast("لطفا نژاد پت خود را انتخاب کنید (اگر نمیدانید گزینه آخر را انتخاب کنید)")
+                    showToast(
+                      "لطفا نژاد پت خود را انتخاب کنید (اگر نمیدانید گزینه آخر را انتخاب کنید)"
+                    );
                   }
 
                   return valid;
