@@ -153,6 +153,9 @@ html body[data-scroll-locked] {
 	--stage-header-inactive-border: #cbd5e1;
 	--stage-header-inactive-foreground: #64748b;
 	--stage-body-border: #e5e7eb;
+	--rejected-red: var(--color-red-500);
+	--confirmed-green: var(--color-green-500);
+	--waiting-yellow: var(--color-yellow-500);
 	--muted: oklch(0.97 0 0);
 	--muted-foreground: oklch(0.556 0 0);
 	--accent: oklch(0.97 0 0);
@@ -207,6 +210,9 @@ html body[data-scroll-locked] {
 	--color-stage-header-inactive-border: var(--stage-header-inactive-border);
 	--color-stage-header-inactive-foreground: var(--stage-header-inactive-foreground);
 	--color-stage-body-border: var(--stage-body-border);
+	--color-rejected-red: var(--rejected-red);
+	--color-confirmed-green: var(--confirmed-green);
+	--color-waiting-yellow: var(--waiting-yellow);
 	--color-muted: var(--muted);
 	--color-muted-foreground: var(--muted-foreground);
 	--color-accent: var(--accent);
