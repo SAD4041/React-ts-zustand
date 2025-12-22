@@ -1,8 +1,8 @@
 import shortTshirt from '@/assets/shortTshirt.jpg';
 import longTshirt from '@/assets/longTshirt.png';
-import image1 from '@/assets/image1.png';
-import type { Brand, ColorOption, SubCategory, Product } from '@/types/productListingTypes';
-import {productData} from "@/data/productcardData";
+// import image1 from '@/assets/image1.png';
+import type { Brand, ColorOption, SubCategory} from '@/types/productListingTypes';
+// import {productData} from "@/data/productcardData";
 
 export  const productsPerPage = 4;
 export  const pagesPerGroup = 5;
@@ -43,6 +43,46 @@ export const subCategories: SubCategory[] = [
   },
   {
     id: 2,
+    title: "تیشرت آستین کوتاه زنانه",
+    image: shortTshirt
+  },
+    {
+    id: 3,
+    title: "تیشرت آستین بلند زنانه",
+    image: longTshirt
+  },
+  {
+    id: 4,
+    title: "تیشرت آستین کوتاه زنانه",
+    image: shortTshirt
+  },
+  {
+    id: 5,
+    title: "تیشرت آستین بلند زنانه",
+    image: longTshirt
+  },
+  {
+    id: 6,
+    title: "تیشرت آستین کوتاه زنانه",
+    image: shortTshirt
+  },
+    {
+    id: 7,
+    title: "تیشرت آستین بلند زنانه",
+    image: longTshirt
+  },
+  {
+    id: 8,
+    title: "تیشرت آستین کوتاه زنانه",
+    image: shortTshirt
+  },
+    {
+    id: 9,
+    title: "تیشرت آستین بلند زنانه",
+    image: longTshirt
+  },
+  {
+    id: 10,
     title: "تیشرت آستین کوتاه زنانه",
     image: shortTshirt
   },

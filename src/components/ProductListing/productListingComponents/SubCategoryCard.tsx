@@ -3,7 +3,7 @@ import type { SubCategoryProps } from '@/types/productListingTypes';
 
 const SubCategoryCard: React.FC<SubCategoryProps> = ({ category }) => {
   return (
-    <div className="shrink-0 w-40 cursor-pointer group">
+    <div className="shrink-0 w-80 cursor-pointer group sm:w-52 md:w-48 lg:w-44 xl:w-40">
       <div className="relative overflow-hidden rounded-lg shadow-sm border border-border">
         <img
           src={category.image}

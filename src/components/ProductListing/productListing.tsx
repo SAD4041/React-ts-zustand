@@ -4,28 +4,25 @@ import ProductGrid from "./productListingComponents/ProductGrid";
 import FilterSidebar from "./productListingComponents/FilterSidebar";
 import SortOptions from "./productListingComponents/SortOptions";
 import Pagination from "./productListingComponents/Pagination";
-import { getData } from "@/services/services";
 import type { Product } from "@/types/productListingTypes";
 import type { SortOption } from "@/types/productListingTypes";
 import { toPersianDigits } from "@/utils/PersianDigits";
 import SubCategorySlider from "./productListingComponents/SubCategorySilder";
 import { categoryLabels, brandLabels } from "@/data/productListingData";
-import type { ProductQueryType } from "@/types/productListingTypes";
+import { fetchAllProducts } from "@/services/productListingService";
+import { X } from 'lucide-react';
 import {
-  fetchProductsByCategory,
-  fetchProductsByBrand,
-  fetchProductsBySearch,
-  fetchProductsByStyle,
-} from "@/services/productListingService";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 type FetchMode = "category" | "brand" | "search" | "style";
-interface ProductListingProps {
-  mode: FetchMode;
-  slug: string;
-}
 
-
-const ProductListing: React.FC<ProductListingProps> = ({ mode, slug }) => {
+const ProductListing: React.FC = () => {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
   const brand = searchParams.get("brand");
@@ -34,29 +31,18 @@ const ProductListing: React.FC<ProductListingProps> = ({ mode, slug }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
-    if (!slug) return;
-
     const loadProducts = async () => {
       setLoading(true);
+      setError(null);
 
       try {
-        let data: Product[] = [];
-
-        if (mode === "category") {
-          data = await fetchProductsByCategory(slug);
-        } else if (mode === "brand") {
-          data = await fetchProductsByBrand(slug);
-        } else if (mode === "search") {
-          data = await fetchProductsBySearch(slug);
-        } else if (mode === "style") {
-          data = await fetchProductsByStyle(slug);
-        }
-
+        const data = await fetchAllProducts();
         setProducts(data);
-      } catch (error) {
-        console.error("❌ Failed to load products", error);
+      } catch (err) {
+        setError("خطا در بارگذاری محصولات");
         setProducts([]);
       } finally {
         setLoading(false);
@@ -64,8 +50,7 @@ const ProductListing: React.FC<ProductListingProps> = ({ mode, slug }) => {
     };
 
     loadProducts();
-  }, [mode, slug]);
-
+  }, []);
 
   let listingType: "category" | "brand" | "search" | null = null;
   let listingValue = "";
@@ -236,24 +221,104 @@ const ProductListing: React.FC<ProductListingProps> = ({ mode, slug }) => {
       <hr className="my-6 border-border" />
 
       <div className="flex gap-6 mt-6">
-        <FilterSidebar
-          selectedBrands={selectedBrands}
-          selectedSizes={selectedSizes}
-          selectedColors={selectedColors}
-          priceRange={priceRange}
-          globalMaxPrice={globalMaxPrice}
-          onBrandToggle={handleBrandToggle}
-          onSizeToggle={handleSizeToggle}
-          onColorToggle={handleColorToggle}
-          onPriceChange={handlePriceChange}
-          onClearFilters={handleClearFilters}
-        />
+        {/* FilterSidebar - فقط در md+ */}
+        <div className="hidden md:block">
+          <FilterSidebar
+            selectedBrands={selectedBrands}
+            selectedSizes={selectedSizes}
+            selectedColors={selectedColors}
+            priceRange={priceRange}
+            globalMaxPrice={globalMaxPrice}
+            onBrandToggle={handleBrandToggle}
+            onSizeToggle={handleSizeToggle}
+            onColorToggle={handleColorToggle}
+            onPriceChange={handlePriceChange}
+            onClearFilters={handleClearFilters}
+          />
+        </div>
 
         <div className="flex-1">
-          <div className="flex items-center justify-between">
+          {/* SortOptions - فقط در md+ */}
+          <div className="hidden md:flex items-center justify-between mb-4">
             <div className="flex items-center space-x-4 space-x-reverse">
               <SortOptions currentSort={currentSort} onSortChange={handleSortChange} />
             </div>
+            <div className="text-sm text-muted-foreground">
+              {toPersianDigits(filteredProductsCount.toLocaleString("fa-IR"))} محصول در{" "}
+              {getDisplayName()}
+            </div>
+          </div>
+
+          {/* دکمه‌های موبایل - فقط در sm- */}
+          <div className="md:hidden flex items-center justify-end gap-2 mb-4">
+            {/* دکمه مرتب سازی */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-sm">
+                  مرتب سازی
+                </button>
+              </DialogTrigger>
+              <DialogContent className="w-60 p-0 max-h-[80vh] overflow-y-auto">
+                <DialogClose asChild>
+                  <button
+                    className="absolute left-3 top-3 p-1 rounded-full hover:bg-border z-10"
+                    aria-label="بستن"
+                  >
+                    <X className="h-5 w-5 text-muted-foreground" />
+                  </button>
+                </DialogClose>
+                <div className="p-4 pb-2 text-right">
+                  <h3 className="font-bold text-foreground">مرتب‌سازی بر اساس:</h3>
+                </div>
+
+                {/* گزینه‌های مرتب‌سازی */}
+                <div className="px-4 pb-4">
+                  <SortOptions currentSort={currentSort} onSortChange={handleSortChange} />
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
+                  فیلتر ها
+                </button>
+              </DialogTrigger>
+
+
+              <DialogContent
+                className={`
+                  w-73 p-0 max-h-[90vh] overflow-y-auto
+                  fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  bottom-auto
+                  rounded-lg
+                  flex flex-col
+                `}
+                dir="rtl"
+              >
+
+                <DialogClose asChild>
+                  <button
+                    className="absolute left-3 top-3 p-1 rounded-full hover:bg-border z-10"
+                  >
+                    <X className="h-5 w-5 text-muted-foreground" />
+                  </button>
+                </DialogClose>
+
+                <FilterSidebar
+                  selectedBrands={selectedBrands}
+                  selectedSizes={selectedSizes}
+                  selectedColors={selectedColors}
+                  priceRange={priceRange}
+                  globalMaxPrice={globalMaxPrice}
+                  onBrandToggle={handleBrandToggle}
+                  onSizeToggle={handleSizeToggle}
+                  onColorToggle={handleColorToggle}
+                  onPriceChange={handlePriceChange}
+                  onClearFilters={handleClearFilters}
+                />
+              </DialogContent>
+            </Dialog>
+
             <div className="text-sm text-muted-foreground">
               {toPersianDigits(filteredProductsCount.toLocaleString("fa-IR"))} محصول در{" "}
               {getDisplayName()}
