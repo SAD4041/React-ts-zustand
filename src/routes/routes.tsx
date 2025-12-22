@@ -6,6 +6,8 @@ import Temp from "@/pages/Temp";
 import Test from "@/pages/Test";
 import Login from "@/pages/Login";
 import AboutUs from "@/pages/AboutUs";
+import ForgetPassword from "@/pages/ForgetPassword";
+import ChangePassword from "@/pages/ChangePassword";
 import Terms from "@/pages/Terms";
 import Signup from "@/pages/Signup";
 import ExplorePetSitter from "@/pages/ExplorePetSitter"
@@ -75,6 +77,14 @@ export const router = createBrowserRouter([
 			{
 				path: "/signup",
 				element: <Signup />,
+			},
+			{
+				path: "/forget-password",
+				element: <ForgetPassword />,
+			},
+			{
+				path: "/reset-password",
+				element: <ChangePassword />,
 			},
 		],
 	},
