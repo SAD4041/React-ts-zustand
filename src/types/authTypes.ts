@@ -12,3 +12,7 @@ export interface LoginResponse {
 		username: string;
 	};
 }
+
+export interface ValidationFormValues {
+  code: string;
+}

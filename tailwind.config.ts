@@ -14,6 +14,10 @@ const config: Config = {
 				vazirmatn: ["Vazirmatn", "Roboto"],
 			},
 
+			height: {
+				'login-card': '600px',
+			},
+
 			colors: {
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
