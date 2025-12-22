@@ -124,6 +124,8 @@ body {
   --login-card-bg: #FFECE7;
   --bg-section1: #ED775A;
   --bg-section2: #E4004B;
+
+  --bg-addShop-btn: #44D6FF80;
 }
 
 @theme inline {
@@ -174,6 +176,7 @@ body {
   --color-login-card-bg: var(--login-card-bg);
   --color-bg-section1: var(--bg-section1);
   --color-bg-section2: var(--bg-section2);
+  --color-bg-addShop-btn: var(--bg-addShop-btn);
   
 }
 

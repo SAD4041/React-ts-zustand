@@ -1,9 +1,11 @@
 // components/WishlistPage.tsx
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import ProductCard from "@/components/Product/ProductCard";
 import { User } from "lucide-react";
 import like from "@/assets/like.png";
+import trash from "@/assets/Trash.png";
+import shop from "@/assets/Shopping bag.png";
 import { Button } from "@/components/ui/button";
 
 // نوع داده‌های محصول
@@ -149,7 +151,24 @@ const WishlistPage: React.FC = () => {
                 {/* گرید محصولات */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-6 px-4">
                     {displayedProducts.map((product) => (
-                        <ProductCard key={product.id} product={product} />
+                        <div key={product.id} className="flex flex-col items-center">
+                            <ProductCard product={product} />
+                            {/* دو دکمه زیر هر کارت */}
+                            <div className="flex gap-3 px-2 mt-3 w-full">
+                                <Button
+                                    className="flex-1/4 gap-2 bg-bg-addShop-btn text-titr rounded-lg text-xs font-medium hover:bg-card hover:text-text transition cursor-pointer"
+                                >
+                                    <img src={shop} className="h-6 w-6" />
+                                    افزودن به سبد خرید
+                                </Button>
+                                <Button
+                                    className="w-1/6 flex bg-destructive border border-border rounded-lg p-0 transition cursor-pointer"
+                                >
+                                    < img src={trash} className="h-6 w-6" />
+                                </Button>
+                                
+                            </div>
+                        </div>
                     ))}
                 </div>
 
