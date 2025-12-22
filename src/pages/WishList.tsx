@@ -1,138 +1,80 @@
 // components/WishlistPage.tsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProductCard from "@/components/Product/ProductCard";
 import { User } from "lucide-react";
 import like from "@/assets/like.png";
 import trash from "@/assets/Trash.png";
 import shop from "@/assets/Shopping bag.png";
 import { Button } from "@/components/ui/button";
+import { getWishlist, removeWishlistItem, addToCart } from "@/services/wishListService";
+import type {WishlistProduct} from "@/services/wishListService";
+import type { ProductData } from "@/types/productCardTypes";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
-// نوع داده‌های محصول
-type Product = {
-    id: number;
-    image: string;
-    name: string;
-    brand: string;
-    price: number;
-    discount?: number;
-    stock: number;
-    colors: string[];
-    sizes: string[];
-};
 
 const WishlistPage: React.FC = () => {
-    // داده‌های ساختگی برای ۸ محصول (چون در تصویر ۸ تا محصول دیده می‌شه)
-    const products: Product[] = [
-        {
-            id: 1,
-            image: "/images/product1.png",
-            name: "تیشرت Bussiness Not Boomin",
-            brand: "CATWAREHOUSE",
-            price: 699999,
-            discount: 20,
-            stock: 5,
-            colors: ["#FF5733", "#33FF57", "#3357FF"],
-            sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"]
-        },
-        {
-            id: 2,
-            image: "/images/product2.png",
-            name: "تیشرت Bussiness Not Boomin",
-            brand: "CATWAREHOUSE",
-            price: 699999,
-            discount: 20,
-            stock: 8,
-            colors: ["#FF5733", "#33FF57", "#3357FF"],
-            sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"]
-        },
-        {
-            id: 3,
-            image: "/images/product3.png",
-            name: "تیشرت Bussiness Not Boomin",
-            brand: "CATWAREHOUSE",
-            price: 699999,
-            discount: 20,
-            stock: 3,
-            colors: ["#FF5733", "#33FF57", "#3357FF"],
-            sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"]
-        },
-        {
-            id: 4,
-            image: "/images/product4.png",
-            name: "تیشرت Bussiness Not Boomin",
-            brand: "CATWAREHOUSE",
-            price: 699999,
-            discount: 20,
-            stock: 12,
-            colors: ["#FF5733", "#33FF57", "#3357FF"],
-            sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"]
-        },
-        {
-            id: 5,
-            image: "/images/product5.png",
-            name: "تیشرت Bussiness Not Boomin",
-            brand: "CATWAREHOUSE",
-            price: 699999,
-            discount: 20,
-            stock: 7,
-            colors: ["#FF5733", "#33FF57", "#3357FF"],
-            sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"]
-        },
-        {
-            id: 6,
-            image: "/images/product6.png",
-            name: "تیشرت Bussiness Not Boomin",
-            brand: "CATWAREHOUSE",
-            price: 699999,
-            discount: 20,
-            stock: 2,
-            colors: ["#FF5733", "#33FF57", "#3357FF"],
-            sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"]
-        },
-        {
-            id: 7,
-            image: "/images/product7.png",
-            name: "تیشرت Bussiness Not Boomin",
-            brand: "CATWAREHOUSE",
-            price: 699999,
-            discount: 20,
-            stock: 15,
-            colors: ["#FF5733", "#33FF57", "#3357FF"],
-            sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"]
-        },
-        {
-            id: 8,
-            image: "/images/product8.png",
-            name: "تیشرت Bussiness Not Boomin",
-            brand: "CATWAREHOUSE",
-            price: 699999,
-            discount: 20,
-            stock: 4,
-            colors: ["#FF5733", "#33FF57", "#3357FF"],
-            sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"]
-        }
-    ];
+    const [wishlist, setWishlist] = useState<WishlistProduct[]>([]);
+    const [loading, setLoading] = useState(true);
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const toggleExpand = () => {
-        setIsExpanded(!isExpanded);
+    useEffect(() => {
+        const fetchWishlist = async () => {
+            try {
+                const data = await getWishlist();
+                setWishlist(data);
+            } catch (error) {
+                console.error("Failed to load wishlist", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchWishlist();
+    }, []);
+
+    const toggleExpand = () => setIsExpanded(!isExpanded);
+
+    // ✅ نمایش حداکثر 4 یا همه
+    const displayedProducts = isExpanded ? wishlist : wishlist.slice(0, 4);
+
+    // ✅ حذف محصول از لیست علاقه‌مندی‌ها
+    const handleRemove = async (productId: number) => {
+        try {
+            await removeWishlistItem(productId);
+            setWishlist(prev => prev.filter(p => p.id !== productId));
+        } catch (error) {
+            console.error("Failed to remove item", error);
+            // می‌تونی اینجا toast بذاری
+        }
     };
 
-    // ✅ انتخاب محصولات برای نمایش
-    const displayedProducts = isExpanded
-        ? products // همه محصولات
-        : products.slice(0, 4); // فقط ۴ تا اول
+    const handleAddToCart = async (productId: number) => {
+        try {
+            await addToCart(productId);
+            // موفقیت‌آمیز بودن رو به کاربر نشون بده
+            alert("محصول به سبد خرید اضافه شد!");
+        } catch (error) {
+            console.error("Failed to add to cart", error);
+            alert("خطا در افزودن به سبد خرید");
+        }
+    };
+
+    // ✅ در حین لودینگ
+    if (loading) {
+        return (
+            <LoadingSpinner />
+        );
+    }
 
     return (
         <div className="p-4 mb-[200px] mx-[150px] max-w-6xl mx-auto" dir="rtl">
+            {/* هدر صفحه — بدون تغییر */}
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
                         <User className="w-6 h-6 text-text" />
                     </div>
-                    {/* create 2 avatar for men, women */}
-
                     <div>
                         <h1 className="text-xl text-titr font-bold">فاطمه رضایی</h1>
                         <p className="text-sm text-text">فاطمه جان خوش آمدی!</p>
@@ -140,43 +82,43 @@ const WishlistPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* کارت علاقمندی ها */}
+            {/* کارت علاقمندی‌ها */}
             <div className="rounded-xl shadow-sm border border-border p-4">
-                {/* هدر کارت */}
                 <div className="flex items-center mt-4 mb-8 px-4 gap-1">
                     <img src={like} className="h-10 w-10" alt="علاقمندی‌ها" />
                     <h2 className="text-xl font-semibold">علاقمندی ها</h2>
                 </div>
 
-                {/* گرید محصولات */}
+                {/* گرید محصولات — حالا با ProductData */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-6 px-4">
                     {displayedProducts.map((product) => (
                         <div key={product.id} className="flex flex-col items-center">
                             <ProductCard product={product} />
-                            {/* دو دکمه زیر هر کارت */}
                             <div className="flex gap-3 px-2 mt-3 w-full">
                                 <Button
-                                    className="flex-1/4 gap-2 bg-bg-addShop-btn text-titr rounded-lg text-xs font-medium hover:bg-card hover:text-text transition cursor-pointer"
+                                    className="flex-1 gap-2 bg-bg-addShop-btn text-titr rounded-lg text-xs font-medium hover:bg-card hover:text-text transition"
+                                    onClick={() => handleAddToCart(product.id)}
                                 >
-                                    <img src={shop} className="h-6 w-6" />
+                                    <img src={shop} className="h-6 w-6" alt="افزودن به سبد خرید" />
                                     افزودن به سبد خرید
                                 </Button>
                                 <Button
-                                    className="w-1/6 flex bg-destructive border border-border rounded-lg p-0 transition cursor-pointer"
+                                    variant="destructive"
+                                    className="flex-1 sm:flex-none w-10 p-0"
+                                    onClick={() => handleRemove(product.id)}
                                 >
-                                    < img src={trash} className="h-6 w-6" />
+                                    <img src={trash} className="h-6 w-6" alt="حذف" />
                                 </Button>
-                                
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* دکمه مشاهده همه / نمایش کمتر */}
-                {products.length > 4 && (
+                {/* دکمه مشاهده همه — با wishlist */}
+                {wishlist.length > 4 && (
                     <div className="flex justify-center pb-4">
                         <Button
-                            className="px-6 py-2 border border-border rounded-lg text-sm font-medium transition cursor-pointer"
+                            className="px-6 py-2 border border-border rounded-lg text-sm font-medium transition"
                             onClick={toggleExpand}
                         >
                             {isExpanded ? "نمایش کمتر" : "مشاهده همه"}
@@ -189,3 +131,6 @@ const WishlistPage: React.FC = () => {
 };
 
 export default WishlistPage;
+// در apiClient.ts، خط کامنت‌شده رو فعال کن
+const token = localStorage.getItem("token"); // یا از store بخون
+if (token) config.headers.Authorization = `Bearer ${token}`;

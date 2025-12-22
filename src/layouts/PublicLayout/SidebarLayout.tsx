@@ -1,5 +1,7 @@
 // src/layouts/PublicLayout/SidebarLayout.tsx
+import Header from '@/components/Header/Header';
 import Sidebar from '@/components/Sidebar/Sidebar';
+import { Outlet } from 'react-router-dom';
 
 export default function SidebarLayout() {
   return (
@@ -11,8 +13,10 @@ export default function SidebarLayout() {
         {/* پس یکبار دیگر: children باید باشه، ولی می‌تونه optional باشه */}
         { /* children رو از props بگیریم */ }
       </div>
-
+      <Header />
+      <Outlet />
       <Sidebar />
+      
     </div>
   );
 }

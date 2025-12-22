@@ -10,6 +10,7 @@ export interface Color {
 }
 
 export interface ProductData {
+  id: number;
   discount: number;
   hasDiscount: boolean;
   image: string;

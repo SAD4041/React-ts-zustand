@@ -30,10 +30,10 @@ export const router = createBrowserRouter([
                 path: "/products-list",
                 element: <ProductListing />
             },
-            {
-                path: "/dash/wishList",
-                element: <WishlistPage />,
-            },
+            // {
+            //     path: "/dash/wishList",
+            //     element: <WishlistPage />,
+            // },
 
         ],
     },
@@ -64,10 +64,10 @@ export const router = createBrowserRouter([
             //     index: true,
             //     element: <DashboardHome />,
             // },
-            // {
-            //     path: "/dash/wishList",
-            //     element: <WishlistPage />,
-            // },
+            {
+                path: "/dash/wishList",
+                element: <WishlistPage />,
+            },
             // {
             //     path: "settings",
             //     element: <Settings />,
