@@ -24,8 +24,10 @@ const apiClient: AxiosInstance = axios.create({
 
 apiClient.interceptors.request.use(
 	(config: InternalAxiosRequestConfig) => {
-		// const token = getTokenFromStore();
-		// if (token) config.headers.Authorization = `Bearer ${token}`;
+		const token = localStorage.getItem("token"); // ⬅️ یا از Redux/Context بخوان
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
+		}
 		return config;
 	},
 	(error) => Promise.reject(error)
