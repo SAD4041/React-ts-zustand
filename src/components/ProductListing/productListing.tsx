@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProductGrid from "./productListingComponents/ProductGrid";
 import FilterSidebar from "./productListingComponents/FilterSidebar";
@@ -14,13 +14,13 @@ import { X } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+import { sorts } from "@/data/productListingData";
+import sortIcon from "@/assets/Group 63.png"
+import filterIcon from "@/assets/Group 64.png"
 
-type FetchMode = "category" | "brand" | "search" | "style";
 
 const ProductListing: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -31,7 +31,6 @@ const ProductListing: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -221,7 +220,6 @@ const ProductListing: React.FC = () => {
       <hr className="my-6 border-border" />
 
       <div className="flex gap-6 mt-6">
-        {/* FilterSidebar - فقط در md+ */}
         <div className="hidden md:block">
           <FilterSidebar
             selectedBrands={selectedBrands}
@@ -238,7 +236,6 @@ const ProductListing: React.FC = () => {
         </div>
 
         <div className="flex-1">
-          {/* SortOptions - فقط در md+ */}
           <div className="hidden md:flex items-center justify-between mb-4">
             <div className="flex items-center space-x-4 space-x-reverse">
               <SortOptions currentSort={currentSort} onSortChange={handleSortChange} />
@@ -249,79 +246,108 @@ const ProductListing: React.FC = () => {
             </div>
           </div>
 
-          {/* دکمه‌های موبایل - فقط در sm- */}
-          <div className="md:hidden flex items-center justify-end gap-2 mb-4">
-            {/* دکمه مرتب سازی */}
+          <div
+            className="md:hidden flex items-center gap-2 mb-4">
             <Dialog>
               <DialogTrigger asChild>
-                <button className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-sm">
-                  مرتب سازی
-                </button>
-              </DialogTrigger>
-              <DialogContent className="w-60 p-0 max-h-[80vh] overflow-y-auto">
-                <DialogClose asChild>
-                  <button
-                    className="absolute left-3 top-3 p-1 rounded-full hover:bg-border z-10"
-                    aria-label="بستن"
-                  >
-                    <X className="h-5 w-5 text-muted-foreground" />
+                <div className="flex items-center space-x-4 text-sm mb-4 bg-secondary hover:bg-muted-foreground/30 border border-accent-foreground rounded">
+                  <img
+                    src={filterIcon}
+                    alt="آیکون مرتب‌سازی"
+                    className="w-4 h-4 object-cover ml-2 mr-2"
+                  />
+                  <button className="px-3 py-1 text-primary-foreground rounded-md text-sm">
+                    مرتب سازی
                   </button>
-                </DialogClose>
-                <div className="p-4 pb-2 text-right">
-                  <h3 className="font-bold text-foreground">مرتب‌سازی بر اساس:</h3>
                 </div>
-
-                {/* گزینه‌های مرتب‌سازی */}
-                <div className="px-4 pb-4">
-                  <SortOptions currentSort={currentSort} onSortChange={handleSortChange} />
-                </div>
-              </DialogContent>
-            </Dialog>
-
-            <Dialog>
-              <DialogTrigger asChild>
-                <button className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
-                  فیلتر ها
-                </button>
               </DialogTrigger>
-
-
               <DialogContent
-                className={`
-                  w-73 p-0 max-h-[90vh] overflow-y-auto
-                  fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  bottom-auto
-                  rounded-lg
-                  flex flex-col
-                `}
-                dir="rtl"
+                className="w-60 p-0 max-h-100 overflow-y-auto "
+                hideCloseButton={true}
               >
-
                 <DialogClose asChild>
-                  <button
-                    className="absolute left-3 top-3 p-1 rounded-full hover:bg-border z-10"
-                  >
+                  <button className="absolute left-3 top-3 p-1 rounded-full hover:bg-border z-10">
                     <X className="h-5 w-5 text-muted-foreground" />
                   </button>
                 </DialogClose>
 
-                <FilterSidebar
-                  selectedBrands={selectedBrands}
-                  selectedSizes={selectedSizes}
-                  selectedColors={selectedColors}
-                  priceRange={priceRange}
-                  globalMaxPrice={globalMaxPrice}
-                  onBrandToggle={handleBrandToggle}
-                  onSizeToggle={handleSizeToggle}
-                  onColorToggle={handleColorToggle}
-                  onPriceChange={handlePriceChange}
-                  onClearFilters={handleClearFilters}
-                />
+                <div className="p-4">
+                  <h3 className="font-bold text-right mb-3">مرتب‌سازی</h3>
+                  <div className="flex flex-col gap-2">
+                    {sorts.map(sort => {
+                      const isActive = currentSort === sort.value;
+                      const isChosenLabel = sort.label === "منتخب";
+                      return (
+                        <button
+                          key={sort.value}
+                          onClick={() => handleSortChange(sort.value as any)}
+                          className={`
+                            px-3 py-2 text-right rounded-md transition-colors text-sm
+                            ${isActive
+                              ? 'bg-primary text-white'
+                              : isChosenLabel
+                                ? 'text-primary bg-transparent'
+                                : 'text-muted-foreground hover:text-primary bg-transparent hover:bg-muted'
+                            }
+              `}
+                        >
+                          {sort.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </DialogContent>
             </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <div className="flex items-center space-x-4 text-sm mb-4 bg-secondary hover:bg-muted-foreground/30 border border-accent-foreground rounded">
+                  <img
+                    src={sortIcon}
+                    alt="آیکون مرتب‌سازی"
+                    className="w-5 h-5 object-cover ml-2 mr-1"
+                  />
+                  <button className="px-3 py-1 text-secondary-foreground rounded-md text-sm">
+                    فیلتر ها
+                  </button>
+                </div>
+              </DialogTrigger>
+              <DialogContent
+                className="w-73 p-0 max-h-[90vh] overflow-y-auto"
+                hideCloseButton={true}
+                style={{ direction: 'rtl' }}
+              >
+                <DialogClose asChild>
+                  <button className="absolute left-3 top-3 p-1 rounded-full hover:bg-border z-10">
+                    <X className="h-5 w-5 text-muted-foreground" />
+                  </button>
+                </DialogClose>
+
+                <div
+                  dir="rtl">
+                  <FilterSidebar
+                    selectedBrands={selectedBrands}
+                    selectedSizes={selectedSizes}
+                    selectedColors={selectedColors}
+                    priceRange={priceRange}
+                    globalMaxPrice={globalMaxPrice}
+                    onBrandToggle={handleBrandToggle}
+                    onSizeToggle={handleSizeToggle}
+                    onColorToggle={handleColorToggle}
+                    onPriceChange={handlePriceChange}
+                    onClearFilters={handleClearFilters}
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <div className="flex-grow"></div>
 
             <div className="text-sm text-muted-foreground">
               {toPersianDigits(filteredProductsCount.toLocaleString("fa-IR"))} محصول در{" "}
               {getDisplayName()}
+
             </div>
           </div>
 

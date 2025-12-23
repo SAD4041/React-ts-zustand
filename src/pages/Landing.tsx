@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import App from "@/components/testing";
 
 function Landing() {
 	const Navigate = useNavigate();
 
 	return (
 		<div className="w-full h-screen font-3xl flex flex-col place-self-center justify-center">
-			{/* 			<div className="flex gap-2 rounded-md place-self-center">
+			<div className="flex gap-2 rounded-md place-self-center">
 				<button
 					className="text-white bg-sky-600 rounded-md p-2 cursor-pointer"
 					onClick={() => {
@@ -16,8 +15,7 @@ function Landing() {
 					Temp route
 				</button>
 			</div>
-			<p className="text-5xl text-center ">This is your landing</p> */}
-			{/* <App /> */}
+			<p className="text-5xl text-center ">This is your landing</p>
 		</div>
 	);
 }
