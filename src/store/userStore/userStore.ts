@@ -2,21 +2,28 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { UserState } from "../../types/userTypes";
+import type { AuthUserWithTokens } from "@/types/authTypes";
 
-const useUserStore = create<UserState>()(
-	persist(
-		(set) => ({
-			username: null,
+interface AuthState {
+  authUser: AuthUserWithTokens | null;
+  setAuth: (user: AuthUserWithTokens) => void;
+  clearAuth: () => void;
+}
 
-			setUsername: (username: string) =>
-				set((prev) => ({ ...prev, username })),
-		}),
-		{
-			name: "profile-storage",
-			storage: createJSONStorage(() => sessionStorage),
-		}
-	)
+const useUserStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      authUser: null,
+
+      setAuth: (user) => set(() => ({ authUser: user })),
+
+      clearAuth: () => set(() => ({ authUser: null })),
+    }),
+    {
+      name: "auth-storage",
+      storage: createJSONStorage(() => localStorage), // یا sessionStorage اگر خواستی
+    }
+  )
 );
 
 export default useUserStore;
