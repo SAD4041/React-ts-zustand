@@ -19,10 +19,6 @@ export const router = createBrowserRouter([
 				element: <Landing />,
 			},
 			{
-				path: "/temp",
-				element: <Temp />,
-			},
-			{
 				path: "/UserDashboard/Information",
 				element: <UserDashInformation />,
 			},

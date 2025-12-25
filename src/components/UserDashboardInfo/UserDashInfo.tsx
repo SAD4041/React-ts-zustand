@@ -3,6 +3,7 @@ import type { Address, AddressFormData, UserInfo } from "@/types/UserDashInfoTyp
 import ProfileHeader from "./userDashInfoComponents/profileHeader";
 import ProfileInfo from "./userDashInfoComponents/profileInfo";
 import AddressSection from "./userDashInfoComponents/addressSection";
+import Error500 from "@/pages/Error500";
 import {
   getUserProfile,
   updateUserProfile,
@@ -28,6 +29,7 @@ const UserDashInfo: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [addresses, setAddresses] = useState<Address[]>([]);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("authToken")) {
@@ -41,12 +43,14 @@ const UserDashInfo: React.FC = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
+    setHasError(false); // ریست
     try {
       const user = await getUserProfile();
       setUserData(user);
     } catch (err) {
       console.error("Failed to load user profile", err);
       setError("خطا در بارگذاری اطلاعات پروفایل");
+      setHasError(true);
     } finally {
       setLoading(false);
     }
@@ -58,7 +62,7 @@ const UserDashInfo: React.FC = () => {
       setAddresses(res);
     } catch (e) {
       console.error("Failed to load addresses", e);
-    } finally {
+      setHasError(true);
     }
   }, []);
 
@@ -71,6 +75,7 @@ const UserDashInfo: React.FC = () => {
   }, [fetchAddresses]);
 
   if (loading) return <Spinner />;
+  if (hasError) return <Error500 />;
   if (error)
     return <div className="p-6 text-destructive text-right">{error}</div>;
   if (!userData)
