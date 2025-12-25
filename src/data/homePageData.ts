@@ -5,10 +5,24 @@ import category3 from "@/assets/category/category3.png";
 import category4 from "@/assets/category/category4.png";
 import category5 from "@/assets/category/category5.png";
 import category6 from "@/assets/category/category6.png";
+
 import style1 from "@/assets/style1.jpg";
 import style2 from "@/assets/style2.jpg";
 import style3 from "@/assets/style3.jpg";
 import style4 from "@/assets/style4.jpg";
+
+import adidas from '@/assets/brands/Adidas-Logo.wine.png';
+import dior from '@/assets/brands/Christian_Dior_(fashion_house)-Logo.wine.png';
+import balenciaga from '@/assets/brands/Balenciaga-Logo.wine.png';
+import chanel from '@/assets/brands/Chanel-Logo.wine.png';
+import zara from '@/assets/brands/Zara_(retailer)-Logo.wine.png';
+import louisVuitton from '@/assets/brands/Louis_Vuitton-Logo.wine.png';
+import burberry from '@/assets/brands/Burberry-Logo.wine.png';
+import fendi from '@/assets/brands/Fendi-Logo.wine.png';
+import nike from '@/assets/brands/Nike,_Inc.-Logo.wine.png';
+import gucci from '@/assets/brands/Gucci-Logo.wine.png';
+
+
 
 export const fallbackCategories = [
     { id: 1, name: "تیشرت", slug: "tshirt", image_url: category1 },
@@ -23,7 +37,7 @@ export const fallbackBanners: Banner[] = [
     { id: 1, image_url: bannerFallback },
     { id: 2, image_url: bannerFallback },
     { id: 3, image_url: bannerFallback },
-  ];
+];
 
 
 export const fallbackStylePalettes = [
@@ -31,4 +45,17 @@ export const fallbackStylePalettes = [
     { id: 2, title: "اسپرت", slug: "sport", image_url: style2 },
     { id: 3, title: "وینتیج", slug: "vintage", image_url: style3 },
     { id: 4, title: "بوهو", slug: "boho", image_url: style4 },
-  ];
+];
+
+export const brands = [
+    { name: "Adidas", logo: adidas },
+    { name: "Dior", logo: dior },
+    { name: "Balenciaga", logo: balenciaga },
+    { name: "Chanel", logo: chanel },
+    { name: "Zara", logo: zara },
+    { name: "Louis Vuitton", logo: louisVuitton },
+    { name: "Burberry", logo: burberry },
+    { name: "Fendi", logo: fendi },
+    { name: "Nike", logo: nike },
+    { name: "Gucci", logo: gucci }
+];
