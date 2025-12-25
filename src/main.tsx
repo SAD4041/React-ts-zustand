@@ -2,17 +2,17 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { router } from "./routes/routes.tsx";
 import { RouterProvider } from "react-router-dom";
-import { aboutStats } from '@/data/about-stats';
-import { aboutValues } from '@/data/about-values';
-import { teamMembers } from '@/data/team-members';
+// import { stats } from '@/data/about/stats';
+// import { values } from '@/data/about/values';
+// import { team } from '@/data/about/team';
 
 createRoot(document.getElementById("root")!).render(
 	<RouterProvider router={router} />
 );
 
 export default function App() {
-  const stats = aboutStats;
-  const values = aboutValues;
-  const team = teamMembers;
-
+//   const statsData = stats;     // یا مستقیم از stats استفاده کن
+//   const valuesData = values;
+//   const teamData = team;
+//   // ...
 }
