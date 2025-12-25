@@ -39,7 +39,6 @@ const config: Config = {
         "product-size-label": "0.625rem",
       },
 
-      /* ---------- Spacing ---------- */
       spacing: {
         "product-image-gap": "0.5rem",
         "product-details-gap": "0.75rem",
@@ -47,7 +46,6 @@ const config: Config = {
         "product-color-gap": "0.125rem",
       },
 
-      /* ---------- Width ---------- */
       width: {
         "product-card": "220px",
         "product-image": "100%",
@@ -73,7 +71,6 @@ const config: Config = {
         "dropdown-menu": "48rem",
       },
 
-      /* ---------- Height ---------- */
       height: {
         "product-color-dot": "1.625rem",
         "product-tuman-icon": "1.125rem",
@@ -81,17 +78,18 @@ const config: Config = {
         "logo-container": "3.5rem",
       },
 
+
       /* ---------- Colors ---------- */
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-
         sidebar: "hsl(var(--sidebar))",
 
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -176,3 +174,4 @@ const config: Config = {
 };
 
 export default config;
+

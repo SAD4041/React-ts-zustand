@@ -14,7 +14,7 @@ package-lock.json
 *.local
 
 package-lock.json
-
+pnpm-lock.yaml
 
 # Editor directories and files
 .vscode/*
@@ -26,3 +26,6 @@ package-lock.json
 *.njsproj
 *.sln
 *.sw?
+
+
+package-lock.json

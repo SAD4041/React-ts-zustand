@@ -4,6 +4,7 @@ import Landing from "@/pages/Landing";
 import UserDashInformation from "@/pages/userDashInfo";
 import Error404 from "@/pages/Error404";
 import Error500 from "@/pages/Error500";
+import ProductList from "@/pages/ProductListing";
 
 
 export const router = createBrowserRouter([
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
 			{
 				path: "/error500",
 				element: <Error500 />
+			},
+			{
+				path: "/productList",
+				element: <ProductList />
 			},
 			// {
 			// 	path: "/AboutUs",
