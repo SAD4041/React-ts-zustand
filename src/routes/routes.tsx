@@ -1,16 +1,18 @@
 import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import Landing from "@/pages/Landing";
-import Temp from "@/pages/Temp";
 import UserDashInformation from "@/pages/userDashInfo";
+import Error404 from "@/pages/Error404";
+import Error500 from "@/pages/Error500";
+
 
 export const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <PublicLayout />,
-		// errorElement: (
-		// 	<Error404 />
-		// ),
+		errorElement: (
+			<Error404 />
+		),
 		children: [
 			{
 				index: true,
@@ -23,6 +25,10 @@ export const router = createBrowserRouter([
 			{
 				path: "/UserDashboard/Information",
 				element: <UserDashInformation />,
+			},
+			{
+				path: "/error500",
+				element: <Error500 />
 			},
 			// {
 			// 	path: "/AboutUs",
