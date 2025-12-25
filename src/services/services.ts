@@ -33,7 +33,7 @@ apiClient.interceptors.request.use(
 	(config: InternalAxiosRequestConfig) => {
 		const token = getTokenFromStore();
 		if (token) {
-			config.headers.Authorization = `Bearer ${token}`;	
+			config.headers.Authorization = token;	
 		}
 		const fullUrl = `${config.baseURL ?? ""}${config.url ?? ""}`;
 		console.log("👉 REQUEST URL:", fullUrl);
