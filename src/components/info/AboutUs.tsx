@@ -13,19 +13,19 @@ export default function App() {
       icon: Award,
       title: 'تعهد به برتری',
       description: 'همیشه در تلاش برای ارائه بهترین خدمات و محصولات هستیم',
-      color: 'bg-[#75BFCA]',
+      colorClass: 'bg-[var(--teal)]', // ✅
     },
     {
       icon: Target,
       title: 'تمرکز بر کیفیت',
       description: 'ما به کیفیت بالا و جزئیات دقیق در تمام پروژه‌ها متعهد هستیم',
-      color: 'bg-[#ADCC80]',
+      colorClass: 'bg-[var(--olive)]', // ✅
     },
     {
       icon: Heart,
       title: 'مشتری محوری',
       description: 'رضایت شما اولویت اول ماست و همیشه در کنار شما خواهیم بود',
-      color: 'bg-[#ED775A]',
+      colorClass: 'bg-[var(--bg-section1)]', // ✅ ED775A
     },
   ];
 
@@ -40,27 +40,32 @@ export default function App() {
   ];
 
   return (
-    <div className="py-16 bg-white">
+    <div className="py-16 bg-background text-foreground">
       {/* Hero */}
       <div className="container mx-auto px-4 mb-20">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center bg-[#E4004B] text-white px-6 py-2 rounded-full mb-6">
+          <div className="inline-flex items-center bg-[var(--bg-section2)] text-white px-6 py-2 rounded-full mb-6">
             درباره ما
           </div>
 
-          <h1 className="text-base font-bold mb-6 text-gray-900">
+          <h1 className="text-base font-bold mb-6 text-titr">
             ما رویاهای شما را به واقعیت تبدیل می‌کنیم
           </h1>
 
-          <p className="text-sm text-gray-800 mb-8 leading-relaxed">
+          <p className="text-sm text-text mb-8 leading-relaxed">
             از سال ۱۴۰۳ ما با ارائه راهکارهای خلاقانه، به توآورانه، به کسب‌وکارها کمک کرده‌ایم تا به اهداف خود دست یابند. 
             تیم ما متشکل از متخصصان با تجربه است که با اشتیاق و تعهد، بهترین خدمات را به شما ارائه می‌دهند.
           </p>
         </div>
       </div>
 
-      {/* Stats - Updated with custom gradient styles matching the image */}
-      <div className="bg-gradient-to-r from-[#ED775A] to-[#E4004B] py-8 mb-20">
+      {/* Stats - Gradient from bg-section1 to bg-section2 */}
+      <div 
+        className="py-8 mb-20"
+        style={{
+          background: 'linear-gradient(to right, var(--bg-section1), var(--bg-section2))',
+        }}
+      >
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             {stats.map((s, i) => (
@@ -76,11 +81,11 @@ export default function App() {
       {/* Values */}
       <div className="container mx-auto px-4 mb-20">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center bg-[#E4004B] text-white px-6 py-2 rounded-full mb-6">
+          <div className="inline-flex items-center bg-[var(--bg-section2)] text-white px-6 py-2 rounded-full mb-6">
             ارزش های ما
           </div>
 
-          <h2 className="text-base font-bold mb-4 text-gray-900">
+          <h2 className="text-base font-bold mb-4 text-titr">
             اصولی که ما را هدایت می‌کنند
           </h2>
         </div>
@@ -89,16 +94,16 @@ export default function App() {
           {values.map((value, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_40px_-2px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-2 p-6"
+              className="bg-card rounded-2xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_40px_-2px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-2 p-6"
             >
               <div className="flex flex-row-reverse justify-between items-start gap-4">
-                <div className={`${value.color} w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0`}>
+                <div className={`${value.colorClass} w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0`}>
                   <value.icon className="w-6 h-6 text-white" />
                 </div>
 
                 <div className="text-right flex-grow">
-                  <h3 className="text-xl font-semibold mb-2 text-gray-900">{value.title}</h3>
-                  <p className="text-gray-600">{value.description}</p>
+                  <h3 className="text-xl font-semibold mb-2 text-titr">{value.title}</h3>
+                  <p className="text-text">{value.description}</p>
                 </div>
               </div>
             </div>
@@ -109,11 +114,11 @@ export default function App() {
       {/* Team */}
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center bg-[#E4004B] text-white px-6 py-2 rounded-full mb-6">
+          <div className="inline-flex items-center bg-[var(--bg-section2)] text-white px-6 py-2 rounded-full mb-6">
             تیم ما
           </div>
 
-          <h2 className="text-base font-bold mb-4 text-gray-900">
+          <h2 className="text-base font-bold mb-4 text-titr">
             افرادی که پشت موفقیت‌های ما هستند
           </h2>
         </div>
@@ -124,15 +129,15 @@ export default function App() {
             {team.slice(0, 4).map((member, index) => (
               <div
                 key={index}
-                className="bg-white rounded-3xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_40px_-2px_rgba(0,0,0,0.2)] transition-all duration-300"
+                className="bg-card rounded-3xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_40px_-2px_rgba(0,0,0,0.2)] transition-all duration-300"
                 style={{ width: '330px', height: '400px', fontWeight: '500' }}
               >
-                <div className="bg-gray-200 h-[250px] rounded-t-3xl flex items-center justify-center">
-                  <Users className="w-16 h-16 text-gray-600" />
+                <div className="bg-muted h-[250px] rounded-t-3xl flex items-center justify-center">
+                  <Users className="w-16 h-16 text-muted-foreground" />
                 </div>
                 <div className="p-4 text-center">
-                  <h3 className="text-sm font-extrabold text-gray-900">{member.role}</h3>
-                  <p className="text-xs text-gray-600">{member.name}</p>
+                  <h3 className="text-sm font-extrabold text-titr">{member.role}</h3>
+                  <p className="text-xs text-text">{member.name}</p>
                 </div>
               </div>
             ))}
@@ -144,16 +149,16 @@ export default function App() {
           <div className="flex gap-10" style={{ width: 'calc(100% - 850px)' }}>
             {team.slice(4).map((member, index) => (
               <div
-                key={index}
-                className="bg-white rounded-3xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_40px_-2px_rgba(0,0,0,0.2)] transition-all duration-300"
+                key={index + 4}
+                className="bg-card rounded-3xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_40px_-2px_rgba(0,0,0,0.2)] transition-all duration-300"
                 style={{ width: '330px', height: '400px', fontWeight: '500' }}
               >
-                <div className="bg-gray-200 h-[250px] rounded-t-3xl flex items-center justify-center">
-                  <Users className="w-16 h-16 text-gray-600" />
+                <div className="bg-muted h-[250px] rounded-t-3xl flex items-center justify-center">
+                  <Users className="w-16 h-16 text-muted-foreground" />
                 </div>
                 <div className="p-4 text-center">
-                  <h3 className="text-sm font-extrabold text-gray-900">{member.role}</h3>
-                  <p className="text-xs text-gray-600">{member.name}</p>
+                  <h3 className="text-sm font-extrabold text-titr">{member.role}</h3>
+                  <p className="text-xs text-text">{member.name}</p>
                 </div>
               </div>
             ))}
