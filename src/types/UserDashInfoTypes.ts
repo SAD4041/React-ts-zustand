@@ -1,4 +1,3 @@
-
 export type Address = {
   id: string;
   userId: string;
@@ -7,7 +6,15 @@ export type Address = {
   city: string;
   fullAddress: string;
   postalCode: string;
-  phone: string;
+  isDefault: boolean;
+};
+
+export type AddressFormData = {
+  title: string;
+  province: string;
+  city: string;
+  postalCode: string;
+  fullAddress: string;
   isDefault: boolean;
 };
 
@@ -19,7 +26,6 @@ export interface UserInfo {
   email: string;
   phone: string;
   birthDate: string;
-  /* password: string; */
 }
 
 export interface ProfileInfoProps {
@@ -45,7 +51,7 @@ export interface ProfileHeaderProps {
 export interface AddressFormModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (address: Omit<Address, 'id'> & { id?: string }) => void;
+  onSubmit: (address: AddressFormData) => void;
   initialData?: Address | null;
 }
 
@@ -63,7 +69,7 @@ export interface ChangePasswordProps {
 
 export interface AddressSectionProps {
   addresses: Address[];
-  onAddAddress: (newAddress: Omit<Address, 'id'>) => void;
-  onUpdateAddress: (id: string, updatedAddress: Omit<Address, 'id'>) => void;
+  onAddAddress: (newAddress: AddressFormData) => void;
+  onUpdateAddress: (id: string, updatedAddress: AddressFormData) => void;
   onDeleteAddress: (id: string) => void;
 }

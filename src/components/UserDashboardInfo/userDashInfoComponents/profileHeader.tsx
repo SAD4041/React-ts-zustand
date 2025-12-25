@@ -1,4 +1,3 @@
-// components/userDashInfoComponents/profileHeader.tsx
 import React, { useRef } from 'react';
 import { Card } from '@/components/ui/userDashInfo/card';
 import { Button } from '@/components/ui/userDashInfo/button';

@@ -24,10 +24,6 @@ const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete }) 
         {address.province !== address.city && `، ${address.city}`}، {address.fullAddress}
       </p>
 
-      <p className="text-muted-foreground mb-3 text-xs">
-        {address.phone}
-      </p>
-
       <div className="flex gap-2">
         <Button variant="outline" size="sm" onClick={onEdit}>
           <Edit2 className="w-3 h-3 ml-1" />

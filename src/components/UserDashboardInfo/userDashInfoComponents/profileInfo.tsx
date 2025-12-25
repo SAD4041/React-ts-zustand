@@ -3,22 +3,24 @@ import { Card } from '@/components/ui/userDashInfo/card';
 import { Button } from '@/components/ui/userDashInfo/button';
 import { Input } from '@/components/ui/userDashInfo/input';
 import { Label } from '@/components/ui/userDashInfo/label';
-import { z } from 'zod';
+import * as yup from 'yup';
 import type { UserInfo, ProfileInfoProps } from '@/types/UserDashInfoTypes';
 import Separator from '@/components/ui/userDashInfo/separator';
 import { translateNumber } from '@/utils/translateNumber';
 
-const personalInfoSchema = z.object({
-  firstName: z.string().min(1, 'نام نباید خالی باشد.'),
-  lastName: z.string().min(1, 'نام خانوادگی نباید خالی باشد.'),
-  email: z.string().email('فرمت ایمیل نامعتبر است.'),
-  phone: z.string().regex(/^09\d{9}$/, 'شماره تلفن باید ۱۱ رقمی و با 09 شروع شود.'),
-  birthDate: z.string().regex(/^\d{4}\/\d{2}\/\d{2}$/, 'فرمت تاریخ باید YYYY/MM/DD باشد.'),
+const personalInfoSchema = yup.object({
+  firstName: yup.string().required('نام نباید خالی باشد.'),
+  lastName: yup.string().required('نام خانوادگی نباید خالی باشد.'),
+  email: yup.string().email('فرمت ایمیل نامعتبر است.').required('ایمیل نباید خالی باشد.'),
+  phone: yup.string().matches(/^09\d{9}$/, 'شماره تلفن باید ۱۱ رقمی و با 09 شروع شود.').required('شماره تلفن نباید خالی باشد.'),
+  birthDate: yup.string().matches(/^\d{4}\/\d{2}\/\d{2}$/, 'فرمت تاریخ باید YYYY/MM/DD باشد.').required('تاریخ تولد نباید خالی باشد.'),
 });
 
+type FormData = Omit<UserInfo, 'password'>;
+type FormErrors = Partial<Record<keyof FormData, string>>;
 
 const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
-  const [formData, setFormData] = useState<Omit<UserInfo, 'password'>>({
+  const [formData, setFormData] = useState<FormData>({
     firstName: initialData.firstName,
     lastName: initialData.lastName,
     avatar: initialData.avatar,
@@ -26,38 +28,39 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
     phone: initialData.phone,
     birthDate: initialData.birthDate,
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof Omit<UserInfo, 'password'>, string>>>({});
+
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const isValid = useMemo(() => {
-    return personalInfoSchema.safeParse(formData).success;
+    try {
+      personalInfoSchema.validateSync(formData, { abortEarly: false });
+      return true;
+    } catch (err) {
+      return false;
+    }
   }, [formData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target as { name: keyof FormData; value: string };
 
     const newFormData = { ...formData, [name]: value };
     setFormData(newFormData);
 
-    const result = personalInfoSchema.safeParse(newFormData);
-
-    if (!result.success) {
-      const fieldIssue = result.error.issues.find(
-        issue => issue.path[0] === name
-      );
-
-      setErrors(prev => ({
-        ...prev,
-        [name]: fieldIssue?.message,
-      }));
-    } else {
-      setErrors(prev => ({
-        ...prev,
-        [name]: undefined,
-      }));
+    try {
+      personalInfoSchema.validateSync(newFormData, { abortEarly: false });
+      setErrors({});
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        const newErrors: FormErrors = {};
+        err.inner.forEach((error) => {
+          if (error.path && error.message) {
+            newErrors[error.path as keyof FormData] = error.message;
+          }
+        });
+        setErrors(newErrors);
+      }
     }
   };
-
-
 
   const handleSave = () => {
     if (isValid) {
@@ -68,7 +71,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
   return (
     <Card className="p-6">
       <div dir="rtl">
-        <div className="text-right mb-2 ">
+        <div className="text-right mb-2">
           <h3 className="text-lg font-semibold">اطلاعات شخصی</h3>
         </div>
         <Separator className="mb-3" />
@@ -81,7 +84,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
               onChange={handleChange}
               className="text-right"
             />
-            {errors.firstName && <p className="text-sm text-destructive"> {errors.firstName} </p>}
+            {errors.firstName && <p className="text-sm text-destructive">{errors.firstName}</p>}
           </div>
           <div className="space-y-2 text-right">
             <Label className="block">نام خانوادگی</Label>
@@ -128,14 +131,9 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
       </div>
 
       <div className="mt-6 px-10">
-        <Button
-          onClick={handleSave}
-          disabled={!isValid}
-          variant="brand">
+        <Button onClick={handleSave} disabled={!isValid} variant="brand">
           ذخیره تغییرات
         </Button>
-
-
       </div>
     </Card>
   );

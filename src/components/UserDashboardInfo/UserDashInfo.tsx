@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import type { Address, UserInfo } from "@/types/UserDashInfoTypes";
+import type { Address, AddressFormData, UserInfo } from "@/types/UserDashInfoTypes";
 import ProfileHeader from "./userDashInfoComponents/profileHeader";
 import ProfileInfo from "./userDashInfoComponents/profileInfo";
 import AddressSection from "./userDashInfoComponents/addressSection";
@@ -28,7 +28,6 @@ const UserDashInfo: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [addresses, setAddresses] = useState<Address[]>([]);
-  const [addressesLoading, setAddressesLoading] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("authToken")) {
@@ -55,13 +54,11 @@ const UserDashInfo: React.FC = () => {
 
   const fetchAddresses = useCallback(async () => {
     try {
-      setAddressesLoading(true);
       const res = await getUserAddresses();
       setAddresses(res);
     } catch (e) {
       console.error("Failed to load addresses", e);
     } finally {
-      setAddressesLoading(false);
     }
   }, []);
 
@@ -101,7 +98,7 @@ const UserDashInfo: React.FC = () => {
     }
   };
 
-  const handleAddAddress = async (data: Omit<Address, "id">) => {
+  const handleAddAddress = async (data: AddressFormData) => {
     if (data.isDefault) {
       await Promise.all(
         addresses
@@ -122,7 +119,7 @@ const UserDashInfo: React.FC = () => {
 
   const handleUpdateAddress = async (
     id: string,
-    data: Partial<Address>
+    data: AddressFormData
   ) => {
     if (data.isDefault) {
       await Promise.all(
@@ -142,7 +139,6 @@ const UserDashInfo: React.FC = () => {
       })
     );
   };
-
 
   const handleDeleteAddress = async (id: string) => {
     await deleteAddress(id);

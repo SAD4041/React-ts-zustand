@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/userDashInfo/input';
 import { Label } from '@/components/ui/userDashInfo/label';
 import ToggleSwitch from '@/components/ui/userDashInfo/toggleSwitch';
 import { X } from 'lucide-react';
-import type { Address, AddressFormModalProps } from '@/types/UserDashInfoTypes';
+import type { AddressFormData, AddressFormModalProps } from '@/types/UserDashInfoTypes'; // ← اضافه کردن AddressFormData
 
 const AddressFormModal: React.FC<AddressFormModalProps> = ({
   isOpen,
@@ -12,26 +12,31 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
   onSubmit,
   initialData = null,
 }) => {
-  const [formData, setFormData] = useState<Omit<Address, 'id'> & { id?: string }>({
+  const [formData, setFormData] = useState<AddressFormData>({
     title: '',
     province: '',
     city: '',
     postalCode: '',
-    phone: '',
     fullAddress: '',
     isDefault: false,
   });
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      setFormData({
+        title: initialData.title,
+        province: initialData.province,
+        city: initialData.city,
+        postalCode: initialData.postalCode,
+        fullAddress: initialData.fullAddress,
+        isDefault: initialData.isDefault,
+      });
     } else {
       setFormData({
         title: '',
         province: '',
         city: '',
         postalCode: '',
-        phone: '',
         fullAddress: '',
         isDefault: false,
       });
@@ -97,16 +102,8 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
               />
             </div>
           </div>
-          <div className='grid grid-cols-3 gap-2'>
-            <div>
-              <Label className='mb-3'>شماره تماس</Label>
-              <Input
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="text-right dir-rtl"
-              />
-            </div>
+
+          <div className='grid grid-cols-2 gap-2'>
             <div>
               <Label className='mb-3'>عنوان</Label>
               <Input
@@ -116,7 +113,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
                 className="text-right dir-rtl"
               />
             </div>
-            <div className="flex items-center gap-2 mt-4">
+            <div className="flex items-end">
               <ToggleSwitch
                 checked={formData.isDefault}
                 onChange={() => setFormData(prev => ({ ...prev, isDefault: !prev.isDefault }))}

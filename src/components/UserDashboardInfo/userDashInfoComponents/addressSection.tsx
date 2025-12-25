@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/userDashInfo/card';
 import { Button } from '@/components/ui/userDashInfo/button';
 import { Plus } from 'lucide-react';
 import AddressCard from './addresscard';
-import type { Address, AddressSectionProps } from '@/types/UserDashInfoTypes';
+import type { Address, AddressFormData, AddressSectionProps } from '@/types/UserDashInfoTypes';
 import Separator from '@/components/ui/userDashInfo/separator';
 import AddressFormModal from './addressFormModal';
 
@@ -34,21 +34,12 @@ const AddressSection: React.FC<AddressSectionProps> = ({
     setEditingAddress(address);
   };
 
-  const handleModalSubmit = (data: Omit<Address, 'id'> & { id?: string }) => {
-    if (data.id) {
-      onUpdateAddress(data.id, data);
-
-      if (data.isDefault) {
-        addresses.forEach(addr => {
-          if (addr.id !== data.id && addr.isDefault) {
-            onUpdateAddress(addr.id, { ...addr, isDefault: false });
-          }
-        });
-      }
+  const handleModalSubmit = (data: AddressFormData) => {
+    if (editingAddress) {
+      onUpdateAddress(editingAddress.id, data);
     } else {
       onAddAddress(data);
     }
-
     setIsAdding(false);
     setEditingAddress(null);
   };
