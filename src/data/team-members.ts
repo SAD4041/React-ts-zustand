@@ -1,7 +1,7 @@
 export type TeamMember = {
   name: string;
   role: string;
-  image: string; // یا number اگر عدد است
+  image: string;
 };
 
 export const teamMembers: TeamMember[] = [

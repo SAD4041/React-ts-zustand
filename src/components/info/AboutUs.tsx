@@ -1,7 +1,5 @@
-// src/components/About.tsx
 import { Users } from 'lucide-react';
 
-// ✅ import جداگانه از هر فایل — بهینه‌تر برای code-splitting
 import { stats } from '@/data/about/stats';
 import { values } from '@/data/about/values';
 import { team } from '@/data/about/team';
