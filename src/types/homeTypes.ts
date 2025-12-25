@@ -107,3 +107,12 @@ export interface BestBrandsSectionProps {
   brands: Brand[];
   onBrandClick: (action: Omit<UserAction, 'timestamp'>) => void;
 }
+
+export interface Banner {
+  id: number;
+  image_url: string;
+}
+
+export interface BannerCarouselProps {
+  banners: Banner[];
+}

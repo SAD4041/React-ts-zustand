@@ -5,18 +5,11 @@ import {
 } from "@/components/ui/carousel";
 import { useRef, useState, useEffect, useCallback } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
+import type {BannerCarouselProps} from "@/types/homeTypes";
 import bannerFallback from "@/assets/banner.jpg";
 import ToRight from "../ui/toRightSvg";
 import ToLeft from "../ui/toLeftSvg";
 
-export interface Banner {
-  id: number;
-  image_url: string;
-}
-
-interface BannerCarouselProps {
-  banners: Banner[];
-}
 
 export default function BannerCarousel({ banners }: BannerCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -90,7 +83,6 @@ export default function BannerCarousel({ banners }: BannerCarouselProps) {
     isHoveredRef.current = false;
   };
 
-  // ✅ دکمه‌های کاستوم برای اطمینان از sync currentIndex
   const scrollPrev = useCallback(() => {
     if (apiRef.current) {
       apiRef.current.scrollPrev();
@@ -114,7 +106,7 @@ export default function BannerCarousel({ banners }: BannerCarouselProps) {
   const scrollTo = useCallback((index: number) => {
     if (apiRef.current) {
       apiRef.current.scrollTo(index);
-      setCurrentIndex(index); // ✅ اینجا می‌تونیم مستقیم ست کنیم
+      setCurrentIndex(index);
     }
   }, []);
 
@@ -181,7 +173,6 @@ export default function BannerCarousel({ banners }: BannerCarouselProps) {
         </div>
       )}
 
-      {/* 🔘 دکمه‌های کاستوم (به جای CarouselPrevious/Next) */}
       {banners.length > 1 && (
         <>
           <button

@@ -72,7 +72,7 @@ const WishlistPage: React.FC = () => {
             {/* هدر صفحه — بدون تغییر */}
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-backoround rounded-full flex items-center justify-center">
                         <User className="w-6 h-6 text-text" />
                     </div>
                     <div>
