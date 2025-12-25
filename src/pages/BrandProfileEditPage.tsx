@@ -18,14 +18,20 @@ const BrandProfileEditPage = () => {
     try {
       const res = await getBrandProfile();
 
+      if (res?.market_id !== undefined && res?.market_id !== null) {
+        localStorage.setItem("marketId", String(res.market_id));
+      } else if (res?.id !== undefined && res?.id !== null) {
+        localStorage.setItem("marketId", String(res.id));
+      }
+
       setBrand({
         brand: res.brand || "",
         description: res.description || "",
         mobile: res.mobile || "",
         email: res.email || "",
         address: res.address || "",
-        logoUrl: res.profileImageUrl || "/placeholder-logo.png",
-        bannerUrl: res.bannerImageUrl || "/placeholder-banner.png",
+        logoUrl: res.logo || "/placeholder-logo.png",
+        bannerUrl: res.banner || "/placeholder-banner.png",
       });
     } catch (err) {
       console.error("Error fetching brand profile:", err);
@@ -49,12 +55,12 @@ const BrandProfileEditPage = () => {
         address: updatedData.address,
       };
 
-      const res = await updateBrandProfile(payload);
+      await updateBrandProfile(payload);
 
       setBrand({
         ...updatedData,
-        logoUrl: res.profileImageUrl,
-        bannerUrl: res.bannerImageUrl,
+        logoUrl: updatedData.logoUrl,
+        bannerUrl: updatedData.bannerUrl,
       });
 
     } catch (err) {

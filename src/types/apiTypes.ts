@@ -2,7 +2,8 @@
 
 export interface BaseParams {
   endPoint: string;
-  headers?: Record<string, any>; 
+  headers?: Record<string, any>;
+  skipAuth?: boolean;
 }
 
 // ---- GET ----

@@ -1,5 +1,5 @@
 import { useFormik, FormikProvider } from "formik";
-import { uploadProfileImage, uploadBannerImage } from "@/services/brandUpload.ts";
+import { uploadProfileImage, uploadBannerImage } from "@/services/brandUpload";
 import type { BrandFormValues, BrandProfileEditProps } from "@/types/brandProfileTypes";
 import { ValidationSchema } from "@/schemas/brandValidationSchema";
 import { Input } from "@/components/ui/Input";
@@ -22,18 +22,22 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
           ? await uploadProfileImage(file)
           : await uploadBannerImage(file);
 
-      formik.setFieldValue(`${type}Url`, res.url);
+      const nextUrl =
+        type === "logo" ? res.logo ?? res.url : res.banner ?? res.url;
+      if (nextUrl) {
+        formik.setFieldValue(`${type}Url`, nextUrl);
+      }
     } catch (err) {
-      console.error(`آپلود ${type} ناموفق بود`, err);
+      console.error(`Image upload failed for ${type}`, err);
     }
   };
 
   return (
     <div className="w-full min-h-screen bg-background">
-      <div className="w-full max-w-6xl mx-auto rtl">
+      <div className="w-full max-w-6xl mx-auto rtl px-4 sm:px-6 lg:px-0 pt-6 sm:pt-8">
 
         {/* --- Top Profile Header --- */}
-        <div className="flex justify-start items-start mb-6 gap-4">
+        <div className="flex flex-row justify-start items-center sm:items-start mb-4 sm:mb-6 gap-4 mx-2 sm:mx-0 ">
           <div className="w-12 h-12 rounded-full border border-border overflow-hidden shrink-0">
             {formik.values.logoUrl ? (
               <img
@@ -48,7 +52,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
             )}
           </div>
 
-          <div className="flex flex-col items-start">
+          <div className="flex flex-col items-start text-right">
             <h3 className="font-extrabold text-foreground text-xl">
               {formik.values.brand || "نام برند"}
             </h3>
@@ -59,36 +63,36 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
         </div>
 
         {/* --- Card --- */}
-        <div className="bg-card rounded-[var(--radius-sm)] border border-border p-8 shadow-md">
-          <div className="flex justify-between items-center mb-10">
+        <div className="bg-card rounded-[11px] border border-border p-5 sm:p-8 shadow-lg mx-2 sm:mx-0">
+          <div className="flex justify-between items-center mb-6 sm:mb-10">
             <h2 className="text-2xl font-bold text-foreground">اطلاعات برند</h2>
           </div>
 
           <FormikProvider value={formik}>
             <form onSubmit={formik.handleSubmit}>
               {/* Images */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 mb-6 sm:mb-8">
 
                 {/* Logo */}
                 <div className="flex flex-col items-center">
                   <label className="font-bold mb-4 text-foreground text-xl">لوگو برند</label>
 
-                  <div className="mb-6">
+                  <div className="mb-4 sm:mb-6">
                     {formik.values.logoUrl ? (
                       <img
                         src={formik.values.logoUrl}
                         alt="Logo"
-                        className="w-40 h-40 rounded-full object-cover  border border-border"
+                        className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border border-border"
                       />
                     ) : (
-                      <div className="w-40 h-40 rounded-full bg-muted flex items-center justify-center text-muted-foreground border border-border">
+                      <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-muted flex items-center justify-center text-muted-foreground border border-border">
                         <span className="text-4xl">📷</span>
                       </div>
                     )}
                   </div>
 
                   <label className="cursor-pointer">
-                    <span className="bg-secondary hover:bg-secondary/90 text-secondary-foreground px-10 py-2 rounded-[var(--radius-lg)] text-base font-medium transition-colors ">
+                    <span className="inline-flex w-full sm:w-auto justify-center bg-secondary hover:bg-secondary/90 text-secondary-foreground px-10 py-2 rounded-[30px] text-base font-medium transition-colors">
                       تغییر لوگو برند
                     </span>
                     <input
@@ -106,7 +110,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                 <div className="flex flex-col items-center">
                   <label className="font-bold mb-4 text-foreground text-xl">بنر برند</label>
 
-                  <div className="w-full h-40 rounded-[var(--radius-sm)] bg-muted overflow-hidden mb-4 flex items-center justify-center border border-border">
+                  <div className="w-full h-32 sm:h-40 rounded-[11px] bg-muted overflow-hidden mb-4 flex items-center justify-center border border-border">
                     {formik.values.bannerUrl ? (
                       <img
                         src={formik.values.bannerUrl}
@@ -121,7 +125,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                   </div>
 
                   <label className="cursor-pointer">
-                    <span className="bg-secondary hover:bg-secondary/90 text-secondary-foreground px-12 py-2 rounded-[var(--radius-lg)] text-base font-medium transition-colors ">
+                    <span className="inline-flex w-full sm:w-auto justify-center bg-secondary hover:bg-secondary/90 text-secondary-foreground px-12 py-2 rounded-[30px] text-base font-medium transition-colors">
                       آپلود بنر
                     </span>
                     <input
@@ -136,15 +140,15 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                 </div>
               </div>
 
-              <div className="border-t border-border my-10"></div>
-              <div className="space-y-8">
+              <div className="border-t border-border my-8 sm:my-10"></div>
+              <div className="space-y-6 sm:space-y-8">
 
                 {/* Brand Name */}
                 <Input
                   label="نام برند"
                   name="maket_name"
                   placeholder="نام کامل برند یا فروشگاه"
-                  className="h-14 rounded-[var(--radius-sm)] bg-muted border-border"
+                  inputClassName="h-14 rounded-[11px] bg-muted border-border"
                   forceRTL
                 />
 
@@ -154,16 +158,16 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                   name="description"
                   rows={5}
                   placeholder="توضیحاتی درباره فعالیت‌ها و محصولات برند شما"
-                  className="rounded-[var(--radius-sm)] bg-muted border-border resize-y"
+                  className="rounded-[11px] bg-muted border-border resize-y"
                 />
 
                 {/* Mobile + Email */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                   <Input
                     label="تلفن تماس"
                     name="mobile"
                     placeholder="09xxxxxxxxx"
-                    className="h-14 rounded-[var(--radius-sm)] bg-muted border-border"
+                    inputClassName="h-14 rounded-[11px] bg-muted border-border"
                     forceRTL
                   />
 
@@ -172,7 +176,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                     name="email"
                     type="email"
                     placeholder="example@domain.com"
-                    className="h-14 rounded-[var(--radius-sm)] bg-muted border-border"
+                    inputClassName="h-14 rounded-[11px] bg-muted border-border"
                     forceRTL
                   />
                 </div>
@@ -183,16 +187,16 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                   name="address"
                   rows={3}
                   placeholder="آدرس کامل فیزیکی برند/فروشگاه"
-                  className="rounded-[var(--radius-sm)] bg-muted border-border resize-y"
+                  className="rounded-[11px] bg-muted border-border resize-y"
                 />
               </div>
 
               {/* Submit */}
-              <div className="mt-12 flex justify-start" dir="ltr">
+              <div className="mt-10 sm:mt-12 flex justify-center sm:justify-start" dir="ltr">
                 <button
                   type="submit"
                   disabled={formik.isSubmitting}
-                  className="bg-secondary hover:bg-secondary/90 text-secondary-foreground px-8 py-3 rounded-[var(--radius-lg)] font-bold text-lg transition-colors min-w-[160px] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-secondary-foreground px-8 py-3 rounded-[30px] font-bold text-lg transition-colors sm:min-w-[160px] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   ذخیره تغییرات
                 </button>

@@ -35,7 +35,7 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
-	--radius-md: 11px
+	--radius-md: 11px;
 	--radius-lg: 30px;
 
 	--background: oklch(1 0 0);
@@ -77,7 +77,7 @@
 /* Theme setup */
 @theme inline {
 	--radius-sm: calc(var(--radius) - 4px);
-	--radius-md: 11px
+	--radius-md: 11px;
 	--radius-lg: 30px;
 	--radius-xl: calc(var(--radius) + 4px);
 

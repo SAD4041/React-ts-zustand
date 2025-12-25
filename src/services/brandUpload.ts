@@ -1,26 +1,27 @@
-import {  putImageData } from "@/services/services";
-const getUserId = () => localStorage.getItem("userId");
+import { postImageData } from "@/services/services";
+const getMarketId = () =>
+  localStorage.getItem("marketId") ?? localStorage.getItem("userId");
 
 // ---------- UPLOAD PROFILE IMAGE ----------
 export const uploadProfileImage = (file: File) => {
-  const userId = getUserId();
+  const marketId = getMarketId();
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("logo", file);
 
-  return putImageData({
-    endPoint: `/api/manager/profile/${userId}/update/image`,
+  return postImageData({
+    endPoint: `/api/manager/profile/${marketId}/update/image`,
     data: formData,
   });
 };
 
 // ---------- UPLOAD BANNER IMAGE ----------
 export const uploadBannerImage = (file: File) => {
-  const userId = getUserId();
+  const marketId = getMarketId();
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("baner", file);
 
-  return putImageData({
-    endPoint: `/api/manager/profile/${userId}/update/banerimage`,
+  return postImageData({
+    endPoint: `/api/manager/profile/${marketId}/update/banerimage`,
     data: formData,
   });
 };
