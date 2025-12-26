@@ -98,19 +98,17 @@ const PaymentsPage: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto p-6 space-y-6">
+        <div className="max-w-7xl mx-auto px-6 md:px-8 py-8 space-y-8 w-full">
             <div dir="rtl" className="flex">
                 <MapPin className="w-6 h-6 ml-2" />
                 <h1 className="text-xl font-bold">تسویه حساب</h1>
             </div>
 
-            {/* بخش اطلاعات تماس */}
             <ContactInfoSection
                 initialData={contactInfo}
                 onChange={(data) => setContactInfo(data)}
             />
 
-            {/* بخش آدرس‌ها */}
             <AddressSection
                 addresses={mockAddresses}
                 onAddAddress={handleAddAddress}
@@ -120,14 +118,12 @@ const PaymentsPage: React.FC = () => {
                 onSelectAddress={setSelectedAddressId}
             />
 
-            {/* بخش روش ارسال */}
             <ShippingMethodSection
                 methods={shippingMethods}
                 selectedMethodId={selectedShippingMethodId}
                 onSelectMethod={setSelectedShippingMethodId}
             />
 
-            {/* بخش خلاصه سفارش */}
             <OrderSummarySection
                 summary={orderSummary}
                 onCheckout={handleCheckout}

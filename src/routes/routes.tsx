@@ -9,6 +9,7 @@ import LoginForm from "@/pages/Login";
 import Validation from "@/pages/Validation";
 import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import Payment from "@/pages/PaymentPage";
+import ShoppingCart from "@/pages/shoppingCart";
 
 export const router = createBrowserRouter([
     {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
             {
                 path: "/Payment",
                 element: <Payment />
+            },
+            {
+                path: "/Shopping-Cart",
+                element: <ShoppingCart />
             },
 
         ],

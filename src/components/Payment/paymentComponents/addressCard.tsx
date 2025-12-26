@@ -27,7 +27,7 @@ const AddressCard: React.FC<AddressCardProps> = ({
     return (
         <div
             dir="rtl"
-            className={`p-4 rounded-md border cursor-pointer transition-all ${isSelected ? 'border-orange-500 bg-orange-50' : 'border-border hover:border-gray-400'
+            className={`p-4 rounded-md border cursor-pointer transition-all shadow-sm ${isSelected ? 'border-orange-500 bg-orange-50' : 'border-border hover:border-gray-400'
                 }`}
             onClick={onSelect}
         >

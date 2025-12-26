@@ -1,5 +1,4 @@
-// src/components/Payments/ContactInfoSection.tsx
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -41,15 +40,6 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({ initialData, on
     });
 
     const [errors, setErrors] = useState<FormErrors>({});
-
-    const isValid = useMemo(() => {
-        try {
-            contactInfoSchema.validateSync(formData, { abortEarly: false });
-            return true;
-        } catch (err) {
-            return false;
-        }
-    }, [formData]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let { name, value } = e.target as { name: keyof FormData; value: string };

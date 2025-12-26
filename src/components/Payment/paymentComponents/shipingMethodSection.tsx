@@ -34,7 +34,7 @@ const ShippingMethodSection: React.FC<ShippingMethodSectionProps> = ({
                         .map((method) => (
                             <div
                                 key={method.id}
-                                className="p-4 border border-border rounded-md flex items-start justify-between"
+                                className="p-4 border border-border rounded-md flex items-start justify-between shadow-sm"
                             >
                                 <div className="flex-1 text-right">
                                     <h4 className="font-medium">{method.name}</h4>
