@@ -6,10 +6,14 @@ import category4 from "@/assets/category/category4.png";
 import category5 from "@/assets/category/category5.png";
 import category6 from "@/assets/category/category6.png";
 
-import style1 from "@/assets/style1.jpg";
-import style2 from "@/assets/style2.jpg";
-import style3 from "@/assets/style3.jpg";
-import style4 from "@/assets/style4.jpg";
+import style1 from "@/assets/styles/style1.jpg";
+import style2 from "@/assets/styles/style2.jpg";
+import style3 from "@/assets/styles/style3.jpg";
+import style4 from "@/assets/styles/style4.jpg";
+import classic from "@/assets/styles/classic.png"
+import sport from "@/assets/styles/sport.png"
+import street from "@/assets/styles/street.png"
+import vintage from "@/assets/styles/vintage.png"
 
 import adidas from '@/assets/brands/Adidas-Logo.wine.png';
 import dior from '@/assets/brands/Christian_Dior_(fashion_house)-Logo.wine.png';
@@ -45,6 +49,9 @@ export const fallbackStylePalettes = [
     { id: 2, title: "اسپرت", slug: "sport", image_url: style2 },
     { id: 3, title: "وینتیج", slug: "vintage", image_url: style3 },
     { id: 4, title: "بوهو", slug: "boho", image_url: style4 },
+];
+export const modelImages = [
+  classic, sport, street, vintage,
 ];
 
 export const brands = [

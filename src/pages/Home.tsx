@@ -2,14 +2,15 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { fetchHomePageData, sendUserAction, type UserAction } from "@/services/homeService";
-import type { HomePageResponse, Banner } from "@/types/homeTypes";
+import type { HomePageResponse } from "@/types/homeTypes";
 import BannerSecton from "@/components/Home/BannerSection";
 import SurpriseSection from "@/components/Home/SupriseSection";
 import BestBrandsSection from "@/components/Home/BestBrand";
 import BrandSlider from "@/components/Home/BrandSlider";
-import {fallbackCategories, fallbackBanners, fallbackStylePalettes} from "@/data/homePageData";
+import { fallbackCategories, fallbackBanners } from "@/data/homePageData";
 import poshtibani from "@/assets/poshtibani.png";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import StyleSection from "@/components/Home/StyleSection";
 
 export default function Home() {
   const [homeData, setHomeData] = useState<HomePageResponse | null>(null);
@@ -50,8 +51,7 @@ export default function Home() {
 
 
   const banners = homeData.banners ?? fallbackBanners;
-  const categories = fallbackCategories; // همیشه از mock استفاده می‌شود
-  const style_palettes = fallbackStylePalettes; // همیشه از mock استفاده می‌شود
+  const categories = fallbackCategories;
   const amazing_products = homeData.special_offers ?? [];
   const best_selling_brands = homeData.best_selling_brands ?? [];
 
@@ -83,14 +83,14 @@ export default function Home() {
                 })
               }
             >
-              <div className="w-25 h-25 rounded-full p-2 flex items-center justify-center transition-colors">
+              <div className="w-25 h-25 rounded-full p-2 flex items-center justify-center transition-colors bg-bg-section1 border-2 border-border">
                 <img
                   src={cat.image_url || bannerFallback}
                   alt={cat.name}
-                  className="w-full h-full object-cover rounded-full"
+                  className="w-[85%] h-[85%] object-contain rounded-full transition-transform group-hover:scale-105"
                 />
               </div>
-              <span className="text-xs sm:text-sm text-[#C57265] font-medium text-center group-hover:text-black transition-colors">
+              <span className="text-xs sm:text-sm text-bg-section1 font-medium text-center group-hover:text-black transition-colors">
                 {cat.name}
               </span>
             </Link>
@@ -98,19 +98,19 @@ export default function Home() {
         </div>
       </div>
 
-      <SurpriseSection products={amazing_products}/>
+      <SurpriseSection products={amazing_products} />
 
       <div className="py-12 px-4 mb-10 bg-white">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-2">!استایل خود را، مجازی پرو کنید</h2>
-          <p className="text-sm text-pink-600 mb-6">
+          <p className="text-xl text-text mb-6">
             .تجربه‌ی خرید از آینده. لباس‌ها را قبل از خرید، آنلاین استایل کنید
           </p>
           <Link to="/style-pro">
             <Button
               variant="default"
               size="sm"
-              className="bg-pink-600 hover:bg-pink-700 rounded-full text-white cursor-pointer"
+              className="bg-bg-section2 hover:bg-bg-section1 rounded-full text-white cursor-pointer"
             >
               شروع استایل
             </Button>
@@ -123,65 +123,7 @@ export default function Home() {
         onBrandClick={logUserAction}
       />
 
-      <div className="py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-8">خرید بر اساس استایل</h2>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="md:w-2/3 relative group cursor-pointer overflow-hidden rounded-xl">
-              <Link to={`/style/classic`} className="block aspect-square">
-                <img
-                  src={style_palettes[0]?.image_url || style1}
-                  alt="کلاسیک"
-                  className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
-                />
-                <p className="absolute bottom-4 right-4 text-black text-xl font-bold">
-                  کلاسیک
-                </p>
-              </Link>
-            </div>
-            <div className="md:w-1/2 flex flex-col gap-4">
-              <div className="flex gap-4">
-                <div className="w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
-                  <Link to={`/style/sport`} className="block aspect-square">
-                    <img
-                      src={style_palettes[1]?.image_url || style2}
-                      alt="اسپرت"
-                      className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <p className="absolute bottom-4 right-4 text-black text-lg font-bold">
-                      اسپرت
-                    </p>
-                  </Link>
-                </div>
-                <div className="w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
-                  <Link to={`/style/street`} className="block aspect-square">
-                    <img
-                      src={style_palettes[2]?.image_url || style3}
-                      alt="استریت"
-                      className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <p className="absolute bottom-4 right-4 text-black text-lg font-bold">
-                      استریت
-                    </p>
-                  </Link>
-                </div>
-              </div>
-              <div className="relative group cursor-pointer overflow-hidden rounded-xl">
-                <Link to={`/style/vintage`} className="block aspect-square">
-                  <img
-                    src={style_palettes[3]?.image_url || style4}
-                    alt="وینتیج"
-                    className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <p className="absolute bottom-4 right-4 text-black text-xl font-bold">
-                    وینتیج
-                  </p>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <StyleSection />
 
       <BrandSlider />
 

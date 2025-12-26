@@ -66,9 +66,9 @@ const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
           </div>
 
           <div className="flex flex-col items-center gap-4">
-            <h2 className="text-xl font-bold text-card-text">شگفت انگیز</h2>
+            <h2 className="text-3xl font-bold text-card-text">شگفت انگیز</h2>
             <div className="flex flex-col items-center gap-1">
-              <span className="text-xl text-card-text">...تا پایان</span>
+              <span className="text-2xl text-card-text">...تا پایان</span>
               <div className="flex flex-col items-center gap-1">
                 <div className="bg-white px-3 py-1 rounded-md border text-bg-section2 text-lg font-bold">
                   {toPersianDigits(timer.hours.toString().padStart(2, '0'))}
