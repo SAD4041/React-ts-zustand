@@ -30,16 +30,18 @@ const getTokenFromStore = () => {
 };
 
 apiClient.interceptors.request.use(
-	(config: InternalAxiosRequestConfig) => {
-		const token = getTokenFromStore();
-		if (token) {
-			config.headers.Authorization = token;	
-		}
-		const fullUrl = `${config.baseURL ?? ""}${config.url ?? ""}`;
-		console.log("👉 REQUEST URL:", fullUrl);
-		return config;
-	},
-	(error) => Promise.reject(error)
+  (config: InternalAxiosRequestConfig) => {
+    const token = getTokenFromStore();
+    if (token) {
+      config.headers.Authorization = token; // بدون Bearer
+    }
+
+    const fullUrl = `${config.baseURL ?? ""}${config.url ?? ""}`;
+    console.log("👉 REQUEST URL:", fullUrl);
+    console.log("👉 AUTH HEADER:", config.headers.Authorization); // ← این خط جدید
+    return config;
+  },
+  (error) => Promise.reject(error)
 );
 
 apiClient.interceptors.response.use(

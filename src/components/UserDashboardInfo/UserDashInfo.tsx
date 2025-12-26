@@ -32,12 +32,12 @@ const UserDashInfo: React.FC = () => {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem("authToken")) {
-      localStorage.setItem(
-        "authToken",
-        "4|XTki1Rhgy5qg4XH8vyBGVSfhmadpsusNbYcSvh032b537ff5"
-      );
-    }
+    //if (!localStorage.getItem("authToken")) {
+    localStorage.setItem(
+      "authToken",
+      "5|0YLSVseQdfSeHxTenCsA8HQnNPCX2tsV3SutdmUNa112b3f0"
+    );
+    //}
   }, []);
 
   const fetchData = useCallback(async () => {
