@@ -8,7 +8,7 @@ import catGif from '@/assets/cat.gif';
 const Footer = () => {
   return (
     <footer
-      className="relative bg-cover bg-center h-80 px-14 border-t border-muted"
+      className="relative bg-cover bg-center h-80 px-14 border-t border-muted mt-20"
       style={{ backgroundImage: `url(${FooterBg})` }}
     >
       <div className="absolute -top-20 left-30 bg-white rounded-full shadow-lg p-5">
