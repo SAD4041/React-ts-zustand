@@ -54,7 +54,7 @@ const Header = () => {
                 onUpdateQuantity={handleUpdateQuantity}
               />
 
-              <nav className="hidden lg:flex items-center space-x-2 md:space-x-3 lg:space-x-4 space-x-reverse flex-row-reverse">
+              <nav className="hidden md:flex items-center space-x-2 md:space-x-3 lg:space-x-4 space-x-reverse flex-row-reverse">
                 {menuItems.map((item, index) => (
                   <DropdownMenu item={item} key={index} />
                 ))}

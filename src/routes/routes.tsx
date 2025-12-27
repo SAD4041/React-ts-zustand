@@ -10,6 +10,7 @@ import Validation from "@/pages/Validation";
 import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import Payment from "@/pages/PaymentPage";
 import ShoppingCart from "@/pages/shoppingCart";
+import ProductPages from "@/pages/ProductPage";
 
 export const router = createBrowserRouter([
     {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
             {
                 path: "/Shopping-Cart",
                 element: <ShoppingCart />
+            },
+            {
+                path: "/ProductPage",
+                element: <ProductPages />
             },
 
         ],
