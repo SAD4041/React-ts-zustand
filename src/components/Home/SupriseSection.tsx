@@ -8,6 +8,7 @@ import ProductCard from '@/components/Product/ProductCard';
 import { toPersianDigits } from '@/utils/PersianDigits';
 import type { Timer, SurpriseSectionProps } from '@/types/homeTypes';
 import { Button } from '../ui/button';
+import ToLeft from '../ui/toLeftSvg';
 
 const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
   const [timer, setTimer] = useState<Timer>({ days: 0, hours: 3, minutes: 14, seconds: 36 });
@@ -41,7 +42,7 @@ const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
   }, []);
 
   return (
-    <div>
+    <div className='mb-10'>
       <div dir="ltr" className="w-full py-6 px-4 md:px-8 bg-gradient-to-r from-bg-section1 to-bg-section2 shadow-sm">
         <div className="flex flex-col md:flex-row items-start gap-4">
           <div className="flex-grow relative">
@@ -65,9 +66,9 @@ const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
           </div>
 
           <div className="flex flex-col items-center gap-4">
-            <h2 className="text-xl font-bold text-card-text">شگفت انگیز</h2>
+            <h2 className="text-3xl font-bold text-card-text">شگفت انگیز</h2>
             <div className="flex flex-col items-center gap-1">
-              <span className="text-xl text-card-text">...تا پایان</span>
+              <span className="text-2xl text-card-text">...تا پایان</span>
               <div className="flex flex-col items-center gap-1">
                 <div className="bg-white px-3 py-1 rounded-md border text-bg-section2 text-lg font-bold">
                   {toPersianDigits(timer.hours.toString().padStart(2, '0'))}
@@ -91,9 +92,7 @@ const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
             variant='slider'
             className="inline-flex items-center gap-2 px-4 py-2 text-sm cursor-pointer"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
+            <ToLeft />
             مشاهده همه
           </Button>
         </div>

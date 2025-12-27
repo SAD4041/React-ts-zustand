@@ -121,8 +121,11 @@ body {
   --titr:  oklch(0.25 0 0);
   /* --special-titr: ; */
 
+  --login-card-bg: #FFECE7;
   --bg-section1: #ED775A;
   --bg-section2: #E4004B;
+
+  --bg-addShop-btn: #44D6FF80;
 }
 
 @theme inline {
@@ -139,6 +142,7 @@ body {
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-border: var(--primary-border);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -169,8 +173,10 @@ body {
   --color-card-text: var(--card-text);
   --color-titr: var(--titr);
   --color-form-ring: var(--form-ring);
+  --color-login-card-bg: var(--login-card-bg);
   --color-bg-section1: var(--bg-section1);
   --color-bg-section2: var(--bg-section2);
+  --color-bg-addShop-btn: var(--bg-addShop-btn);
   
 }
 

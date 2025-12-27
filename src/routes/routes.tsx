@@ -7,7 +7,8 @@ import Error500 from "@/pages/Error500";
 import ProductListing from "@/components/ProductListing/productListing";
 import LoginForm from "@/pages/Login";
 import Validation from "@/pages/Validation";
-import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
+// import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
+import WishlistPage from "@/pages/WishList";
 
 export const router = createBrowserRouter([
     {
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
             {
                 path: "/products-list",
                 element: <ProductListing />
+            },
+            {
+                path: "/dash/wishList",
+                element: <WishlistPage />,
             },
 
         ],
@@ -50,23 +55,23 @@ export const router = createBrowserRouter([
             },
         ],
     },
-    {
-        path: "/dash",
-        element: <SidebarLayout />,
-        errorElement: <Error404 />,
-        children: [
-            // {
-            //     index: true,
-            //     element: <DashboardHome />,
-            // },
-            // {
-            //     path: "profile",
-            //     element: <Profile />,
-            // },
-            // {
-            //     path: "settings",
-            //     element: <Settings />,
-            // },
-        ],
-    }
+    // {
+    //     path: "/dash",
+    //     element: <SidebarLayout />,
+    //     errorElement: <Error404 />,
+    //     children: [
+    //         // {
+    //         //     index: true,
+    //         //     element: <DashboardHome />,
+    //         // },
+    //         {
+    //             path: "/dash/wishList",
+    //             element: <WishlistPage />,
+    //         },
+    //         // {
+    //         //     path: "settings",
+    //         //     element: <Settings />,
+    //         // },
+    //     ],
+    // }
 ]);
