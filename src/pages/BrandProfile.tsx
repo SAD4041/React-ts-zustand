@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getBrandProfile, getBrandProducts } from '@/services/brandProfileService';
+import useUserStore from '@/store/userStore/userStore';
 
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import BrandHeader from '@/components/BrandProfile/BrandHeaderSection';
@@ -17,21 +18,29 @@ const BrandProfile = () => {
   const [brandData, setBrandData] = useState<any>(null);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null); // فقط برای لاگ/توست — صفحه crash نمی‌کند
+  const [error, setError] = useState<string | null>(null);
+
+  // دریافت اطلاعات کاربر فعلی از store
+  const currentUser = useUserStore((state) => state.user);
+  const getUserId = useUserStore((state) => state.getUserId);
+
+  // تشخیص اینکه آیا در حال نمایش پروفایل خودمون هستیم
+  const isOwnProfile = brandId === 'me' || brandId === getUserId();
 
   useEffect(() => {
-    if (!brandId) {
-      // ❗ فقط redirect یا نمایش صفحه 404 برای عدم وجود brandId
-      navigate('/not-found'); // یا نمایش <Error404 /> در render
+    // اگر brandId برابر 'me' باشه، از userId خودمون استفاده می‌کنیم
+    const actualBrandId = brandId === 'me' ? getUserId() : brandId;
+
+    if (!actualBrandId) {
+      navigate('/not-found');
       return;
     }
 
     const fetchData = async () => {
       try {
-        // ✅ درخواست‌ها parallel اما مستقل
         const [brandRes, productsRes] = await Promise.allSettled([
-          getBrandProfile(brandId),
-          getBrandProducts(brandId)
+          getBrandProfile(actualBrandId),
+          getBrandProducts(actualBrandId)
         ]);
 
         if (brandRes.status === 'fulfilled') {
@@ -39,14 +48,13 @@ const BrandProfile = () => {
         } else {
           console.error('❌ Brand data fetch failed:', brandRes.reason);
           setError('اطلاعات برند در دسترس نیست.');
-          // ولی brandData = null می‌ماند → کامپوننت‌ها باید با این حالت کار کنند
         }
 
         if (productsRes.status === 'fulfilled') {
           setProducts(productsRes.value);
         } else {
           console.error('❌ Products fetch failed:', productsRes.reason);
-          setProducts([]); // خالی بماند
+          setProducts([]);
         }
       } finally {
         setLoading(false);
@@ -54,9 +62,8 @@ const BrandProfile = () => {
     };
 
     fetchData();
-  }, [brandId, navigate]);
+  }, [brandId, navigate, getUserId]);
 
-  // 🔹 فقط در صورت عدم وجود brandId اصلاً — نه خطای API — 404 نشان داده شود
   if (!brandId) {
     return <Error404 />;
   }
@@ -65,22 +72,29 @@ const BrandProfile = () => {
     return <LoadingSpinner />;
   }
 
-  // ✅ اینجا دیگر error منجر به render کردن صفحه خطا نمی‌شود
-  // فقط می‌توانید یک توست/پیام هشدار نمایش دهید (اختیاری)
   return (
     <div dir="rtl" className="bg-white rounded-lg shadow-sm overflow-hidden">
-      {/* مثلاً یک پیام خطا در بالای صفحه (اختیاری) */}
       {error && (
         <div className="p-3 bg-yellow-50 text-yellow-700 text-sm text-center">
           {error}
         </div>
       )}
 
-      {/* همیشه رندر شوند — حتی اگر brandData null باشد */}
+      {/* اگر پروفایل خودمون باشه، یک دکمه ویرایش نشون می‌دیم */}
+      {isOwnProfile && (
+        <div className="p-4 bg-blue-50 border-b">
+          <button
+            onClick={() => navigate('/brandProfileEdit')}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            ویرایش پروفایل
+          </button>
+        </div>
+      )}
+
       <BrandHeader brandData={brandData} />
       <BrandInfo brandData={brandData} />
       
-      {/* فقط اگر محصولی وجود داشت */}
       {products.length > 0 && <BestSell brandData={brandData} products={products} />}
       
       <BrandProductsSection products={products} brandId={brandId} />

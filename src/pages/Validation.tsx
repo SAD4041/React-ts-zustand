@@ -20,8 +20,10 @@ import { translateNumber } from '@/utils/translateNumber'
 import type ValidationFormValues from '@/types/loginTypes';
 import BackToLogin from '@/components/ui/toLeftSvg';
 import SubmitSpinner from '@/components/login/submitSpinner';
-import useUserStore from '@/store/userStore/userStore';
 import ToRight from '@/components/ui/toRightSvg';
+import useUserStore from '@/store/userStore/userStore';
+import { decodeToken, getUserIdFromToken } from '@/utils/jwtUtils';
+import { getCurrentUser } from '@/services/userService';
 
 
 
@@ -32,7 +34,9 @@ const Validation: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
-  const setToken = useUserStore((state) => state.setToken);
+  
+  // استفاده از Zustand store
+  const setAuth = useUserStore((state) => state.setAuth);
 
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
@@ -65,9 +69,36 @@ const Validation: React.FC = () => {
             message: result.data?.message || 'کد تأیید صحیح است. خوش آمدید!',
             buttonText: 'ادامه',
             imageSrc: successCat,
-            onButtonClick: () => {
+            onButtonClick: async () => {
               if (result.data?.token) {
-                setToken(result.data.token);
+                try {
+                  // اول توکن رو decode می‌کنیم تا userId بگیریم
+                  const decoded = decodeToken(result.data.token);
+                  
+                  // سعی می‌کنیم اطلاعات کامل user رو از API بگیریم
+                  const userId = getUserIdFromToken(result.data.token);
+                  
+                  // یک user object موقت می‌سازیم
+                  const tempUser = {
+                    id: userId || decoded?.userId || decoded?.id || '',
+                    mobile: phone,
+                    role: (decoded?.role as any) || 'user',
+                  };
+                  
+                  // ذخیره توکن و user در store
+                  setAuth(result.data.token, tempUser);
+                  
+                  // سعی می‌کنیم اطلاعات کامل رو بگیریم
+                  try {
+                    const fullUser = await getCurrentUser();
+                    setAuth(result.data.token, fullUser);
+                  } catch (err) {
+                    console.warn('Could not fetch full user data:', err);
+                    // اگر نتونستیم اطلاعات کامل بگیریم، با همون tempUser ادامه میدیم
+                  }
+                } catch (error) {
+                  console.error('Error processing user data:', error);
+                }
               }
               setModalConfig(prev => ({ ...prev, isOpen: false }));
               navigate('/');

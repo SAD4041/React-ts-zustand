@@ -10,25 +10,19 @@ import Validation from "@/pages/Validation";
 import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import BrandProfile from "@/pages/BrandProfile";
 import BrandProfileEditPage from "@/pages/BrandProfileEditPage";
-// import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import WishlistPage from "@/pages/WishList";
+import ProtectedRoute from "@/components/protectedRoute";
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <PublicLayout />,
-        errorElement: (
-            <Error404 />
-        ),
+        errorElement: <Error404 />,
         children: [
             {
                 index: true,
                 element: <Home />
             },
-            {
-				path: "/brandProfileEdit",
-				element: <BrandProfileEditPage />,
-			},
             {
                 path: "/error500",
                 element: <Error500 />
@@ -39,22 +33,42 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/dash/wishList",
-                element: <WishlistPage />,
+                element: (
+                    <ProtectedRoute>
+                        <WishlistPage />
+                    </ProtectedRoute>
+                ),
             },
-			{
-				path: "/brands/:brandId",
-				element: <BrandProfile />,
-			},
-
+            {
+                // نمایش پروفایل هر برندی (عمومی)
+                path: "/brands/:brandId",
+                element: <BrandProfile />,
+            },
+            {
+                // نمایش پروفایل خودم
+                path: "/my-profile",
+                element: (
+                    <ProtectedRoute requireBrand={true}>
+                        <BrandProfile />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                // ویرایش پروفایل (فقط برای brand ها)
+                path: "/brandProfileEdit",
+                element: (
+                    <ProtectedRoute requireBrand={true}>
+                        <BrandProfileEditPage />
+                    </ProtectedRoute>
+                ),
+            },
         ],
     },
 
     {
         path: "/login",
         element: <LoginLayout />,
-        errorElement: (
-            <Error404 />
-        ),
+        errorElement: <Error404 />,
         children: [
             {
                 index: true,
@@ -66,23 +80,4 @@ export const router = createBrowserRouter([
             },
         ],
     },
-    // {
-    //     path: "/dash",
-    //     element: <SidebarLayout />,
-    //     errorElement: <Error404 />,
-    //     children: [
-    //         // {
-    //         //     index: true,
-    //         //     element: <DashboardHome />,
-    //         // },
-    //         {
-    //             path: "/dash/wishList",
-    //             element: <WishlistPage />,
-    //         },
-    //         // {
-    //         //     path: "settings",
-    //         //     element: <Settings />,
-    //         // },
-    //     ],
-    // }
 ]);
