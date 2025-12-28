@@ -31,6 +31,13 @@ export interface Product extends ProductData {
   id: number;
 }
 
+export type SortOption = 'newest' | 'cheapest' | 'expensive' | 'most-salled' | 'most-revelent';
+
+export interface SortOptionsProps {
+  currentSort: SortOption | null;
+  onSortChange: (sort: SortOption) => void;
+}
+
 export interface BrandFilterProps {
   brands: Brand[];
   selectedBrands: string[];
@@ -80,11 +87,6 @@ export interface SizeFilterProps {
   onToggleSize: (size: string) => void;
 }
 
-export interface SortOptionsProps {
-  currentSort: SortOption | null;
-  onSortChange: (sort: SortOption) => void;
-}
-
-export interface Props {
+export interface SubCategoryProps {
   category: SubCategory;
 }

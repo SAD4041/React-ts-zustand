@@ -1,22 +1,20 @@
-import React from 'react';
-import type { Color } from '@/types/productCardTypes.ts'
-import type { Product } from '@/types/productListingTypes.ts';
-import type { ColorSelectorProps } from '@/types/productCardTypes';
+import React from "react";
+import type { ColorSelectorProps } from "@/types/productCardTypes";
 
 
-const ColorSelector: React.FC<ColorSelectorProps> = ({product}) => {
-
-  return (
-    <div className="flex justify-end space-x-3">
-      {product.colors.map((color: Color) => (
-        <button
-          key={color.hex}
-          className='w-6.5 h-6.5 rounded-full border-2 transition duration-200 '
-          style={{backgroundColor: color.hex,}}
-        />
-      ))}
-    </div>
-  );
+const ColorSelector: React.FC<ColorSelectorProps> = ({ product }) => {
+    return (
+        <div className="flex gap-2 flex-wrap">
+            {product.colors.map(color => (
+                <button
+                    key={color.hex}
+                    className="w-4 aspect-square rounded-full border border-border"
+                    style={{ backgroundColor: color.hex }}
+                />
+            ))}
+        </div>
+    );
 };
+
 
 export default ColorSelector;

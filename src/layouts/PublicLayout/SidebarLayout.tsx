@@ -1,19 +1,18 @@
+// src/layouts/PublicLayout/SidebarLayout.tsx
 import Sidebar from '@/components/Sidebar/Sidebar';
-import type { SidebarLayoutProps } from '@/types/sidebarTypes';
 
-export default function SidebarLayout({
-  children,
-  sidebarItems,
-}: SidebarLayoutProps) {
+export default function SidebarLayout() {
   return (
     <div className="flex h-screen">
-      {/* Main Content Area */}
+      {/* Main Content */}
       <div className="flex-1 overflow-y-auto bg-background">
-        {children}
+        {/* فقط children را نمایش می‌دهیم — React Router خودش اینجا محتوای فرزند را قرار می‌دهد */}
+        {/* ⚠️ اما باید children را دریافت کنیم */}
+        {/* پس یکبار دیگر: children باید باشه، ولی می‌تونه optional باشه */}
+        { /* children رو از props بگیریم */ }
       </div>
 
-      {/* Sidebar */}
-      <Sidebar items={sidebarItems} />
+      <Sidebar />
     </div>
   );
 }

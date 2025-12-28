@@ -1,7 +1,6 @@
 import React from 'react';
 import { toPersianDigits } from '@/utils/PersianDigits';
-import type { PaginationProps } from '@/types/productListingTypes'
-
+import type { PaginationProps } from '@/types/productListingTypes';
 
 const Pagination: React.FC<PaginationProps> = ({ 
   currentGroup, 
@@ -21,7 +20,9 @@ const Pagination: React.FC<PaginationProps> = ({
             key={startPage}
             onClick={() => onGroupChange(i + 1)}
             className={`w-10 h-10 rounded-full transition cursor-pointer ${
-              i + 1 === currentGroup ? 'bg-gray-800 text-white' : 'text-gray-700 hover:bg-gray-100'
+              i + 1 === currentGroup 
+                ? 'bg-primary text-primary-foreground' 
+                : 'text-foreground hover:bg-muted'
             }`}
           >
             {toPersianDigits(startPage)}
@@ -32,8 +33,6 @@ const Pagination: React.FC<PaginationProps> = ({
   }
 
   const items: (number | 'dots')[] = [];
-
-
   items.push(groupStarts[0]);
 
   if (currentGroup > 2) {
@@ -49,12 +48,10 @@ const Pagination: React.FC<PaginationProps> = ({
     items.push(groupStarts[currentGroup]);
   }
 
-
   if (currentGroup < totalGroups - 1) {
     items.push('dots');
     items.push(groupStarts[totalGroups - 1]);
   }
-
 
   const cleaned = [];
   for (let i = 0; i < items.length; i++) {
@@ -81,14 +78,16 @@ const Pagination: React.FC<PaginationProps> = ({
               key={item}
               onClick={() => onGroupChange(groupNumber)}
               className={`w-10 h-10 rounded-full transition cursor-pointer ${
-                isCurrent ? 'bg-gray-800 text-white' : 'text-gray-700 hover:bg-gray-100'
+                isCurrent 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'text-foreground hover:bg-muted'
               }`}
             >
               {toPersianDigits(item)}
             </button>
           );
         }
-        return <span key={`dots-${index}`} className="px-2 text-gray-500">...</span>;
+        return <span key={`dots-${index}`} className="px-2 text-muted-foreground">...</span>;
       })}
     </div>
   );

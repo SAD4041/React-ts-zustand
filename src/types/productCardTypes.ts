@@ -1,3 +1,4 @@
+import type { Product } from "./productListingTypes";
 
 export interface Size {
   label: string;
@@ -9,6 +10,7 @@ export interface Color {
 }
 
 export interface ProductData {
+  id: number;
   discount: number;
   hasDiscount: boolean;
   image: string;
@@ -29,10 +31,6 @@ export interface ImageData {
   image: string;
 }
 
-export interface ProductCardProps {
-  product: Product;
-}
-
 export interface ColorSelectorProps {
   product:Product
 }
@@ -48,4 +46,8 @@ export interface ProductImageProps {
 
 export interface SizeSelectorProps {
   product : Product
+}
+
+export interface ProductCardProps {
+  product: Product;
 }

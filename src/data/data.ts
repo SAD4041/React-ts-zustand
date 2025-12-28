@@ -3,6 +3,8 @@ import type { Brand, ColorOption, SubCategory, Product } from '@/types/productLi
 import type { ProductData } from '@/types/productCardTypes';
 import shortTshirt from '@/assets/shortTshirt.jpg';
 import longTshirt from '@/assets/longTshirt.png';
+import dress from '@/assets/dress.png'
+import Tshirt from '@/assets/T-shirt.png' 
 
 export const productData: ProductData = {
   discount: 24,
@@ -54,7 +56,63 @@ export type MenuItem = {
 };
 
 
-
+export const menuItems: MenuItem[] = [
+  {
+    title: 'زنانه',
+    image: dress,
+    category: {
+      categoryName: 'خرید لباس زنانه',
+      itemsList: [
+        { name: 'تیشرت', image: Tshirt },
+        { name: 'جوراب',  },
+        { name: 'تونیک',  },
+        { name: 'شومیز',  },
+        { name: 'بارانی' },
+        { name: 'شلوار' },
+        { name: 'دامن' },
+        { name: 'پالتو' }
+      ]
+    }
+  },
+  {
+    title: 'مردانه',
+    category: {
+      categoryName: 'خرید لباس مردانه',
+      itemsList: [
+        { name: 'پیراهن' },
+        { name: 'شلوار جین' },
+        { name: 'کت و شلوار' },
+        { name: 'تیشرت' },
+        { name: 'کفش' }
+      ]
+    }
+  },
+  {
+    title: 'بچه‌گانه',
+    category: {
+      categoryName: 'لباس بچه‌گانه',
+      itemsList: [
+        { name: 'لباس نوزاد' },
+        { name: 'کفش بچه' },
+        { name: 'عروسک' },
+        { name: 'اکسسوری' }
+      ]
+    }
+  },
+  {
+    title: 'برند ها',
+    category: {
+      categoryName: 'برندهای محبوب',
+      itemsList: [
+        { name: 'Nike' },
+        { name: 'Adidas' },
+        { name: 'Zara' },
+        { name: 'H&M' },
+        { name: 'Gucci' }
+      ]
+    }
+  }
+];
 
 
 //=========================================================
