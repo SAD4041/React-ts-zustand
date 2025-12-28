@@ -1,10 +1,10 @@
-// src/apiClient.ts
 import axios from "axios";
 import type {
   AxiosInstance,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
+import useUserStore from "@/store/userStore/userStore";
 
 import type {
   GetParams,
@@ -26,11 +26,17 @@ const apiClient: AxiosInstance = axios.create({
 
 // دریافت توکن
 const getTokenFromStore = () => {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("authToken");
+  if (typeof window === "undefined") {
+    return null;
   }
-  return null;
+  return useUserStore.getState().token || null;
 };
+
+
+
+
+
+
 
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig & { skipAuth?: boolean }) => {

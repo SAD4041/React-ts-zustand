@@ -1,15 +1,18 @@
 // src/pages/BrandProfileEditPage.tsx
 
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import BrandProfileEdit from "@/components/BrandInfo/BrandProfileEdit";
 import { getBrandProfile, updateBrandProfile } from "@/services/brandService";
 import { Spinner } from "@/components/ui/Spinner";
 import type { BrandData } from "@/types/brandProfileTypes";
+import { resolveImageUrl } from "@/utils/imageUrl";
 
 const BrandProfileEditPage = () => {
   const [brand, setBrand] = useState<BrandData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const fetchBrandProfile = useCallback(async () => {
     setLoading(true);
@@ -18,11 +21,18 @@ const BrandProfileEditPage = () => {
     try {
       const res = await getBrandProfile();
 
-      if (res?.market_id !== undefined && res?.market_id !== null) {
+      if (res?.manager_id !== undefined && res?.manager_id !== null) {
+        localStorage.setItem("marketId", String(res.manager_id));
+      } else if (res?.market_id !== undefined && res?.market_id !== null) {
         localStorage.setItem("marketId", String(res.market_id));
       } else if (res?.id !== undefined && res?.id !== null) {
         localStorage.setItem("marketId", String(res.id));
       }
+
+      const logoUrl =
+        resolveImageUrl(res.logo) || "/placeholder-logo.png";
+      const bannerUrl =
+        resolveImageUrl(res.baner || res.banner) || "/placeholder-banner.png";
 
       setBrand({
         brand: res.brand || "",
@@ -30,16 +40,16 @@ const BrandProfileEditPage = () => {
         mobile: res.mobile || "",
         email: res.email || "",
         address: res.address || "",
-        logoUrl: res.logo || "/placeholder-logo.png",
-        bannerUrl: res.banner || "/placeholder-banner.png",
+        logoUrl,
+        bannerUrl,
       });
     } catch (err) {
       console.error("Error fetching brand profile:", err);
-      setError("خطا در دریافت اطلاعات فروشگاه. لطفاً دوباره تلاش کنید.");
+      navigate("/error500");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     fetchBrandProfile();

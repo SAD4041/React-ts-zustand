@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const ValidationSchema = Yup.object({
-  maket_name: Yup.string().required("نام فروشگاه الزامی است"),
+  brand: Yup.string().required("نام فروشگاه الزامی است"),
   description: Yup.string()
     .max(500, "حداکثر 500 کاراکتر مجاز است")
     .required("درباره فروشگاه الزامی است"),

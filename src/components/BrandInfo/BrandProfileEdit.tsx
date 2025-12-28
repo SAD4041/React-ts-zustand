@@ -2,8 +2,17 @@ import { useFormik, FormikProvider } from "formik";
 import { uploadProfileImage, uploadBannerImage } from "@/services/brandUpload";
 import type { BrandFormValues, BrandProfileEditProps } from "@/types/brandProfileTypes";
 import { ValidationSchema } from "@/schemas/brandValidationSchema";
-import { Input } from "@/components/ui/Input";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/Custom/CustomTextArea";
+import { resolveImageUrl } from "@/utils/imageUrl";
+
+const preloadImage = (src: string) =>
+  new Promise<void>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => reject(new Error("Image failed to load"));
+    img.src = src;
+  });
 
 const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
   const formik = useFormik<BrandFormValues>({
@@ -16,6 +25,13 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
   });
 
   const handleImageUpload = async (file: File, type: "logo" | "banner") => {
+    const fieldName = `${type}Url` as "logoUrl" | "bannerUrl";
+    const prevUrl = formik.values[fieldName];
+    const previewUrl = URL.createObjectURL(file);
+    let shouldRevokePreview = false;
+
+    formik.setFieldValue(fieldName, previewUrl);
+
     try {
       const res =
         type === "logo"
@@ -23,12 +39,26 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
           : await uploadBannerImage(file);
 
       const nextUrl =
-        type === "logo" ? res.logo ?? res.url : res.banner ?? res.url;
-      if (nextUrl) {
-        formik.setFieldValue(`${type}Url`, nextUrl);
+        type === "logo" ? res.logo ?? res.url : res.baner ?? res.banner ?? res.url;
+      const resolvedUrl = resolveImageUrl(nextUrl);
+
+      if (resolvedUrl) {
+        try {
+          await preloadImage(resolvedUrl);
+          formik.setFieldValue(fieldName, resolvedUrl);
+          shouldRevokePreview = true;
+        } catch (loadError) {
+          console.warn("Uploaded image URL failed to load, keeping preview.", loadError);
+        }
       }
     } catch (err) {
+      formik.setFieldValue(fieldName, prevUrl);
+      shouldRevokePreview = true;
       console.error(`Image upload failed for ${type}`, err);
+    } finally {
+      if (shouldRevokePreview) {
+        URL.revokeObjectURL(previewUrl);
+      }
     }
   };
 
@@ -81,7 +111,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                     {formik.values.logoUrl ? (
                       <img
                         src={formik.values.logoUrl}
-                        alt="Logo"
+                        // alt="Logo"
                         className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border border-border"
                       />
                     ) : (
@@ -92,7 +122,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                   </div>
 
                   <label className="cursor-pointer">
-                    <span className="inline-flex w-full sm:w-auto justify-center bg-secondary hover:bg-secondary/90 text-secondary-foreground px-10 py-2 rounded-[30px] text-base font-medium transition-colors">
+                    <span className="inline-flex w-full sm:w-auto justify-center bg-secondary hover:bg-secondary/90 text-card-text px-10 py-2 rounded-[30px] text-base font-medium transition-colors">
                       تغییر لوگو برند
                     </span>
                     <input
@@ -114,7 +144,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                     {formik.values.bannerUrl ? (
                       <img
                         src={formik.values.bannerUrl}
-                        alt="Banner"
+                        // alt="Banner"
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -125,7 +155,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                   </div>
 
                   <label className="cursor-pointer">
-                    <span className="inline-flex w-full sm:w-auto justify-center bg-secondary hover:bg-secondary/90 text-secondary-foreground px-12 py-2 rounded-[30px] text-base font-medium transition-colors">
+                    <span className="inline-flex w-full sm:w-auto justify-center bg-secondary hover:bg-secondary/90 text-card-text px-12 py-2 rounded-[30px] text-base font-medium transition-colors">
                       آپلود بنر
                     </span>
                     <input
@@ -146,7 +176,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                 {/* Brand Name */}
                 <Input
                   label="نام برند"
-                  name="maket_name"
+                  name="brand"
                   placeholder="نام کامل برند یا فروشگاه"
                   inputClassName="h-14 rounded-[11px] bg-muted border-border"
                   forceRTL
@@ -196,7 +226,7 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
                 <button
                   type="submit"
                   disabled={formik.isSubmitting}
-                  className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-secondary-foreground px-8 py-3 rounded-[30px] font-bold text-lg transition-colors sm:min-w-[160px] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-card-text px-8 py-3 rounded-[30px] font-bold text-lg transition-colors sm:min-w-[160px] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   ذخیره تغییرات
                 </button>

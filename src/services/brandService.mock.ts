@@ -2,13 +2,14 @@
 
 export const getBrandProfile = async () => {
   return {
+    manager_id: 1,
     brand: "Test Market",
     description: "This is a mock description.",
-    mobile: "09120000000",
-    email: "test@example.com",
-    address: "Mock Street 123",
     logo: "/placeholder-logo.png",
-    banner: "/placeholder-banner.png",
+    baner: "/placeholder-banner.png",
+    email: "test@example.com",
+    mobile: "09120000000",
+    address: "Mock Street 123",
   };
 };
 

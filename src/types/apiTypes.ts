@@ -1,5 +1,3 @@
-// src/api/types.ts
-
 export interface BaseParams {
   endPoint: string;
   headers?: Record<string, any>;
