@@ -9,7 +9,7 @@ import BrandHeader from '@/components/BrandProfile/BrandHeaderSection';
 import BrandInfo from '@/components/BrandProfile/BrandInfoSection';
 import BestSell from '@/components/BrandProfile/BestSellSection';
 import BrandProductsSection from '@/components/BrandProfile/BrandProductSection';
-import Comments from '@/components/BrandProfile/CommentsSection';
+import ReviewsSection from '@/components/BrandProfile/CommentsSection';
 import Error404 from './Error404';
 
 const BrandProfile = () => {
@@ -72,6 +72,24 @@ const BrandProfile = () => {
     return <LoadingSpinner />;
   }
 
+  // اگر brandData null باشه و error داشته باشیم، یک پیام خطا نشون بدیم
+  if (!brandData && error) {
+    return (
+      <div dir="rtl" className="flex items-center justify-center min-h-screen">
+        <div className="text-center p-8 bg-red-50 rounded-lg max-w-md">
+          <h2 className="text-2xl font-bold text-red-700 mb-4">خطا در بارگذاری</h2>
+          <p className="text-red-600 mb-6">{error}</p>
+          <button
+            onClick={() => navigate(-1)}
+            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          >
+            بازگشت
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div dir="rtl" className="bg-white rounded-lg shadow-sm overflow-hidden">
       {error && (
@@ -92,13 +110,16 @@ const BrandProfile = () => {
         </div>
       )}
 
-      <BrandHeader brandData={brandData} />
-      <BrandInfo brandData={brandData} />
-      
-      {products.length > 0 && <BestSell brandData={brandData} products={products} />}
+      {brandData && (
+        <>
+          <BrandHeader brandData={brandData} />
+          <BrandInfo brandData={brandData} />
+          {products.length > 0 && <BestSell brandData={brandData} products={products} />}
+        </>
+      )}
       
       <BrandProductsSection products={products} brandId={brandId} />
-      <Comments brandId={brandId} />
+      <ReviewsSection entityId={brandId!} reviewType="brand" />
     </div>
   );
 };
