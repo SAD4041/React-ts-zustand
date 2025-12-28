@@ -13,13 +13,6 @@ export const fetchHomePageData = async (): Promise<HomePageResponse> => {
   }
 };
 
-export interface UserAction {
-  action: "click" | "search" | "view";
-  target_type: "product" | "brand" | "category";
-  target_id: number;
-  query?: string;
-  timestamp: string;
-}
 
 export const sendUserAction = async (action: UserAction): Promise<void> => {
   try {

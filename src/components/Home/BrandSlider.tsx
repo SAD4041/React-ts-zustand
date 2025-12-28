@@ -1,44 +1,42 @@
-import adidas from '@/assets/brands/Adidas-Logo.wine.png';
-import dior from '@/assets/brands/Christian_Dior_(fashion_house)-Logo.wine.png';
-import balenciaga from '@/assets/brands/Balenciaga-Logo.wine.png';
-import chanel from '@/assets/brands/Chanel-Logo.wine.png';
-import zara from '@/assets/brands/Zara_(retailer)-Logo.wine.png';
-import louisVuitton from '@/assets/brands/Louis_Vuitton-Logo.wine.png';
-import burberry from '@/assets/brands/Burberry-Logo.wine.png';
-import fendi from '@/assets/brands/Fendi-Logo.wine.png';
-import nike from '@/assets/brands/Nike,_Inc.-Logo.wine.png';
-import gucci from '@/assets/brands/Gucci-Logo.wine.png';
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, FreeMode } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/free-mode';
+import { brands } from "@/data/homePageData";
 
 const BrandSlider = () => {
-  const brands = [
-    { name: "Adidas", logo: adidas },
-    { name: "Dior", logo: dior },
-    { name: "Balenciaga", logo: balenciaga },
-    { name: "Chanel", logo: chanel },
-    { name: "Zara", logo: zara },
-    { name: "Louis Vuitton", logo: louisVuitton },
-    { name: "Burberry", logo: burberry },
-    { name: "Fendi", logo: fendi },
-    { name: "Nike", logo: nike },
-    { name: "Gucci", logo: gucci }
-  ];
+  
 
   return (
-    <div className="py-6 ">
+    <div className="py-6">
       <div className="bg-gradient-to-r from-background-color via-bg-section1 to-background-color rounded-lg p-4">
-        <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">
+        <Swiper
+          dir="rtl"
+          modules={[Navigation, FreeMode]}
+          spaceBetween={5}
+          slidesPerView={5}
+          slidesPerGroup={1}
+          freeMode={{ enabled: true, momentum: true }}
+          navigation={true}
+          className="brand-swiper"
+        >
           {brands.map((brand, index) => (
-            <div key={index} className="flex-shrink-0">
-              <a href={`brands/${brand.name}`}>
+            <SwiperSlide key={index} className="flex justify-center px-20">
+              <a
+                href={`brands/${brand.name}`}
+                className="block cursor-pointer"
+              >
                 <img
                   src={brand.logo}
                   alt={brand.name}
-                  className="h-17 w-auto object-contain cursor-pointer"
+                  className="h-14 sm:h-16 md:h-17 object-contain"
                 />
               </a>
-            </div>
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       </div>
     </div>
   );

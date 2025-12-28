@@ -6,10 +6,11 @@ import 'swiper/css/navigation';
 import 'swiper/css/free-mode';
 import type { BestBrandsSectionProps } from '@/types/homeTypes';
 import { Button } from '../ui/button';
+import ToLeft from '../ui/toLeftSvg';
 
 const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBrandClick }) => {
   return (
-    <div className="w-full py-6 px-4 md:px-8 bg-bg-section1 shadow-sm rounded-3xl border border-border">
+    <div className="w-full py-6 px-4 mb-10 md:px-8 bg-bg-section1 shadow-sm rounded-3xl border border-border">
       <div className="flex flex-col md:flex-row items-start gap-4">
         <div className="flex-grow">
           <Swiper
@@ -62,9 +63,7 @@ const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBr
             onClick={() => window.location.href = '/brands'}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-destructive hover:text-card-text border border-destructive hover:border-border rounded-full hover:bg-bg-section1 transition cursor-pointer"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
+            <ToLeft />
             مشاهده همه
           </Button>
         </div>

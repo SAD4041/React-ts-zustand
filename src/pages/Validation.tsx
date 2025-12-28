@@ -18,9 +18,10 @@ import {
 import { Button } from '../components/ui/button';
 import { translateNumber } from '@/utils/translateNumber'
 import type ValidationFormValues from '@/types/loginTypes';
-import BackToLogin from '@/components/login/backToLogin';
+import BackToLogin from '@/components/ui/toLeftSvg';
 import SubmitSpinner from '@/components/login/submitSpinner';
 import useUserStore from '@/store/userStore/userStore';
+import ToRight from '@/components/ui/toRightSvg';
 
 
 
@@ -118,11 +119,7 @@ const Validation: React.FC = () => {
     try {
       const result = await checkPhone(phone);
       if (result.success) {
-
-        const otpCode = result.data?.message;
-        console.log('OTP Code:', otpCode);
-        
-        setModalConfig({
+          setModalConfig({
           isOpen: true,
           title: 'ارسال مجدد',
           message: 'کد تأیید مجدداً ارسال شد.',
@@ -187,9 +184,14 @@ const Validation: React.FC = () => {
   return (
     <div className="flex min-h-screen" dir="rtl">
       <div className="w-full flex items-center justify-center p-6 md:p-10">
-        <div className="w-full max-w-xl h-5/6 bg-card rounded-3xl border-2 border-border shadow-2xl p-8 relative overflow-hidden">
+        <div className="w-full max-w-xl h-5/6 bg-login-card-bg rounded-4xl border-3 border-primary-border shadow-2xl p-8 relative overflow-hidden">
 
-          <BackToLogin />
+          <a
+            href="/login"
+            className="absolute top-4 right-4 bg-bg-section1 text-white w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200 z-10"
+          >
+            <ToRight />
+          </a>
 
           <div className="text-center mb-8">
             <img src={logo} alt="CB Buck Gallery" className="mx-auto w-32 h-auto" />
@@ -235,7 +237,7 @@ const Validation: React.FC = () => {
                         handleOtpChange(englishValue, index);
                       }}
                       onKeyDown={(e) => handleOtpKeyDown(e, index)}
-                      className="w-12 h-12 text-center text-lg bg-white shadow border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
+                      className="w-12 h-12 text-center text-lg bg-white border border-transparent rounded-lg focus:border-primary-border focus:border-2 focus:ring-0 text-center text-l transition-all duration-200 outline-none disabled:bg-card disabled:cursor-not-allowed"
                     />
                   ))}
                 </div>
@@ -244,7 +246,7 @@ const Validation: React.FC = () => {
                   <Button
                     type="submit"
                     disabled={loading || isSubmitting || otp.join('').length !== 6}
-                    className="w-82 bg-black text-white text-md rounded-md disabled:opacity-50 cursor-pointer"
+                    className="w-82 bg-bg-section2 text-white text-md rounded-md disabled:opacity-50 hover:bg-bg-section1 cursor-pointer"
                   >
                     {loading || isSubmitting ? (
 
@@ -261,7 +263,7 @@ const Validation: React.FC = () => {
                     type="button"
                     onClick={handleResendCode}
                     disabled={loading || isSubmitting}
-                    className="text-link font-medium disabled:text-text cursor-pointer"
+                    className="text-bg-section2 font-medium disabled:text-text cursor-pointer"
                   >
                     ارسال مجدد
                   </button>
@@ -270,7 +272,7 @@ const Validation: React.FC = () => {
             )}
           </Formik>
 
-          <div className="absolute bottom-0 left-1 w-48 h-55 opacity-80 pointer-events-none">
+          <div className="absolute bottom-0 left-0 w-48 h-55 opacity-80 pointer-events-none">
             <img src={buck} alt="Hand Illustration" className="w-full h-full object-contain" />
           </div>
         </div>
