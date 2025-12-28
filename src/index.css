@@ -1,3 +1,9 @@
+/* Import Vazirmatn font (weights 400, 500, 700) */
+@import "@fontsource/vazirmatn/400.css";
+@import "@fontsource/vazirmatn/500.css";
+@import "@fontsource/vazirmatn/700.css";
+
+/* Import Tailwind */
 @import "tailwindcss";
 
 body {
@@ -47,6 +53,7 @@ body {
   }
 }
 
+/* Apply Vazirmatn globally */
 :root {
   font-family: "Vazir","Vazirmatn", sans-serif;
   line-height: 1.5;
@@ -73,7 +80,7 @@ body {
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
 
-  --secondary: oklch(0.97 0 0);
+  --secondary: #ED775A;
   --secondary-foreground: oklch(0.145 0 0);
 
   --muted: oklch(0.97 0 0);
@@ -90,7 +97,7 @@ body {
   --input: oklch(0.94 0 0);
   --ring: oklch(0.72 0.19 35 / 0.3);
   --form-ring: oklch(46.849% 0.30212 264.226);
-  --card: #F6F6F6;
+  --card: #ffffff;
 
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -128,6 +135,7 @@ body {
   --bg-addShop-btn: #44D6FF80;
 }
 
+/* Theme setup */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -180,6 +188,7 @@ body {
   
 }
 
+/* Dark mode */
 .dark {
   --background: oklch(0.12 0 0);
   --foreground: oklch(0.88 0 0);
@@ -227,4 +236,8 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+}
+
+@keyframes l15{ 
+  100%{transform: rotate(1turn)}
 }
