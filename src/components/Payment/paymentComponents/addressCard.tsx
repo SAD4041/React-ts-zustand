@@ -1,3 +1,4 @@
+// src/components/Payments/AddressCard.tsx
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { MapPin, Trash2, Edit2 } from 'lucide-react';
@@ -28,8 +29,8 @@ const AddressCard: React.FC<AddressCardProps> = ({
         <div
             dir="rtl"
             className={`p-4 rounded-md border cursor-pointer transition-all ${isSelected
-                ? 'border-orange-500 bg-orange-50'
-                : 'border-border hover:border-orange-300'
+                    ? 'border-orange-500 bg-orange-50'
+                    : 'border-border hover:border-orange-300'
                 }`}
             onClick={onSelect}
         >
@@ -39,18 +40,37 @@ const AddressCard: React.FC<AddressCardProps> = ({
                     <span className="text-sm font-semibold">{address.title}</span>
                 </div>
 
-                {/* چک باکس دایره‌ای از اول */}
-                <div
-                    className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors ${isSelected
-                        ? 'bg-orange-500 border-orange-500 text-white'
-                        : 'border-gray-300 bg-white text-gray-500'
-                        }`}
-                >
-                    {isSelected && (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M20 6L9 17l-5-5"></path>
-                        </svg>
+                <div className="flex items-center gap-2">
+                    {/* برچسب "پیش‌فرض" — همیشه نمایش داده بشه اگر isDefault = true */}
+                    {address.isDefault && (
+                        <span className="px-2 py-1 rounded bg-orange-100 text-orange-700 text-xs whitespace-nowrap">
+                            پیش‌فرض
+                        </span>
                     )}
+
+                    {/* دایره انتخاب — همیشه نمایش داده بشه */}
+                    <div
+                        className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors ${isSelected
+                                ? 'bg-orange-500 border-orange-500 text-white'
+                                : 'border-gray-300 bg-white'
+                            }`}
+                    >
+                        {isSelected && (
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="12"
+                                height="12"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                                <path d="M20 6L9 17l-5-5" />
+                            </svg>
+                        )}
+                    </div>
                 </div>
             </div>
 
