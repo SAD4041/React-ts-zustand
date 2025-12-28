@@ -1,3 +1,5 @@
+// src/components/productListing/ProductListing.tsx
+
 import React, { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProductGrid from "./productListingComponents/ProductGrid";
@@ -5,12 +7,12 @@ import FilterSidebar from "./productListingComponents/FilterSidebar";
 import SortOptions from "./productListingComponents/SortOptions";
 import Pagination from "./productListingComponents/Pagination";
 import { getData } from "@/services/services";
-import type { Product } from "@/types/productListingTypes";
+import type { Product as AdaptedProduct } from "@/types/productCardTypes"; // ← توجه: از productCardTypes
 import type { SortOption } from "@/types/productListingTypes";
 import { toPersianDigits } from "@/utils/PersianDigits";
 import SubCategorySlider from "./productListingComponents/SubCategorySilder";
 import { categoryLabels, brandLabels } from "@/data/productListingData";
-
+import { transformProducts } from "@/utils/transformproduct"; // ← اضافه شد
 
 const ProductListing: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -18,7 +20,7 @@ const ProductListing: React.FC = () => {
   const brand = searchParams.get("brand");
   const searchQuery = searchParams.get("q");
 
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<AdaptedProduct[]>([]); // ← نوع صحیح
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,30 +48,30 @@ const ProductListing: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    let fetchPromise: Promise<any>;
-
+    // ✅ ساخت URL واقعی مطابق API
+    let endPoint = "";
     if (listingType === "category") {
-      fetchPromise = getData({
-        endPoint: "/api/category/",
-        params: { category: listingValue },
-        headers: { "Cache-Control": "no-cache", Pragma: "no-cache", Accept: "*/*" },
-      });
+      endPoint = `/api/product/CA/${listingValue}`;
     } else if (listingType === "brand") {
-      fetchPromise = getData({
-        endPoint: "/api/brand/",
-        params: { brand: listingValue },
-        headers: { "Cache-Control": "no-cache", Pragma: "no-cache", Accept: "*/*" },
-      });
+      endPoint = `/api/product/BR/${listingValue}`;
+    } else if (listingType === "search") {
+      endPoint = `/api/product/SE/${listingValue}`;
     } else {
-      fetchPromise = getData({
-        endPoint: "/api/search/",
-        params: { q: listingValue },
-        headers: { "Cache-Control": "no-cache", Pragma: "no-cache", Accept: "*/*" },
-      });
+      setError("نوع لیست نامعتبر است");
+      setLoading(false);
+      return;
     }
 
+    const fetchPromise = getData({
+      endPoint,
+      headers: { "Cache-Control": "no-cache", Pragma: "no-cache", Accept: "*/*" },
+    });
+
     fetchPromise
-      .then((data) => setProducts(Array.isArray(data) ? data : []))
+      .then((data) => {
+        const adaptedProducts = transformProducts(Array.isArray(data) ? data : []);
+        setProducts(adaptedProducts);
+      })
       .catch((err) => {
         setError("خطا در بارگذاری محصولات");
         console.error(err);
@@ -92,19 +94,20 @@ const ProductListing: React.FC = () => {
   const productsPerGroup = 20;
   const pagesPerGroup = 10;
 
+  // ✅ اصلاح فیلترها برای استفاده از فیلدهای جدید
   const productsWithoutPriceFilter = useMemo(() => {
     let result = [...products];
     if (selectedBrands.length > 0) {
-      result = result.filter((p) => selectedBrands.includes(p.model));
+      result = result.filter((p) => selectedBrands.includes(p.model)); // model = brand
     }
     if (selectedSizes.length > 0) {
       result = result.filter((p) =>
-        p.sizes.some((sizeObj) => selectedSizes.includes(sizeObj.label))
+        p.sizes.some((sizeObj) => selectedSizes.includes(sizeObj.label)) // sizes[]
       );
     }
     if (selectedColors.length > 0) {
       result = result.filter((p) =>
-        p.colors.some((colorObj) => selectedColors.includes(colorObj.hex))
+        p.colors.some((colorObj) => selectedColors.includes(colorObj.hex)) // colors[]
       );
     }
     return result;
@@ -129,11 +132,16 @@ const ProductListing: React.FC = () => {
     if (currentSort) {
       result.sort((a, b) => {
         switch (currentSort) {
-          case "newest": return b.id - a.id;
-          case "cheapest": return a.discountedPrice - b.discountedPrice;
-          case "expensive": return b.discountedPrice - a.discountedPrice;
-          case "most-salled": return (b.sales || 0) - (a.sales || 0);
-          default: return 0;
+          case "newest":
+            return b.id - a.id;
+          case "cheapest":
+            return a.discountedPrice - b.discountedPrice;
+          case "expensive":
+            return b.discountedPrice - a.discountedPrice;
+          case "most-salled":
+            return (b.sales || 0) - (a.sales || 0);
+          default:
+            return 0;
         }
       });
     }
@@ -200,10 +208,8 @@ const ProductListing: React.FC = () => {
 
   return (
     <div dir="rtl" className="container mx-auto px-4 py-6 font-vazir">
-
       <SubCategorySlider />
-
-      <hr className="my-6 border-border border-1" />
+      <hr className="my-6 border-border border" />
 
       <div className="flex gap-6 mt-6">
         <FilterSidebar
@@ -230,13 +236,13 @@ const ProductListing: React.FC = () => {
             </div>
           </div>
 
-          <hr className="mb-4 border-border border-1" />
+          <hr className="mb-4 border-border border" />
 
-          <div className="h-150 overflow-y-auto border-border border-1 rounded-lg p-4 bg-card shadow-sm">
+          <div className="h-150 overflow-y-auto border-border border rounded-lg p-4 bg-card shadow-sm">
             <ProductGrid products={productsToDisplay} />
           </div>
 
-          <hr className="my-6 border-border border-1" />
+          <hr className="my-6 border-border border" />
 
           <div className="mt-4 flex justify-center">
             <Pagination

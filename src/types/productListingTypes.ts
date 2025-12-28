@@ -1,5 +1,8 @@
-import type {ProductData} from './productCardTypes';
+// types/productListingTypes.ts
 
+// --- بدون import از productCardTypes ---
+
+import type { Product as AdaptedProduct } from "@/types/productCardTypes";
 export interface SubCategory {
   id: number;
   title: string;
@@ -27,10 +30,24 @@ export interface Filters {
   };
 }
 
-export interface Product extends ProductData {
+// ✅ این ساختار دقیقاً همان چیزی است که از API می‌آید
+export interface Product {
   id: number;
+  market_id: number;
+  name: string;
+  image: string;
+  color: string[];           // ["#FF0000", "#000000", ...]
+  size: string[];            // ["S", "M", "L", ...]
+  inventory_Count: number;   // تعداد موجودی
+  brand: string;             // نام برند
+  price: number;
+  rating: number;            // از بک می‌آید
+  ratingCount: number;
+  sales: number;
+  discount: number;          // درصد تخفیف (0 تا 100)
 }
 
+// --- بقیه انترفیس‌ها ---
 export type SortOption = 'newest' | 'cheapest' | 'expensive' | 'most-salled' | 'most-revelent';
 
 export interface SortOptionsProps {
@@ -78,7 +95,7 @@ export interface PriceRangeFilterProps {
 }
 
 export interface ProductGridProps {
-  products: Product[];
+  products: AdaptedProduct[];
 }
 
 export interface SizeFilterProps {

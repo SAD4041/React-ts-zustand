@@ -1,12 +1,18 @@
 import { getData, putData, postImageData } from "@/services/services";
 import type { UserInfo } from "@/types/UserDashInfoTypes";
 
+// userDashInfoService.ts اصلاح شده
 export const getUserProfile = async (): Promise<UserInfo> => {
   try {
     const response = await getData({ endPoint: "/api/user/profile" });
 
+    if (!response) {
+       throw new Error("پاسخی از سرور دریافت نشد");
+    }
+
+    // مطابقت با ساختار دیتای سرور
     return {
-      id: String(response.user_id),
+      id: String(response.user_id || ""),
       firstName: response.name || "",
       lastName: response.family || "",
       email: response.email || "",
@@ -14,8 +20,13 @@ export const getUserProfile = async (): Promise<UserInfo> => {
       avatar: response.picture || null,
       birthDate: "", 
     };
-  } catch (error) {
+
+  } catch (error: any) {
     console.error("Failed to fetch user profile", error);
+    // اگر سرور 404 داد، یک آبجکت پیش‌فرض برگردان تا صفحه کرش نکند
+    if (error.response?.status === 404) {
+      console.warn("پروفایل یافت نشد، نمایش پروفایل خام.");
+    }
     throw new Error("خطا در دریافت اطلاعات پروفایل");
   }
 };

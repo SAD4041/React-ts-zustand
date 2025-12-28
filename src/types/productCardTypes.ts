@@ -1,4 +1,4 @@
-import type { Product } from "./productListingTypes";
+// types/productCardTypes.ts
 
 export interface Size {
   label: string;
@@ -9,29 +9,26 @@ export interface Color {
   label: string;
 }
 
-export interface ProductData {
+export interface Product {
+  id: number;
   discount: number;
   hasDiscount: boolean;
   image: string;
-  model: string;
+  model: string;             // = brand
   name: string;
   price: number;
   discountedPrice: number;
   sizes: Size[];
   colors: Color[];
-  rating: number;
-  stock: number;
+  rating: number;            // ✅ وجود دارد
+  stock: number;             // = inventory_Count
   ratingCount: number;
   sales: number;
 }
 
-export interface ImageData {
-  title: string;
-  image: string;
-}
-
+// --- Props برای کامپوننت‌ها ---
 export interface ColorSelectorProps {
-  product:Product
+  product: Product;
 }
 
 export interface ProductProps {
@@ -44,7 +41,7 @@ export interface ProductImageProps {
 }
 
 export interface SizeSelectorProps {
-  product : Product
+  product: Product;
 }
 
 export interface ProductCardProps {

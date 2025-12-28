@@ -19,22 +19,26 @@ const apiClient: AxiosInstance = axios.create({
 	timeout: 20000,
 	headers: {
 		"Content-Type": "application/json",
+		"Accept": "application/json",
 	},
 });
 
-const getTokenFromStore = () => {
+/* const getTokenFromStore = () => {
   if (typeof window !== 'undefined') {
     return localStorage.getItem('authToken');
   }
   return null;
+}; */
+const getTokenFromStore = () => {
+  return "18|mccycWfzo0pyotzUCvIkdk5ALibUM6kOC32LfZq0796fbd9a"; // برای تست
 };
 
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = getTokenFromStore();
+    const token = getTokenFromStore();	
     if (token) {
-      config.headers.Authorization = token; // بدون Bearer
-    }
+	config.headers.Authorization = `Bearer ${token}`;    
+}
 
     const fullUrl = `${config.baseURL ?? ""}${config.url ?? ""}`;
     console.log("👉 REQUEST URL:", fullUrl);
