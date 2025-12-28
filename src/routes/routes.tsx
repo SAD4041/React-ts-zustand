@@ -7,6 +7,8 @@ import Error500 from "@/pages/Error500";
 import ProductListing from "@/components/ProductListing/productListing";
 import LoginForm from "@/pages/Login";
 import Validation from "@/pages/Validation";
+import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
+import BrandProfileEditPage from "@/pages/BrandProfileEditPage";
 // import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import WishlistPage from "@/pages/WishList";
 
@@ -22,6 +24,10 @@ export const router = createBrowserRouter([
                 index: true,
                 element: <Home />
             },
+            {
+				path: "/brandProfileEdit",
+				element: <BrandProfileEditPage />,
+			},
             {
                 path: "/error500",
                 element: <Error500 />

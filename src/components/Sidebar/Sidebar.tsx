@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DASHBOARD_SIDEBAR_ITEMS } from '@/pages/SidebarConstant';
 import type { NavItem } from '@/types/sidebarTypes';
+import useUserStore from '@/store/userStore/userStore';
 
 // تابع کمکی برای اضافه کردن onClick
 const mapItemsWithNavigation = (navigate: (path: string) => void): NavItem[] => {
@@ -11,7 +12,7 @@ const mapItemsWithNavigation = (navigate: (path: string) => void): NavItem[] => 
     onClick: () => {
       if (item.id === 'logout') {
         // مثلاً logout logic
-        localStorage.removeItem('token');
+        useUserStore.getState().setToken(null);
         navigate('/login');
       } else {
         navigate(item.path);
@@ -104,4 +105,5 @@ export default function Sidebar() {
       </nav>
     </div>
   );
+  
 }

@@ -20,6 +20,7 @@ import { translateNumber } from '@/utils/translateNumber'
 import type ValidationFormValues from '@/types/loginTypes';
 import BackToLogin from '@/components/ui/toLeftSvg';
 import SubmitSpinner from '@/components/login/submitSpinner';
+import useUserStore from '@/store/userStore/userStore';
 import ToRight from '@/components/ui/toRightSvg';
 
 
@@ -31,6 +32,7 @@ const Validation: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+  const setToken = useUserStore((state) => state.setToken);
 
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
@@ -65,7 +67,7 @@ const Validation: React.FC = () => {
             imageSrc: successCat,
             onButtonClick: () => {
               if (result.data?.token) {
-                localStorage.setItem('authToken', result.data.token);
+                setToken(result.data.token);
               }
               setModalConfig(prev => ({ ...prev, isOpen: false }));
               navigate('/');
