@@ -4,4 +4,5 @@ export interface UserState {
 
   setToken: (token: string | null) => void;
   setUsername: (username: string) => void;
+  clearToken: () => void;
 }
