@@ -7,6 +7,8 @@ import {
 } from "@/pages/SidebarConstant";
 import type { NavItem } from "@/types/sidebarTypes";
 import useAuthStore from "@/store/authStore/authStore";
+import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer/Footer";
 
 export default function SidebarLayout() {
   const navigate = useNavigate();
@@ -40,7 +42,9 @@ export default function SidebarLayout() {
           <Sidebar items={items} className="rounded-none" />
         </aside>
         <main className="min-w-0 flex-1">
+          <Header />
           <Outlet />
+          <Footer />
         </main>
       </div>
     </div>

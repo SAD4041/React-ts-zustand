@@ -34,41 +34,32 @@ export const router = createBrowserRouter([
                 path: "/products-list",
                 element: <ProductListing />
             },
+
+        ],
+    },
+    {
+        path: "/dash",
+        element: <SidebarLayout />,
+        children: [
+            // {
+            //     index: true,
+            //     element: <OrderHistoryPage />,
+            // },
             {
-                path: "user-dash",
-                element: <SidebarLayout />,
-                children: [
-                    {
-                        index: true,
-                        element: <OrderHistoryPage />,
-                    },
-                    {
-                        path: "wishList",
-                        element: <WishlistPage />,
-                    },
-                    {
-                        path: "orders",
-                        element: <OrderHistoryPage />,
-                    },
-                ],
+                path: "/dash/product-management",
+                element: <ProductManagementPage />,
             },
             {
-                path: "brand-dash",
-                element: <SidebarLayout />,
-                children: [
-                    // {
-                    //     index: true,
-                    //     element: <OrderHistoryPage />,
-                    // },
-                    {
-                        path: "product-management",
-                        element: <ProductManagementPage />,
-                    },
-                    {
-                        path: "/profile-edit",
-                        element: <BrandProfileEditPage />,
-                    },
-                ],
+                path: "/dash/wishList",
+                element: <WishlistPage />,
+            },
+            {
+                path: "/dash/profile-edit",
+                element: <BrandProfileEditPage />,
+            },
+            {
+                path: "/dash/orders",
+                element: <OrderHistoryPage />,
             },
         ],
     },
