@@ -17,15 +17,14 @@ import MobileLayout from "@/layouts/MobileLayout/MobileLayout";
 import AdminDashboard from "@/pages/AdminDashboard";
 import Dashboard from "@/pages/PetDashboard";
 import PetDashboard from "@/pages/PetDashboard";
+import Error404 from "@/pages/Error404";
+
 
 export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <PublicLayout />,
-    // errorElement: (
-    // 	<Error404 />
-    // ),
-    children: [
+	{
+		path: "/",
+		element: <PublicLayout />,
+		children: [
       {
         index: true,
         path: "/",
@@ -64,6 +63,11 @@ export const router = createBrowserRouter([
 			{
 				path: "/Dashboard/pets",
 				element: <PetDashboard/>
+			}
+			,
+			{
+				path: "*",
+				element: <Error404 />,
 			}
 		],
 	},
