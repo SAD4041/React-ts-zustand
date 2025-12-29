@@ -55,15 +55,9 @@ body {
 
 /* Apply Vazirmatn globally */
 :root {
-<<<<<<< HEAD
-	font-family: Vazir, system-ui, Avenir, Helvetica, Arial, sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
-=======
   font-family: "Vazir","Vazirmatn", sans-serif;
   line-height: 1.5;
   font-weight: 400;
->>>>>>> 0f6f3f9387680b400d5ad0a40c27c9eeb416f0ca
 
   color-scheme: light dark;
   background-color: oklch(1 0 0);
@@ -88,6 +82,8 @@ body {
 
   --secondary: #ED775A;
   --secondary-foreground: oklch(0.145 0 0);
+
+  --contact-pill: #E4004B;
 
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.45 0 0);
@@ -246,4 +242,8 @@ body {
 
 @keyframes l15{ 
   100%{transform: rotate(1turn)}
+}
+
+.contact-pill {
+  background-color: var(--contact-pill);
 }
