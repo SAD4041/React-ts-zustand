@@ -1,9 +1,13 @@
 import User from '@/assets/icon.png';
+import { Link } from "react-router-dom";
 
 const ProfileIcon = () => (
-  <button className="text-foreground hover:text-muted-foreground transition-colors">
+  <Link
+    to="/UserDashboard/Information"
+    className="text-foreground hover:text-muted-foreground transition-colors"
+  >
     <img src={User} alt="پروفایل" className="h-5 w-5" />
-  </button>
+  </Link>
 );
 
 export default ProfileIcon;

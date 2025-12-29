@@ -15,7 +15,7 @@ import UserDashInformation from "@/pages/userDashInfo";
 import FAQ from "@/pages/FAQ";
 import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import AboutUs from "@/pages/AboutUs";
-import ContactUs from "@/pages/ContactUs";
+import ContactUs from "@/components/ContactUs/ContactUs";
 
 
 export const router = createBrowserRouter([
