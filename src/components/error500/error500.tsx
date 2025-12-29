@@ -30,7 +30,7 @@ export default function Errors500() {
 
         <MotionButton
           onClick={() => navigate("/")}
-          variant="default"
+          variant="destructive"
           className="px-6 py-3 font-semibold text-lg"
         >
           بازگشت به خانه اصلی

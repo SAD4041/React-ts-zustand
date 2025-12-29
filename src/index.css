@@ -1,3 +1,9 @@
+/* Import Vazirmatn font (weights 400, 500, 700) */
+@import "@fontsource/vazirmatn/400.css";
+@import "@fontsource/vazirmatn/500.css";
+@import "@fontsource/vazirmatn/700.css";
+
+/* Import Tailwind */
 @import "tailwindcss";
 
 body {
@@ -6,6 +12,27 @@ body {
 }
 
 /* ---------- Utils ---------- */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.text-link {
+  color: var(--link);
+  text-decoration: none;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+.text-link:hover {
+  text-decoration-thickness: 2px;
+  opacity: 0.9;
+}
+.vazir {
+		font-family: "Vazirmatn", sans-serif;
+	}
+
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -27,9 +54,9 @@ body {
   }
 }
 
-/* ---------- Root Tokens ---------- */
+/* Apply Vazirmatn globally */
 :root {
-  font-family: "Vazirmatn", sans-serif;
+  font-family: "Vazir","Vazirmatn", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -61,7 +88,7 @@ body {
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
 
-  --secondary: oklch(0.97 0 0);
+  --secondary: #ED775A;
   --secondary-foreground: oklch(0.145 0 0);
 
   --muted: oklch(0.97 0 0);
@@ -84,6 +111,8 @@ body {
   --border: oklch(0.92 0 0);
   --input: oklch(0.94 0 0);
   --ring: oklch(0.72 0.19 35 / 0.3);
+  --form-ring: oklch(46.849% 0.30212 264.226);
+  --card: #ffffff;
 
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -119,6 +148,26 @@ body {
 }
 
 /* ---------- Theme Mapping ---------- */
+  --text:  oklch(0.45 0 0);
+  --card-text: white;
+  --titr:  oklch(0.25 0 0);
+  /* --special-titr: ; */
+
+  --login-card-bg: #FFECE7;
+  --bg-section1: #ED775A;
+  --bg-section2: #E4004B;
+
+  --bg-addShop-btn: #44D6FF80;
+  --tabs-active: #ffffff;
+  --order-current: 59 130 246;
+  --order-complete: 34 197 94;
+  --order-cancel: 239 68 68;
+  --badge-success: #63D949;
+  --badge-warning: #ED775A;
+  --badge-danger: #E4004B;
+}
+
+/* Theme setup */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -133,8 +182,8 @@ body {
   --color-popover-foreground: var(--popover-foreground);
 
   --color-primary: var(--primary);
-  --color-primary-foreground: var(--brand-foreground);
-
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-border: var(--primary-border);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
 
@@ -154,6 +203,12 @@ body {
   --color-brand-foreground: var(--brand-foreground);
   --color-brand-light: var(--brand-light);
 
+  --color-card: var(--card);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -164,9 +219,21 @@ body {
   --color-sidebar-ring: var(--sidebar-ring);
   --color-yellow: var(--yellow);
   --color-yellow-foreground: var(--yellow-foreground);
+  --color-text: var(--text);
+  --color-card-text: var(--card-text);
+  --color-titr: var(--titr);
+  --color-form-ring: var(--form-ring);
+  --color-login-card-bg: var(--login-card-bg);
+  --color-bg-section1: var(--bg-section1);
+  --color-bg-section2: var(--bg-section2);
+  --color-bg-addShop-btn: var(--bg-addShop-btn);
+  --color-order-current: rgb(var(--order-current));
+	--color-order-complete: rgb(var(--order-complete));
+	--color-order-cancel: rgb(var(--order-cancel));
+  
 }
 
-/* ---------- Dark Mode ---------- */
+/* Dark mode */
 .dark {
   --background: oklch(0.12 0 0);
   --foreground: oklch(0.88 0 0);
@@ -214,9 +281,12 @@ body {
   --ring-primary-subtle: oklch(0.3 0.1 35);
 }
 
-/* ---------- Base ---------- */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+}
+
+@keyframes l15{ 
+  100%{transform: rotate(1turn)}
 }

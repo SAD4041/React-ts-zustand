@@ -13,6 +13,8 @@ import { toPersianDigits } from "@/utils/PersianDigits";
 import SubCategorySlider from "./productListingComponents/SubCategorySilder";
 import { categoryLabels, brandLabels } from "@/data/productListingData";
 import { transformProducts } from "@/utils/transformproduct"; // ← اضافه شد
+import LoadingSpinner from "../ui/LoadingSpinner";
+
 
 const ProductListing: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -192,9 +194,7 @@ const ProductListing: React.FC = () => {
 
   if (loading) {
     return (
-      <div dir="rtl" className="container mx-auto px-4 py-12 text-center">
-        در حال بارگذاری...
-      </div>
+      <LoadingSpinner />
     );
   }
 
