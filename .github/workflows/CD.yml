@@ -143,19 +143,11 @@ jobs:
           echo "${{ secrets.SERVER_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Install cloudflared
-        if: steps.docker_build.outcome == 'success'
-        run: |
-          wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-          sudo dpkg -i cloudflared-linux-amd64.deb || sudo apt-get install -f -y
-          cloudflared --version
-
       - name: Copy configuration files via SCP
         if: steps.docker_build.outcome == 'success'
         run: |
           scp -i ~/.ssh/id_rsa \
             -o StrictHostKeyChecking=no \
-            -o ProxyCommand="cloudflared access ssh --hostname ${{ secrets.SERVER_HOST }}" \
             docker-compose.yml \
             root@${{ secrets.SERVER_HOST }}:/root/front
 
@@ -165,7 +157,6 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa \
             -o StrictHostKeyChecking=no \
-            -o ProxyCommand="cloudflared access ssh --hostname ${{ secrets.SERVER_HOST }}" \
             root@${{ secrets.SERVER_HOST }} \
             "cd /root/front && \
              docker logout ghcr.io && \

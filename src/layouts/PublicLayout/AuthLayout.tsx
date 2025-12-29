@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
 	return (
-		<div className="font-[alibaba]">
+		<div className="font-[alibaba]" dir="rtl">
 			<Toaster
 				position="bottom-right"
 				richColors={true}

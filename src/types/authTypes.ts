@@ -45,3 +45,35 @@ export interface PermissionResponse {
 	name: string;
 	description: string;
 }
+
+export interface ForgetPasswordPayload {
+	Email: string;
+}
+
+export interface ForgetPasswordResponse {
+	statusCode: number;
+	messages?: ForgetPasswordErrors;
+	message?: string;
+}
+
+export interface ForgetPasswordErrors {
+	Email?: string;
+}
+
+
+export interface ResetPasswordPayload {
+	email: string;   
+	token: string;   
+	password: string; 
+  }
+  
+  export interface ResetPasswordResponse {
+	statusCode: number;
+	message?: string;
+	messages?: {
+	  password?: string;
+	  email?: string;
+	  token?: string;
+	};
+  }
+  

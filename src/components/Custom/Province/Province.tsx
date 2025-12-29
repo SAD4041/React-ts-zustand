@@ -6,13 +6,16 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../Select/Select";
-import { getIranProvincesFa } from "@/utils/provinces";
 
 import customStyles from "./Province.module.css";
 
 import { useContext, useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { LocationContext } from "@/types/locationSelectorTypes";
+import { fetchProvincesService } from "@/services/provinceService";
+import type { ProvinceResponse } from "@/types/addressInfoTypes";
+import { PROVINCES_QUERY_KEY } from "@/keys/locationKeys";
 
 export function Province({
 	className,
@@ -30,15 +33,12 @@ export function Province({
 	const ref = useRef<HTMLButtonElement>(null);
 	const [width, setWidth] = useState(0);
 
-	const [iranProvincesFa, setIranProvincesFa] = useState<
-		Record<string, string[]>
-	>({});
-
-	useEffect(() => {
-		getIranProvincesFa().then((data) => {
-			setIranProvincesFa(data);
-		});
-	}, []);
+	const { data } = useQuery<ProvinceResponse>({
+		queryKey: PROVINCES_QUERY_KEY,
+		queryFn: fetchProvincesService,
+		staleTime: 1000 * 60 * 30,
+		gcTime: 1000 * 60 * 60,
+	});
 	useEffect(() => {
 		if (ref.current) {
 			setWidth(ref.current.clientWidth); // gets the width in pixels
@@ -73,13 +73,13 @@ export function Province({
 			</SelectTrigger>
 			<SelectContent>
 				<SelectGroup>
-					{Array.from(Object.keys(iranProvincesFa)).map((province) => {
+					{Array.from(data?.data ?? []).map((city) => {
 						return (
 							<SelectItem
-								style={{ fontSize: calculateFontSize(province.length) }}
-								value={province}
+								style={{ fontSize: calculateFontSize(city.name.length) }}
+								value={city.num.toString()}
 							>
-								{province}
+								{city.name}
 							</SelectItem>
 						);
 					})}

@@ -9,10 +9,14 @@ type item = {
 export type PetKindToggleGroupProps = {
   items: item[];
   name: string;
-
+  className?: string | null;
+  disable? : boolean | undefined;
+  onChange?: (value: string) => void;
 };
 
 export type IsAdultToggleGroupProps = {
   items: item[];
   name: string;
+  className?: string | null;
+
 };

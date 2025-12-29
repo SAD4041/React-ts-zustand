@@ -40,7 +40,10 @@ export function PetDatePicker({
 	const [month, setMonth] = useState(currentPersianDate.jm);
 	const [day, setDay] = useState(currentPersianDate.jd);
 	const [field, , helper] = useField(name);
+	const [initialized, setInitialized] = useState(false);
 	useEffect(() => {
+		if (initialized) return;
+		setInitialized(true);
 		if (field.value) {
 			const persianDate = convertGregorianToJalaliDate(new Date(field.value));
 			setYear(persianDate.jy);
@@ -83,7 +86,12 @@ export function PetDatePicker({
 					max={month > 6 ? 30 : 31}
 				/>
 			</div>
-			<div className={cn("flex flex-col items-center justify-center")}>
+			<div
+				className={cn(
+					"flex flex-col items-center justify-center",
+					classes?.containerClassName,
+				)}
+			>
 				<div>
 					<p className={cn("text-3xl", classes?.textClassName)}>ماه</p>
 				</div>

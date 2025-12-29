@@ -129,7 +129,7 @@ export const NumberRoller = ({
 		}
 	}
 	return (
-		<div className="flex flex-col items-center">
+		<div className="flex flex-col items-center w-full">
 			{isDesktop && (
 				<ChevronUp
 					className="text-gray-500 cursor-pointer"
@@ -140,7 +140,7 @@ export const NumberRoller = ({
 			<div
 				ref={ref}
 				className={cn(
-					"relative h-60 w-40 bg-transparent overflow-hidden text-center select-none",
+					"relative h-60 w-40 bg-transparent overflow-hidden text-center select-none w-full",
 					classes?.className,
 				)}
 			>
