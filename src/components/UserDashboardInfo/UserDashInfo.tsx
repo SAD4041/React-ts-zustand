@@ -35,7 +35,7 @@ const UserDashInfo: React.FC = () => {
     //if (!localStorage.getItem("authToken")) {
     localStorage.setItem(
       "authToken",
-      "6|RzXPPb980rYFqH6eiWDJ07M2UvUVDRzalXp7gFKyee3e7e59");
+      "7|BjkRZcsnGWmq4r0VPwa8eTP7NeihXbKmF3zOS5Hi8752c75e");
     //}
   }, []);
 
