@@ -15,9 +15,8 @@ export default function Sidebar({ items }: SidebarProps) {
 
   return (
     <div
-      className={`fixed top-0 right-0 h-screen bg-sidebar shadow-lg transition-all duration-300 ease-in-out z-50 ${
-        isHovered ? 'w-sidebar' : 'w-sidebar-collapsed'
-      }`}
+      className={`fixed top-0 right-0 h-screen bg-sidebar shadow-lg transition-all duration-300 ease-in-out z-50 ${isHovered ? 'w-sidebar' : 'w-sidebar-collapsed'
+        }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ fontFamily: 'vazirmatn, sans-serif' }}
@@ -46,7 +45,7 @@ export default function Sidebar({ items }: SidebarProps) {
                   {item.label}
                 </span>
 
-                <div className="flex-shrink-0 text-foreground [&>svg]:w-8 [&>svg]:h-8">
+                <div className="shrink-0 text-foreground [&>svg]:w-8 [&>svg]:h-8">
                   {item.icon}
                 </div>
               </div>
@@ -76,7 +75,7 @@ export default function Sidebar({ items }: SidebarProps) {
                   {bottomItem.label}
                 </span>
 
-                <div className="flex-shrink-0 text-foreground [&>svg]:w-8 [&>svg]:h-8">
+                <div className="shrink-0 text-foreground [&>svg]:w-8 [&>svg]:h-8">
                   {bottomItem.icon}
                 </div>
               </div>
