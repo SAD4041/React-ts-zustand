@@ -15,6 +15,7 @@ import UserDashInformation from "@/pages/userDashInfo";
 import FAQ from "@/pages/FAQ";
 import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import AboutUs from "@/pages/AboutUs";
+import ContactUs from "@/pages/ContactUs";
 
 
 export const router = createBrowserRouter([
@@ -48,6 +49,14 @@ export const router = createBrowserRouter([
             {
                 path: "/aboutus",
                 element: <AboutUs />,
+            },
+            {
+                path: "/ContactUs",
+                element: <ContactUs />,
+            },
+            {
+                path: "/brandProfileEdit",
+                element: <BrandProfileEditPage />,
             },
 
         ],
@@ -96,4 +105,23 @@ export const router = createBrowserRouter([
             },
         ],
     },
+    // {
+    //     path: "/dash",
+    //     element: <SidebarLayout />,
+    //     errorElement: <Error404 />,
+    //     children: [
+    //         // {
+    //         //     index: true,
+    //         //     element: <DashboardHome />,
+    //         // },
+    //         {
+    //             path: "/dash/wishList",
+    //             element: <WishlistPage />,
+    //         },
+    //         // {
+    //         //     path: "settings",
+    //         //     element: <Settings />,
+    //         // },
+    //     ],
+    // }
 ]);
