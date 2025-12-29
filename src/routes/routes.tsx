@@ -14,6 +14,7 @@ import OrderHistoryPage from "@/pages/OrderHistoryPage";
 import UserDashInformation from "@/pages/userDashInfo";
 import FAQ from "@/pages/FAQ";
 import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
+import AboutUs from "@/pages/AboutUs";
 
 
 export const router = createBrowserRouter([
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
             {
                 path: "/FAQ",
                 element: <FAQ />,
+            },
+            {
+                path: "/aboutus",
+                element: <AboutUs />,
             },
 
         ],

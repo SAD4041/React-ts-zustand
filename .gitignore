@@ -27,4 +27,8 @@ pnpm-lock.yaml
 *.sw?
 
 
+<<<<<<< HEAD
 package-lock.json
+=======
+package-lock.json
+>>>>>>> 0f6f3f9387680b400d5ad0a40c27c9eeb416f0ca
