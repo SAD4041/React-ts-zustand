@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
-import LoginLayout from "@/layouts/PublicLayout/LoginLayout";
+import AuthLayout from "@/layouts/PublicLayout/AuthLayout";
 import Home from "@/pages/Home";
 import Error404 from "@/pages/Error404";
 import Error500 from "@/pages/Error500";
@@ -11,7 +11,7 @@ import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import BrandProfile from "@/pages/BrandProfile";
 import BrandProfileEditPage from "@/pages/BrandProfileEditPage";
 import WishlistPage from "@/pages/WishList";
-import ProtectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export const router = createBrowserRouter([
     {
@@ -32,42 +32,49 @@ export const router = createBrowserRouter([
                 element: <ProductListing />
             },
             {
-                path: "/dash/wishList",
-                element: (
-                    <ProtectedRoute>
-                        <WishlistPage />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                // نمایش پروفایل هر برندی (عمومی)
                 path: "/brands/:brandId",
                 element: <BrandProfile />,
             },
+
+            // {
+            //     path: "/brandProfileEdit",
+            //     element: (
+            //         <ProtectedRoute requireBrand={true}>
+            //             <BrandProfileEditPage />
+            //         </ProtectedRoute>
+            //     ),
+            // },
+        ],
+    },
+    {
+        path: "/dash",
+        element: <SidebarLayout />,
+        children: [
+            // {
+            //     index: true,
+            //     element: <OrderHistoryPage />,
+            // },
             {
-                // نمایش پروفایل خودم
-                path: "/my-profile",
-                element: (
-                    <ProtectedRoute requireBrand={true}>
-                        <BrandProfile />
-                    </ProtectedRoute>
-                ),
+                path: "/dash/product-management",
+                element: <ProductManagementPage />,
             },
             {
-                // ویرایش پروفایل (فقط برای brand ها)
-                path: "/brandProfileEdit",
-                element: (
-                    <ProtectedRoute requireBrand={true}>
-                        <BrandProfileEditPage />
-                    </ProtectedRoute>
-                ),
+                path: "/dash/wishList",
+                element: <WishlistPage />,
+            },
+            {
+                path: "/dash/profile-edit",
+                element: <BrandProfileEditPage />,
+            },
+            {
+                path: "/dash/orders",
+                element: <OrderHistoryPage />,
             },
         ],
     },
-
     {
         path: "/login",
-        element: <LoginLayout />,
+        element: <AuthLayout />,
         errorElement: <Error404 />,
         children: [
             {
