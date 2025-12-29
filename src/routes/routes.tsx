@@ -1,20 +1,32 @@
 import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
-import Landing from "@/pages/Landing";
-import Temp from "@/pages/Temp";
+import LoginLayout from "@/layouts/PublicLayout/LoginLayout";
+import Home from "@/pages/Home";
+import Error404 from "@/pages/Error404";
+import Error500 from "@/pages/Error500";
+import ProductListing from "@/components/ProductListing/productListing";
+import LoginForm from "@/pages/Login";
+import Validation from "@/pages/Validation";
+import BrandProfileEditPage from "@/pages/BrandProfileEditPage";
+import WishlistPage from "@/pages/WishList";
+import Temp from "@/routes/Temp";
 import ContactUs from "@/pages/ContactUs";
 
 export const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <PublicLayout />,
-		// errorElement: (
-		// 	<Error404 />
-		// ),
-		children: [
-			{
-				index: true,
-				element: <Landing />,
+    {
+        path: "/",
+        element: <PublicLayout />,
+        errorElement: (
+            <Error404 />
+        ),
+        children: [
+            {
+                index: true,
+                element: <Home />
+            },
+            {
+				path: "/brandProfileEdit",
+				element: <BrandProfileEditPage />,
 			},
 			{
 				path: "/temp",
@@ -29,32 +41,56 @@ export const router = createBrowserRouter([
 			// 	element: <AboutUs />,
 			// },
 			// {
-		],
-	},
-	// {
-	// 	element: <PrivateLayout />,
-	// 	children: [
-	// 		{
-	// 			path: "/EditProfile",
-	// 			element: <EditProfile />,
-	// 		},
-	// 		{
-	// 			path: "/DashBoard",
-	// 			element: <DashBoard />,
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	element: <AnotherLayout />,
-	// 	children: [
-	// 		{
-	// 			path: "/login",
-	// 			element: <Login />,
-	// 		},
-	// 		{
-	// 			path: "/temp",
-	// 			element: <Temp />,
-	// 		},
-	// 	],
-	// },
+            {
+                path: "/error500",
+                element: <Error500 />
+            },
+            {
+                path: "/products-list",
+                element: <ProductListing />
+            },
+            {
+                path: "/dash/wishList",
+                element: <WishlistPage />,
+            },
+
+        ],
+    },
+
+    {
+        path: "/login",
+        element: <LoginLayout />,
+        errorElement: (
+            <Error404 />
+        ),
+        children: [
+            {
+                index: true,
+                element: <LoginForm />,
+            },
+            {
+                path: "/login/verify",
+                element: <Validation />,
+            },
+        ],
+    },
+    // {
+    //     path: "/dash",
+    //     element: <SidebarLayout />,
+    //     errorElement: <Error404 />,
+    //     children: [
+    //         // {
+    //         //     index: true,
+    //         //     element: <DashboardHome />,
+    //         // },
+    //         {
+    //             path: "/dash/wishList",
+    //             element: <WishlistPage />,
+    //         },
+    //         // {
+    //         //     path: "settings",
+    //         //     element: <Settings />,
+    //         // },
+    //     ],
+    // }
 ]);
