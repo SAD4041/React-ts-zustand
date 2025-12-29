@@ -15,6 +15,7 @@ import type {
 } from "@/types/apiTypes"; // ← اینجا مهم است
 
 export const baseURL = "http://185.60.136.225";
+const TEST_TOKEN = "21|WyyucFOUWGa7pAnkHmTfKVXkMNSGTeTEt31LJ4DC47be1255";
 
 const apiClient: AxiosInstance = axios.create({
   baseURL,
@@ -29,7 +30,7 @@ const getTokenFromStore = () => {
   if (typeof window === "undefined") {
     return null;
   }
-  return useUserStore.getState().token || null;
+  return useUserStore.getState().token || TEST_TOKEN;
 };
 
 apiClient.interceptors.request.use(

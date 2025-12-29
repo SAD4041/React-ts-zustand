@@ -131,6 +131,3 @@ const WishlistPage: React.FC = () => {
 };
 
 export default WishlistPage;
-// در apiClient.ts، خط کامنت‌شده رو فعال کن
-const token = localStorage.getItem("token"); // یا از store بخون
-if (token) config.headers.Authorization = `Bearer ${token}`;

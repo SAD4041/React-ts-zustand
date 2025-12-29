@@ -11,6 +11,7 @@ import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import BrandProfileEditPage from "@/pages/BrandProfileEditPage";
 // import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import WishlistPage from "@/pages/WishList";
+import ProductManagementPage from "@/pages/BrandDash/ProductManagementPage";
 import OrderHistoryPage from "@/pages/OrderHistoryPage";
 
 export const router = createBrowserRouter([
@@ -60,12 +61,15 @@ export const router = createBrowserRouter([
                     //     element: <OrderHistoryPage />,
                     // },
                     {
+                        path: "product-management",
+                        element: <ProductManagementPage />,
+                    },
+                    {
                         path: "/profile-edit",
                         element: <BrandProfileEditPage />,
                     },
                 ],
             },
-
         ],
     },
 

@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 
-import { cn } from "@/utils/util.ts";
+import { cn } from "@/utils/util";
 
 function Tabs({
   className,
@@ -18,7 +18,6 @@ function Tabs({
   );
 }
 
-// ui/tabs.tsx — فقط دو کلاس عوض شد:
 function TabsList({
   className,
   ...props
