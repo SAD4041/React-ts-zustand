@@ -16,14 +16,12 @@ import {
   DialogTitle,
 } from '../components/ui/dialog';
 import { Button } from '../components/ui/button';
-import { translateNumber } from '@/utils/translateNumber'
+import { translateNumber } from '@/utils/translateNumber';
 import type ValidationFormValues from '@/types/loginTypes';
 import BackToLogin from '@/components/ui/toLeftSvg';
 import SubmitSpinner from '@/components/login/submitSpinner';
 import ToRight from '@/components/ui/toRightSvg';
 import useUserStore from '@/store/userStore/userStore';
-
-
 
 const Validation: React.FC = () => {
   const navigate = useNavigate();
@@ -33,14 +31,15 @@ const Validation: React.FC = () => {
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
   const setToken = useUserStore((state) => state.setToken);
+  const setAuth = useUserStore((state) => state.setAuth);
 
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
     title: '',
     message: '',
     buttonText: '',
-    onButtonClick: () => { },
-    imageSrc: ''
+    onButtonClick: () => {},
+    imageSrc: '',
   });
 
   useEffect(() => {
@@ -69,10 +68,24 @@ const Validation: React.FC = () => {
               if (result.data?.token) {
                 // ذخیره توکن در Zustand store
                 setToken(result.data.token);
+                
+                // اگر اطلاعات user هم در response بود، اونا رو هم ذخیره کن
+                // فعلاً فقط یک user ساده می‌سازیم
+                const tempUser = {
+                  id: '', // فعلاً خالی، بعداً از توکن یا API میاد
+                  mobile: phone,
+                  role: 'user' as const,
+                };
+                
+                // ذخیره اطلاعات کامل
+                setAuth(result.data.token, tempUser);
               }
-              setModalConfig(prev => ({ ...prev, isOpen: false }));
-              navigate('/');
-            }
+              
+              setModalConfig((prev) => ({ ...prev, isOpen: false }));
+              
+              // ارسال state که از validation اومدیم
+              navigate('/', { state: { fromValidation: true } });
+            },
           });
         } else {
           setModalConfig({
@@ -82,8 +95,8 @@ const Validation: React.FC = () => {
             buttonText: 'تلاش مجدد',
             imageSrc: errorCat,
             onButtonClick: () => {
-              setModalConfig(prev => ({ ...prev, isOpen: false }));
-            }
+              setModalConfig((prev) => ({ ...prev, isOpen: false }));
+            },
           });
         }
       } else {
@@ -94,8 +107,8 @@ const Validation: React.FC = () => {
           buttonText: 'باشه',
           imageSrc: errorCat,
           onButtonClick: () => {
-            setModalConfig(prev => ({ ...prev, isOpen: false }));
-          }
+            setModalConfig((prev) => ({ ...prev, isOpen: false }));
+          },
         });
       }
     } catch (err) {
@@ -107,8 +120,8 @@ const Validation: React.FC = () => {
         buttonText: 'باشه',
         imageSrc: errorCat,
         onButtonClick: () => {
-          setModalConfig(prev => ({ ...prev, isOpen: false }));
-        }
+          setModalConfig((prev) => ({ ...prev, isOpen: false }));
+        },
       });
     } finally {
       setLoading(false);
@@ -120,15 +133,15 @@ const Validation: React.FC = () => {
     try {
       const result = await checkPhone(phone);
       if (result.success) {
-          setModalConfig({
+        setModalConfig({
           isOpen: true,
           title: 'ارسال مجدد',
           message: 'کد تأیید مجدداً ارسال شد.',
           buttonText: 'باشه',
           imageSrc: successCat,
           onButtonClick: () => {
-            setModalConfig(prev => ({ ...prev, isOpen: false }));
-          }
+            setModalConfig((prev) => ({ ...prev, isOpen: false }));
+          },
         });
       } else {
         setModalConfig({
@@ -138,8 +151,8 @@ const Validation: React.FC = () => {
           buttonText: 'باشه',
           imageSrc: errorCat,
           onButtonClick: () => {
-            setModalConfig(prev => ({ ...prev, isOpen: false }));
-          }
+            setModalConfig((prev) => ({ ...prev, isOpen: false }));
+          },
         });
       }
     } catch (err) {
@@ -151,8 +164,8 @@ const Validation: React.FC = () => {
         buttonText: 'باشه',
         imageSrc: errorCat,
         onButtonClick: () => {
-          setModalConfig(prev => ({ ...prev, isOpen: false }));
-        }
+          setModalConfig((prev) => ({ ...prev, isOpen: false }));
+        },
       });
     } finally {
       setLoading(false);
@@ -179,14 +192,12 @@ const Validation: React.FC = () => {
     }
   };
 
-
   const initialValues: ValidationFormValues = { code: '' };
 
   return (
     <div className="flex min-h-screen" dir="rtl">
       <div className="w-full flex items-center justify-center p-6 md:p-10">
         <div className="w-full max-w-xl h-5/6 bg-login-card-bg rounded-4xl border-3 border-primary-border shadow-2xl p-8 relative overflow-hidden">
-
           <a
             href="/login"
             className="absolute top-4 right-4 bg-bg-section1 text-white w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200 z-10"
@@ -200,9 +211,7 @@ const Validation: React.FC = () => {
             {phone && (
               <p className="text-sm text-text mt-4">
                 لطفا کد ارسال شده برای شماره{' '}
-                <span className="font-bold">
-                  {translateNumber(phone)}
-                </span>
+                <span className="font-bold">{translateNumber(phone)}</span>
                 را وارد کنید.
               </p>
             )}
@@ -249,12 +258,7 @@ const Validation: React.FC = () => {
                     disabled={loading || isSubmitting || otp.join('').length !== 6}
                     className="w-82 bg-bg-section2 text-white text-md rounded-md disabled:opacity-50 hover:bg-bg-section1 cursor-pointer"
                   >
-                    {loading || isSubmitting ? (
-
-                      <SubmitSpinner />
-                    ) : (
-                      'ورود'
-                    )}
+                    {loading || isSubmitting ? <SubmitSpinner /> : 'ورود'}
                   </Button>
                 </div>
 
@@ -279,7 +283,10 @@ const Validation: React.FC = () => {
         </div>
       </div>
 
-      <Dialog open={modalConfig.isOpen} onOpenChange={(open) => !open && setModalConfig(prev => ({ ...prev, isOpen: false }))}>
+      <Dialog
+        open={modalConfig.isOpen}
+        onOpenChange={(open) => !open && setModalConfig((prev) => ({ ...prev, isOpen: false }))}
+      >
         <DialogContent className="sm:max-w-md" dir="rtl">
           <DialogHeader>
             <div className="flex justify-center mb-4">
@@ -299,7 +306,7 @@ const Validation: React.FC = () => {
           <DialogFooter className="sm:justify-center">
             <Button
               type="button"
-              variant='dialog'
+              variant="dialog"
               onClick={modalConfig.onButtonClick}
               className="w-full sm:w-auto min-w-[220px] cursor-pointer"
             >
