@@ -35,14 +35,14 @@ const UserDashInfo: React.FC = () => {
     //if (!localStorage.getItem("authToken")) {
     localStorage.setItem(
       "authToken",
-      "18|mccycWfzo0pyotzUCvIkdk5ALibUM6kOC32LfZq0796fbd9a");
+      "6|RzXPPb980rYFqH6eiWDJ07M2UvUVDRzalXp7gFKyee3e7e59");
     //}
   }, []);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
-    setHasError(false); // ریست
+    setHasError(false);
     try {
       const user = await getUserProfile();
       setUserData(user);

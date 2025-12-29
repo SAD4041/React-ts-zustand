@@ -30,7 +30,7 @@ const apiClient: AxiosInstance = axios.create({
   return null;
 }; */
 const getTokenFromStore = () => {
-  return "18|mccycWfzo0pyotzUCvIkdk5ALibUM6kOC32LfZq0796fbd9a"; // برای تست
+  return "6|RzXPPb980rYFqH6eiWDJ07M2UvUVDRzalXp7gFKyee3e7e59"; // برای تست
 };
 
 apiClient.interceptors.request.use(
