@@ -32,12 +32,6 @@ const getTokenFromStore = () => {
   return useUserStore.getState().token || null;
 };
 
-
-
-
-
-
-
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig & { skipAuth?: boolean }) => {
     const token = getTokenFromStore();

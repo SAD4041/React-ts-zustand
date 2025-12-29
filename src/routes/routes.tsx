@@ -11,6 +11,7 @@ import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import BrandProfileEditPage from "@/pages/BrandProfileEditPage";
 // import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import WishlistPage from "@/pages/WishList";
+import OrderHistoryPage from "@/pages/OrderHistoryPage";
 
 export const router = createBrowserRouter([
     {
@@ -25,10 +26,6 @@ export const router = createBrowserRouter([
                 element: <Home />
             },
             {
-				path: "/brandProfileEdit",
-				element: <BrandProfileEditPage />,
-			},
-            {
                 path: "/error500",
                 element: <Error500 />
             },
@@ -37,8 +34,36 @@ export const router = createBrowserRouter([
                 element: <ProductListing />
             },
             {
-                path: "/dash/wishList",
-                element: <WishlistPage />,
+                path: "user-dash",
+                element: <SidebarLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <OrderHistoryPage />,
+                    },
+                    {
+                        path: "wishList",
+                        element: <WishlistPage />,
+                    },
+                    {
+                        path: "orders",
+                        element: <OrderHistoryPage />,
+                    },
+                ],
+            },
+            {
+                path: "brand-dash",
+                element: <SidebarLayout />,
+                children: [
+                    // {
+                    //     index: true,
+                    //     element: <OrderHistoryPage />,
+                    // },
+                    {
+                        path: "/profile-edit",
+                        element: <BrandProfileEditPage />,
+                    },
+                ],
             },
 
         ],
@@ -61,23 +86,4 @@ export const router = createBrowserRouter([
             },
         ],
     },
-    // {
-    //     path: "/dash",
-    //     element: <SidebarLayout />,
-    //     errorElement: <Error404 />,
-    //     children: [
-    //         // {
-    //         //     index: true,
-    //         //     element: <DashboardHome />,
-    //         // },
-    //         {
-    //             path: "/dash/wishList",
-    //             element: <WishlistPage />,
-    //         },
-    //         // {
-    //         //     path: "settings",
-    //         //     element: <Settings />,
-    //         // },
-    //     ],
-    // }
 ]);

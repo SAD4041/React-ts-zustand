@@ -29,7 +29,7 @@ body {
   opacity: 0.9;
 }
 .vazir {
-		font-family: "Vazir", sans-serif;
+		font-family: "Vazirmatn", sans-serif;
 	}
 
 .hide-scrollbar {
@@ -133,6 +133,13 @@ body {
   --bg-section2: #E4004B;
 
   --bg-addShop-btn: #44D6FF80;
+  --tabs-active: #ffffff;
+  --order-current: 59 130 246;
+  --order-complete: 34 197 94;
+  --order-cancel: 239 68 68;
+  --badge-success: #63D949;
+  --badge-warning: #ED775A;
+  --badge-danger: #E4004B;
 }
 
 /* Theme setup */
@@ -185,6 +192,9 @@ body {
   --color-bg-section1: var(--bg-section1);
   --color-bg-section2: var(--bg-section2);
   --color-bg-addShop-btn: var(--bg-addShop-btn);
+  --color-order-current: rgb(var(--order-current));
+	--color-order-complete: rgb(var(--order-complete));
+	--color-order-cancel: rgb(var(--order-cancel));
   
 }
 
