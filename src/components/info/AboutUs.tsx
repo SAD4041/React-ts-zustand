@@ -27,7 +27,7 @@ export default function App() {
 
       {/* Stats */}
       <div 
-        className="py-8 mb-20"
+        className="py-4 mb-20"
         style={{
           background: 'linear-gradient(to right, var(--bg-section1), var(--bg-section2))',
         }}
@@ -35,7 +35,7 @@ export default function App() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             {stats.map((s, i) => (
-              <div key={i} className="flex flex-col items-center justify-center h-40">
+              <div key={i} className="flex flex-col items-center justify-center h-32">
                 <div className="text-xl font-bold text-white mb-1">{s.number}</div>
                 <div className="text-white text-xs font-medium text-center">{s.label}</div>
               </div>
@@ -112,7 +112,7 @@ export default function App() {
 
         {/* Row 2 - 3 cards */}
         <div className="flex justify-center">
-          <div className="flex gap-10" style={{ width: 'calc(100% - 850px)' }}>
+          <div className="flex gap-10" style={{ width: 'calc(100% - 700px)' }}>
             {team.slice(4).map((member, index) => (
               <div
                 key={index + 4}
