@@ -20,7 +20,7 @@ const ContactUs: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-white rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.12)] p-6">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 bg-[#7ADCAA] rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 bg-[#7ADCAA] rounded-xl flex items-center justify-center shrink-0">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 text-white"
@@ -47,7 +47,7 @@ const ContactUs: React.FC = () => {
 
           <div className="bg-white rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.12)] p-6">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 bg-[#6C9CF3] rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 bg-[#6C9CF3] rounded-xl flex items-center justify-center shrink-0">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6 text-white"
@@ -74,7 +74,7 @@ const ContactUs: React.FC = () => {
 
           <div className="bg-white rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.12)] p-6">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 bg-[#FF8787] rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 bg-[#FF8787] rounded-xl flex items-center justify-center shrink-0">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6 text-white"
@@ -109,7 +109,7 @@ const ContactUs: React.FC = () => {
 
           <div className="bg-white rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.12)] p-6">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 bg-[#D384E9] rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 bg-[#D384E9] rounded-xl flex items-center justify-center shrink-0">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 text-white"
