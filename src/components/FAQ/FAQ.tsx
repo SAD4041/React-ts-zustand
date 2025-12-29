@@ -8,7 +8,7 @@ const FAQ: React.FC = () => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const categories = ["ارسال کالا", "بازگشت کالا", "پرداخت", "عمومی"];
+  const categories = ["عمومی", "پرداخت", "بازگشت کالا", "ارسال کالا"];
 
   const faqData: Record<string, { question: string; answer: string }[]> = {
     عمومی: [
