@@ -83,6 +83,8 @@ body {
   --secondary: #ed775a;
   --secondary-foreground: oklch(0.145 0 0);
 
+  --contact-pill: #e4004b;
+
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.45 0 0);
   --muted-hover: oklch(0.94 0 0);
@@ -263,4 +265,8 @@ body {
   100% {
     transform: rotate(1turn);
   }
+}
+
+.contact-pill {
+  background-color: var(--contact-pill);
 }

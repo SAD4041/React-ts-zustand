@@ -7,13 +7,14 @@ import Error500 from "@/pages/Error500";
 import ProductListing from "@/components/ProductListing/productListing";
 import LoginForm from "@/pages/Login";
 import Validation from "@/pages/Validation";
-import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import BrandProfileEditPage from "@/pages/BrandProfileEditPage";
-// import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
 import WishlistPage from "@/pages/WishList";
 import ProductManagementPage from "@/pages/BrandDash/ProductManagementPage";
 import OrderHistoryPage from "@/pages/OrderHistoryPage";
 import UserDashInformation from "@/pages/userDashInfo";
+import FAQ from "@/pages/FAQ";
+import SidebarLayout from "@/layouts/PublicLayout/SidebarLayout";
+
 
 export const router = createBrowserRouter([
     {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
             {
                 path: "/UserDashboard/Information",
                 element: <UserDashInformation />,
+            },
+            {
+                path: "/FAQ",
+                element: <FAQ />,
             },
 
         ],
