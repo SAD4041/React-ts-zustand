@@ -14,3 +14,4 @@ export function translateNumber(number: number | string): string {
 		})
 		?.join(""); // Join the array of Persian characters back into a string
 }
+
