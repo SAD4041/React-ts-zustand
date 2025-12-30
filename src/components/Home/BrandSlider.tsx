@@ -1,32 +1,51 @@
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, FreeMode } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/free-mode';
-import { brands } from "@/data/homePageData";
+import React, { useEffect, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { brands } from '@/data/homePageData';
 
 const BrandSlider = () => {
-  
+  const controls = useAnimation();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const duplicatedBrands = [...brands, ...brands]; // برای ایجاد حلقه بی‌نهایت
+
+  useEffect(() => {
+    const animate = async () => {
+      if (!containerRef.current) return;
+
+      const containerWidth = containerRef.current.scrollWidth / 2; // نصف، چون دو برابر کردیم
+
+      // حرکت به راست (چون rtl، جلو رفتن یعنی scroll left کمتر بشه)
+      await controls.start({
+        x: [`0%`, `-${containerWidth}px`],
+        transition: {
+          duration: 30, // مثلاً 30 ثانیه برای یک دور کامل — می‌تونی تنظیم کنی
+          ease: 'linear',
+          repeat: Infinity,
+        },
+      });
+    };
+
+    animate();
+
+    return () => controls.stop();
+  }, [controls]);
 
   return (
-    <div className="py-6">
+    <div className="py-6 overflow-hidden">
       <div className="bg-gradient-to-r from-background-color via-bg-section1 to-background-color rounded-lg p-4">
-        <Swiper
-          dir="rtl"
-          modules={[Navigation, FreeMode]}
-          spaceBetween={5}
-          slidesPerView={5}
-          slidesPerGroup={1}
-          freeMode={{ enabled: true, momentum: true }}
-          navigation={true}
-          className="brand-swiper"
-        >
-          {brands.map((brand, index) => (
-            <SwiperSlide key={index} className="flex justify-center px-20">
+        <div className="relative overflow-hidden">
+          <motion.div
+            ref={containerRef}
+            className="flex items-center justify-start gap-8 whitespace-nowrap"
+            dir="rtl"
+            animate={controls}
+            style={{ display: 'inline-flex' }}
+          >
+            {duplicatedBrands.map((brand, index) => (
               <a
+                key={`${brand.name}-${index}`}
                 href={`brands/${brand.name}`}
-                className="block cursor-pointer"
+                className="block px-4 cursor-pointer"
+                aria-label={`برند ${brand.name}`}
               >
                 <img
                   src={brand.logo}
@@ -34,9 +53,9 @@ const BrandSlider = () => {
                   className="h-14 sm:h-16 md:h-17 object-contain"
                 />
               </a>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </div>
   );
