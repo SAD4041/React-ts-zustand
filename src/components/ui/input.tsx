@@ -1,85 +1,37 @@
-import { forwardRef } from "react";
-import { useField } from "formik";
+// src/components/ui/input.tsx
+import * as React from "react";
 import { cn } from "@/lib/utils";
-import type { FormikInputProps } from "@/types/inputTypes";
 
-const isRTL = (text: string | undefined): boolean => {
-  if (!text) return true;
-  const rtlChars = /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/;
-  return rtlChars.test(text);
-};
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+  containerClassName?: string;
+}
 
-export const Input = forwardRef<
-  HTMLInputElement,
-  FormikInputProps & { forceRTL?: boolean }
->(
-  (
-    {
-      label,
-      icon: Icon,
-      onIconClick,
-      onlyNumbers = false,
-      forceRTL = false,
-      containerClassName = "",
-      inputClassName = "",
-      iconClassName = "",
-      errorClassName = "",
-      ...props
-    },
-    ref
-  ) => {
-    const [field, meta] = useField(props.name);
-    const hasError = meta.touched && meta.error;
-    const value = field.value ?? "";
-
-    const isRightToLeft = forceRTL || isRTL(value);
-
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, label, error, containerClassName, ...props }, ref) => {
     return (
       <div className={cn("flex flex-col gap-1", containerClassName)}>
         {label && (
-          <label className="text-sm font-medium text-foreground">{label}</label>
+          <label className="text-sm font-medium text-foreground text-right">
+            {label}
+          </label>
         )}
-
-        <div className="relative">
-          {Icon && (
-            <Icon
-              className={cn(
-                "absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground cursor-pointer",
-                iconClassName
-              )}
-              onClick={onIconClick}
-            />
+        <input
+          ref={ref}
+          className={cn(
+            "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            className
           )}
-
-          <input
-            {...field}
-            {...props}
-            ref={ref}
-            dir={isRightToLeft ? "rtl" : "ltr"}
-            onChange={(e) => {
-              const newValue = e.target.value;
-              if (onlyNumbers && !/^\d*$/.test(newValue)) return;
-              field.onChange(e);
-            }}
-            className={cn(
-              `w-full px-4 py-2 rounded-md border border-input bg-card text-foreground 
-               placeholder:text-muted-foreground focus:outline-none 
-               focus:ring-2 focus:ring-ring/50 focus:border-primary transition`,
-              Icon ? "pl-10" : "",
-              isRightToLeft ? "text-right" : "text-left",
-              inputClassName
-            )}
-          />
-        </div>
-
-        {hasError && (
-          <span className={cn("text-sm text-destructive", errorClassName)}>
-            {meta.error}
-          </span>
-        )}
+          {...props}
+        />
+        {error && <span className="text-sm text-destructive text-right">{error}</span>}
       </div>
     );
   }
 );
 
 Input.displayName = "Input";
+
+export { Input };

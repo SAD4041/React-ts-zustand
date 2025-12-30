@@ -4,19 +4,20 @@ import SubmitSpinner from "../login/submitSpinner";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "dialog" | "slider";
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "dialog" | "slider" | "simple";
   size?: "default" | "sm" | "lg" | "icon";
   loading?: boolean;
 }
 
 const variantStyles: Record<NonNullable<ButtonProps["variant"]>, string> = {
-  default: "bg-primary text-white hover:bg-primary/80 hover:text-white",
+  default: "bg-primary text-white hover:bg-primary/80",
+  simple: "bg-white text-black hover:bg-gray-300",
   destructive: "bg-red-600 text-white hover:bg-red-700",
   outline: "border border-gray-300 bg-white text-gray-900 hover:bg-gray-50",
   secondary: "bg-gray-600 text-white hover:bg-gray-700",
   ghost: "hover:bg-gray-100 text-gray-900",
   link: "text-blue-600 underline-offset-4 hover:underline",
-  dialog: "w-full max-w-xs bg-bg-section1 text-white text-md py-2.5 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium shadow-md hover:shadow-lg disabled:bg-gray-4 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer",
+  dialog: "w-full max-w-xs bg-black text-white text-md py-2.5 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium shadow-md hover:shadow-lg disabled:bg-gray-4 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer",
   slider: "text-white bg-gradient-to-r from-bg-section1 to-bg-section2 rounded-full shadow-sm hover:opacity-90 transition cursor-pointer",
 };
 

@@ -1,4 +1,4 @@
-﻿// src/pages/ProductPage.tsx
+// src/pages/ProductPage.tsx
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -12,18 +12,17 @@ import { StarIcon, HeartIcon, ChevronLeftIcon, ChevronRightIcon, ShoppingCartIco
 // Mock Data
 const mockProduct = {
     id: 1,
-    name: "Ù¾ÛŒØ±Ø§Ù‡Ù† Ø¨Ù‡Ø§Ø±Ù‡ Ø¢Ø³ØªÛŒÙ† Ø¨Ù„Ù†Ø¯",
+    name: "پیراهن بهاره آستین بلند",
     images: [
         "https://via.placeholder.com/600x800?text=Image+1",
         "https://via.placeholder.com/600x800?text=Image+2",
-        "https://via.placeholder.com/600x800?text=Image+3",
-        "https://via.placeholder.com/600x800?text=Image+4"
+        "https://via.placeholder.com/600x800?text=Image+3"
     ],
     brand: {
-        name: "Ø¨Ø±Ù†Ø¯ Ù…Ø¯Ø¢ÙˆØ±Ø§Ù†",
+        name: "برند مدآوران",
         logo: "https://via.placeholder.com/50x50?text=Brand",
         isOfficial: true,
-        description: "Ù…Ø¯ Ø§Ù…Ø±ÙˆØ²ØŒ Ø³Ø¨Ú© ÙØ±Ø¯Ø§"
+        description: "مد امروز، سبک فردا"
     },
     price: 850000,
     originalPrice: 1200000,
@@ -34,50 +33,50 @@ const mockProduct = {
     questionsCount: 18,
     stock: 15,
     colors: [
-        { id: 1, name: "Ø³Ø¨Ø²", hex: "#008000" },
-        { id: 2, name: "Ø¢Ø¨ÛŒ", hex: "#0000FF" },
-        { id: 3, name: "Ù…Ø´Ú©ÛŒ", hex: "#000000" }
+        { id: 1, name: "سبز", hex: "#008000" },
+        { id: 2, name: "آبی", hex: "#0000FF" },
+        { id: 3, name: "مشکی", hex: "#000000" }
     ],
-    sizes: ["XXXL","XXL", "XL", "L", "M", "S"],
+    sizes: ["XXL", "XL", "L", "M", "S"],
     features: [
-        "Ù¾Ø§Ø±Ú†Ù‡ Ú©ØªØ§Ù† Û±Û°Û°Ùª Ø·Ø¨ÛŒØ¹ÛŒ Ùˆ Ø§Ø±Ú¯Ø§Ù†ÛŒÚ©",
-        "Ù…Ù‚Ø§ÙˆÙ… Ø¯Ø± Ø¨Ø±Ø§Ø¨Ø± Ú†Ø±ÙˆÚ© Ùˆ Ù¾Ø§Ø±Ú¯ÛŒ",
-        "Ø¯ÙˆØ®Øª ØªÙ…ÛŒØ² Ùˆ Ø­Ø±ÙÙ‡â€ŒØ§ÛŒ",
-        "Ø¶Ø¯ Ø¨Ø§Ú©ØªØ±ÛŒ Ùˆ Ø¶Ø¯ Ø¨Ùˆ",
-        "ØªÙ†ÙØ³â€ŒÙ¾Ø°ÛŒØ±ÛŒ Ø¹Ø§Ù„ÛŒ Ø¨Ø±Ø§ÛŒ ÙØµÙ„ Ú¯Ø±Ù…",
-        "Ù‚Ø§Ø¨Ù„ Ø´Ø³ØªØ´Ùˆ Ø¯Ø± Ù…Ø§Ø´ÛŒÙ† Ù„Ø¨Ø§Ø³Ø´ÙˆÛŒÛŒ"
+        "پارچه کتان ۱۰۰٪ طبیعی و ارگانیک",
+        "مقاوم در برابر چروک و پارگی",
+        "دوخت تمیز و حرفه‌ای",
+        "ضد باکتری و ضد بو",
+        "تنفس‌پذیری عالی برای فصل گرم",
+        "قابل شستشو در ماشین لباسشویی"
     ],
     specifications: {
-        fabric: "Ú©ØªØ§Ù† Û±Û°Û°Ùª Ø·Ø¨ÛŒØ¹ÛŒ",
-        country: "Ø§ÛŒØ±Ø§Ù†",
-        collar: "ÛŒÙ‚Ù‡ Ø¨Ø±Ú¯Ø±Ø¯Ø§Ù†",
-        sleeve: "Ø¢Ø³ØªÛŒÙ† Ø¨Ù„Ù†Ø¯",
-        pattern: "Ø³Ø§Ø¯Ù‡ ØªÚ© Ø±Ù†Ú¯",
-        season: "Ø¨Ù‡Ø§Ø± Ùˆ ØªØ§Ø¨Ø³ØªØ§Ù†"
+        fabric: "کتان ۱۰۰٪ طبیعی",
+        country: "ایران",
+        collar: "یقه برگردان",
+        sleeve: "آستین بلند",
+        pattern: "ساده تک رنگ",
+        season: "بهار و تابستان"
     },
     relatedProducts: [
-        { id: 2, name: "CATWAREHOUSE Bussiness Not Boomin Ù…Ø¯Ù„", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+1", colors: ["#FF6B6B", "#008000", "#000000"] },
-        { id: 3, name: "CATWAREHOUSE Bussiness Not Boomin Ù…Ø¯Ù„", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+2", colors: ["#FF6B6B", "#008000", "#000000"] },
-        { id: 4, name: "CATWAREHOUSE Bussiness Not Boomin Ù…Ø¯Ù„", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+3", colors: ["#FF6B6B", "#008000", "#000000"] },
-        { id: 5, name: "CATWAREHOUSE Bussiness Not Boomin Ù…Ø¯Ù„", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+4", colors: ["#FF6B6B", "#008000", "#000000"] },
-        { id: 6, name: "CATWAREHOUSE Bussiness Not Boomin Ù…Ø¯Ù„", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+5", colors: ["#FF6B6B", "#008000", "#000000"] },
+        { id: 2, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+1", colors: ["#FF6B6B", "#008000", "#000000"] },
+        { id: 3, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+2", colors: ["#FF6B6B", "#008000", "#000000"] },
+        { id: 4, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+3", colors: ["#FF6B6B", "#008000", "#000000"] },
+        { id: 5, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+4", colors: ["#FF6B6B", "#008000", "#000000"] },
+        { id: 6, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+5", colors: ["#FF6B6B", "#008000", "#000000"] },
     ],
     reviews: [
         {
             id: 1,
-            user: "Ø§ÛŒÙ„ÛŒØ§ Ù…ÙˆØ³ÙˆÛŒ",
+            user: "ایلیا موسوی",
             avatar: "https://via.placeholder.com/40x40?text=U1",
             rating: 5,
-            text: "Ú©ÛŒÙÛŒØª Ù…Ø­ØµÙˆÙ„Ø§Øª Ø§ÛŒÙ† Ø¨Ø±Ù†Ø¯ ÙˆØ§Ù‚Ø¹Ø§Ù‹ Ø¹Ø§Ù„ÛŒÙ‡. Ù¾Ø§Ø±Ú†Ù‡â€ŒÙ‡Ø§ Ù…Ø±ØºÙˆØ¨ Ù‡Ø³ØªÙ†Ø¯ Ùˆ Ø¯ÙˆØ®Øª Ù…Ø­ØµÙˆÙ„Ø§Øª Ø¨Ø³ÛŒØ§Ø± ØªÙ…ÛŒØ² Ùˆ Ø­Ø±ÙÙ‡â€ŒØ§ÛŒ Ø§Ø³Øª.",
+            text: "کیفیت محصولات این برند واقعاً عالیه. پارچه‌ها مرغوب هستند و دوخت محصولات بسیار تمیز و حرفه‌ای است.",
             helpful: 29,
             notHelpful: 2
         },
         {
             id: 2,
-            user: "Ø±ÛŒØ­Ø§Ù†Ù‡ Ú©Ø±Ø¯Ú¯Ø§Ø±ÛŒ",
+            user: "ریحانه کردگاری",
             avatar: "https://via.placeholder.com/40x40?text=U2",
             rating: 5,
-            text: "Ø¨Ø³ØªÙ‡â€ŒØ¨Ù†Ø¯ÛŒ Ù…Ø­ØµÙˆÙ„Ø§Øª Ø®ÛŒÙ„ÛŒ Ø´ÛŒÚ© Ø¨ÙˆØ¯ Ùˆ Ø§Ø±Ø³Ø§Ù„ Ù‡Ù… Ø³Ø±ÛŒØ¹ Ø§Ù†Ø¬Ø§Ù… Ø´Ø¯. Ù…Ø§Ù†ØªÙˆÛŒ Ú©Ù‡ Ø®Ø±ÛŒØ¯Ù… Ø¯Ù‚ÛŒÙ‚Ø§Ù‹ Ù…Ø·Ø§Ø¨Ù‚ ØªØµÙˆÛŒØ± Ø¨ÙˆØ¯.",
+            text: "بسته‌بندی محصولات خیلی شیک بود و ارسال هم سریع انجام شد. مانتوی که خریدم دقیقاً مطابق تصویر بود.",
             helpful: 36,
             notHelpful: 1
         }
@@ -85,18 +84,18 @@ const mockProduct = {
     questions: [
         {
             id: 1,
-            user: "Ø´Ù…Ø§",
-            question: "Ø¢ÛŒØ§ Ø§ÛŒÙ† Ù¾ÛŒØ±Ø§Ù‡Ù† Ø¢Ø¨ Ù…ÛŒâ€ŒØ±ÙˆØ¯ØŸ",
-            answer: "Ø®ÛŒØ±ØŒ Ø§ÛŒÙ† Ù…Ø­ØµÙˆÙ„ Ø¨Ø§ Ù¾Ø§Ø±Ú†Ù‡ Ú©ØªØ§Ù† Ù…Ø±ØºÙˆØ¨ Ùˆ Ø±Ù†Ú¯ Ø«Ø§Ø¨Øª ØªÙˆÙ„ÛŒØ¯ Ø´Ø¯Ù‡ Ùˆ Ø¢Ø¨ Ù†Ù…ÛŒâ€ŒØ±ÙˆØ¯.",
-            answeredBy: "Ù¾Ø§Ø³Ø® ÙØ±ÙˆØ´Ù†Ø¯Ù‡",
+            user: "شما",
+            question: "آیا این پیراهن آب می‌رود؟",
+            answer: "خیر، این محصول با پارچه کتان مرغوب و رنگ ثابت تولید شده و آب نمی‌رود.",
+            answeredBy: "پاسخ فروشنده",
             daysAgo: 3
         },
         {
             id: 2,
-            user: "Ø´Ù…Ø§",
-            question: "Ø¨Ø±Ø§ÛŒ Ù‚Ø¯ Û±Û¸Û° Ø³Ø§Ù†ØªÛŒ Ù…ØªØ± Ú†Ù‡ Ø³Ø§ÛŒØ²ÛŒ Ù…Ù†Ø§Ø³Ø¨ Ø§Ø³ØªØŸ",
-            answer: "Ø¨Ø±Ø§ÛŒ Ù‚Ø¯ Û±Û¸Û° Ø³Ø§Ù†ØªÛŒ Ù…ØªØ±ØŒ Ø³Ø§ÛŒØ² XL ÛŒØ§ L ØªÙˆØµÛŒÙ‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯. Ø¨Ù‡ØªØ± Ø§Ø³Øª Ø¬Ø¯ÙˆÙ„ Ø³Ø§ÛŒØ² Ø±Ø§ Ø¨Ø±Ø±Ø³ÛŒ Ú©Ù†ÛŒØ¯.",
-            answeredBy: "Ù¾Ø§Ø³Ø® ÙØ±ÙˆØ´Ù†Ø¯Ù‡",
+            user: "شما",
+            question: "برای قد ۱۸۰ سانتی متر چه سایزی مناسب است؟",
+            answer: "برای قد ۱۸۰ سانتی متر، سایز XL یا L توصیه می‌شود. بهتر است جدول سایز را بررسی کنید.",
+            answeredBy: "پاسخ فروشنده",
             daysAgo: 1
         }
     ]
@@ -158,11 +157,9 @@ const ProductImageGallery: React.FC<{
         setCurrentIndex(index);
     };
 
-    const thumbnailImages = images.slice(0, 4);
-
     return (
         <div className="space-y-4">
-            <div className="relative w-[500px] h-[500px] bg-gray-100 rounded-xl overflow-hidden mx-auto">
+            <div className="relative w-full h-[400px] bg-gray-100 rounded-xl overflow-hidden">
                 <img
                     src={images[currentIndex]}
                     alt={`Product Image ${currentIndex + 1}`}
@@ -181,12 +178,12 @@ const ProductImageGallery: React.FC<{
                     <ChevronRightIcon className="w-6 h-6 text-gray-700" />
                 </button>
             </div>
-            <div className="flex gap-[10px] overflow-x-auto justify-center">
-                {thumbnailImages.map((image, index) => (
+            <div className="flex space-x-2 overflow-x-auto">
+                {images.map((image, index) => (
                     <button
                         key={index}
                         onClick={() => selectImage(index)}
-                        className={`w-[90px] h-[90px] rounded-lg overflow-hidden border-2 transition-all ${currentIndex === index ? 'border-pink-500' : 'border-gray-200'
+                        className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${currentIndex === index ? 'border-pink-500' : 'border-gray-200'
                             }`}
                     >
                         <img
@@ -213,7 +210,7 @@ const ProductDetails: React.FC<{
     const [activeTab, setActiveTab] = useState<'description' | 'specifications' | 'reviews' | 'questions'>('description');
 
     const handleAddToCart = () => {
-        alert(`Ù…Ø­ØµÙˆÙ„ ${product.name} Ø¨Ø§ ØªØ¹Ø¯Ø§Ø¯ ${quantity} Ø¨Ù‡ Ø³Ø¨Ø¯ Ø®Ø±ÛŒØ¯ Ø§Ø¶Ø§ÙÙ‡ Ø´Ø¯.`);
+        alert(`محصول ${product.name} با تعداد ${quantity} به سبد خرید اضافه شد.`);
     };
 
     const toggleFavorite = () => {
@@ -237,7 +234,7 @@ const ProductDetails: React.FC<{
     };
 
     return (
-        <div className="bg-white rounded-xl shadow-md p-6 w-full w-[720px] mx-auto">
+        <div className="bg-white rounded-xl shadow-md p-6">
             {/* Header with Favorite */}
             <div className="flex justify-between items-start mb-4">
                 <h1 className="text-2xl font-bold">{product.name}</h1>
@@ -254,7 +251,7 @@ const ProductDetails: React.FC<{
             <ProductImageGallery images={product.images} />
 
             {/* Brand Section */}
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg w-full w-[720px] mx-auto">
+            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                         <span className="text-blue-600 font-bold">B</span>
@@ -263,7 +260,7 @@ const ProductDetails: React.FC<{
                         <div className="flex items-center gap-2">
                             <span className="font-bold text-lg">{product.brand.name}</span>
                             {product.brand.isOfficial && (
-                                <Badge variant="secondary" className="bg-pink-500 text-white">Ø¨Ø±Ù†Ø¯ Ø±Ø³Ù…ÛŒ</Badge>
+                                <Badge variant="secondary" className="bg-pink-500 text-white">برند رسمی</Badge>
                             )}
                         </div>
                         <p className="text-sm text-gray-600">{product.brand.description}</p>
@@ -273,48 +270,48 @@ const ProductDetails: React.FC<{
                     <div className="flex items-center gap-1">
                         <span className="font-semibold">{product.rating}</span>
                         <StarIcon className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                        <span>Ø§Ù…ØªÛŒØ§Ø²</span>
+                        <span>امتیاز</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <span className="font-semibold">{product.reviewsCount}</span>
-                        <span>Ø¯Ù†Ø¨Ø§Ù„ Ú©Ù†Ù†Ø¯Ù‡</span>
+                        <span>دنبال کننده</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <span className="font-semibold">{product.stock}</span>
-                        <span>ÙØ±ÙˆØ´</span>
+                        <span>فروش</span>
                     </div>
                     <Button variant="outline" size="sm" onClick={toggleFollow}>
-                        {isFollowing ? 'Ø¯Ù†Ø¨Ø§Ù„ Ù…ÛŒâ€ŒÚ©Ù†ÛŒØ¯' : 'Ø¯Ù†Ø¨Ø§Ù„ Ú©Ø±Ø¯Ù†'}
+                        {isFollowing ? 'دنبال می‌کنید' : 'دنبال کردن'}
                     </Button>
                 </div>
             </div>
 
             {/* Discount Banner */}
             {product.discountPercent > 0 && (
-                <div className="mt-4 p-4 bg-gradient-to-r from-orange-400 to-pink-500 rounded-lg text-white w-full max-w-[720px] mx-auto">
+                <div className="mt-4 p-4 bg-gradient-to-r from-orange-400 to-pink-500 rounded-lg text-white">
                     <div className="flex items-center justify-between">
-                        <Badge variant="secondary" className="bg-white/30 text-white">ØªØ®ÙÛŒÙ {product.discountPercent}%</Badge>
+                        <Badge variant="secondary" className="bg-white/30 text-white">تخفیف {product.discountPercent}%</Badge>
                         <div className="flex items-center gap-2">
-                            <span>Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯ ÙˆÛŒÚ˜Ù‡ Ù…Ø­Ø¯ÙˆØ¯</span>
+                            <span>پیشنهاد ویژه محدود</span>
                             <ClockIcon className="w-5 h-5" />
                         </div>
                     </div>
                     <div className="mt-2 text-xl font-bold">{product.discountEndsIn}</div>
-                    <div className="mt-1 text-sm">ØªØ§ Ù¾Ø§ÛŒØ§Ù† ØªØ®ÙÛŒÙ Ø¨Ø§Ù‚ÛŒ Ù…Ø§Ù†Ø¯Ù‡ ...</div>
+                    <div className="mt-1 text-sm">تا پایان تخفیف باقی مانده ...</div>
                 </div>
             )}
 
             {/* Price Section */}
-            <div className="mt-6 w-full w-[720px] mx-auto">
+            <div className="mt-6">
                 <div className="flex items-center gap-4">
-                    <span className="text-3xl font-bold text-pink-600">{product.price.toLocaleString()} ØªÙˆÙ…Ø§Ù†</span>
+                    <span className="text-3xl font-bold text-pink-600">{product.price.toLocaleString()} تومان</span>
                     {product.originalPrice > product.price && (
-                        <span className="text-gray-500 line-through">{product.originalPrice.toLocaleString()} ØªÙˆÙ…Ø§Ù†</span>
+                        <span className="text-gray-500 line-through">{product.originalPrice.toLocaleString()} تومان</span>
                     )}
                 </div>
                 {product.originalPrice > product.price && (
                     <div className="mt-1 text-green-600 text-sm">
-                        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% ØªØ®ÙÛŒÙ Ø´Ù…Ø§
+                        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% تخفیف شما
                     </div>
                 )}
                 <div className="mt-4 w-full bg-gray-300 h-2 rounded-full">
@@ -323,13 +320,13 @@ const ProductDetails: React.FC<{
                         style={{ width: `${(product.stock / 100) * 100}%` }}
                     ></div>
                 </div>
-                <div className="mt-1 text-xs text-gray-500">ÙÙ‚Ø· {product.stock} Ø¹Ø¯Ø¯ Ø¨Ø§Ù‚ÛŒ Ù…Ø§Ù†Ø¯Ù‡!</div>
+                <div className="mt-1 text-xs text-gray-500">فقط {product.stock} عدد باقی مانده!</div>
             </div>
 
             {/* Selection Options */}
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 w-full w-[720px] mx-auto">
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <Label className="block mb-2">Ø±Ù†Ú¯: Ø³ÙÛŒØ¯</Label>
+                    <Label className="block mb-2">رنگ: سفید</Label>
                     <div className="flex gap-2">
                         {product.colors.map((color) => (
                             <button
@@ -351,7 +348,7 @@ const ProductDetails: React.FC<{
                 </div>
 
                 <div>
-                    <Label className="block mb-2">Ø§Ù†ØªØ®Ø§Ø¨ Ø³Ø§ÛŒØ²</Label>
+                    <Label className="block mb-2">انتخاب سایز</Label>
                     <div className="flex gap-2">
                         {product.sizes.map((size) => (
                             <button
@@ -367,7 +364,7 @@ const ProductDetails: React.FC<{
                 </div>
 
                 <div>
-                    <Label className="block mb-2">ØªØ¹Ø¯Ø§Ø¯</Label>
+                    <Label className="block mb-2">تعداد</Label>
                     <div className="flex items-center gap-2">
                         <Button variant="outline" size="icon" onClick={decreaseQuantity} disabled={quantity <= 1}>
                             -
@@ -382,32 +379,32 @@ const ProductDetails: React.FC<{
 
             {/* Add to Cart Button */}
             <Button
-                className="mt-6 w-full max-w-[720px] mx-auto bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white"
+                className="mt-6 w-full bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white"
                 onClick={handleAddToCart}
             >
                 <ShoppingCartIcon className="ml-2 w-5 h-5" />
-                Ø§ÙØ²ÙˆØ¯Ù† Ø¨Ù‡ Ø³Ø¨Ø¯ Ø®Ø±ÛŒØ¯
+                افزودن به سبد خرید
             </Button>
 
             {/* Trust Icons */}
-            <div className="mt-6 flex justify-around w-full w-[720px] mx-auto">
+            <div className="mt-6 flex justify-around">
                 <div className="text-center">
                     <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
                         <CheckIcon className="w-6 h-6 text-purple-600" />
                     </div>
-                    <div className="text-sm">Ù¾Ø±Ø¯Ø§Ø®Øª Ø§Ù…Ù†</div>
+                    <div className="text-sm">پرداخت امن</div>
                 </div>
                 <div className="text-center">
                     <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
                         <RepeatIcon className="w-6 h-6 text-blue-600" />
                     </div>
-                    <div className="text-sm">Ø¨Ø§Ø²Ú¯Ø´Øª Ø¢Ø³Ø§Ù†</div>
+                    <div className="text-sm">بازگشت آسان</div>
                 </div>
                 <div className="text-center">
                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
                         <ShieldIcon className="w-6 h-6 text-green-600" />
                     </div>
-                    <div className="text-sm">ØªØ¶Ù…ÛŒÙ† Ø§ØµØ§Ù„Øª</div>
+                    <div className="text-sm">تضمین اصالت</div>
                 </div>
             </div>
         </div>
@@ -425,62 +422,62 @@ const ProductTabs: React.FC<{
 
     const submitReview = () => {
         if (reviewRating === 0 || reviewText.trim() === '') {
-            alert('Ù„Ø·ÙØ§Ù‹ Ø§Ù…ØªÛŒØ§Ø² Ùˆ Ù†Ø¸Ø± Ø®ÙˆØ¯ Ø±Ø§ ÙˆØ§Ø±Ø¯ Ú©Ù†ÛŒØ¯.');
+            alert('لطفاً امتیاز و نظر خود را وارد کنید.');
             return;
         }
-        alert('Ù†Ø¸Ø± Ø´Ù…Ø§ Ø¨Ø§ Ù…ÙˆÙÙ‚ÛŒØª Ø«Ø¨Øª Ø´Ø¯.');
+        alert('نظر شما با موفقیت ثبت شد.');
         setReviewRating(0);
         setReviewText('');
     };
 
     const submitQuestion = () => {
         if (questionText.trim() === '') {
-            alert('Ù„Ø·ÙØ§Ù‹ Ø³ÙˆØ§Ù„ Ø®ÙˆØ¯ Ø±Ø§ ÙˆØ§Ø±Ø¯ Ú©Ù†ÛŒØ¯.');
+            alert('لطفاً سوال خود را وارد کنید.');
             return;
         }
-        alert('Ø³ÙˆØ§Ù„ Ø´Ù…Ø§ Ø¨Ø§ Ù…ÙˆÙÙ‚ÛŒØª Ø«Ø¨Øª Ø´Ø¯.');
+        alert('سوال شما با موفقیت ثبت شد.');
         setQuestionText('');
     };
 
     return (
-        <div className="mt-6 bg-white rounded-xl shadow-md mx-auto w-full w-[720px]">
+        <div className="mt-6 bg-white rounded-xl shadow-md">
             <div className="border-b">
                 <div className="flex">
                     <button
                         onClick={() => setActiveTab('description')}
                         className={`px-6 py-3 font-medium transition-colors ${activeTab === 'description'
-                                ? 'bg-blue-100 text-blue-800 border-b-2 border-blue-500'
-                                : 'text-gray-700 hover:bg-gray-100'
+                            ? 'bg-blue-100 text-blue-800 border-b-2 border-blue-500'
+                            : 'text-gray-700 hover:bg-gray-100'
                             }`}
                     >
-                        ØªÙˆØ¶ÛŒØ­Ø§Øª
+                        توضیحات
                     </button>
                     <button
                         onClick={() => setActiveTab('specifications')}
                         className={`px-6 py-3 font-medium transition-colors ${activeTab === 'specifications'
-                                ? 'bg-orange-100 text-orange-800 border-b-2 border-orange-500'
-                                : 'text-gray-700 hover:bg-gray-100'
+                            ? 'bg-orange-100 text-orange-800 border-b-2 border-orange-500'
+                            : 'text-gray-700 hover:bg-gray-100'
                             }`}
                     >
-                        Ù…Ø´Ø®ØµØ§Øª
+                        مشخصات
                     </button>
                     <button
                         onClick={() => setActiveTab('reviews')}
                         className={`px-6 py-3 font-medium transition-colors ${activeTab === 'reviews'
-                                ? 'bg-green-100 text-green-800 border-b-2 border-green-500'
-                                : 'text-gray-700 hover:bg-gray-100'
+                            ? 'bg-green-100 text-green-800 border-b-2 border-green-500'
+                            : 'text-gray-700 hover:bg-gray-100'
                             }`}
                     >
-                        Ù†Ø¸Ø±Ø§Øª ({product.reviewsCount})
+                        نظرات ({product.reviewsCount})
                     </button>
                     <button
                         onClick={() => setActiveTab('questions')}
                         className={`px-6 py-3 font-medium transition-colors ${activeTab === 'questions'
-                                ? 'bg-purple-100 text-purple-800 border-b-2 border-purple-500'
-                                : 'text-gray-700 hover:bg-gray-100'
+                            ? 'bg-purple-100 text-purple-800 border-b-2 border-purple-500'
+                            : 'text-gray-700 hover:bg-gray-100'
                             }`}
                     >
-                        Ù¾Ø±Ø³Ø´ Ùˆ Ù¾Ø§Ø³Ø® ({product.questionsCount})
+                        پرسش و پاسخ ({product.questionsCount})
                     </button>
                 </div>
             </div>
@@ -488,11 +485,11 @@ const ProductTabs: React.FC<{
             <div className="p-6">
                 {activeTab === 'description' && (
                     <div>
-                        <h2 className="text-xl font-bold mb-4">Ø¯Ø±Ø¨Ø§Ø±Ù‡ Ø§ÛŒÙ† Ù…Ø­ØµÙˆÙ„</h2>
+                        <h2 className="text-xl font-bold mb-4">درباره این محصول</h2>
                         <p className="mb-6">
-                            Ø§ÛŒÙ† Ù¾ÛŒØ±Ø§Ù‡Ù† Ú©ØªØ§Ù† Ø¨Ø§ Ø·Ø±Ø§Ø­ÛŒ Ù…ÛŒÙ†ÛŒÙ…Ø§Ù„ Ùˆ Ù…Ø¯Ø±Ù†ØŒ Ø§Ù†ØªØ®Ø§Ø¨ÛŒ Ø¹Ø§Ù„ÛŒ Ø¨Ø±Ø§ÛŒ Ø§Ø³ØªØ§ÛŒÙ„ Ø±ÙˆØ²Ù…Ø±Ù‡ Ø´Ù…Ø§Ø³Øª. Ù¾Ø§Ø±Ú†Ù‡ Ú©ØªØ§Ù† Ø¨Ø§ Ú©ÛŒÙÛŒØª Ø¨Ø§Ù„Ø§ØŒ Ù†Ø±Ù… Ùˆ Ø±Ø§Ø­ØªÛŒ ÙÙˆÙ‚â€ŒØ§Ù„Ø¹Ø§Ø¯Ù‡â€ŒØ§ÛŒ Ø±Ø§ Ø¨Ù‡ Ø´Ù…Ø§ Ù‡Ø¯ÛŒÙ‡ Ù…ÛŒâ€ŒØ¯Ù‡Ø¯. Ù…Ù†Ø§Ø³Ø¨ Ø¨Ø±Ø§ÛŒ ÙØµÙ„ Ø¨Ù‡Ø§Ø± Ùˆ ØªØ§Ø¨Ø³ØªØ§Ù†.
+                            این پیراهن کتان با طراحی مینیمال و مدرن، انتخابی عالی برای استایل روزمره شماست. پارچه کتان با کیفیت بالا، نرم و راحتی فوق‌العاده‌ای را به شما هدیه می‌دهد. مناسب برای فصل بهار و تابستان.
                         </p>
-                        <h3 className="text-lg font-semibold mb-3">ÙˆÛŒÚ˜Ú¯ÛŒâ€ŒÙ‡Ø§ÛŒ Ø¨Ø±Ø¬Ø³ØªÙ‡</h3>
+                        <h3 className="text-lg font-semibold mb-3">ویژگی‌های برجسته</h3>
                         <ul className="space-y-2">
                             {product.features.map((feature, index) => (
                                 <li key={index} className="flex items-center gap-2">
@@ -506,30 +503,30 @@ const ProductTabs: React.FC<{
 
                 {activeTab === 'specifications' && (
                     <div>
-                        <h2 className="text-xl font-bold mb-4">Ù…Ø´Ø®ØµØ§Øª ÙÙ†ÛŒ</h2>
+                        <h2 className="text-xl font-bold mb-4">مشخصات فنی</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="bg-gray-50 p-3 rounded-lg">
-                                <div className="font-semibold">Ø¬Ù†Ø³ Ù¾Ø§Ø±Ú†Ù‡</div>
+                                <div className="font-semibold">جنس پارچه</div>
                                 <div>{product.specifications.fabric}</div>
                             </div>
                             <div className="bg-gray-50 p-3 rounded-lg">
-                                <div className="font-semibold">Ú©Ø´ÙˆØ± Ø³Ø§Ø²Ù†Ø¯Ù‡</div>
+                                <div className="font-semibold">کشور سازنده</div>
                                 <div>{product.specifications.country}</div>
                             </div>
                             <div className="bg-gray-50 p-3 rounded-lg">
-                                <div className="font-semibold">Ù†ÙˆØ¹ ÛŒÙ‚Ù‡</div>
+                                <div className="font-semibold">نوع یقه</div>
                                 <div>{product.specifications.collar}</div>
                             </div>
                             <div className="bg-gray-50 p-3 rounded-lg">
-                                <div className="font-semibold">Ù†ÙˆØ¹ Ø§Ø³ØªÛŒÙ†</div>
+                                <div className="font-semibold">نوع استین</div>
                                 <div>{product.specifications.sleeve}</div>
                             </div>
                             <div className="bg-gray-50 p-3 rounded-lg">
-                                <div className="font-semibold">Ø§Ù„Ú¯Ùˆ</div>
+                                <div className="font-semibold">الگو</div>
                                 <div>{product.specifications.pattern}</div>
                             </div>
                             <div className="bg-gray-50 p-3 rounded-lg">
-                                <div className="font-semibold">ÙØµÙ„ Ù…Ù†Ø§Ø³Ø¨</div>
+                                <div className="font-semibold">فصل مناسب</div>
                                 <div>{product.specifications.season}</div>
                             </div>
                         </div>
@@ -538,12 +535,12 @@ const ProductTabs: React.FC<{
 
                 {activeTab === 'reviews' && (
                     <div>
-                        <h2 className="text-xl font-bold mb-4">Ù†Ø¸Ø±Ø§Øª Ù…Ø´ØªØ±ÛŒØ§Ù†</h2>
+                        <h2 className="text-xl font-bold mb-4">نظرات مشتریان</h2>
                         <div className="flex items-center gap-4 mb-4">
                             <div className="text-2xl font-bold">{product.rating}</div>
                             <div className="flex items-center gap-1">
                                 <StarIcon className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                                <span>Ø§Ø² {product.reviewsCount} Ù†Ø¸Ø±</span>
+                                <span>از {product.reviewsCount} نظر</span>
                             </div>
                         </div>
 
@@ -552,7 +549,7 @@ const ProductTabs: React.FC<{
                             <CardHeader>
                                 <div className="flex items-center gap-2">
                                     <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
-                                    <span>Ø´Ù…Ø§</span>
+                                    <span>شما</span>
                                 </div>
                             </CardHeader>
                             <CardContent>
@@ -560,13 +557,12 @@ const ProductTabs: React.FC<{
                                     <StarRating value={reviewRating} onChange={setReviewRating} />
                                 </div>
                                 <Input
-                                    name="reviewText"
-                                    placeholder="...Ù†Ø¸Ø± Ø®ÙˆØ¯ Ø±Ø§ Ø«Ø¨Øª Ú©Ù†ÛŒØ¯"
+                                    placeholder="...نظر خود را ثبت کنید"
                                     value={reviewText}
                                     onChange={(e) => setReviewText(e.target.value)}
                                     className="mb-4"
                                 />
-                                <Button onClick={submitReview}>Ø«Ø¨Øª Ù†Ø¸Ø± Ø¬Ø¯ÛŒØ¯</Button>
+                                <Button onClick={submitReview}>ثبت نظر جدید</Button>
                             </CardContent>
                         </Card>
 
@@ -592,41 +588,40 @@ const ProductTabs: React.FC<{
                                     <p className="mb-4">{review.text}</p>
                                     <div className="flex gap-2">
                                         <Button variant="outline" size="sm" className="flex items-center gap-1">
-                                            <ThumbsUpIcon className="w-4 h-4" /> Ù…ÙÛŒØ¯ Ø¨ÙˆØ¯ ({review.helpful})
+                                            <ThumbsUpIcon className="w-4 h-4" /> مفید بود ({review.helpful})
                                         </Button>
                                         <Button variant="outline" size="sm" className="flex items-center gap-1">
-                                            <ThumbsDownIcon className="w-4 h-4" /> Ù…ÙÛŒØ¯ Ù†Ø¨ÙˆØ¯ ({review.notHelpful})
+                                            <ThumbsDownIcon className="w-4 h-4" /> مفید نبود ({review.notHelpful})
                                         </Button>
                                     </div>
                                 </CardContent>
                             </Card>
                         ))}
 
-                        <Button variant="outline" className="w-full">Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù†Ø¸Ø±Ø§Øª Ø¨ÛŒØ´ØªØ±</Button>
+                        <Button variant="outline" className="w-full">مشاهده نظرات بیشتر</Button>
                     </div>
                 )}
 
                 {activeTab === 'questions' && (
                     <div>
-                        <h2 className="text-xl font-bold mb-4">Ù¾Ø±Ø³Ø´ Ùˆ Ù¾Ø§Ø³Ø®</h2>
+                        <h2 className="text-xl font-bold mb-4">پرسش و پاسخ</h2>
 
                         {/* Ask Question */}
                         <Card className="mb-6">
                             <CardHeader>
                                 <div className="flex items-center gap-2">
                                     <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
-                                    <span>Ø´Ù…Ø§</span>
+                                    <span>شما</span>
                                 </div>
                             </CardHeader>
                             <CardContent>
                                 <Input
-                                    name="questionText"
-                                    placeholder="...Ø³ÙˆØ§Ù„ Ø®ÙˆØ¯ Ø±Ø§ Ø¨Ù¾Ø±Ø³ÛŒØ¯"
+                                    placeholder="...سوال خود را بپرسید"
                                     value={questionText}
                                     onChange={(e) => setQuestionText(e.target.value)}
                                     className="mb-4"
                                 />
-                                <Button onClick={submitQuestion}>Ø«Ø¨Øª Ù¾Ø±Ø³Ø´ Ø¬Ø¯ÛŒØ¯</Button>
+                                <Button onClick={submitQuestion}>ثبت پرسش جدید</Button>
                             </CardContent>
                         </Card>
 
@@ -638,7 +633,7 @@ const ProductTabs: React.FC<{
                                         <MessageSquareIcon className="w-5 h-5 text-green-600" />
                                         <span>{q.question}</span>
                                     </div>
-                                    <div className="text-xs text-green-600 mt-1">Ù¾ÛŒØ´ {q.daysAgo} Ø±ÙˆØ²</div>
+                                    <div className="text-xs text-green-600 mt-1">پیش {q.daysAgo} روز</div>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="bg-white p-3 rounded-lg">
@@ -652,7 +647,7 @@ const ProductTabs: React.FC<{
                             </Card>
                         ))}
 
-                        <Button variant="outline" className="w-full">Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù¾Ø±Ø³Ø´â€ŒÙ‡Ø§ÛŒ Ø¨ÛŒØ´ØªØ±</Button>
+                        <Button variant="outline" className="w-full">مشاهده پرسش‌های بیشتر</Button>
                     </div>
                 )}
             </div>
@@ -677,8 +672,8 @@ const RelatedProducts: React.FC<{
     const visibleProducts = products.slice(currentIndex, currentIndex + 4);
 
     return (
-        <div className="mt-6 mx-auto w-full w-[720px]">
-            <h2 className="text-xl font-bold mb-4">Ù…Ø­ØµÙˆÙ„Ø§Øª Ù…Ø±ØªØ¨Ø·</h2>
+        <div className="mt-6">
+            <h2 className="text-xl font-bold mb-4">محصولات مرتبط</h2>
             <div className="relative">
                 <div className="flex gap-4">
                     {visibleProducts.map((product) => (
@@ -748,12 +743,15 @@ const ClockIcon: React.FC<{ className?: string }> = ({ className }) => (
 // Main Product Page Component
 const ProductPage: React.FC = () => {
     return (
-        <div className="container mx-auto px-6 py-8 max-w-5xl text-right" dir="rtl">
-            <div className="grid grid-cols-1 gap-8 items-start">
-                <div className="flex flex-col items-center">
+        <div className="container mx-auto px-4 py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2">
                     <ProductDetails product={mockProduct} />
                     <ProductTabs product={mockProduct} />
                     <RelatedProducts products={mockProduct.relatedProducts} />
+                </div>
+                <div className="lg:col-span-1">
+                    {/* Sidebar content can be added here if needed */}
                 </div>
             </div>
         </div>
@@ -761,4 +759,3 @@ const ProductPage: React.FC = () => {
 };
 
 export default ProductPage;
-

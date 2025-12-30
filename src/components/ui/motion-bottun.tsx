@@ -1,24 +1,58 @@
-"use client"
+"use client";
 
-import { Button, type ButtonProps } from "@/components/ui/button"
-import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { motion, type HTMLMotionProps } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-// Extend props: all Button props + motion props on the same element (no nested buttons)
-type MotionButtonProps = ButtonProps & React.ComponentProps<typeof motion.button>
+const buttonVariants = cva(
+    "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+    {
+        variants: {
+            variant: {
+                default: "bg-primary text-primary-foreground hover:bg-primary/90",
+                destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+                outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+                secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+                ghost: "hover:bg-accent hover:text-accent-foreground",
+                link: "text-primary underline-offset-4 hover:underline",
+                brand: "bg-brand text-brand-foreground hover:bg-brand/90",
+            },
+            size: {
+                default: "h-10 px-4 py-2",
+                sm: "h-9 rounded-md px-3",
+                lg: "h-11 rounded-md px-8",
+                icon: "h-10 w-10",
+            },
+        },
+        defaultVariants: {
+            variant: "default",
+            size: "default",
+        },
+    }
+);
 
-const MotionButtonBase = motion.create(Button)
+export interface MotionButtonProps
+    extends HTMLMotionProps<"button">,
+    VariantProps<typeof buttonVariants> { }
 
-export function MotionButton({ className, children, ...props }: MotionButtonProps) {
-    return (
-        <MotionButtonBase
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.03 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className={cn("cursor-pointer", className)}
-            {...props}
-        >
-            {children}
-        </MotionButtonBase>
-    )
-}
+const MotionButton = React.forwardRef<HTMLButtonElement, MotionButtonProps>(
+    ({ className, variant, size, children, whileHover, whileTap, ...props }, ref) => {
+        return (
+            <motion.button
+                ref={ref}
+                className={cn(buttonVariants({ variant, size, className }))}
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                {...props}
+            >
+                {children}
+            </motion.button>
+        );
+    }
+);
+
+MotionButton.displayName = "MotionButton";
+
+export { MotionButton };
