@@ -9,7 +9,7 @@ import type { SortOption } from "@/types/productListingTypes";
 import { toPersianDigits } from "@/utils/PersianDigits";
 import SubCategorySlider from "./productListingComponents/SubCategorySilder";
 import { categoryLabels, brandLabels } from "@/data/productListingData";
-import { fetchAllProducts } from "@/services/productListingService";
+import { getMockProducts } from "@/data/productList.mock";
 import { X } from 'lucide-react';
 import {
   Dialog,
@@ -38,7 +38,7 @@ const ProductListing: React.FC = () => {
       setError(null);
 
       try {
-        const data = await fetchAllProducts();
+        const data = getMockProducts();
         setProducts(data);
       } catch (err) {
         setError("خطا در بارگذاری محصولات");
