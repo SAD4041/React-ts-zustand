@@ -63,7 +63,10 @@ const AddressSection: React.FC<AddressSectionProps> = ({
         <Card dir="rtl">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 px-6">
                 <CardTitle className="text-right">آدرس‌ها</CardTitle>
-                <Button size="sm" onClick={handleAddClick}>
+                <Button
+                    variant='default'
+                    size="sm"
+                    onClick={handleAddClick}>
                     <Plus className="w-4 h-4 ml-2" />
                     آدرس جدید
                 </Button>

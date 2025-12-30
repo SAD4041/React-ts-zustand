@@ -42,8 +42,9 @@ const OrderSummarySection: React.FC<OrderSummarySectionProps> = ({ summary, onCh
                 </div>
                 <div className="mt-6 flex justify-end">
                     <Button
+                        variant='default'
                         onClick={onCheckout}
-                        className="w-50 max-w-xs bg-orange-600 hover:bg-orange-700"
+                        className="w-50 max-w-x"
                     >
                         تکمیل پرداخت
                     </Button>
