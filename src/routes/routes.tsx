@@ -36,14 +36,14 @@ export const router = createBrowserRouter([
                 element: <BrandProfile />,
             },
 
-            // {
-            //     path: "/brandProfileEdit",
-            //     element: (
-            //         <ProtectedRoute requireBrand={true}>
-            //             <BrandProfileEditPage />
-            //         </ProtectedRoute>
-            //     ),
-            // },
+            {
+                path: "/brandProfileEdit",
+                element: (
+                    <ProtectedRoute requireBrand={true}>
+                        <BrandProfileEditPage />
+                    </ProtectedRoute>
+                ),
+            },
         ],
     },
     {
