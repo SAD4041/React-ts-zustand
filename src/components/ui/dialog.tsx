@@ -1,4 +1,3 @@
-// src/components/ui/dialog.tsx
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
@@ -37,21 +36,20 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   DialogContentProps
->(({ 
-  className, 
-  children, 
-  variant = "default", 
+>(({
+  className,
+  children,
+  variant = "default",
   hideCloseButton = false,
   disableOverlayClose = false,
-  ...props 
+  ...props
 }, ref) => (
   <DialogPortal>
-    <DialogOverlay 
-      onPointerDownOutside={disableOverlayClose ? (e) => e.preventDefault() : undefined}
-    />
+    <DialogOverlay />
     <DialogPrimitive.Content
       ref={ref}
       onEscapeKeyDown={disableOverlayClose ? (e) => e.preventDefault() : undefined}
+      onPointerDownOutside={disableOverlayClose ? (e) => e.preventDefault() : undefined}
       className={cn(
         "fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4",
         "border bg-background p-6 shadow-lg duration-200 sm:rounded-lg",

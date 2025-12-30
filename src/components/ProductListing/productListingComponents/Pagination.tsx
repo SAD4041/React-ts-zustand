@@ -2,11 +2,11 @@ import React from 'react';
 import { toPersianDigits } from '@/utils/PersianDigits';
 import type { PaginationProps } from '@/types/productListingTypes';
 
-const Pagination: React.FC<PaginationProps> = ({ 
-  currentGroup, 
-  totalGroups, 
+const Pagination: React.FC<PaginationProps> = ({
+  currentGroup,
+  totalGroups,
   onGroupChange,
-  pagesPerGroup 
+  pagesPerGroup
 }) => {
   if (totalGroups <= 1) return null;
 
@@ -19,11 +19,10 @@ const Pagination: React.FC<PaginationProps> = ({
           <button
             key={startPage}
             onClick={() => onGroupChange(i + 1)}
-            className={`w-10 h-10 rounded-full transition cursor-pointer ${
-              i + 1 === currentGroup 
-                ? 'bg-primary text-primary-foreground' 
-                : 'text-foreground hover:bg-muted'
-            }`}
+            className={`w-10 h-10 rounded-full transition cursor-pointer ${i + 1 === currentGroup
+              ? 'bg-primary text-primary-foreground'
+              : 'text-foreground hover:bg-muted'
+              }`}
           >
             {toPersianDigits(startPage)}
           </button>
@@ -77,11 +76,10 @@ const Pagination: React.FC<PaginationProps> = ({
             <button
               key={item}
               onClick={() => onGroupChange(groupNumber)}
-              className={`w-10 h-10 rounded-full transition cursor-pointer ${
-                isCurrent 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'text-foreground hover:bg-muted'
-              }`}
+              className={`w-10 h-10 rounded-full transition cursor-pointer ${isCurrent
+                ? 'bg-primary text-primary-foreground'
+                : 'text-foreground hover:bg-muted'
+                }`}
             >
               {toPersianDigits(item)}
             </button>

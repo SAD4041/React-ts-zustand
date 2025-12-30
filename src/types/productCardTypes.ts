@@ -1,4 +1,4 @@
-// types/productCardTypes.ts
+// import { number } from "framer-motion";
 
 export interface Size {
   label: string;
@@ -17,18 +17,23 @@ export interface Product {
   model: string;             // = brand
   name: string;
   price: number;
-  discountedPrice: number;
   sizes: Size[];
   colors: Color[];
   rating: number;            // ✅ وجود دارد
   stock: number;             // = inventory_Count
   ratingCount: number;
   sales: number;
+  category: string;
+  discountedPrice: number;
 }
 
-// --- Props برای کامپوننت‌ها ---
+export interface ImageData {
+  title: string;
+  image: string;
+}
+
 export interface ColorSelectorProps {
-  product: Product;
+  product:Product
 }
 
 export interface ProductProps {
@@ -41,9 +46,9 @@ export interface ProductImageProps {
 }
 
 export interface SizeSelectorProps {
-  product: Product;
+  product : Product
 }
 
 export interface ProductCardProps {
-  product: Product;
+  Product: Product;
 }

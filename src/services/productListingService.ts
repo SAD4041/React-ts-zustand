@@ -1,7 +1,7 @@
 // services/productListingServices.ts
 
 import { getData } from "@/services/services";
-import type { Product as RawProduct } from "@/types/productListingTypes";
+import type { Product as RawProduct } from "@/types/productCardTypes";
 import type { Product as AdaptedProduct } from "@/types/productCardTypes";
 import { transformProducts } from "@/utils/transformproduct";
 

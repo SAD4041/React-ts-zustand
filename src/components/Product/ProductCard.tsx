@@ -6,23 +6,24 @@ import ColorSelector from "./productCardComponents/ColorSelector";
 import { toPersianDigits } from "../../utils/PersianDigits";
 import type { ProductCardProps } from "@/types/productCardTypes";
 import { Heart } from "lucide-react";
+import type { Product } from "@/types/productCardTypes";
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ Product }) => {
     const [isWishlisted, setIsWishlisted] = useState(false);
 
     useEffect(() => {
         const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-        setIsWishlisted(wishlist.includes(product.id));
-    }, [product.id]);
+        setIsWishlisted(wishlist.includes(Product.id));
+    }, [Product.id]);
 
     const handleToggleWishlist = () => {
         const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
         let newWishlist: number[];
 
         if (isWishlisted) {
-            newWishlist = wishlist.filter((id: number) => id !== product.id);
+            newWishlist = wishlist.filter((id: string) => Number(id) !== Product.id);
         } else {
-            newWishlist = [...wishlist, product.id];
+            newWishlist = [...wishlist, Product.id];
         }
 
         localStorage.setItem("wishlist", JSON.stringify(newWishlist));
@@ -47,19 +48,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 />
             </button>
 
-            <ProductImage imageUrl={product.image} discount={product.discount} />
-            <ProductDetails product={product} />
-            <SizeSelector product={product} />
+            <ProductImage imageUrl={Product.image} discount={Product.discount} />
+            <ProductDetails product={Product} />
+            <SizeSelector product={Product} />
 
             <div
                 dir="rtl"
                 className="flex flex-wrap items-center justify-between gap-2 text-xs"
             >
-                <ColorSelector product={product} />
+                <ColorSelector product={Product} />
 
-                {product.stock < 10 && (
+                {Product.stock < 10 && (
                     <p className="text-primary font-medium whitespace-normal leading-tight">
-                        ⚠️ تنها {toPersianDigits(product.stock.toString())} عدد باقی مانده
+                        ⚠️ تنها {toPersianDigits(Product.stock.toString())} عدد باقی مانده
                     </p>
                 )}
             </div>

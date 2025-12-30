@@ -18,8 +18,8 @@ const ColorFilter: React.FC<ColorFilterProps> = ({ colors, selectedColors, onTog
             type="button"
             onClick={() => onToggleColor(color.code)}
             className={`w-6 h-6 rounded-full border-2 transition ${selectedColors.includes(color.code)
-                ? 'border-border ring-1 ring-offset-1 ring-primary'
-                : 'border-border hover:border-primary-border-hover'
+              ? 'border-border ring-1 ring-offset-1 ring-primary'
+              : 'border-border hover:border-primary-border-hover'
               }`}
             style={{ backgroundColor: color.code }}
             title={color.name}

@@ -30,24 +30,10 @@ export interface Filters {
   };
 }
 
-// ✅ این ساختار دقیقاً همان چیزی است که از API می‌آید
-export interface Product {
-  id: number;
-  market_id: number;
-  name: string;
-  image: string;
-  color: string[];           // ["#FF0000", "#000000", ...]
-  size: string[];            // ["S", "M", "L", ...]
-  inventory_Count: number;   // تعداد موجودی
-  brand: string;             // نام برند
-  price: number;
-  rating: number;            // از بک می‌آید
-  ratingCount: number;
-  sales: number;
-  discount: number;          // درصد تخفیف (0 تا 100)
-}
+/* export interface Product extends ProductData {
+  id: string;s
+} */
 
-// --- بقیه انترفیس‌ها ---
 export type SortOption = 'newest' | 'cheapest' | 'expensive' | 'most-salled' | 'most-revelent';
 
 export interface SortOptionsProps {
@@ -107,3 +93,5 @@ export interface SizeFilterProps {
 export interface SubCategoryProps {
   category: SubCategory;
 }
+
+export type ProductQueryType = "SE" | "CA" | "CM" | "BR";

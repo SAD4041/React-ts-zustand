@@ -5,9 +5,9 @@ import type { ProductImageProps } from "@/types/productCardTypes";
 
 const ProductImage: React.FC<ProductImageProps> = ({ imageUrl, discount }) => {
     return (
-        <div className="relative w-full aspect-4/5 rounded-lg overflow-hidden">
+        <div className="relative w-full aspect-[4/5] rounded-lg overflow-hidden">
             {discount > 0 && (
-                <div className="absolute top-2 left-2 z-10 bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded-lg">
+                <div className="absolute top-2 left-2 z-10 bg-primary text-white text-xs font-bold px-2 py-1 rounded-lg">
                     {toPersianDigits(discount.toString())}%
                 </div>
             )}

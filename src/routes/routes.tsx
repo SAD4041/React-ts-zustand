@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
 import LoginLayout from "@/layouts/PublicLayout/LoginLayout";
 import Home from "@/pages/Home";
+// import Temp from "@/pages/Temp";
 import Error404 from "@/pages/Error404";
 import Error500 from "@/pages/Error500";
 import ProductListing from "@/components/ProductListing/productListing";
