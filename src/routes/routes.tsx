@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
                 element: <Error500 />
             },
             {
-                path: "/products-list",
+                path: "/productList",
                 element: <ProductListing />
             },
             {
