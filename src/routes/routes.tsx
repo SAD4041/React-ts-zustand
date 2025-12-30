@@ -20,6 +20,9 @@ import ContactUs from "@/components/ContactUs/ContactUs";
 import Payment from "@/pages/PaymentPage";
 import ShoppingCart from "@/pages/shoppingCart";
 import ProductPages from "@/pages/ProductPage";
+import SettingsPage from "@/pages/SettingsPage";
+import OrderManagementPage from "@/pages/BrandDash/OrderManagementPage";
+import BrandHomePage from "@/pages/BrandDash/Home";
 
 export const router = createBrowserRouter([
     {
@@ -101,6 +104,19 @@ export const router = createBrowserRouter([
                 path: "/dash/orders",
                 element: <OrderHistoryPage />,
             },
+            {
+                path: "settings",
+                element: <SettingsPage />,
+            },
+            {
+                path: "order-management",
+                element: <OrderManagementPage />,
+            },
+            {
+                path: "brand-home",
+                element: <BrandHomePage />,
+            },
+
         ],
     },
 

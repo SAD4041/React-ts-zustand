@@ -31,7 +31,7 @@ export default function Errors404() {
         <MotionButton
           onClick={() => navigate("/")}
           variant="default"
-          className="px-6 py-3 font-semibold text-lg"
+          className="px-6 py-3 bg-bg-section1 font-semibold text-lg"
         >
           بازگشت به خانه اصلی
         </MotionButton>
