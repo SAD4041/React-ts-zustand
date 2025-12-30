@@ -7,6 +7,8 @@ import ProfileIcon from './HeaderComponents/ProfileIcon';
 import NotificationIcon from './HeaderComponents/NotificatoinIcaon';
 import headerBg from '@/assets/Group.png';
 import PromoBanner from './HeaderComponents/PromoBanner';
+import { Link } from "react-router-dom";
+
 
 const Header = () => {
   return (
@@ -20,11 +22,14 @@ const Header = () => {
             <div className="flex items-center space-x-2 space-x-reverse mr-2 md:mr-3">
               <div className="w-11 h-11 md:w-13.5 md:h-13.5 bg-header-bg-blur backdrop-blur-md rounded-full shadow-sm flex items-center justify-center">
                 <div className="w-11 h-11 md:w-14 md:h-14 bg-header-bg-blur backdrop-blur-md rounded-full shadow-sm flex items-center justify-center">
-                  <img
-                    src={logo}
-                    alt="لوگو"
-                    className="w-11 h-11 md:w-14 md:h-14 object-contain"
-                  />
+                  <Link
+                    to="/">
+                    <img
+                      src={logo}
+                      alt="لوگو"
+                      className="w-11 h-11 md:w-14 md:h-14 object-contain"
+                    />
+                  </Link>
                 </div>
               </div>
             </div>

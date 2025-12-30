@@ -10,13 +10,13 @@ export interface ButtonProps
 }
 
 const variantStyles: Record<NonNullable<ButtonProps["variant"]>, string> = {
-  default: "bg-white text-black hover:bg-primary hover:text-white",
+  default: "bg-primary text-white hover:bg-primary/80 hover:text-white",
   destructive: "bg-red-600 text-white hover:bg-red-700",
   outline: "border border-gray-300 bg-white text-gray-900 hover:bg-gray-50",
   secondary: "bg-gray-600 text-white hover:bg-gray-700",
   ghost: "hover:bg-gray-100 text-gray-900",
   link: "text-blue-600 underline-offset-4 hover:underline",
-  dialog: "w-full max-w-xs bg-bg-section1 text-white text-md py-2.5 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium shadow-md hover:shadow-lg disabled:bg-gray-4 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer", 
+  dialog: "w-full max-w-xs bg-bg-section1 text-white text-md py-2.5 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium shadow-md hover:shadow-lg disabled:bg-gray-4 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm cursor-pointer",
   slider: "text-white bg-gradient-to-r from-bg-section1 to-bg-section2 rounded-full shadow-sm hover:opacity-90 transition cursor-pointer",
 };
 
