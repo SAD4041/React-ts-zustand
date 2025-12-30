@@ -60,7 +60,7 @@ const AddressSection: React.FC<AddressSectionProps> = ({
       </div>
       <Separator className="mb-6" />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-10 px-6">
+      <div dir='rtl' className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-10 px-6">
         {addresses.map((address) => (
           <AddressCard
             key={address.id}
