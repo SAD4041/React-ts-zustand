@@ -1,0 +1,25 @@
+import { GlobalProviders } from "@/providers/GlobalProviders";
+import { Toaster } from "@/components/ui/sonner";
+import { Outlet } from "react-router-dom";
+
+const AuthLayout = () => {
+	return (
+		<div className="font-[alibaba]" dir="rtl">
+			<Toaster
+				position="bottom-right"
+				richColors={true}
+				duration={5000}
+				// toastOptions={{
+				// 	style: {
+				// 		color: "red",
+				// 	},
+				// }}
+			/>
+			<GlobalProviders>
+				<Outlet />
+			</GlobalProviders>
+		</div>
+	);
+};
+
+export default AuthLayout;
