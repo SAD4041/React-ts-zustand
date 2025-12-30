@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import * as yup from 'yup';
 import { translateNumber } from '@/utils/translateNumber';
 import { untranslateNumber } from "@/utils/untranslateNumber";
@@ -83,7 +82,7 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({ initialData, on
                 <div className="space-y-5">
                     <div className="space-y-2">
                         <Label htmlFor="fullName" className="text-right">نام و نام خانوادگی</Label>
-                        <Input
+                        <input
                             id="fullName"
                             name="fullName"
                             value={formData.fullName}
@@ -96,7 +95,7 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({ initialData, on
 
                     <div className="space-y-2">
                         <Label htmlFor="phone" className="text-right">شماره تماس</Label>
-                        <Input
+                        <input
                             id="phone"
                             name="phone"
                             value={translateNumber(formData.phone)} // نمایش فارسی
@@ -109,7 +108,7 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({ initialData, on
 
                     <div className="space-y-2">
                         <Label htmlFor="email" className="text-right">ایمیل</Label>
-                        <Input
+                        <input
                             id="email"
                             name="email"
                             type="email"
