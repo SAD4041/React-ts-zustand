@@ -14,6 +14,7 @@ import WishlistPage from "@/pages/WishList";
 import ProductManagementPage from "@/pages/BrandDash/ProductManagementPage";
 import OrderHistoryPage from "@/pages/OrderHistoryPage";
 import SettingsPage from "@/pages/SettingsPage";
+import OrderManagementPage from "@/pages/BrandDash/OrderManagementPage";
 
 export const router = createBrowserRouter([
     {
@@ -65,6 +66,10 @@ export const router = createBrowserRouter([
             {
             path: "settings",
             element: <SettingsPage />,
+            },
+            {
+            path: "order-management",
+            element: <OrderManagementPage />,
             },
         ],
     },
