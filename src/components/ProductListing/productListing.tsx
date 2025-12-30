@@ -4,7 +4,7 @@ import ProductGrid from "./productListingComponents/ProductGrid";
 import FilterSidebar from "./productListingComponents/FilterSidebar";
 import SortOptions from "./productListingComponents/SortOptions";
 import Pagination from "./productListingComponents/Pagination";
-import type { Product } from "@/types/productListingTypes";
+import type { Product } from "@/types/productCardTypes";
 import type { SortOption } from "@/types/productListingTypes";
 import { toPersianDigits } from "@/utils/PersianDigits";
 import SubCategorySlider from "./productListingComponents/SubCategorySilder";
