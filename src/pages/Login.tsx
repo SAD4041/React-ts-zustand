@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { loginSchema } from '../schemas/LoginSchemas';
@@ -21,6 +21,20 @@ import type LoginFormValues from '@/types/loginTypes';
 import ErrorForm from '@/components/login/errorForm';
 import { Input } from '@/components/ui/input';
 
+// 🔹 هوک تشخیص موبایل — اضافه شد ✅
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => setIsMobile(window.innerWidth < 768);
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  return isMobile;
+};
+
 const SUCCESS_CAT = successCat;
 const ERROR_CAT = errorCat;
 
@@ -35,12 +49,12 @@ const LoginForm: React.FC = () => {
     onButtonClick: () => { },
     imageSrc: ''
   });
+  const isMobile = useIsMobile(); // ✅ استفاده صحیح از هوک
 
   const initialValues: LoginFormValues = { phone: '' };
 
   const onFormSubmit = async (values: LoginFormValues) => {
     setLoading(true);
-
     try {
       const result = await checkPhone(values.phone);
 
@@ -94,25 +108,27 @@ const LoginForm: React.FC = () => {
     setFieldValue: (field: string, value: any) => void
   ) => {
     const inputValue = e.target.value;
-
-    const persianToEnglish = inputValue.replace(/[۰-۹]/g, (d) =>
+    const persianToEnglish = inputValue.replace(/[۰-۹]/g, d =>
       '۰۱۲۳۴۵۶۷۸۹'.indexOf(d).toString()
     );
-
     const englishValue = persianToEnglish.replace(/[^0-9]/g, '').slice(0, 11);
-
     setFieldValue('phone', englishValue);
   };
 
   return (
     <div className="flex min-h-screen bg-background-color" dir="rtl">
-      <div className="w-full flex items-center justify-center p-6 md:p-10">
-        <div className="w-full max-w-xl h-5/6 bg-login-card-bg rounded-4xl border-3 border-primary-border p-8 relative overflow-hidden">
-          <div className="text-center mb-8">
+      <div className={`w-full flex items-center justify-center ${isMobile ? 'p-0' : 'p-6 md:p-10'}`}>
+        <div
+          className={`w-full relative overflow-hidden ${isMobile
+            ? 'h-screen bg-login-card-bg rounded-none'
+            : 'max-w-xl h-5/6 bg-login-card-bg rounded-4xl border-3 border-primary-border p-8'
+            }`}
+        >
+          <div className={`text-center ${isMobile ? 'mt-10 px-4' : 'mb-8'}`}>
             <img src={logo} alt="CB Buck Gallery" className="mx-auto w-32 h-auto" />
             <h2 className="text-3xl font-bold text-titr">عضویت/ورود</h2>
             <p className="text-sm text-text mt-2">خوش آمدید!</p>
-            <p className="text-sm text-text">لطفا شماره موبایل خود را وارد کنید.</p>
+            <p className="text-sm text-text">لطفاً شماره موبایل خود را وارد کنید.</p>
           </div>
 
           <Formik
@@ -121,7 +137,7 @@ const LoginForm: React.FC = () => {
             onSubmit={onFormSubmit}
           >
             {({ isSubmitting }) => (
-              <Form className="space-y-6 px-6">
+              <Form className={`space-y-6 ${isMobile ? 'px-4' : 'px-6'}`}>
                 <div className="flex justify-center">
                   <div className="w-full max-w-xs">
                     <Field name="phone">
@@ -137,6 +153,7 @@ const LoginForm: React.FC = () => {
                           containerClassName="w-full"
                           inputClassName="w-full px-4 py-2.5 bg-white border border-transparent rounded-lg focus:border-primary-border focus:border-2 focus:ring-0 text-center text-sm transition-all duration-200 outline-none disabled:bg-card disabled:cursor-not-allowed"
                           value={translateNumber(field.value || '')}
+                          // ✅ اینجا form.setFieldValue — دقیقاً مثل فایل اصلی شما
                           onChange={(e) => handlePhoneChange(e, form.setFieldValue)}
                         />
                       )}
@@ -154,21 +171,21 @@ const LoginForm: React.FC = () => {
 
                 <div className="flex justify-center">
                   <Button
-                    className='bg-bg-section2 rounded-xl hover:bg-bg-section1'
+                    className="bg-bg-section2 rounded-xl hover:bg-bg-section1"
                     type="submit"
                     disabled={loading || isSubmitting}
-                    variant='dialog'
+                    variant="dialog"
                     loading={loading || isSubmitting}
                   >
                     ثبت
                   </Button>
                 </div>
 
-                <div className="text-center text-xs mt-4">
+                <div className={`text-center text-xs ${isMobile ? 'mt-6' : 'mt-4'}`}>
                   <span className="text-text">ایجاد حساب به معنای پذیرش </span>
-                  <Link to="/terms" className="text-bg-section2">قوانین و مقررات</Link>
+                  <Link to="/terms" className="text-bg-section2 hover:underline">قوانین و مقررات</Link>
                   <span className="text-text"> و </span>
-                  <Link to="/privacy" className="text-bg-section2">حریم‌خصوصی</Link>
+                  <Link to="/privacy" className="text-bg-section2 hover:underline">حریم‌خصوصی</Link>
                   <span className="text-text"> است.</span>
                 </div>
               </Form>
@@ -181,7 +198,7 @@ const LoginForm: React.FC = () => {
         </div>
       </div>
 
-      <Dialog open={modalConfig.isOpen} onOpenChange={(open) => !open && setModalConfig(prev => ({ ...prev, isOpen: false }))}>
+      <Dialog open={modalConfig.isOpen} onOpenChange={(open) => !open && setModalConfig((prev) => ({ ...prev, isOpen: false }))}>
         <DialogContent className="sm:max-w-md" dir="rtl">
           <DialogHeader>
             <div className="flex justify-center mb-4">
@@ -202,7 +219,7 @@ const LoginForm: React.FC = () => {
             <Button
               type="button"
               onClick={modalConfig.onButtonClick}
-              variant='dialog'
+              variant="dialog"
               className="w-full sm:w-auto min-w-[120px] cursor-pointer"
             >
               {modalConfig.buttonText}

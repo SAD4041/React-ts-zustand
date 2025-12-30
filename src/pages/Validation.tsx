@@ -18,10 +18,23 @@ import {
 import { Button } from '../components/ui/button';
 import { translateNumber } from '@/utils/translateNumber';
 import type ValidationFormValues from '@/types/loginTypes';
-import BackToLogin from '@/components/ui/toLeftSvg';
 import SubmitSpinner from '@/components/login/submitSpinner';
 import ToRight from '@/components/ui/toRightSvg';
 import useUserStore from '@/store/userStore/userStore';
+
+// 🔹 هوک تشخیص موبایل — SSR-safe
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  return isMobile;
+};
 
 const Validation: React.FC = () => {
   const navigate = useNavigate();
@@ -32,13 +45,14 @@ const Validation: React.FC = () => {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
   const setToken = useUserStore((state) => state.setToken);
   const setAuth = useUserStore((state) => state.setAuth);
+  const isMobile = useIsMobile();
 
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
     title: '',
     message: '',
     buttonText: '',
-    onButtonClick: () => {},
+    onButtonClick: () => { },
     imageSrc: '',
   });
 
@@ -66,24 +80,15 @@ const Validation: React.FC = () => {
             imageSrc: successCat,
             onButtonClick: () => {
               if (result.data?.token) {
-                // ذخیره توکن در Zustand store
                 setToken(result.data.token);
-                
-                // اگر اطلاعات user هم در response بود، اونا رو هم ذخیره کن
-                // فعلاً فقط یک user ساده می‌سازیم
                 const tempUser = {
-                  id: '', // فعلاً خالی، بعداً از توکن یا API میاد
+                  id: '',
                   mobile: phone,
                   role: 'user' as const,
                 };
-                
-                // ذخیره اطلاعات کامل
                 setAuth(result.data.token, tempUser);
               }
-              
               setModalConfig((prev) => ({ ...prev, isOpen: false }));
-              
-              // ارسال state که از validation اومدیم
               navigate('/', { state: { fromValidation: true } });
             },
           });
@@ -195,9 +200,14 @@ const Validation: React.FC = () => {
   const initialValues: ValidationFormValues = { code: '' };
 
   return (
-    <div className="flex min-h-screen" dir="rtl">
-      <div className="w-full flex items-center justify-center p-6 md:p-10">
-        <div className="w-full max-w-xl h-5/6 bg-login-card-bg rounded-4xl border-3 border-primary-border shadow-2xl p-8 relative overflow-hidden">
+    <div className="flex min-h-screen bg-background-color" dir="rtl">
+      <div className={`w-full flex items-center justify-center ${isMobile ? 'p-0' : 'p-6 md:p-10'}`}>
+        <div
+          className={`w-full relative overflow-hidden ${isMobile
+            ? 'h-screen bg-login-card-bg rounded-none'
+            : 'max-w-xl h-5/6 bg-login-card-bg rounded-4xl border-3 border-primary-border p-8'
+            }`}
+        >
           <a
             href="/login"
             className="absolute top-4 right-4 bg-bg-section1 text-white w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200 z-10"
@@ -205,7 +215,7 @@ const Validation: React.FC = () => {
             <ToRight />
           </a>
 
-          <div className="text-center mb-8">
+          <div className={`text-center ${isMobile ? 'mt-10 px-4' : 'mb-8'}`}>
             <img src={logo} alt="CB Buck Gallery" className="mx-auto w-32 h-auto" />
             <h2 className="text-3xl font-bold text-titr">عضویت/ورود</h2>
             {phone && (
@@ -228,7 +238,7 @@ const Validation: React.FC = () => {
                   e.preventDefault();
                   handleVerify({ code: otp.join('') });
                 }}
-                className="space-y-6 px-6"
+                className={`space-y-6 ${isMobile ? 'px-4' : 'px-6'}`}
               >
                 <div className="flex gap-2 justify-center" dir="ltr">
                   {otp.map((digit, index) => (
