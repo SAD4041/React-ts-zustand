@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "@/layouts/PublicLayout/PublicLayout";
-import LoginLayout from "@/layouts/PublicLayout/LoginLayout";
+import AuthLayout from "@/layouts/PublicLayout/AuthLayout";
 import Home from "@/pages/Home";
 // import Temp from "@/pages/Temp";
 import Error404 from "@/pages/Error404";
@@ -122,7 +122,7 @@ export const router = createBrowserRouter([
 
     {
         path: "/login",
-        element: <LoginLayout />,
+        element: <AuthLayout />,
         errorElement: (
             <Error404 />
         ),
