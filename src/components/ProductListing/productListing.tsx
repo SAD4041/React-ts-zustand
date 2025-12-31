@@ -7,14 +7,13 @@ import FilterSidebar from "./productListingComponents/FilterSidebar";
 import SortOptions from "./productListingComponents/SortOptions";
 import Pagination from "./productListingComponents/Pagination";
 import { getData } from "@/services/services";
-import type { Product as AdaptedProduct } from "@/types/productCardTypes"; // نکته: اینجا productCardTypes
+import type { Product as AdaptedProduct } from "@/types/productCardTypes";
 import type { SortOption } from "@/types/productListingTypes";
 import { toPersianDigits } from "@/utils/PersianDigits";
 import SubCategorySlider from "./productListingComponents/SubCategorySilder";
 import { categoryLabels, brandLabels } from "@/data/productListingData";
-import { transformProducts } from "@/utils/transformproduct"; // تبدیل ساختار API
+import { transformProducts } from "@/utils/transformproduct";
 import LoadingSpinner from "../ui/LoadingSpinner";
-
 
 const ProductListing: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -22,7 +21,7 @@ const ProductListing: React.FC = () => {
   const brand = searchParams.get("brand");
   const searchQuery = searchParams.get("q");
 
-  const [products, setProducts] = useState<AdaptedProduct[]>([]); // داده تطبیق‌یافته
+  const [products, setProducts] = useState<AdaptedProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,7 +49,6 @@ const ProductListing: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    // تعیین endpoint بر اساس نوع لیستینگ
     let endPoint = "";
     if (listingType === "category") {
       endPoint = `/api/product/CA/${listingValue}`;
@@ -96,20 +94,19 @@ const ProductListing: React.FC = () => {
   const productsPerGroup = 20;
   const pagesPerGroup = 10;
 
-  // اعمال فیلترهای سمت کلاینت روی داده‌های دریافتی
   const productsWithoutPriceFilter = useMemo(() => {
     let result = [...products];
     if (selectedBrands.length > 0) {
-      result = result.filter((p) => selectedBrands.includes(p.model)); // model = brand
+      result = result.filter((p) => selectedBrands.includes(p.model));
     }
     if (selectedSizes.length > 0) {
       result = result.filter((p) =>
-        p.sizes.some((sizeObj) => selectedSizes.includes(sizeObj.label)) // sizes[]
+        p.sizes.some((sizeObj) => selectedSizes.includes(sizeObj.label))
       );
     }
     if (selectedColors.length > 0) {
       result = result.filter((p) =>
-        p.colors.some((colorObj) => selectedColors.includes(colorObj.hex)) // colors[]
+        p.colors.some((colorObj) => selectedColors.includes(colorObj.hex))
       );
     }
     return result;
@@ -193,9 +190,7 @@ const ProductListing: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <LoadingSpinner />
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {
@@ -238,7 +233,7 @@ const ProductListing: React.FC = () => {
 
           <hr className="mb-4 border-border border" />
 
-          <div className="h-150 overflow-y-auto border-border border rounded-lg p-4 bg-card shadow-sm">
+          <div className="h-150 overflow-y-auto border border-border rounded-lg p-4 bg-card shadow-sm">
             <ProductGrid products={productsToDisplay} />
           </div>
 
