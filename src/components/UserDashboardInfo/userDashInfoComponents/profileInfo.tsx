@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import type { UserInfo, ProfileInfoProps } from '@/types/UserDashInfoTypes';
 import Separator from '@/components/ui/userDashInfo/separator';
 import { translateNumber } from '@/utils/translateNumber';
+import { untranslateNumber } from '@/utils/untranslateNumber';
 
 const personalInfoSchema = yup.object({
   firstName: yup.string().required('نام نباید خالی باشد.'),
@@ -41,7 +42,12 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
   }, [formData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target as { name: keyof FormData; value: string };
+    let { name, value } = e.target as { name: keyof FormData; value: string };
+
+    // Normalize Persian digits to English for validation/storage
+    if (name === 'phone' || name === 'birthDate') {
+      value = untranslateNumber(value);
+    }
 
     const newFormData = { ...formData, [name]: value };
     setFormData(newFormData);
