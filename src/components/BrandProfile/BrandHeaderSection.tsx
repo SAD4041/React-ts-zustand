@@ -4,7 +4,7 @@ import shareIcon from '@/assets/brand-profile/Send_light.png';
 import shopIcon from '@/assets/brand-profile/Shop.png';
 import banner from '@/assets/brand-profile/banner.png';
 import avatar from '@/assets/avatar.png';
-import type { BrandHeaderProps } from "@/types/homeTypes";
+import type { BrandHeaderProps } from "@/types/brandProfileTypes";
 import LoadingSpinner from '../ui/LoadingSpinner';
 
 const BrandHeader: React.FC<BrandHeaderProps> = ({ brandData }) => {
@@ -35,7 +35,7 @@ const BrandHeader: React.FC<BrandHeaderProps> = ({ brandData }) => {
 
   return (
     <div>
-      <div className="relative h-50 bg-gray-200">
+      <div className="relative h-50 bg-login-card-bg">
         <img
           src={brandData.coverImage || banner}
           alt="Cover Image"
@@ -43,12 +43,12 @@ const BrandHeader: React.FC<BrandHeaderProps> = ({ brandData }) => {
         />
       </div>
 
-      <div className="mb-12 px-6 py-4 border relative">
+      <div className="mb-12 px-6 py-4 border border-border relative">
         <div className="absolute -top-14 right-6">
           <img
             src={brandData?.avatar || avatar}
             alt={brandData?.name}
-            className="w-25 h-25 rounded-full border-4 border-white shadow-lg"
+            className="w-25 h-25 rounded-full border-4 border-border shadow-lg"
           />
           {brandData.isOfficial && (
             <div className="absolute bottom-0 right-0 bg-brand-official-bg text-brand-official-text p-1 rounded-full">
@@ -62,16 +62,16 @@ const BrandHeader: React.FC<BrandHeaderProps> = ({ brandData }) => {
         <div className="pt-10 flex items-start gap-6">
           <div className='w-1/3'>
             <div className="flex items-center gap-2 mb-1">
-              <h1 className="text-xl font-bold text-gray-800">{brandData.name}</h1>
+              <h1 className="text-xl font-bold text-text">{brandData.name}</h1>
               {brandData.isOfficial && (
                 <span className="bg-brand-badge-bg text-brand-badge-text text-xs px-2 py-1 rounded-full">برند رسمی</span>
               )}
             </div>
-            <p className="text-sm text-gray-600 italic mb-3">{brandData.slogan}</p>
+            <p className="text-sm text-text italic mb-3">{brandData.slogan}</p>
           </div>
 
           <div className="w-1/3 flex-1 flex items-start gap-30">
-            <div className="flex items-center pt-2 gap-6 text-sm text-gray-700">
+            <div className="flex items-center pt-2 gap-6 text-sm text-text">
               <div className="flex items-center gap-2">
                 <div className="w-full font-semibold">{brandData.sales}</div>
                 <div>فروش</div>
@@ -81,7 +81,7 @@ const BrandHeader: React.FC<BrandHeaderProps> = ({ brandData }) => {
                 <span className="font-semibold">{brandData.followers}</span>
                 <span>دنبال کننده</span>
               </div>
-              <div className="border-l border-gray-300 mx-2 h-6"></div>
+              <div className="border-l border-border mx-2 h-6"></div>
               <div className="flex items-center gap-1">
                 <span className="font-semibold">{brandData.rating}</span>
                 <img src={starIcon} alt="امتیاز" className="h-5 w-5" />
@@ -93,7 +93,7 @@ const BrandHeader: React.FC<BrandHeaderProps> = ({ brandData }) => {
           <div className="flex items-center gap-2">
             <button 
               onClick={handleFollow}
-              className="bg-brand-follow-bg hover:bg-brand-follow-hover text-white font-medium py-2 px-4 rounded-full flex items-center gap-1 text-sm cursor-pointer"
+              className="bg-brand-follow-bg hover:bg-brand-follow-hover text-light font-medium py-2 px-4 rounded-full flex items-center gap-1 text-sm cursor-pointer"
             >
               <img src={shopIcon} alt="دنبال کردن" className="h-7 w-7" />
               دنبال کردن

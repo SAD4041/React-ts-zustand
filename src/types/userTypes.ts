@@ -6,7 +6,7 @@ export interface User {
   username?: string;
   name?: string;
   avatar?: string;
-  role: 'user' | 'brand' | 'admin';
+  role: 'user' | 'brand' ;
   isBrand: boolean; // آیا این کاربر برند هست یا نه
   // هر فیلد دیگه‌ای که از بک میاد
 }

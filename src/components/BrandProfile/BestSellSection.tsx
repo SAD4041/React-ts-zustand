@@ -6,7 +6,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/free-mode';
 import { Link } from 'react-router-dom';
 import ProductCard from '../Product/ProductCard';
-import type { BestSellProps } from '@/types/homeTypes';
+import type { BestSellProps } from '@/types/brandProfileTypes';
 import { Button } from '../ui/button';
 import ToLeft from '../ui/toLeftSvg';
 
@@ -57,7 +57,7 @@ const BestSell: React.FC<BestSellProps> = ({ brandData, products }) => {
             <p className="text-lg mt-1">{brandData.promotion.subtitle}</p>
             <Link
               to={`/brands/${brandData.id}/products`}
-              className="mt-4 block text-blue-500 no-underline hover:underline"
+              className="mt-4 block text-form-ring no-underline hover:underline"
             >
               مشاهده محصولات برند
             </Link>

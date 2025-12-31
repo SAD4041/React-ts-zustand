@@ -2,27 +2,24 @@
 
 import { Navigate } from 'react-router-dom';
 import useUserStore from '@/store/userStore/userStore';
+import type { ProtectedRouteProps } from '@/types/protectedRoute';
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-  requireBrand?: boolean; // آیا فقط brand ها دسترسی دارن؟
-}
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  children, 
-  requireBrand = false 
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  allowedRoles,
 }) => {
   const isAuthenticated = useUserStore((state) => state.isAuthenticated);
-  const isBrand = useUserStore((state) => state.isBrand);
+  const userRole = useUserStore((state) => state.user?.role); // ✅ استفاده از role از user
 
   if (!isAuthenticated) {
-    // اگر لاگین نیست، به صفحه لاگین بفرستش
     return <Navigate to="/login" replace />;
   }
 
-  if (requireBrand && !isBrand()) {
-    // اگر نیاز به برند بودن داره ولی برند نیست
-    return <Navigate to="/" replace />;
+  if (Array.isArray(allowedRoles) && allowedRoles.length > 0) {
+    if (!userRole || !allowedRoles.includes(userRole)) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return <>{children}</>;

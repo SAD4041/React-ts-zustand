@@ -13,6 +13,9 @@ import type { ProductData } from "@/types/productCardTypes";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 
+const token = localStorage.getItem("token");
+if (token) config.headers.Authorization = `Bearer ${token}`;
+
 const WishlistPage: React.FC = () => {
     const [wishlist, setWishlist] = useState<WishlistProduct[]>([]);
     const [loading, setLoading] = useState(true);
@@ -35,10 +38,8 @@ const WishlistPage: React.FC = () => {
 
     const toggleExpand = () => setIsExpanded(!isExpanded);
 
-    // ✅ نمایش حداکثر 4 یا همه
-    const displayedProducts = isExpanded ? wishlist : wishlist.slice(0, 4);
+    const displayedProducts = isExpanded ? wishlist : wishlist.slice(0, 8);
 
-    // ✅ حذف محصول از لیست علاقه‌مندی‌ها
     const handleRemove = async (productId: number) => {
         try {
             await removeWishlistItem(productId);
@@ -52,7 +53,6 @@ const WishlistPage: React.FC = () => {
     const handleAddToCart = async (productId: number) => {
         try {
             await addToCart(productId);
-            // موفقیت‌آمیز بودن رو به کاربر نشون بده
             alert("محصول به سبد خرید اضافه شد!");
         } catch (error) {
             console.error("Failed to add to cart", error);
@@ -60,7 +60,6 @@ const WishlistPage: React.FC = () => {
         }
     };
 
-    // ✅ در حین لودینگ
     if (loading) {
         return (
             <LoadingSpinner />
@@ -131,6 +130,3 @@ const WishlistPage: React.FC = () => {
 };
 
 export default WishlistPage;
-// در apiClient.ts، خط کامنت‌شده رو فعال کن
-const token = localStorage.getItem("token"); // یا از store بخون
-if (token) config.headers.Authorization = `Bearer ${token}`;

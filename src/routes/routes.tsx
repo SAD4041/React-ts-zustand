@@ -35,15 +35,6 @@ export const router = createBrowserRouter([
                 path: "/brands/:brandId",
                 element: <BrandProfile />,
             },
-
-            {
-                path: "/brandProfileEdit",
-                element: (
-                    <ProtectedRoute requireBrand={true}>
-                        <BrandProfileEditPage />
-                    </ProtectedRoute>
-                ),
-            },
         ],
     },
     {
@@ -60,15 +51,27 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/dash/wishList",
-                element: <WishlistPage />,
+                element: (
+                    <ProtectedRoute allowedRoles={['user']}>
+                        <WishlistPage />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: "/dash/profile-edit",
-                element: <BrandProfileEditPage />,
+                element: (
+                    <ProtectedRoute allowedRoles={['brand']}>
+                        <BrandProfileEditPage />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: "/dash/orders",
                 element: <OrderHistoryPage />,
+            },
+            {
+                path: "/brandProfile",
+                element: <BrandProfile />,
             },
         ],
     },
