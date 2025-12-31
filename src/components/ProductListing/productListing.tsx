@@ -342,7 +342,7 @@ const ProductListing: React.FC = () => {
               </DialogContent>
             </Dialog>
 
-            <div className="flex-grow"></div>
+            <div className="grow"></div>
 
             <div className="text-sm text-muted-foreground">
               {toPersianDigits(filteredProductsCount.toLocaleString("fa-IR"))} محصول در{" "}
