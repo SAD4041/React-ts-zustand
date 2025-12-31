@@ -4,9 +4,9 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import BrandProfileEdit from "@/components/BrandInfo/BrandProfileEdit";
 import { getBrandProfile, updateBrandProfile } from "@/services/brandService";
-import { Spinner } from "@/components/ui/Spinner";
 import type { BrandData } from "@/types/brandProfileTypes";
 import { resolveImageUrl } from "@/utils/imageUrl";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const BrandProfileEditPage = () => {
   const [brand, setBrand] = useState<BrandData | null>(null);
@@ -82,7 +82,7 @@ const BrandProfileEditPage = () => {
   if (loading)
     return (
       <div className="w-full max-w-3xl mx-auto p-6">
-        <Spinner />
+        <LoadingSpinner />
       </div>
     );
 
