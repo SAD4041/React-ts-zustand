@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import { Card } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import {
   Table,
   TableBody,
@@ -110,19 +109,27 @@ export function OrderManagement() {
     return [
       {
         label: "کل سفارشات",
-        value: statsFromApi?.allorders?.toLocaleString("fa-IR") ?? translateNumber(orders.length),
+        value:
+          statsFromApi?.allorders?.toLocaleString("fa-IR") ??
+          translateNumber(orders.length),
       },
       {
         label: STATUS_META.processing.label,
-        value: statsFromApi?.inprocess?.toLocaleString("fa-IR") ?? translateNumber(counts.processing),
+        value:
+          statsFromApi?.inprocess?.toLocaleString("fa-IR") ??
+          translateNumber(counts.processing),
       },
       {
         label: STATUS_META.shipped.label,
-        value: statsFromApi?.onroute?.toLocaleString("fa-IR") ?? translateNumber(counts.shipped),
+        value:
+          statsFromApi?.onroute?.toLocaleString("fa-IR") ??
+          translateNumber(counts.shipped),
       },
       {
         label: STATUS_META.delivered.label,
-        value: statsFromApi?.delivered?.toLocaleString("fa-IR") ?? translateNumber(counts.delivered),
+        value:
+          statsFromApi?.delivered?.toLocaleString("fa-IR") ??
+          translateNumber(counts.delivered),
       },
     ];
   }, [orders, statsFromApi]);
@@ -185,9 +192,10 @@ export function OrderManagement() {
         return (
           <Form
             className="p-6 bg-gray-50/50 min-h-screen font-sans"
-            dir="rtl"
           >
+            {/* Reverted to original inner container max-width and spacing */}
             <div className="max-w-6xl mx-auto space-y-8">
+              
               {/* Header Section */}
               <div className="flex justify-end items-center mb-8" dir="ltr">
                 <div className="flex items-center gap-3">
@@ -199,9 +207,9 @@ export function OrderManagement() {
                   </div>
                   <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
                     <img
-                      src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+                      src="/avatar.png"
                       alt="Avatar"
-                      className="w-full h-full object-cover bg-amber-100"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </div>
@@ -224,54 +232,62 @@ export function OrderManagement() {
                 ))}
               </div>
 
-              {/* Filter and Search Bar */}
-              <div className="flex flex-col md:flex-row gap-4 items-center bg-white p-2 rounded-xl shadow-sm border border-gray-100">
-                <Input
-                  name="search"
-                  placeholder="محصول خود را جست و جو کنید"
-                  icon={Search}
-                  forceRTL
-                  containerClassName="w-full md:w-64"
-                  inputClassName="w-full border-0 bg-muted mr-2 text-right pr-4 focus-visible:ring-0 focus:ring-0 focus:border-transparent placeholder:text-gray-400 text-sm"
-                  iconClassName="w-8 h-8 right-1 top-1/2 -translate-y-1/2 bg-[#E91E63] p-1 mr--5 rounded-full text-white hover:bg-[#D81B60] transition-colors"
-                />
-
-                <div className="h-6 w-px bg-gray-200 hidden md:block"></div>
-
-                <div className="w-full md:w-48">
-                  <Select
-                    value={filterStatus}
-                    onValueChange={(value) =>
-                      setFilterStatus(value as OrderStatus | "all")
-                    }
-                  >
-                    <SelectTrigger
-                      className="w-full border-0 bg-muted focus:ring-0 text-right"
-                      dir="rtl"
+              {/* Search & Filter Card (Kept the new design inside the old container) */}
+              <Card className="p-3">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                  {/* Status Filter */}
+                  <div className="w-full md:w-48 order-2 md:order-1">
+                    <Select
+                      value={filterStatus}
+                      onValueChange={(value) =>
+                        setFilterStatus(value as OrderStatus | "all")
+                      }
                     >
-                      <SelectValue placeholder="وضعیت سفارش" />
-                    </SelectTrigger>
-                    <SelectContent dir="rtl">
-                      <SelectItem value="all">همه وضعیت‌ها</SelectItem>
-                      <SelectItem value="processing">
-                        {STATUS_META.processing.label}
-                      </SelectItem>
-                      <SelectItem value="shipped">
-                        {STATUS_META.shipped.label}
-                      </SelectItem>
-                      <SelectItem value="delivered">
-                        {STATUS_META.delivered.label}
-                      </SelectItem>
-                      <SelectItem value="cancelled">
-                        {STATUS_META.cancelled.label}
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+                      <SelectTrigger
+                        className="w-full border-input bg-background focus:ring-0 text-right"
+                        dir="rtl"
+                      >
+                        <SelectValue placeholder="وضعیت سفارش" />
+                      </SelectTrigger>
+                      <SelectContent dir="rtl">
+                        <SelectItem value="all">همه وضعیت‌ها</SelectItem>
+                        <SelectItem value="processing">
+                          {STATUS_META.processing.label}
+                        </SelectItem>
+                        <SelectItem value="shipped">
+                          {STATUS_META.shipped.label}
+                        </SelectItem>
+                        <SelectItem value="delivered">
+                          {STATUS_META.delivered.label}
+                        </SelectItem>
+                        <SelectItem value="cancelled">
+                          {STATUS_META.cancelled.label}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Search Bar */}
+                  <div className="relative w-full md:w-72 order-1 md:order-2">
+                    <Field
+                      name="search"
+                      type="text"
+                      dir="rtl"
+                      placeholder="سفارش خود را جستجو کنید"
+                      className="w-full rounded-full border border-input/60 bg-muted/60 py-2.5 pr-12 pl-4 text-sm text-foreground shadow-inner placeholder:text-muted-foreground/80 focus:outline-none focus:ring-2 focus:ring-primary/30 text-right"
+                    />
+                    <button
+                      type="button"
+                      className="absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-orange-500 text-white shadow-sm"
+                    >
+                      <Search className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </Card>
 
               {/* Orders Table */}
-              <Card className="overflow-hidden shadow-sm border-gray-100" dir="ltr">
+              <Card className="overflow-hidden shadow-sm border-gray-100">
                 <Table>
                   <TableHeader className="bg-gray-50/50">
                     <TableRow>
@@ -291,7 +307,7 @@ export function OrderManagement() {
                         تاریخ
                       </TableHead>
                       <TableHead className="text-center font-bold text-gray-700 py-5">
-                        نام سفارش
+                        شماره سفارش
                       </TableHead>
                     </TableRow>
                   </TableHeader>
@@ -385,4 +401,3 @@ export function OrderManagement() {
     </Formik>
   );
 }
-

@@ -7,6 +7,10 @@ export interface Product {
   stock: number;
   price: number;
   status: "active" | "inactive";
+  description?: string;
+  brand?: string;
+  color?: string;
+  marketId?: number;
   sex?: string;
   model?: string;
 }
@@ -23,8 +27,13 @@ export interface CreateProductPayload {
   stock: number;
   description?: string;
   images: string[];
+  imageFiles: File[];
+  imageFilePreviews: string[];
+  brand?: string;
+  color?: string;
   sex?: string;
   model?: string;
+  status: "active" | "inactive";
 }
 
 export interface CreateProductResponse {

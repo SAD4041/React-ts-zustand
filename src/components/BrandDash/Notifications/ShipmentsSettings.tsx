@@ -14,9 +14,12 @@ export default function ShipmentsSettings() {
         relative
         rounded-[16px]
         bg-white
-        px-6
-        pb-6
-        pt-10
+        px-4
+        md:px-6
+        pb-4
+        md:pb-6
+        pt-9
+        md:pt-10
 
         border
         border-[0.5px]
@@ -26,11 +29,11 @@ export default function ShipmentsSettings() {
       "
     >
       {/* لیبل گوشه بالا راست */}
-      <span className="absolute right-6 top-3 text-sm font-medium text-gray-800">
+      <span className="absolute right-4 top-3 text-xs font-medium text-gray-800 md:right-6 md:text-sm">
         روش‌های ارسال
       </span>
 
-      <div className="space-y-4">
+      <div className="space-y-3 md:space-y-4">
         {/* ارسال عادی */}
         <ShipmentCard
           title="ارسال عادی"
@@ -104,10 +107,10 @@ function ShipmentCard({
   inputPlaceholder,
 }: ShipmentCardProps) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4">
-      <div className="flex items-center justify-between">
+    <div className="rounded-xl border border-gray-200 bg-white p-3 md:p-4">
+      <div className="flex flex-col items-end gap-3 md:flex-row md:items-center md:justify-between">
         {/* متن */}
-        <div className="text-right space-y-1">
+        <div className="w-full text-right space-y-1 md:w-auto">
           <p className="text-sm font-medium text-gray-900">
             {title}
           </p>

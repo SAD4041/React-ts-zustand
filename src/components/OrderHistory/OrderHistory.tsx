@@ -20,7 +20,7 @@ import { translateNumber } from "@/utils/translateNumber";
 import type { OrderHistoryData, OrderDetailsType } from "@/types/orderTypes";
 
 // 🔵 NEW — گرفتن جزئیات سفارش از سرویس Mock یا API
-import { getOrderDetails } from "@/services/orderService.api";
+import { getOrderDetails } from "@/services/orderService.api.mock";
 
 // 🔵 NEW — مدال
 import { OrderDetailsModal } from "@/components/OrderHistory/OrderDetailsModal";

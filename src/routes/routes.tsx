@@ -35,9 +35,7 @@ export const router = createBrowserRouter([
             {
                 index: true,
                 element: (
-                    <ProtectedRoute>
-                        <Home />
-                    </ProtectedRoute>
+                    <Home />
                 ),
             },
             {
@@ -45,7 +43,7 @@ export const router = createBrowserRouter([
                 element: <Error500 />
             },
             {
-                path: "/productList",
+                path: "/product-list",
                 element: (
                     <ProtectedRoute>
                         <ProductListing />
@@ -53,15 +51,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/UserDashboard/Information",
-                element: (
-                    <ProtectedRoute allowedRoles={['user']}>
-                        <UserDashInformation />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "/FAQ",
+                path: "/faq",
                 element: (
                     <ProtectedRoute>
                         <FAQ />
@@ -69,7 +59,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/aboutus",
+                path: "/about-us",
                 element: (
                     <ProtectedRoute>
                         <AboutUs />
@@ -77,7 +67,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/ContactUs",
+                path: "contact-us",
                 element: (
                     <ProtectedRoute>
                         <ContactUs />
@@ -85,7 +75,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/Payment",
+                path: "/payment",
                 element: (
                     <ProtectedRoute>
                         <Payment />
@@ -93,7 +83,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/Shopping-Cart",
+                path: "/shopping-cart",
                 element: (
                     <ProtectedRoute>
                         <ShoppingCart />
@@ -101,7 +91,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/ProductPage",
+                path: "/product-page",
                 element: (
                     <ProtectedRoute>
                         <ProductPages />
@@ -121,39 +111,7 @@ export const router = createBrowserRouter([
             //     element: <OrderHistoryPage />,
             // },
             {
-                path: "/dash/product-management",
-                element: (
-                    <ProtectedRoute allowedRoles={['brand']}>
-                        <ProductManagementPage />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "/dash/orders",
-                element: (
-                    <ProtectedRoute allowedRoles={['user']}>
-                        <OrderHistoryPage />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "/dash/settings",
-                element: (
-                    <ProtectedRoute>
-                        <SettingsPage />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "/dash/order-management",
-                element: (
-                    <ProtectedRoute allowedRoles={['user']}>
-                        <OrderManagementPage />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "/dash/brand-home",
+                path: "/dash/brand/home",
                 element: (
                     <ProtectedRoute>
                         <BrandHomePage />
@@ -161,15 +119,31 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/dash/wishList",
+                path: "/dash/brand/product-management",
                 element: (
-                    <ProtectedRoute allowedRoles={['user']}>
-                        <WishlistPage />
+                    <ProtectedRoute allowedRoles={['brand']}>
+                        <ProductManagementPage />
                     </ProtectedRoute>
                 ),
             },
             {
-                path: "/dash/brandProfileEdit",
+                path: "/dash/brand/order-management",
+                element: (
+                    <ProtectedRoute allowedRoles={['user']}>
+                        <OrderManagementPage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/dash/brand/settings",
+                element: (
+                    <ProtectedRoute>
+                        <SettingsPage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/dash/brand/profile-edit",
                 element: (
                     <ProtectedRoute allowedRoles={['brand']}>
                         <BrandProfileEditPage />
@@ -177,10 +151,34 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/dash/brandProfile/:brandId",
+                path: "/dash/brand/profile/:brandId",
                 element: (
                     <ProtectedRoute>
                         <ProductPages />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/dash/home",
+                element: (
+                    <ProtectedRoute allowedRoles={['user']}>
+                        <OrderHistoryPage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/dash/wish-list",
+                element: (
+                    <ProtectedRoute allowedRoles={['user']}>
+                        <WishlistPage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/dash/profile",
+                element: (
+                    <ProtectedRoute allowedRoles={['user']}>
+                        <UserDashInformation />
                     </ProtectedRoute>
                 ),
             },

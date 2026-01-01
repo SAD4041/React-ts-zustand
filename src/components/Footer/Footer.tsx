@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer
-      className="relative bg-cover bg-center border-t border-muted mt-20 px-6 py-16 md:px-14"
+      className="relative bg-cover bg-center border-t border-muted px-6 py-16 md:px-14"
       style={{ backgroundImage: `url(${FooterBg})` }}
     >
       <div className="absolute -top-16 left-1/2 -translate-x-1/2 bg-white rounded-full shadow-lg p-4 md:-top-20 md:left-28 md:translate-x-0 md:p-5">
@@ -53,7 +53,7 @@ const Footer = () => {
           </h3>
           <ul className="space-y-2 text-lg mt-2">
             <li className="cursor-pointer hover:font-semibold">
-              <Link to="/FAQ" className="block">سوالات متداول</Link>
+              <Link to="/faq" className="block">سوالات متداول</Link>
             </li>
             <li className="cursor-pointer hover:font-semibold">راهنمای خرید</li>
             <li className="cursor-pointer hover:font-semibold">حریم خصوصی</li>
@@ -69,8 +69,8 @@ const Footer = () => {
             درباره باک گالری
           </h3>
           <ul className="space-y-2 text-lg mt-2">
-            <Link to="/aboutus" className="block">درباره ما</Link>
-            <Link to="/ContactUs" className="block">تماس با ما</Link>
+            <Link to="/about-us" className="block">درباره ما</Link>
+            <Link to="/contact-us" className="block">تماس با ما</Link>
           </ul>
         </div>
 

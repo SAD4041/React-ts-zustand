@@ -1,5 +1,5 @@
 import { useFormik, FormikProvider } from "formik";
-import { uploadProfileImage, uploadBannerImage } from "@/services/brandUpload";
+import { uploadProfileImage, uploadBannerImage } from "@/services/brandUpload.mock";
 import type { BrandFormValues, BrandProfileEditProps } from "@/types/brandProfileTypes";
 import { ValidationSchema } from "@/schemas/brandValidationSchema";
 import { Input } from "@/components/ui/input";
