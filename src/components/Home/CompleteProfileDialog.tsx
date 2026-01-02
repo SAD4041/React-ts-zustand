@@ -25,7 +25,7 @@ const CompleteProfileDialog: React.FC<CompleteProfileDialogProps> = ({
 
   const handleComplete = () => {
     onClose();
-    navigate('/dash/profile-edit');
+    navigate('/dash/profile');
   };
 
   const handleSkip = () => {

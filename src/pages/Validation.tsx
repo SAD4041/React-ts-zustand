@@ -19,9 +19,11 @@ import { Button } from '../components/ui/button';
 import { translateNumber } from '@/utils/translateNumber';
 import type ValidationFormValues from '@/types/loginTypes';
 import SubmitSpinner from '@/components/login/submitSpinner';
-import useUserStore from '@/store/userStore/userStore';
 import ToRight from '@/components/ui/toRightSvg';
 import useAuthStore from '@/store/authStore/authStore';
+import useUserStore from '@/store/userStore/userStore';
+
+
 
 // 🔹 هوک تشخیص موبایل — SSR-safe
 const useIsMobile = () => {
@@ -44,6 +46,8 @@ const Validation: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+  
+  // دریافت setToken و setAuth از store
   const setToken = useUserStore((state) => state.setToken);
   const setAuth = useUserStore((state) => state.setAuth);
   const isMobile = useIsMobile();
@@ -81,6 +85,7 @@ const Validation: React.FC = () => {
             imageSrc: successCat,
             onButtonClick: () => {
               if (result.data?.token) {
+                // ذخیره توکن در Zustand store
                 setToken(result.data.token);
                 const tempUser = {
                   id: '',

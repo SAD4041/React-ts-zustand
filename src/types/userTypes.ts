@@ -4,13 +4,16 @@ export interface User {
   id: string;
   mobile: string;
   username?: string;
-  role: 'user' | 'brand' | 'admin';
+  name?: string;
+  avatar?: string;
+  role: 'user' | 'brand' ;
+  isBrand: boolean; // آیا این کاربر برند هست یا نه
   // هر فیلد دیگه‌ای که از بک میاد
 }
 
 export interface UserState {
-  token: string;
-  user: User;
+  token: string | null;
+  user: User | null;
   isAuthenticated: boolean;
   profileCompleted: boolean; // آیا پروفایل تکمیل شده
 

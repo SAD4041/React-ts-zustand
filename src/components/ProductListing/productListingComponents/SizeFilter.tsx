@@ -1,5 +1,5 @@
-import React from 'react';
 import type { SizeFilterProps } from '@/types/productListingTypes';
+import React from 'react';
 
 const SizeFilter: React.FC<SizeFilterProps> = ({ sizes, selectedSizes, onToggleSize }) => {
   return (
