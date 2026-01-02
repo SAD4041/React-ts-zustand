@@ -81,7 +81,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
           <h3 className="text-lg font-semibold">اطلاعات شخصی</h3>
         </div>
         <Separator className="mb-3" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 gap-x-20 px-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 gap-x-20 px-4 md:px-10">
           <div className="space-y-2 text-right">
             <Label className="block">نام</Label>
             <Input
@@ -136,7 +136,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
         </div>
       </div>
 
-      <div className="mt-6 px-10">
+      <div className="mt-6 px-4 md:px-10">
         <Button onClick={handleSave} disabled={!isValid} variant="brand">
           ذخیره تغییرات
         </Button>

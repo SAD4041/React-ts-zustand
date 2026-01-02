@@ -22,7 +22,7 @@ const SearchBox = () => {
           inputClassName="
             bg-background rounded-full py-2 px-10 text-xs pr-7
             focus:outline-none focus:ring-2 focus:ring-ring-primary-subtle
-            w-60 md:w-48 lg:w-90
+            w-50 md:w-48 lg:w-90
             text-foreground placeholder-muted-foreground
           "
         />

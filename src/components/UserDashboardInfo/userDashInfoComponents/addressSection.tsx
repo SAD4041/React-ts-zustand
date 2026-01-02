@@ -47,7 +47,7 @@ const AddressSection: React.FC<AddressSectionProps> = ({
 
   return (
     <Card className="p-6">
-      <div className="flex items-center justify-between mb-4 px-10">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 px-4 sm:px-10">
         <Button
           size="sm"
           variant="brand"
@@ -56,11 +56,11 @@ const AddressSection: React.FC<AddressSectionProps> = ({
           <Plus className="w-4 h-4 ml-2" />
           آدرس جدید
         </Button>
-        <h3 className="text-right text-lg font-semibold">آدرس‌ها</h3>
+        <h3 className="text-right text-lg font-semibold w-full sm:w-auto">آدرس‌ها</h3>
       </div>
       <Separator className="mb-6" />
 
-      <div dir='rtl' className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-10 px-6">
+      <div dir='rtl' className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-10 px-4 sm:px-6">
         {addresses.map((address) => (
           <AddressCard
             key={address.id}

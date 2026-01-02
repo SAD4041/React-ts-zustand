@@ -24,7 +24,7 @@ const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete }) 
         {address.province !== address.city && `، ${address.city}`}، {address.fullAddress}
       </p>
 
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2 sm:justify-end mt-3 sm:mt-2">
         <Button variant="outline" size="sm" onClick={onEdit}>
           <Edit2 className="w-3 h-3 ml-1" />
           ویرایش

@@ -73,7 +73,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
         </h2>
 
         <div className="space-y-4 text-right">
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <div>
               <Label className='mb-3'>شهر</Label>
               <Input
@@ -103,7 +103,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
             </div>
           </div>
 
-          <div className='grid grid-cols-2 gap-2'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
             <div>
               <Label className='mb-3'>عنوان</Label>
               <Input
@@ -133,10 +133,10 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
           </div>
         </div>
 
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex flex-col sm:flex-row gap-2 sm:justify-end">
           <Button
             size="sm"
-            className="bg-brand text-brand-foreground hover:bg-brand-hover"
+            className="bg-brand text-brand-foreground hover:bg-brand-hover w-full sm:w-auto"
             onClick={handleSubmit}
           >
             {initialData ? 'ذخیره تغییرات' : 'افزودن'}

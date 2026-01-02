@@ -1,4 +1,4 @@
-import { getData, putData, postImageData } from "@/services/services";
+import { baseURL, getData, putData, postImageData } from "@/services/services";
 import type { UserInfo } from "@/types/UserDashInfoTypes";
 
 /**
@@ -19,7 +19,11 @@ export const getUserProfile = async (): Promise<UserInfo> => {
       lastName: response.family || "", 
       email: response.email || "",
       phone: response.mobile || "", 
-      avatar: response.picture || null,
+      avatar: response.picture
+        ? (response.picture.startsWith("http")
+            ? response.picture
+            : `${baseURL.replace(/\/+$/, "")}/${String(response.picture).replace(/^\/+/, "")}`)
+        : null,
       birthDate: "", 
     };
 
@@ -86,7 +90,17 @@ export const uploadUserAvatar = async (file: File): Promise<{ avatar_url: string
     });
 
     // انتظار می‌رود 'url' در پاسخ موجود باشد؛ در PHP نام متد updateImageprofile است
-    return { avatar_url: response.url };
+    const joinWithBase = (path: string) =>
+      `${baseURL.replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
+
+    const avatar_url =
+      typeof response?.url === "string" && response.url
+        ? response.url
+        : response?.path
+          ? joinWithBase(response.path)
+          : "";
+
+    return { avatar_url };
   } catch (error) {
     console.error("Failed to upload avatar", error);
     throw new Error("خطا در آپلود تصویر پروفایل");
