@@ -15,7 +15,7 @@ export default function ExitModal() {
 
   let currentCatImage = catDefault;
   let mainText = "برنج خیس کردم کجا میخوای بری؟";
-  let subText = "آیا میخواهید خارج شوید؟";
+  let subText = "واقعا میخوای بری؟؟؟";
 
   if (hoveredButton === "no") {
     currentCatImage = catHappy;
