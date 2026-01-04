@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
@@ -17,18 +17,18 @@ import {
 } from "@/components/ui/table.tsx";
 
 import { translateNumber } from "@/utils/translateNumber";
-import type { OrderHistoryData, OrderDetailsType } from "@/types/orderTypes";
+import type { OrderHistoryData, OrderDetailsType, Order } from "@/types/orderTypes";
 
-// 🔵 NEW — گرفتن جزئیات سفارش از سرویس Mock یا API
-import { getOrderDetails } from "@/services/orderService.api.mock";
+// ?? NEW - ????? ?????? ????? ?? ????? Mock ?? API
+import { getOrderDetails } from "@/services/orderService.api";
 
-// 🔵 NEW — مدال
+// ?? NEW - ????
 import { OrderDetailsModal } from "@/components/OrderHistory/OrderDetailsModal";
 
-// 🔵 NEW — اسپینر هنگام لود جزئیات
+// ?? NEW - ?????? ????? ??? ??????
 import { Spinner } from "@/components/ui/Spinner";
 
-// 🔵 NEW — تابع نگاشت وضعیت به رنگ Badge
+// ?? NEW - ???? ????? ????? ?? ??? Badge
 import { getOrderStatusVariant } from "@/components/ui/getOrderStatusVariant";
 
 export function OrderHistory({ data }: { data: OrderHistoryData }) {
@@ -39,17 +39,21 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
   const [loadingDetails, setLoadingDetails] = useState<boolean>(false);
 
   const userData = {
-    fullName: "نام کاربر",
+    fullName: "??? ?????",
     profileUrl: "/images/sample-user.jpg",
   };
 
-  const openOrderModal = async (order: any) => {
+  const openOrderModal = async (order: Order) => {
     try {
       setIsModalOpen(true);
       setSelectedOrder(null);
       setLoadingDetails(true);
 
-      const details = await getOrderDetails(order.id);
+      const details = await getOrderDetails(order.id, {
+        orderDate: order.date,
+        totalPrice: order.amount,
+        status: order.status,
+      });
 
       setSelectedOrder(details);
     } catch (err) {
@@ -136,7 +140,7 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
                 </TableCell>
 
                 <TableCell className="text-right text-xs md:text-sm py-2 md:py-3 px-3 md:px-4">
-                  {/* 🔹 اینجا تغییر دادیم: رنگ Badge بر اساس وضعیت */}
+                  {/* ?? ????? ????? ?????: ??? Badge ?? ???? ????? */}
                   <Badge
                     className="text-white border-0 vazir"
                     variant={getOrderStatusVariant(order.status)}
@@ -173,7 +177,7 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
     <>
       <div className="container mx-auto px-5 md:px-6 py-4 md:py-6 space-y-6 md:space-y-8 rtl vazir">
 
-        {/* هدر */}
+        {/* ??? */}
         <div className="max-w-5xl mx-auto flex flex-row justify-start items-center sm:items-start gap-3 md:gap-4 mb-4 md:mb-6 rtl">
           <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-border overflow-hidden shrink-0">
             {userData?.profileUrl ? (
@@ -193,7 +197,7 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
             <h3 className="font-extrabold text-foreground text-lg md:text-xl truncate">
               {userData?.fullName || "نام کاربر"}
             </h3>
-            <p className="text-muted-foreground text-xs md:text-sm truncate mt-0.5">سفارش های شما در فروشگاه</p>
+            <p className="text-muted-foreground text-xs md:text-sm truncate mt-0.5">سفارش‌های شما در فروشگاه</p>
           </div>
         </div>
 
@@ -205,7 +209,7 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
                 <Clock className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
               <div>
-                <p className="text-muted-foreground text-xs md:text-sm">سفارش های جاری</p>
+                <p className="text-muted-foreground text-xs md:text-sm">سفارش‌های فعال</p>
                 <p className="text-xl md:text-2xl font-bold">{translateNumber(data.current.length)}</p>
               </div>
             </div>
@@ -217,7 +221,7 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
                 <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
               <div>
-                <p className="text-muted-foreground text-xs md:text-sm">سفارش های تحویل شده</p>
+                <p className="text-muted-foreground text-xs md:text-sm">سفارش‌های تحویل شده</p>
                 <p className="text-xl md:text-2xl font-bold">{translateNumber(data.past.length)}</p>
               </div>
             </div>
@@ -229,7 +233,7 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
                 <XCircle className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
               <div>
-                <p className="text-muted-foreground text-xs md:text-sm">سفارش های لغو شده</p>
+                <p className="text-muted-foreground text-xs md:text-sm">سفارش‌های لغو شده</p>
                 <p className="text-xl md:text-2xl font-bold">{translateNumber(data.cancelled.length)}</p>
               </div>
             </div>
@@ -240,9 +244,9 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
         <div className="max-w-5xl mx-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="mx-auto w-full max-w-md flex justify-center rounded-xl-50 bg-muted p-1 vazir">
-              <TabsTrigger value="current" className="flex-1 px-2 md:px-3 py-2 text-xs md:text-sm font-medium">سفارش های جاری</TabsTrigger>
-              <TabsTrigger value="past" className="flex-1 px-2 md:px-3 py-2 text-xs md:text-sm font-medium">سفارش های گذشته</TabsTrigger>
-              <TabsTrigger value="cancelled" className="flex-1 px-2 md:px-3 py-2 text-xs md:text-sm font-medium">سفارش های لغو شده</TabsTrigger>
+              <TabsTrigger value="current" className="flex-1 px-2 md:px-3 py-2 text-xs md:text-sm font-medium">سفارش‌های جاری</TabsTrigger>
+              <TabsTrigger value="past" className="flex-1 px-2 md:px-3 py-2 text-xs md:text-sm font-medium">سفارش‌های گذشته</TabsTrigger>
+              <TabsTrigger value="cancelled" className="flex-1 px-2 md:px-3 py-2 text-xs md:text-sm font-medium">سفارش‌های لغو شده</TabsTrigger>
             </TabsList>
 
             <TabsContent value="current" className="mt-4 md:mt-6">
@@ -252,7 +256,7 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
                   <div className="hidden md:block">{renderOrderTable(data.current)}</div>
                 </>
               ) : (
-                <Card className="py-12 text-center text-muted-foreground vazir">سفارش فعالی وجود ندارد.</Card>
+                <Card className="py-12 text-center text-muted-foreground vazir">سفارش فعالی وجود ندارد</Card>
               )}
             </TabsContent>
 
@@ -263,7 +267,7 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
                   <div className="hidden md:block">{renderOrderTable(data.past)}</div>
                 </>
               ) : (
-                <Card className="py-12 text-center text-muted-foreground vazir">سفارش تحویل شده ای وجود ندارد.</Card>
+                <Card className="py-12 text-center text-muted-foreground vazir">سفارش تحویل شده‌ای وجود ندارد</Card>
               )}
             </TabsContent>
 
@@ -274,14 +278,14 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
                   <div className="hidden md:block">{renderOrderTable(data.cancelled)}</div>
                 </>
               ) : (
-                <Card className="py-12 text-center text-muted-foreground vazir">سفارش لغو شده ای وجود ندارد.</Card>
+                <Card className="py-12 text-center text-muted-foreground vazir">سفارش لغو شده‌ای وجود ندارد</Card>
               )}
             </TabsContent>
           </Tabs>
         </div>
       </div>
 
-      {/* مدال */}
+      {/* ???? */}
       {isModalOpen && (
         <OrderDetailsModal
           isOpen={isModalOpen}
@@ -294,7 +298,7 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
         />
       )}
 
-      {/* اسپینر هنگام لود */}
+      {/* ?????? ????? ??? */}
       {isModalOpen && loadingDetails && (
         <div className="fixed inset-0 flex items-center justify-center z-60">
           <Spinner />
@@ -303,4 +307,3 @@ export function OrderHistory({ data }: { data: OrderHistoryData }) {
     </>
   );
 }
-
