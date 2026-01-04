@@ -1,6 +1,22 @@
 import { baseURL, getData, putData, postImageData } from "@/services/services";
 import type { UserInfo } from "@/types/UserDashInfoTypes";
 
+const formatBirthdayForUi = (value?: string) => {
+  if (!value) return "";
+  const raw = String(value).trim();
+  const datePart = raw.includes("T") ? raw.split("T")[0] : raw;
+  const match = datePart.match(/^(\d{4})[-/](\d{2})[-/](\d{2})$/);
+  return match ? `${match[1]}/${match[2]}/${match[3]}` : "";
+};
+
+const normalizeBirthdayForApi = (value?: string) => {
+  if (!value) return "";
+  const match = String(value)
+    .trim()
+    .match(/^(\d{4})[-/](\d{2})[-/](\d{2})$/);
+  return match ? `${match[1]}-${match[2]}-${match[3]}` : "";
+};
+
 /**
  * دریافت اطلاعات پروفایل کاربر
  */
@@ -24,7 +40,7 @@ export const getUserProfile = async (): Promise<UserInfo> => {
             ? response.picture
             : `${baseURL.replace(/\/+$/, "")}/${String(response.picture).replace(/^\/+/, "")}`)
         : null,
-      birthDate: "", 
+      birthDate: formatBirthdayForUi(response.birthday || response.birthdate), 
     };
 
   } catch (error: any) {
@@ -51,8 +67,10 @@ export const getUserProfile = async (): Promise<UserInfo> => {
  */
 export const updateUserProfile = async (data: Partial<UserInfo>): Promise<UserInfo> => {
   try {
+    const birthday = normalizeBirthdayForApi(data.birthDate);
+
     // آماده‌سازی payload مطابق با UserUpdateProfileRequest در بک‌اند
-    const payload = {
+    const payload: Record<string, string> = {
       name: data.firstName || "",        // معادل $data['name']
       Fname: data.lastName || "",       // معادل $data['Fname']
       email: data.email || "",
@@ -61,6 +79,10 @@ export const updateUserProfile = async (data: Partial<UserInfo>): Promise<UserIn
     };
 
     console.log("در حال ارسال به‌روزرسانی پروفایل با داده:", payload);
+
+    if (birthday) {
+      payload.birthday = birthday;
+    }
 
     await putData({
       endPoint: "/api/user/profile/update",

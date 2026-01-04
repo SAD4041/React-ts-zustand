@@ -4,13 +4,18 @@ import ProductGrid from "./productListingComponents/ProductGrid";
 import FilterSidebar from "./productListingComponents/FilterSidebar";
 import SortOptions from "./productListingComponents/SortOptions";
 import Pagination from "./productListingComponents/Pagination";
-import type { Product } from "@/types/productCardTypes";
-import type { SortOption } from "@/types/productListingTypes";
+import type { Product, SortOption, ProductListingProps } from "@/types/productListingTypes";
 import { toPersianDigits } from "@/utils/PersianDigits";
 import SubCategorySlider from "./productListingComponents/SubCategorySilder";
-import { categoryLabels, brandLabels } from "@/data/productListingData";
+import {
+  categoryLabels,
+  brandLabels,
+  subCategoryLabels,
+  modelStyleLabels,
+  genderLabels,
+} from "@/data/productListingData";
 import { getMockProducts } from "@/data/productList.mock";
-import { X } from 'lucide-react';
+import { X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -21,15 +26,40 @@ import { sorts } from "@/data/productListingData";
 import sortIcon from "@/assets/Group 63.png";
 import filterIcon from "@/assets/Group 64.png";
 
-const ProductListing: React.FC = () => {
+const ProductListing: React.FC<ProductListingProps> = ({
+  category: categoryProp = null,
+  brand: brandProp = null,
+  subcategory: subCategoryProp = null,
+  modelStyle: modelStyleProp = null,
+  gender: genderProp = null,
+}) => {
   const [searchParams] = useSearchParams();
-  const category = searchParams.get("category");
-  const brand = searchParams.get("brand");
+  const category = categoryProp ?? searchParams.get("category");
+  const brand = brandProp ?? searchParams.get("brand");
+  const subCategory = subCategoryProp ?? searchParams.get("subcategory");
+  const modelStyle = modelStyleProp ?? searchParams.get("modelStyle");
+  const gender = genderProp ?? searchParams.get("gender");
   const searchQuery = searchParams.get("q");
+
+  const normalizedCategory = category ?? null;
+  const normalizedBrand = brand ? brand.toLowerCase() : null;
+  const normalizedSubCategory = subCategory ?? null;
+  const normalizedModelStyle = modelStyle ? modelStyle.toLowerCase() : null;
+  const normalizedGender = gender ? gender.toLowerCase() : null;
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(() =>
+    normalizedBrand ? [normalizedBrand] : []
+  );
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [currentSort, setCurrentSort] = useState<SortOption>("most-revelent");
+  const [currentGroup, setCurrentGroup] = useState(1);
+  const productsPerGroup = 20;
+  const pagesPerGroup = 10;
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -40,7 +70,7 @@ const ProductListing: React.FC = () => {
         const data = getMockProducts();
         setProducts(data);
       } catch (err) {
-        setError("خطا در بارگذاری محصولات");
+        setError("خطا در دریافت محصولات");
         setProducts([]);
       } finally {
         setLoading(false);
@@ -50,46 +80,40 @@ const ProductListing: React.FC = () => {
     loadProducts();
   }, []);
 
-  let listingType: "category" | "brand" | "search" | null = null;
-  let listingValue = "";
-
-  if (searchQuery) {
-    listingType = "search";
-    listingValue = searchQuery;
-  } else if (category) {
-    listingType = "category";
-    listingValue = category;
-  } else if (brand) {
-    listingType = "brand";
-    listingValue = brand;
-  }
-
-  const getDisplayName = () => {
-    if (listingType === "search") return `جستجوی «${listingValue}»`;
-    if (listingType === "brand") return brandLabels[listingValue] || listingValue;
-    return categoryLabels[listingValue] || listingValue;
-  };
-
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-  const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const [currentSort, setCurrentSort] = useState<SortOption>("most-revelent");
-  const [currentGroup, setCurrentGroup] = useState(1);
-  const productsPerGroup = 20;
-  const pagesPerGroup = 10;
+  useEffect(() => {
+    setSelectedBrands(normalizedBrand ? [normalizedBrand] : []);
+  }, [normalizedBrand]);
 
   const productsWithoutPriceFilter = useMemo(() => {
     let result = [...products];
 
-    if (category && listingType === "category") {
-      result = result.filter((p) => p.category === category);
+    if (normalizedCategory) {
+      result = result.filter((p) => p.category === normalizedCategory);
     }
 
-    if (brand && listingType === "brand") {
-      result = result.filter((p) => p.model === brand);
+    if (normalizedSubCategory) {
+      result = result.filter((p) => p.subCategory === normalizedSubCategory);
     }
 
-    if (searchQuery && listingType === "search") {
+    if (normalizedBrand) {
+      result = result.filter(
+        (p) => (p.brandSlug ?? p.model.toLowerCase()) === normalizedBrand
+      );
+    }
+
+    if (normalizedModelStyle) {
+      result = result.filter(
+        (p) => (p.modelStyle ?? "").toLowerCase() === normalizedModelStyle
+      );
+    }
+
+    if (normalizedGender) {
+      result = result.filter(
+        (p) => (p.gender ?? "").toLowerCase() === normalizedGender
+      );
+    }
+
+    if (searchQuery) {
       const queryLower = searchQuery.toLowerCase();
       result = result.filter(
         (p) =>
@@ -99,7 +123,9 @@ const ProductListing: React.FC = () => {
     }
 
     if (selectedBrands.length > 0) {
-      result = result.filter((p) => selectedBrands.includes(p.model));
+      result = result.filter((p) =>
+        selectedBrands.includes(p.brandSlug ?? p.model.toLowerCase())
+      );
     }
     if (selectedSizes.length > 0) {
       result = result.filter((p) =>
@@ -115,10 +141,12 @@ const ProductListing: React.FC = () => {
     return result;
   }, [
     products,
-    category,
-    brand,
+    normalizedCategory,
+    normalizedBrand,
+    normalizedSubCategory,
+    normalizedModelStyle,
+    normalizedGender,
     searchQuery,
-    listingType,
     selectedBrands,
     selectedSizes,
     selectedColors,
@@ -144,9 +172,9 @@ const ProductListing: React.FC = () => {
       result.sort((a, b) => {
         switch (currentSort) {
           case "newest": return Number(b.id) - Number(a.id);
-          case "cheapest": return a.discountedPrice - b.discountedPrice;
-          case "expensive": return b.discountedPrice - a.discountedPrice;
-          case "most-salled": return (b.sales || 0) - (a.sales || 0);
+          case "cheapest": return Number(a.discountedPrice) - Number(b.discountedPrice);
+          case "expensive": return Number(b.discountedPrice) - Number(a.discountedPrice);
+          case "most-salled": return (Number(b.sales) || 0) - (Number(a.sales) || 0);
           default: return 0;
         }
       });
@@ -163,9 +191,9 @@ const ProductListing: React.FC = () => {
     if (currentGroup > totalGroups) setCurrentGroup(1);
   }, [totalGroups, currentGroup]);
 
-  const handleBrandToggle = (name: string) => {
+  const handleBrandToggle = (slug: string) => {
     setSelectedBrands((prev) =>
-      prev.includes(name) ? prev.filter((b) => b !== name) : [...prev, name]
+      prev.includes(slug) ? prev.filter((b) => b !== slug) : [...prev, slug]
     );
   };
 
@@ -190,16 +218,34 @@ const ProductListing: React.FC = () => {
   };
 
   const handleClearFilters = () => {
-    setSelectedBrands([]);
+    setSelectedBrands(normalizedBrand ? [normalizedBrand] : []);
     setSelectedSizes([]);
     setSelectedColors([]);
     setPriceRange({ min: 0, max: globalMaxPrice });
   };
 
+  const getDisplayName = () => {
+    const parts: string[] = [];
+    // اولویت: اگر ساب‌کتگوری داریم همان به‌همراه کتگوری؛ در غیر این صورت کتگوری؛ وگرنه برند یا استایل
+    if (normalizedSubCategory || normalizedCategory) {
+      if (normalizedCategory) parts.push(categoryLabels[normalizedCategory] || normalizedCategory);
+      if (normalizedSubCategory) parts.push(subCategoryLabels[normalizedSubCategory] || normalizedSubCategory);
+    } else if (normalizedBrand) {
+      parts.push(brandLabels[normalizedBrand] || normalizedBrand);
+    } else if (normalizedModelStyle) {
+      parts.push(modelStyleLabels[normalizedModelStyle] || normalizedModelStyle);
+    }
+
+    if (normalizedGender) parts.push(genderLabels[normalizedGender] || normalizedGender);
+    if (searchQuery) parts.push(`جستجو "${searchQuery}"`);
+
+    return parts.join(" ") || "محصولات";
+  };
+
   if (loading) {
     return (
       <div dir="rtl" className="container mx-auto px-4 py-12 text-center">
-        در حال بارگذاری...
+        در حال دریافت محصولات...
       </div>
     );
   }
@@ -214,7 +260,7 @@ const ProductListing: React.FC = () => {
 
   return (
     <div dir="rtl" className="container mx-auto px-4 py-6 font-vazir">
-      <SubCategorySlider />
+      <SubCategorySlider category={normalizedCategory} />
 
       <hr className="my-6 border-border" />
 
@@ -245,18 +291,17 @@ const ProductListing: React.FC = () => {
             </div>
           </div>
 
-          <div
-            className="md:hidden flex items-center gap-2 mb-4">
+          <div className="md:hidden flex items-center gap-2 mb-4">
             <Dialog>
               <DialogTrigger asChild>
                 <div className="flex items-center space-x-4 text-sm mb-4 bg-muted-foreground/30 hover:bg-secondary border border-accent-foreground rounded">
                   <img
                     src={filterIcon}
-                    alt="آیکون مرتب‌سازی"
+                    alt="فیلتر محصولات"
                     className="w-4 h-4 object-cover ml-2 mr-2"
                   />
                   <button className="px-3 py-1 text-primary-foreground rounded-md text-sm">
-                    مرتب سازی
+                    فیلتر کردن
                   </button>
                 </div>
               </DialogTrigger>
@@ -275,7 +320,7 @@ const ProductListing: React.FC = () => {
                   <div className="flex flex-col gap-2">
                     {sorts.map(sort => {
                       const isActive = currentSort === sort.value;
-                      const isChosenLabel = sort.label === "منتخب";
+                      const isChosenLabel = sort.label === "برگزیده";
                       return (
                         <button
                           key={sort.value}
@@ -283,10 +328,10 @@ const ProductListing: React.FC = () => {
                           className={`
                             px-3 py-2 text-right rounded-md transition-colors text-sm
                             ${isActive
-                              ? 'bg-primary text-white'
+                              ? "bg-primary text-white"
                               : isChosenLabel
-                                ? 'text-primary bg-transparent'
-                                : 'text-muted-foreground hover:text-primary bg-transparent hover:bg-muted'
+                                ? "text-primary bg-transparent"
+                                : "text-muted-foreground hover:text-primary bg-transparent hover:bg-muted"
                             }
               `}
                         >
@@ -304,18 +349,18 @@ const ProductListing: React.FC = () => {
                 <div className="flex items-center space-x-4 text-sm mb-4 bg-muted-foreground/30 hover:bg-secondary border border-accent-foreground rounded">
                   <img
                     src={sortIcon}
-                    alt="آیکون مرتب‌سازی"
+                    alt="فیلتر محصولات"
                     className="w-5 h-5 object-cover ml-2 mr-1"
                   />
                   <button className="px-3 py-1 text-secondary-foreground rounded-md text-sm">
-                    فیلتر ها
+                    فیلترها
                   </button>
                 </div>
               </DialogTrigger>
               <DialogContent
                 className="w-73 p-0 max-h-[90vh] overflow-y-auto"
                 hideCloseButton={true}
-                style={{ direction: 'rtl' }}
+                style={{ direction: "rtl" }}
               >
                 <DialogClose asChild>
                   <button className="absolute left-3 top-3 p-1 rounded-full hover:bg-border z-10">
@@ -323,8 +368,7 @@ const ProductListing: React.FC = () => {
                   </button>
                 </DialogClose>
 
-                <div
-                  dir="rtl">
+                <div dir="rtl">
                   <FilterSidebar
                     selectedBrands={selectedBrands}
                     selectedSizes={selectedSizes}

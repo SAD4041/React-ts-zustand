@@ -46,7 +46,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onAvatarChange }) =
   }, [user.profileImage, (user as any).avatar]);
 
   return (
-    <Card className="px-6 py-3 relative mt-14 md:mt-0">
+    <Card className="px-6 py-3 relative mt-14 md:mt-0 max-w-full min-w-[300px]">
       <input
         type="file"
         ref={fileInputRef}
@@ -77,7 +77,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, onAvatarChange }) =
           <Button
             size="sm"
             variant="brand"
-            className="px-4 py-1 rounded-md text-sm mt-4 w-full md:w-auto"
+            className="px-4 py-1 rounded-md text-sm mt-4 w-full md:w-auto min-w-[150px] min-h-10"
             onClick={() => fileInputRef.current?.click()}
           >
             تغییر عکس پروفایل

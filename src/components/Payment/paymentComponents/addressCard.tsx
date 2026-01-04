@@ -28,9 +28,9 @@ const AddressCard: React.FC<AddressCardProps> = ({
     return (
         <div
             dir="rtl"
-            className={`p-4 rounded-md border cursor-pointer transition-all ${isSelected
-                    ? 'border-orange-500 bg-orange-50'
-                    : 'border-border hover:border-orange-300'
+            className={`p-4 rounded-md border cursor-pointer transition-all min-w-[260px] max-w-full min-h-[180px] ${isSelected
+                ? 'border-orange-500 bg-orange-50'
+                : 'border-border hover:border-orange-300'
                 }`}
             onClick={onSelect}
         >
@@ -41,18 +41,16 @@ const AddressCard: React.FC<AddressCardProps> = ({
                 </div>
 
                 <div className="flex items-center gap-2">
-                    {/* برچسب "پیش‌فرض" — همیشه نمایش داده بشه اگر isDefault = true */}
                     {address.isDefault && (
                         <span className="px-2 py-1 rounded bg-orange-100 text-orange-700 text-xs whitespace-nowrap">
                             پیش‌فرض
                         </span>
                     )}
 
-                    {/* دایره انتخاب — همیشه نمایش داده بشه */}
                     <div
                         className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors ${isSelected
-                                ? 'bg-orange-500 border-orange-500 text-white'
-                                : 'border-gray-300 bg-white'
+                            ? 'bg-orange-500 border-orange-500 text-white'
+                            : 'border-gray-300 bg-white'
                             }`}
                     >
                         {isSelected && (
@@ -79,8 +77,8 @@ const AddressCard: React.FC<AddressCardProps> = ({
                 {address.province !== address.city && `، ${address.city}`}، {address.fullAddress}
             </p>
 
-            <div className="flex gap-2 mt-2">
-                <Button variant="outline" size="sm" onClick={onEdit}>
+            <div className="flex flex-col sm:flex-row gap-2 mt-3 sm:mt-2 sm:justify-end">
+                <Button variant="outline" size="sm" onClick={onEdit} className="w-full sm:w-auto min-w-[140px] min-h-10">
                     <Edit2 className="w-3 h-3 mr-1" />
                     ویرایش
                 </Button>
@@ -88,7 +86,7 @@ const AddressCard: React.FC<AddressCardProps> = ({
                     variant="outline"
                     size="sm"
                     onClick={onDelete}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50 w-full sm:w-auto min-w-[140px] min-h-10"
                 >
                     <Trash2 className="w-3 h-3 mr-1" />
                     حذف

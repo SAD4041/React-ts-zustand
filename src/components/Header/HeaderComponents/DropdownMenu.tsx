@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import type { DropdownItem, DropdownMenuProps } from '@/types/headerTypes';
 import Icon from './nextIcon';
+import { useNavigate } from 'react-router-dom';
 
 
 const DropdownMenu = ({ item }: DropdownMenuProps) => {
@@ -9,6 +10,7 @@ const DropdownMenu = ({ item }: DropdownMenuProps) => {
   const [hoveredItem, setHoveredItem] = useState<DropdownItem | null>(null);
   const triggerRef = useRef<HTMLSpanElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -26,6 +28,15 @@ const DropdownMenu = ({ item }: DropdownMenuProps) => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
+
+  const handleNavigate = (categorySlug?: string, brandSlug?: string) => {
+    if (!categorySlug && !brandSlug) return;
+    const params = new URLSearchParams();
+    if (categorySlug) params.set('category', categorySlug);
+    if (brandSlug) params.set('brand', brandSlug);
+    navigate(`/product-list?${params.toString()}`);
+    setIsOpen(false);
+  };
 
   const firstColumn = item.category.itemsList.slice(0, 6);
   const secondColumn = item.category.itemsList.slice(6);
@@ -93,7 +104,10 @@ const DropdownMenu = ({ item }: DropdownMenuProps) => {
                     {secondColumn.map((cat, idx) => (
                       <button
                         key={`second-${idx}`}
-                        onClick={() => setSelectedCategory(cat.name)}
+                        onClick={() => {
+                          setSelectedCategory(cat.name);
+                          handleNavigate(cat.categorySlug, cat.brandSlug);
+                        }}
                         onMouseEnter={() => setHoveredItem(cat)}
                         onMouseLeave={() => setHoveredItem(null)}
                         className={`block w-full text-right px-4 py-2 rounded-lg text-sm transition-colors ${selectedCategory === cat.name
@@ -112,7 +126,10 @@ const DropdownMenu = ({ item }: DropdownMenuProps) => {
                         {firstColumn.map((cat, idx) => (
                           <button
                             key={`first-${idx}`}
-                            onClick={() => setSelectedCategory(cat.name)}
+                            onClick={() => {
+                              setSelectedCategory(cat.name);
+                              handleNavigate(cat.categorySlug, cat.brandSlug);
+                            }}
                             onMouseEnter={() => setHoveredItem(cat)}
                             onMouseLeave={() => setHoveredItem(null)}
                             className={`block w-full text-right px-4 py-2 rounded-lg text-sm transition-colors ${selectedCategory === cat.name

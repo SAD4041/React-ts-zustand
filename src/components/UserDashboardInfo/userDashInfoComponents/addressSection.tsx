@@ -46,12 +46,13 @@ const AddressSection: React.FC<AddressSectionProps> = ({
 
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 max-w-full min-w-[300px]">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 px-4 sm:px-10">
         <Button
           size="sm"
           variant="brand"
           onClick={handleAddClick}
+          className="min-w-[150px] min-h-10"
         >
           <Plus className="w-4 h-4 ml-2" />
           آدرس جدید
@@ -73,19 +74,21 @@ const AddressSection: React.FC<AddressSectionProps> = ({
 
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-sm shadow-lg max-w-sm w-full text-right">
+          <div className="bg-white p-6 rounded-sm shadow-lg max-w-sm min-w-[280px] w-full text-right">
             <h4 className="text-lg font-semibold mb-3">آیا مطمئن هستید؟</h4>
             <div className="flex justify-end gap-2">
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setShowDeleteConfirm(null)}>
+                onClick={() => setShowDeleteConfirm(null)}
+                className="min-w-[110px] min-h-9">
                 لغو
               </Button>
               <Button
                 variant="destructive"
                 size="sm"
                 onClick={() => confirmDelete(showDeleteConfirm)}
+                className="min-w-[110px] min-h-9"
               >
                 بله
               </Button>

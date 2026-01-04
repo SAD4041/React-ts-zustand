@@ -5,6 +5,8 @@ export interface DropdownMenuProps {
 export type DropdownItem = {
   name: string;
   image?: string;
+  categorySlug?: string;
+  brandSlug?: string;
 };
 
 export type CategoryData = {

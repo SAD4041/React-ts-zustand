@@ -68,7 +68,8 @@ export default function Sidebar({ items, className }: SidebarProps) {
     const curveWidth = 118; // The total width of the curve opening
     const curveDepth = 36; // How deep the dip goes
 
-    if (x === 0) return "";
+    // Fallback to a rectangle until we have a measured position to avoid invalid SVG path
+    if (x <= 0) return `M 0 0 L ${width} 0 L ${width} ${height} L 0 ${height} Z`;
 
     return `
       M 0 0

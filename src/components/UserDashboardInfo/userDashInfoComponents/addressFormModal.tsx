@@ -60,7 +60,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
 
   return (
     <div dir='rtl' className="fixed inset-0 bg-black/40 bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md min-w-[320px] p-6 relative">
         <button
           onClick={onClose}
           className="absolute top-4 left-4 text-muted-foreground hover:text-foreground"
@@ -80,7 +80,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
                 name="city"
                 value={formData.city}
                 onChange={handleChange}
-                className="text-right dir-rtl"
+                className="text-right dir-rtl min-h-10"
               />
             </div>
             <div>
@@ -89,7 +89,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
                 name="province"
                 value={formData.province}
                 onChange={handleChange}
-                className="text-right dir-rtl"
+                className="text-right dir-rtl min-h-10"
               />
             </div>
             <div>
@@ -98,7 +98,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
                 name="postalCode"
                 value={formData.postalCode}
                 onChange={handleChange}
-                className="text-right dir-rtl"
+                className="text-right dir-rtl min-h-10"
               />
             </div>
           </div>
@@ -110,7 +110,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="text-right dir-rtl"
+                className="text-right dir-rtl min-h-10"
               />
             </div>
             <div className="flex items-end">
@@ -128,7 +128,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
               name="fullAddress"
               value={formData.fullAddress}
               onChange={handleChange}
-              className="text-right dir-rtl"
+              className="text-right dir-rtl min-h-12"
             />
           </div>
         </div>
@@ -136,7 +136,7 @@ const AddressFormModal: React.FC<AddressFormModalProps> = ({
         <div className="mt-6 flex flex-col sm:flex-row gap-2 sm:justify-end">
           <Button
             size="sm"
-            className="bg-brand text-brand-foreground hover:bg-brand-hover w-full sm:w-auto"
+            className="bg-brand text-brand-foreground hover:bg-brand-hover w-full sm:w-auto min-w-[150px] min-h-10"
             onClick={handleSubmit}
           >
             {initialData ? 'ذخیره تغییرات' : 'افزودن'}

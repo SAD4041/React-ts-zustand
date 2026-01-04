@@ -104,7 +104,7 @@ export const router = createBrowserRouter([
         path: "/dash",
         element: <SidebarLayout />,
         errorElement: <Error404 />,
-        
+
         children: [
             // {
             //     index: true,

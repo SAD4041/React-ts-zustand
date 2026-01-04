@@ -16,37 +16,37 @@ interface OrderSummarySectionProps {
 
 const OrderSummarySection: React.FC<OrderSummarySectionProps> = ({ summary, onCheckout }) => {
     return (
-        <Card dir="rtl">
+        <Card dir="rtl" className="max-w-full min-w-[320px]">
             <CardHeader>
-                <CardTitle className="text-right">خلاصه سفارش</CardTitle>
+                <CardTitle className="text-right">جزئیات سفارش</CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
                         <span>مجموع قیمت کالاها</span>
                         <span>{summary.totalItemsPrice.toLocaleString()} تومان</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
                         <span>هزینه ارسال</span>
                         <span>{summary.shippingCost.toLocaleString()} تومان</span>
                     </div>
-                    <div className="flex justify-between">
-                        <span>مالیات (۱۰%)</span>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
+                        <span>مالیات (۹٪)</span>
                         <span>{summary.tax.toLocaleString()} تومان</span>
                     </div>
                     <div className="border-t border-border my-3 pt-3" />
-                    <div className="flex justify-between font-bold text-lg">
-                        <span>مبلغ نهایی</span>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0 font-bold text-lg">
+                        <span>مبلغ نهایی پرداخت</span>
                         <span>{summary.finalTotal.toLocaleString()} تومان</span>
                     </div>
                 </div>
-                <div className="mt-6 flex justify-end">
+                <div className="mt-6 flex flex-col sm:flex-row justify-end">
                     <Button
                         variant='default'
                         onClick={onCheckout}
-                        className="w-50 max-w-x"
+                        className="w-full sm:w-auto min-w-[160px] min-h-10"
                     >
-                        تکمیل پرداخت
+                        ادامه پرداخت
                     </Button>
                 </div>
             </CardContent>

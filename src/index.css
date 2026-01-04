@@ -80,7 +80,7 @@ body {
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
 
-  --secondary: #ed775a;
+  --secondary: rgba(228, 0, 75, 1);
   --secondary-foreground: oklch(0.145 0 0);
 
   --contact-pill: #e4004b;

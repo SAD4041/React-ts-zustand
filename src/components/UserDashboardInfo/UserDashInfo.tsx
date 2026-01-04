@@ -157,7 +157,7 @@ const UserDashInfo: React.FC = () => {
 
 
   return (
-    <div className="space-y-6 py-6 px-6 max-w-6xl mx-auto bg-background">
+    <div className="space-y-6 py-6 px-6 max-w-6xl mx-auto bg-background min-w-[320px] w-full">
       <div className="text-right mb-4">
         <h1 className="text-xl font-bold">پروفایل کاربری</h1>
         <p className="text-muted-foreground text-sm">
