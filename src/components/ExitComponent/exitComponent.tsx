@@ -7,34 +7,51 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
-export default function ExitModal() {
+type ExitModalProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: () => void;
+};
+
+export default function ExitModal({
+  open,
+  onOpenChange,
+  onConfirm,
+}: ExitModalProps) {
   const [hoveredButton, setHoveredButton] = useState<"yes" | "no" | null>(null);
 
   let currentCatImage = catDefault;
   let mainText = "برنج خیس کردم کجا میخوای بری؟";
-  let subText = "واقعا میخوای بری؟؟؟";
+  let subText = "واقعا میخوای بری؟";
 
   if (hoveredButton === "no") {
     currentCatImage = catHappy;
-    mainText = "! هورااا";
+    mainText = "هورااا!";
+    subText = "خوشحال شدم که موندی.";
   } else if (hoveredButton === "yes") {
     currentCatImage = catSad;
-    mainText = "! نرو فاطمه";
-
+    mainText = "نرو لطفا";
+    subText = "مطمئنی میخوای خارج بشی؟";
   }
 
-  return (
-    <Dialog>
-      <DialogTrigger className="px-4 py-2 bg-primary text-primary-foreground rounded-lg shadow hover:bg-primary/90">
-        خروج
-      </DialogTrigger>
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      setHoveredButton(null);
+    }
+    onOpenChange(nextOpen);
+  };
 
+  const handleConfirm = () => {
+    setHoveredButton(null);
+    onConfirm();
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="font-bold text-center">
-        <DialogHeader>
-        </DialogHeader>
+        <DialogHeader />
 
         <div className="bg-white rounded-lg p-6 text-center">
           <img
@@ -52,6 +69,7 @@ export default function ExitModal() {
               onMouseLeave={() => setHoveredButton(null)}
               className={`w-40 py-3 rounded-lg transition-transform duration-200 bg-gray-300 text-black font-bold ${hoveredButton === "yes" ? "-translate-y-1" : ""
                 }`}
+              onClick={handleConfirm}
             >
               بله
             </button>
@@ -61,6 +79,7 @@ export default function ExitModal() {
               onMouseLeave={() => setHoveredButton(null)}
               className={`w-40 py-3 rounded-lg transition-transform duration-200 bg-cyan-400 text-black font-bold ${hoveredButton === "no" ? "-translate-y-1" : ""
                 }`}
+              onClick={() => handleOpenChange(false)}
             >
               خیر
             </button>
