@@ -1,15 +1,15 @@
-import type { Config } from "tailwindcss";
+﻿import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 
 const config: Config = {
+  darkMode: "class",
+
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{ts,tsx,js,jsx}",
   ],
-
-  darkMode: "class",
 
   theme: {
     screens: {
@@ -22,11 +22,13 @@ const config: Config = {
     },
 
     extend: {
+      /* ---------- Fonts ---------- */
       fontFamily: {
         sans: ["Vazirmatn", "sans-serif"],
         vazirmatn: ["Vazirmatn", "Roboto"],
       },
 
+      /* ---------- Font Sizes ---------- */
       fontSize: {
         "2xs": "0.625rem",
         "product-title": "0.875rem",
@@ -76,6 +78,8 @@ const config: Config = {
         "logo-container": "3.5rem",
       },
 
+
+      /* ---------- Colors ---------- */
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -98,6 +102,7 @@ const config: Config = {
           active: "hsl(var(--primary-active))",
           border: "hsl(var(--primary-border))",
           "border-hover": "hsl(var(--primary-border-hover))",
+          light: "hsl(var(--primary-light))",
         },
 
         secondary: {
@@ -114,11 +119,23 @@ const config: Config = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          hover: "hsl(var(--accent-hover))",
         },
 
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
+        },
+
+        brand: {
+          DEFAULT: "hsl(var(--brand))",
+          foreground: "hsl(var(--brand-foreground))",
+          light: "hsl(var(--brand-light))",
+        },
+
+        danger: {
+          DEFAULT: "hsl(var(--danger))",
+          foreground: "hsl(var(--danger-foreground))",
         },
 
         border: "hsl(var(--border))",
@@ -140,6 +157,7 @@ const config: Config = {
         "ring-primary-subtle": "hsl(var(--ring-primary-subtle))",
       },
 
+      /* ---------- Radius ---------- */
       borderRadius: {
         sm: "calc(var(--radius) - 4px)",
         md: "calc(var(--radius) - 2px)",

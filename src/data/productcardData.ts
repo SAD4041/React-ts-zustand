@@ -1,14 +1,15 @@
-import image1 from '@/assets/image1.png';
-import type { ProductData } from '@/types/productCardTypes';
+/* import image1 from '@/assets/image1.png';
+import type { ProductData} from '@/types/productCardTypes';
 
 export const productData: ProductData = {
+  category: "تیشرت زنانه",
   discount: 24,
   hasDiscount: true,
+  discountedPrice: 0,
   image : image1,
   model: 'CATWAREHOUSE',
   name: 'Bussiness Not Boomin',
   price: 699999,
-  discountedPrice: 0,
   rating: 4.2,
   stock: 1,
   ratingCount: 502,
@@ -54,3 +55,4 @@ export type MenuItem = {
 
 
 
+ */

@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
-import catPic from '@/assets/Gemini_Generated_Image_muba2rmuba2rmuba 1 (1).png'
+import catPic from '@/assets/Gemini_Generated_Image_muba2rmuba2rmuba 1 (1).png';
 import { useNavigate } from "react-router-dom";
-import { MotionButton } from "@/components/ui/motion-bottun";
-
+import { MotionButton } from "../ui/motion-bottun";
 
 export default function Errors500() {
   const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 text-foreground">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}

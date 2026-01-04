@@ -1,4 +1,4 @@
-import type { Product } from "./productListingTypes";
+// import { number } from "framer-motion";
 
 export interface Size {
   label: string;
@@ -9,21 +9,22 @@ export interface Color {
   label: string;
 }
 
-export interface ProductData {
+export interface Product {
   id: number;
   discount: number;
   hasDiscount: boolean;
   image: string;
-  model: string;
+  model: string;             // = brand
   name: string;
   price: number;
-  discountedPrice: number;
   sizes: Size[];
   colors: Color[];
-  rating: number;
-  stock: number;
+  rating: number;            // ✅ وجود دارد
+  stock: number;             // = inventory_Count
   ratingCount: number;
   sales: number;
+  category: string;
+  discountedPrice: number;
 }
 
 export interface ImageData {
@@ -49,5 +50,5 @@ export interface SizeSelectorProps {
 }
 
 export interface ProductCardProps {
-  product: Product;
+  Product: Product;
 }

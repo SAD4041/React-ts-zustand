@@ -1,4 +1,3 @@
-// src/components/ui/dialog.tsx
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
@@ -37,21 +36,25 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   DialogContentProps
->(({ 
-  className, 
-  children, 
-  variant = "default", 
+>(({
+  className,
+  children,
+  variant = "default",
   hideCloseButton = false,
   disableOverlayClose = false,
-  ...props 
+  ...props
 }, ref) => (
   <DialogPortal>
-    <DialogOverlay 
-      onPointerDownOutside={disableOverlayClose ? (e) => e.preventDefault() : undefined}
-    />
+    <DialogOverlay />
+
     <DialogPrimitive.Content
       ref={ref}
-      onEscapeKeyDown={disableOverlayClose ? (e) => e.preventDefault() : undefined}
+      onEscapeKeyDown={
+        disableOverlayClose ? (e) => e.preventDefault() : undefined
+      }
+      onInteractOutside={
+        disableOverlayClose ? (e) => e.preventDefault() : undefined
+      }
       className={cn(
         "fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4",
         "border bg-background p-6 shadow-lg duration-200 sm:rounded-lg",
@@ -71,8 +74,9 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       {children}
+
       {!hideCloseButton && (
-        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-full border border-primary text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 disabled:pointer-events-none cursor-pointer">
+        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-full border border-primary text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 cursor-pointer">
           <X className="h-6 w-6" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
@@ -80,6 +84,7 @@ const DialogContent = React.forwardRef<
     </DialogPrimitive.Content>
   </DialogPortal>
 ));
+
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
@@ -97,7 +102,6 @@ const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
   />
 );
 DialogFooter.displayName = "DialogFooter";
-
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>

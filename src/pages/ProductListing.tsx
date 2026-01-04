@@ -1,9 +1,9 @@
 import ProductListing from "@/components/ProductListing/productListing";
 
-function ProductList (){
+function ProductList() {
     return (
         <div>
-            <ProductListing/>
+            <ProductListing />
         </div>
     )
 }

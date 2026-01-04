@@ -14,6 +14,12 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
   const [localMin, setLocalMin] = useState(minPrice);
   const [localMax, setLocalMax] = useState(maxPrice);
 
+  // Keep local slider state in sync when parent price range changes (e.g., after products load)
+  useEffect(() => {
+    setLocalMin(minPrice);
+    setLocalMax(maxPrice);
+  }, [minPrice, maxPrice]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       onPriceChange({ min: localMin, max: localMax });

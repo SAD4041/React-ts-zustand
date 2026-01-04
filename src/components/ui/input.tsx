@@ -55,8 +55,8 @@ export const Input = forwardRef<HTMLInputElement, FormikInputProps>(
           )}
 
           <input
-            {...field}       
-            {...props}         
+            {...field}
+            {...props}
             ref={ref}
             dir={isRightToLeft ? "rtl" : "ltr"}
             disabled={disabled}

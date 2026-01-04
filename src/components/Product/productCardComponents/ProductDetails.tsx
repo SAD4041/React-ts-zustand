@@ -27,12 +27,14 @@ const ProductDetails: React.FC<ProductProps> = ({ product }) => {
 
 
 
-            <div className="flex flex-wrap justify-end items-baseline gap-2">
+            <div
+                dir="ltr"
+                className="flex flex-wrap justify-end items-baseline gap-2 ">
                 {product.hasDiscount ? (
                     <>
                         <div className="flex items-center gap-1 font-semibold text-foreground whitespace-nowrap">
+                            <img src={tuman} alt="تومان" className="w-5 h-5  object-contain" />
                             <span className="text-base">{formatPrice(product.discountedPrice)}</span>
-                            <img src={tuman} alt="تومان" className="w-3 h-3 object-contain" />
                         </div>
 
 
@@ -42,8 +44,9 @@ const ProductDetails: React.FC<ProductProps> = ({ product }) => {
                     </>
                 ) : (
                     <div className="flex items-center gap-1 font-semibold text-foreground whitespace-nowrap">
+                        <img src={tuman} alt="تومان" className="w-5 h-5 object-contain" />
                         <span className="text-base">{formatPrice(product.price)}</span>
-                        <img src={tuman} alt="تومان" className="w-3 h-3 object-contain" />
+
                     </div>
                 )}
             </div>

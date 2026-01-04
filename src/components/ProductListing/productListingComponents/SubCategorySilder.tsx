@@ -1,87 +1,51 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
+import 'swiper/swiper-bundle.css';
+
 import SubCategoryCard from './SubCategoryCard';
 import { subCategories } from '@/data/productListingData';
 import LeftScroll from '../icon loader/leftscroll';
 import RightScroll from '../icon loader/rightscroll';
 
 const SubCategorySlider: React.FC = () => {
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-  const [isScrollable, setIsScrollable] = useState(false);
-
-  const updateScrollButtons = () => {
-    if (!sliderRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-    const maxScroll = scrollWidth - clientWidth;
-
-    const scrollable = scrollWidth > clientWidth;
-    setIsScrollable(scrollable);
-
-    if (scrollable) {
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < maxScroll - 1);
-    } else {
-      setCanScrollLeft(false);
-      setCanScrollRight(false);
-    }
-  };
-
-  useEffect(() => {
-    updateScrollButtons();
-  }, []);
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (!sliderRef.current) return;
-    const scrollAmount = 250;
-    const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-    const maxScroll = scrollWidth - clientWidth;
-
-    const newScroll = direction === 'left'
-      ? Math.max(0, scrollLeft - scrollAmount)
-      : Math.min(maxScroll, scrollLeft + scrollAmount);
-
-    sliderRef.current.scrollTo({ left: newScroll, behavior: 'smooth' });
-    setTimeout(updateScrollButtons, 300);
-  };
-
   return (
     <div className="relative mb-6">
-      {isScrollable && (
-        <button
-          onClick={() => scroll('left')}
-          disabled={!canScrollLeft}
-          className={`absolute left-0 top-1/2 z-10 p-2 bg-background rounded-full shadow-md transition-colors ${!canScrollLeft
-            ? 'opacity-50 cursor-not-allowed text-muted-foreground'
-            : 'text-foreground hover:bg-muted'
-            }`}
-        >
-          <LeftScroll />
-        </button>
-      )}
-
-      <div
-        ref={sliderRef}
-        onScroll={updateScrollButtons}
-        className="flex items-start space-x-10 space-x-reverse overflow-x-auto py-3 px-6 hide-scrollbar gap-6"
+      <Swiper
+        dir="rtl"
+        modules={[Navigation]}
+        spaceBetween={24}
+        slidesPerView="auto"
+        slidesPerGroupAuto={true} // ✅ مهم: هر بار به اندازه اسلایدهای دیده‌شده حرکت کنه
+        navigation={{
+          prevEl: '.custom-prev-button',
+          nextEl: '.custom-next-button',
+        }}
+        className="py-3 px-4"
       >
         {subCategories.map((cat) => (
-          <SubCategoryCard key={cat.id} category={cat} />
+          <SwiperSlide
+            key={cat.id}
+            className="!w-auto"
+          >
+            <SubCategoryCard category={cat} />
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
 
-      {isScrollable && (
-        <button
-          onClick={() => scroll('right')}
-          disabled={!canScrollRight}
-          className={`absolute right-0 top-1/2 z-10 p-2 bg-background rounded-full shadow-md transition-colors ${!canScrollRight
-            ? 'opacity-50 cursor-not-allowed text-muted-foreground'
-            : 'text-foreground hover:bg-muted'
-            }`}
-        >
-          <RightScroll />
-        </button>
-      )}
+      <button
+        type="button"
+        className="custom-next-button absolute left-0 top-1/2 z-10 p-2 bg-background rounded-full shadow-md transition-colors"
+      >
+        <LeftScroll />
+      </button>
+
+      <button
+        type="button"
+        className="custom-prev-button absolute right-0 top-1/2 z-10 p-2 bg-background rounded-full shadow-md transition-colors"
+      >
+        <RightScroll />
+      </button>
     </div>
   );
 };

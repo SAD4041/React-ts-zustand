@@ -7,8 +7,19 @@ import ProfileIcon from './HeaderComponents/ProfileIcon';
 import NotificationIcon from './HeaderComponents/NotificatoinIcaon';
 import headerBg from '@/assets/Group.png';
 import PromoBanner from './HeaderComponents/PromoBanner';
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import CartModal from "@/components/ShoppingCart/CartModal";
+import { mockCartItems } from "@/components/ShoppingCart/shoppingCart"
+
 
 const Header = () => {
+  const [openCart, setOpenCart] = useState<boolean>(false);
+
+  const handleRemove = (id: string) => { };
+  const handleUpdateQuantity = (id: string, quantity: number) => { };
+
+  const items = mockCartItems;
   return (
     <>
       <header className="bg-white shadow-sm relative z-50">
@@ -20,23 +31,34 @@ const Header = () => {
             <div className="flex items-center space-x-2 space-x-reverse mr-2 md:mr-3">
               <div className="w-11 h-11 md:w-13.5 md:h-13.5 bg-header-bg-blur backdrop-blur-md rounded-full shadow-sm flex items-center justify-center">
                 <div className="w-11 h-11 md:w-14 md:h-14 bg-header-bg-blur backdrop-blur-md rounded-full shadow-sm flex items-center justify-center">
-                  <img
-                    src={logo}
-                    alt="لوگو"
-                    className="w-11 h-11 md:w-14 md:h-14 object-contain"
-                  />
+                  <Link
+                    to="/">
+                    <img
+                      src={logo}
+                      alt="لوگو"
+                      className="w-11 h-11 md:w-14 md:h-14 object-contain"
+                    />
+                  </Link>
                 </div>
               </div>
             </div>
 
             <div className="bg-header-bg-blur backdrop-blur-md rounded-full shadow-sm flex flex-1 items-center justify-between p-1.5 md:p-2.5">
-              <div className=" ml-4 flex items-center space-x-1 md:space-x-2 space-x-reverse mr-1 md:mr-2">
-                <CartIcon />
+              <div className="ml-4 flex items-center space-x-1 space-x-reverse">
+                <CartIcon onClick={() => setOpenCart(true)} />
                 <NotificationIcon />
                 <ProfileIcon />
               </div>
 
-              <nav className="hidden lg:flex items-center space-x-2 md:space-x-3 lg:space-x-4 space-x-reverse flex-row-reverse">
+              <CartModal
+                open={openCart}
+                onOpenChange={setOpenCart}
+                items={items}
+                onRemove={handleRemove}
+                onUpdateQuantity={handleUpdateQuantity}
+              />
+
+              <nav className="hidden md:flex items-center space-x-2 md:space-x-3 lg:space-x-4 space-x-reverse flex-row-reverse">
                 {menuItems.map((item, index) => (
                   <DropdownMenu item={item} key={index} />
                 ))}

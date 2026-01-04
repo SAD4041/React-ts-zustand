@@ -1,17 +1,16 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProductGrid from "./productListingComponents/ProductGrid";
 import FilterSidebar from "./productListingComponents/FilterSidebar";
 import SortOptions from "./productListingComponents/SortOptions";
 import Pagination from "./productListingComponents/Pagination";
-import { getData } from "@/services/services";
-import type { Product } from "@/types/productListingTypes";
+import type { Product } from "@/types/productCardTypes";
 import type { SortOption } from "@/types/productListingTypes";
 import { toPersianDigits } from "@/utils/PersianDigits";
 import SubCategorySlider from "./productListingComponents/SubCategorySilder";
 import { categoryLabels, brandLabels } from "@/data/productListingData";
+import { getMockProducts } from "@/data/productList.mock";
 import LoadingSpinner from "../ui/LoadingSpinner";
-
 
 const ProductListing: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -22,6 +21,18 @@ const ProductListing: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const data = getMockProducts();
+      setProducts(data);
+    } catch (err) {
+      setError("خطا در لود محصولات ماک");
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   let listingType: "category" | "brand" | "search" | null = null;
   let listingValue = "";
@@ -37,50 +48,8 @@ const ProductListing: React.FC = () => {
     listingValue = brand;
   }
 
-  useEffect(() => {
-    if (!listingType || !listingValue) {
-      setProducts([]);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    let fetchPromise: Promise<any>;
-
-    if (listingType === "category") {
-      fetchPromise = getData({
-        endPoint: "/api/category/",
-        params: { category: listingValue },
-        headers: { "Cache-Control": "no-cache", Pragma: "no-cache", Accept: "*/*" },
-      });
-    } else if (listingType === "brand") {
-      fetchPromise = getData({
-        endPoint: "/api/brand/",
-        params: { brand: listingValue },
-        headers: { "Cache-Control": "no-cache", Pragma: "no-cache", Accept: "*/*" },
-      });
-    } else {
-      fetchPromise = getData({
-        endPoint: "/api/search/",
-        params: { q: listingValue },
-        headers: { "Cache-Control": "no-cache", Pragma: "no-cache", Accept: "*/*" },
-      });
-    }
-
-    fetchPromise
-      .then((data) => setProducts(Array.isArray(data) ? data : []))
-      .catch((err) => {
-        setError("خطا در بارگذاری محصولات");
-        console.error(err);
-        setProducts([]);
-      })
-      .finally(() => setLoading(false));
-  }, [listingType, listingValue]);
-
   const getDisplayName = () => {
-    if (listingType === "search") return `جستجوی «${listingValue}»`;
+    if (listingType === "search") return `جستجو: ${listingValue}`;
     if (listingType === "brand") return brandLabels[listingValue] || listingValue;
     return categoryLabels[listingValue] || listingValue;
   };
@@ -95,6 +64,24 @@ const ProductListing: React.FC = () => {
 
   const productsWithoutPriceFilter = useMemo(() => {
     let result = [...products];
+
+    if (listingType === "category" && listingValue) {
+      result = result.filter((p) => p.category === listingValue);
+    }
+
+    if (listingType === "brand" && listingValue) {
+      result = result.filter((p) => p.model === listingValue);
+    }
+
+    if (listingType === "search" && listingValue) {
+      const queryLower = listingValue.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(queryLower) ||
+          p.model.toLowerCase().includes(queryLower)
+      );
+    }
+
     if (selectedBrands.length > 0) {
       result = result.filter((p) => selectedBrands.includes(p.model));
     }
@@ -109,7 +96,14 @@ const ProductListing: React.FC = () => {
       );
     }
     return result;
-  }, [products, selectedBrands, selectedSizes, selectedColors]);
+  }, [
+    products,
+    listingType,
+    listingValue,
+    selectedBrands,
+    selectedSizes,
+    selectedColors,
+  ]);
 
   const globalMaxPrice = useMemo(() => {
     if (productsWithoutPriceFilter.length === 0) return 100000;
@@ -122,6 +116,11 @@ const ProductListing: React.FC = () => {
     setPriceRange((prev) => ({ ...prev, max: globalMaxPrice }));
   }, [globalMaxPrice]);
 
+  const toNumberId = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    return digits ? parseInt(digits, 10) : 0;
+  };
+
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...productsWithoutPriceFilter];
     result = result.filter(
@@ -130,11 +129,16 @@ const ProductListing: React.FC = () => {
     if (currentSort) {
       result.sort((a, b) => {
         switch (currentSort) {
-          case "newest": return b.id - a.id;
-          case "cheapest": return a.discountedPrice - b.discountedPrice;
-          case "expensive": return b.discountedPrice - a.discountedPrice;
-          case "most-salled": return (b.sales || 0) - (a.sales || 0);
-          default: return 0;
+          case "newest":
+            return toNumberId(b.id) - toNumberId(a.id);
+          case "cheapest":
+            return a.discountedPrice - b.discountedPrice;
+          case "expensive":
+            return b.discountedPrice - a.discountedPrice;
+          case "most-salled":
+            return (b.sales || 0) - (a.sales || 0);
+          default:
+            return 0;
         }
       });
     }
@@ -184,9 +188,7 @@ const ProductListing: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <LoadingSpinner />
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {
@@ -199,10 +201,8 @@ const ProductListing: React.FC = () => {
 
   return (
     <div dir="rtl" className="container mx-auto px-4 py-6 font-vazir">
-
       <SubCategorySlider />
-
-      <hr className="my-6 border-border border-1" />
+      <hr className="my-6 border-border border" />
 
       <div className="flex gap-6 mt-6">
         <FilterSidebar
@@ -224,18 +224,17 @@ const ProductListing: React.FC = () => {
               <SortOptions currentSort={currentSort} onSortChange={handleSortChange} />
             </div>
             <div className="text-sm text-muted-foreground">
-              {toPersianDigits(filteredProductsCount.toLocaleString("fa-IR"))} محصول در{" "}
-              {getDisplayName()}
+              {toPersianDigits(filteredProductsCount.toLocaleString("fa-IR"))} محصول {getDisplayName()}
             </div>
           </div>
 
-          <hr className="mb-4 border-border border-1" />
+          <hr className="mb-4 border-border border" />
 
-          <div className="h-150 overflow-y-auto border-border border-1 rounded-lg p-4 bg-card shadow-sm">
+          <div className="h-150 overflow-y-auto border-border border rounded-lg p-4 bg-card shadow-sm">
             <ProductGrid products={productsToDisplay} />
           </div>
 
-          <hr className="my-6 border-border border-1" />
+          <hr className="my-6 border-border border" />
 
           <div className="mt-4 flex justify-center">
             <Pagination

@@ -1,5 +1,8 @@
-import type {ProductData} from './productCardTypes';
+// types/productListingTypes.ts
 
+// --- بدون import از productCardTypes ---
+
+import type { Product as AdaptedProduct } from "@/types/productCardTypes";
 export interface SubCategory {
   id: number;
   title: string;
@@ -27,9 +30,9 @@ export interface Filters {
   };
 }
 
-export interface Product extends ProductData {
-  id: number;
-}
+/* export interface Product extends ProductData {
+  id: string;s
+} */
 
 export type SortOption = 'newest' | 'cheapest' | 'expensive' | 'most-salled' | 'most-revelent';
 
@@ -78,7 +81,7 @@ export interface PriceRangeFilterProps {
 }
 
 export interface ProductGridProps {
-  products: Product[];
+  products: AdaptedProduct[];
 }
 
 export interface SizeFilterProps {
@@ -90,3 +93,5 @@ export interface SizeFilterProps {
 export interface SubCategoryProps {
   category: SubCategory;
 }
+
+export type ProductQueryType = "SE" | "CA" | "CM" | "BR";
