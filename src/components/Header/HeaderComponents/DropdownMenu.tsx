@@ -6,11 +6,14 @@ import { useNavigate } from 'react-router-dom';
 
 const DropdownMenu = ({ item }: DropdownMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [hoveredItem, setHoveredItem] = useState<DropdownItem | null>(null);
   const triggerRef = useRef<HTMLSpanElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  const makeKey = (cat: DropdownItem) =>
+    `${cat.categorySlug || cat.brandSlug || cat.name}-${item.title}`;
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -28,6 +31,15 @@ const DropdownMenu = ({ item }: DropdownMenuProps) => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const detail = (event as CustomEvent<string>).detail;
+      setSelectedKey(detail);
+    };
+    window.addEventListener("header-category-select", handler);
+    return () => window.removeEventListener("header-category-select", handler);
+  }, []);
 
   const handleNavigate = (categorySlug?: string, brandSlug?: string) => {
     if (!categorySlug && !brandSlug) return;
@@ -103,12 +115,14 @@ const DropdownMenu = ({ item }: DropdownMenuProps) => {
                     <button
                       key={`single-${idx}`}
                       onClick={() => {
-                        setSelectedCategory(cat.name);
+                        const key = makeKey(cat);
+                        setSelectedKey(key);
+                        window.dispatchEvent(new CustomEvent("header-category-select", { detail: key }));
                         handleNavigate(cat.categorySlug, cat.brandSlug);
                       }}
                       onMouseEnter={() => setHoveredItem(cat)}
                       onMouseLeave={() => setHoveredItem(null)}
-                      className={`block w-full text-right px-4 py-2 rounded-lg text-sm transition-colors ${selectedCategory === cat.name
+                      className={`block w-full text-right px-4 py-2 rounded-lg text-sm transition-colors ${selectedKey === makeKey(cat)
                         ? 'bg-primary/10 text-primary font-medium border border-primary/20'
                         : 'text-foreground hover:bg-muted hover:border hover:border-border'
                         }`}

@@ -8,7 +8,7 @@ const SubCategoryCard: React.FC<SubCategoryProps> = ({ category }) => {
 
   return (
     <Link
-      to={`/product-list?q=${encodeURIComponent(categoryTitle)}`}
+      to={`/product-list?category=${encodeURIComponent(category.category)}&subcategory=${encodeURIComponent(category.slug)}`}
       className="shrink-0 w-80 cursor-pointer group sm:w-52 md:w-48 lg:w-44 xl:w-40"
     >
       <div className="relative overflow-hidden rounded-lg shadow-sm border border-border">

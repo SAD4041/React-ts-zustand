@@ -117,7 +117,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               className={`flex items-center gap-2 whitespace-nowrap text-sm ${item.emphasis
                 ? item.emphasis === "product"
                   ? "bg-secondary text-white px-4 py-1.5 rounded-3xl"
-                  : "bg-secondary text-secondary-foreground px-4 py-1.5"
+                  : "bg-secondary text-secondary-foreground px-4 py-1.5 rounded-3xl"
                 : "text-foreground px-1.5"
                 }`}
             >
