@@ -9,27 +9,11 @@ export const productsPerGroup = productsPerPage * pagesPerGroup;
 export const currentCategory = "tshirt";
 
 export const categoryLabels: Record<string, string> = {
-  tshirt: "تیشرت",
-  shirt: "پیراهن",
-  shoes: "کفش",
+  accessory: "اکسسوری",
+  "warm-clothes": "لباس گرم",
   pants: "شلوار",
-  dress: "پیراهن زنانه",
-  bag: "کیف",
-  hoodie: "هودی",
-  shorts: "شلوارک",
-  polo: "پولو",
-  socks: "جوراب",
-  tunic: "تونیک",
-  blouse: "شومیز",
-  raincoat: "بارانی",
-  skirt: "دامن",
-  coat: "پالتو",
-  jeans: "شلوار جین",
-  suit: "کت و شلوار",
-  "baby-clothes": "لباس نوزاد",
-  "kids-shoes": "کفش بچه",
-  doll: "عروسک",
-  "kids-accessory": "اکسسوری بچه",
+  pullover: "پلیور",
+  tshirt: "تیشرت",
 };
 
 export const brandLabels: Record<string, string> = {
@@ -57,85 +41,30 @@ export const genderLabels: Record<string, string> = {
 };
 
 export const subCategoriesByCategory: Record<string, SubCategory[]> = {
-  tshirt: [
-    { id: 1, title: "آستین بلند", image: longTshirt, category: "tshirt", slug: "long-sleeve" },
-    { id: 2, title: "آستین کوتاه", image: shortTshirt, category: "tshirt", slug: "short-sleeve" },
+  accessory: [
+    { id: 1, title: "ساعت و زیورآلات", image: longTshirt, category: "accessory", slug: "watch-jewelry" },
+    { id: 2, title: "کیف و کلاه", image: shortTshirt, category: "accessory", slug: "bag-hat" },
+    { id: 3, title: "کمربند و دستکش", image: dress, category: "accessory", slug: "belt-gloves" },
   ],
-  dress: [
-    { id: 3, title: "مجلسى", image: dress, category: "dress", slug: "evening" },
-    { id: 4, title: "روزمره", image: shortTshirt, category: "dress", slug: "casual-dress" },
-  ],
-  hoodie: [
-    { id: 5, title: "کلاسیک", image: longTshirt, category: "hoodie", slug: "casual-hoodie" },
-    { id: 6, title: "ورزشی", image: shortTshirt, category: "hoodie", slug: "sport-hoodie" },
-  ],
-  shorts: [
-    { id: 7, title: "تمرینی", image: shortTshirt, category: "shorts", slug: "training-shorts" },
-    { id: 8, title: "روزمره", image: longTshirt, category: "shorts", slug: "casual-shorts" },
-  ],
-  polo: [
-    { id: 9, title: "کلاسیک", image: longTshirt, category: "polo", slug: "classic-polo" },
-    { id: 10, title: "ورزشی", image: shortTshirt, category: "polo", slug: "sport-polo" },
-  ],
-  socks: [
-    { id: 11, title: "کلاسیک", image: shortTshirt, category: "socks", slug: "socks-classic" },
-    { id: 12, title: "ورزشی", image: longTshirt, category: "socks", slug: "socks-sport" },
-  ],
-  tunic: [
-    { id: 13, title: "کلاسیک", image: shortTshirt, category: "tunic", slug: "tunic-classic" },
-    { id: 14, title: "ورزشی", image: longTshirt, category: "tunic", slug: "tunic-sport" },
-  ],
-  blouse: [
-    { id: 15, title: "کلاسیک", image: shortTshirt, category: "blouse", slug: "blouse-classic" },
-    { id: 16, title: "ورزشی", image: longTshirt, category: "blouse", slug: "blouse-sport" },
-  ],
-  raincoat: [
-    { id: 17, title: "کلاسیک", image: shortTshirt, category: "raincoat", slug: "raincoat-classic" },
-    { id: 18, title: "ورزشی", image: longTshirt, category: "raincoat", slug: "raincoat-sport" },
+  "warm-clothes": [
+    { id: 4, title: "کاپشن", image: longTshirt, category: "warm-clothes", slug: "jacket" },
+    { id: 5, title: "بارانی", image: shortTshirt, category: "warm-clothes", slug: "raincoat" },
+    { id: 6, title: "پالتو", image: dress, category: "warm-clothes", slug: "coat" },
   ],
   pants: [
-    { id: 19, title: "کلاسیک", image: shortTshirt, category: "pants", slug: "pants-classic" },
-    { id: 20, title: "ورزشی", image: longTshirt, category: "pants", slug: "pants-sport" },
+    { id: 7, title: "جین", image: longTshirt, category: "pants", slug: "jeans" },
+    { id: 8, title: "اسلش", image: shortTshirt, category: "pants", slug: "slim" },
+    { id: 9, title: "راحتی", image: dress, category: "pants", slug: "casual-pants" },
   ],
-  skirt: [
-    { id: 21, title: "کلاسیک", image: shortTshirt, category: "skirt", slug: "skirt-classic" },
-    { id: 22, title: "ورزشی", image: longTshirt, category: "skirt", slug: "skirt-sport" },
+  pullover: [
+    { id: 10, title: "یقه‌گرد", image: longTshirt, category: "pullover", slug: "crew" },
+    { id: 11, title: "یقه‌اسکی", image: shortTshirt, category: "pullover", slug: "turtleneck" },
+    { id: 12, title: "جلو دکمه‌دار", image: dress, category: "pullover", slug: "cardigan" },
   ],
-  coat: [
-    { id: 23, title: "کلاسیک", image: shortTshirt, category: "coat", slug: "coat-classic" },
-    { id: 24, title: "ورزشی", image: longTshirt, category: "coat", slug: "coat-sport" },
-  ],
-  shirt: [
-    { id: 25, title: "کلاسیک", image: shortTshirt, category: "shirt", slug: "shirt-classic" },
-    { id: 26, title: "ورزشی", image: longTshirt, category: "shirt", slug: "shirt-sport" },
-  ],
-  jeans: [
-    { id: 27, title: "کلاسیک", image: shortTshirt, category: "jeans", slug: "jeans-classic" },
-    { id: 28, title: "ورزشی", image: longTshirt, category: "jeans", slug: "jeans-sport" },
-  ],
-  suit: [
-    { id: 29, title: "کلاسیک", image: shortTshirt, category: "suit", slug: "suit-classic" },
-    { id: 30, title: "ورزشی", image: longTshirt, category: "suit", slug: "suit-sport" },
-  ],
-  shoes: [
-    { id: 31, title: "کلاسیک", image: shortTshirt, category: "shoes", slug: "shoes-classic" },
-    { id: 32, title: "ورزشی", image: longTshirt, category: "shoes", slug: "shoes-sport" },
-  ],
-  "baby-clothes": [
-    { id: 33, title: "کلاسیک", image: shortTshirt, category: "baby-clothes", slug: "baby-clothes-classic" },
-    { id: 34, title: "ورزشی", image: longTshirt, category: "baby-clothes", slug: "baby-clothes-sport" },
-  ],
-  "kids-shoes": [
-    { id: 35, title: "کلاسیک", image: shortTshirt, category: "kids-shoes", slug: "kids-shoes-classic" },
-    { id: 36, title: "ورزشی", image: longTshirt, category: "kids-shoes", slug: "kids-shoes-sport" },
-  ],
-  doll: [
-    { id: 37, title: "کلاسیک", image: shortTshirt, category: "doll", slug: "doll-classic" },
-    { id: 38, title: "ورزشی", image: longTshirt, category: "doll", slug: "doll-sport" },
-  ],
-  "kids-accessory": [
-    { id: 39, title: "کلاسیک", image: shortTshirt, category: "kids-accessory", slug: "kids-accessory-classic" },
-    { id: 40, title: "ورزشی", image: longTshirt, category: "kids-accessory", slug: "kids-accessory-sport" },
+  tshirt: [
+    { id: 13, title: "آستین کوتاه", image: shortTshirt, category: "tshirt", slug: "short-sleeve" },
+    { id: 14, title: "آستین بلند", image: longTshirt, category: "tshirt", slug: "long-sleeve" },
+    { id: 15, title: "یقه هفت", image: dress, category: "tshirt", slug: "v-neck" },
   ],
 };
 

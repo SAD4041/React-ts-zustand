@@ -38,8 +38,7 @@ const DropdownMenu = ({ item }: DropdownMenuProps) => {
     setIsOpen(false);
   };
 
-  const firstColumn = item.category.itemsList.slice(0, 6);
-  const secondColumn = item.category.itemsList.slice(6);
+  const items = item.category.itemsList;
 
   return (
     <div
@@ -99,50 +98,24 @@ const DropdownMenu = ({ item }: DropdownMenuProps) => {
               </div>
               <div className="w-px bg-border"></div>
               <div className="flex-1 min-w-0 mt-2">
-                <div className="flex gap-1">
-                  <div className="flex-1 space-y-2">
-                    {secondColumn.map((cat, idx) => (
-                      <button
-                        key={`second-${idx}`}
-                        onClick={() => {
-                          setSelectedCategory(cat.name);
-                          handleNavigate(cat.categorySlug, cat.brandSlug);
-                        }}
-                        onMouseEnter={() => setHoveredItem(cat)}
-                        onMouseLeave={() => setHoveredItem(null)}
-                        className={`block w-full text-right px-4 py-2 rounded-lg text-sm transition-colors ${selectedCategory === cat.name
-                          ? 'bg-dropdown-selected-bg text-primary border border-dropdown-selected-border'
-                          : 'text-foreground hover:bg-dropdown-hover-bg hover:border hover:border-border'
-                          }`}
-                      >
-                        {cat.name}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="w-px bg-border"></div>
-                  <div className="flex-1 min-w-0 mt-2">
-                    <div className="flex gap-1">
-                      <div className="flex-1 space-y-2">
-                        {firstColumn.map((cat, idx) => (
-                          <button
-                            key={`first-${idx}`}
-                            onClick={() => {
-                              setSelectedCategory(cat.name);
-                              handleNavigate(cat.categorySlug, cat.brandSlug);
-                            }}
-                            onMouseEnter={() => setHoveredItem(cat)}
-                            onMouseLeave={() => setHoveredItem(null)}
-                            className={`block w-full text-right px-4 py-2 rounded-lg text-sm transition-colors ${selectedCategory === cat.name
-                              ? 'bg-primary/10 text-primary font-medium border border-primary/20'
-                              : 'text-foreground hover:bg-muted hover:border hover:border-border'
-                              }`}
-                          >
-                            {cat.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                <div className="space-y-2">
+                  {items.map((cat, idx) => (
+                    <button
+                      key={`single-${idx}`}
+                      onClick={() => {
+                        setSelectedCategory(cat.name);
+                        handleNavigate(cat.categorySlug, cat.brandSlug);
+                      }}
+                      onMouseEnter={() => setHoveredItem(cat)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      className={`block w-full text-right px-4 py-2 rounded-lg text-sm transition-colors ${selectedCategory === cat.name
+                        ? 'bg-primary/10 text-primary font-medium border border-primary/20'
+                        : 'text-foreground hover:bg-muted hover:border hover:border-border'
+                        }`}
+                    >
+                      {cat.name}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>

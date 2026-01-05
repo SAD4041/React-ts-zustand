@@ -8,10 +8,17 @@ export default defineConfig({
 	plugins: [react(), tailwindcss()],
 	server: {
 		port: 3002,
+		proxy: {
+			"/api": {
+				target: "http://185.60.136.225",
+				changeOrigin: true,
+				secure: false,
+			},
+		},
 	},
 	resolve: {
 		alias: {
-			"@": path.resolve(__dirname, "./src"), // 👈 maps "@" to "src"
+			"@": path.resolve(__dirname, "./src"), // dY`^ maps "@" to "src"
 		},
 	},
 });

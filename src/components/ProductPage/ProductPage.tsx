@@ -1,6 +1,7 @@
 // src/pages/ProductPage.tsx
 
 import React, { useState, useEffect } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { StarIcon, HeartIcon, ChevronLeftIcon, ChevronRightIcon, ShoppingCartIcon, CheckIcon, RepeatIcon, ShieldIcon, MessageSquareIcon, ThumbsUpIcon, ThumbsDownIcon } from 'lucide-react';
+import NavigationBar from '@/components/ProductListing/productListingComponents/NavigationBar';
 
 // Mock Data
 const mockProduct = {
@@ -742,8 +744,30 @@ const ClockIcon: React.FC<{ className?: string }> = ({ className }) => (
 
 // Main Product Page Component
 const ProductPage: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const [searchParams] = useSearchParams();
+    const category = searchParams.get("category");
+    const brand = searchParams.get("brand");
+    const subCategory = searchParams.get("subcategory");
+    const modelStyle = searchParams.get("modelStyle");
+    const gender = searchParams.get("gender");
+    const searchQuery = searchParams.get("q");
+    const productName = mockProduct.name;
+
+    // TODO: replace mockProduct with real fetch using `id`
     return (
         <div className="container mx-auto px-4 py-8">
+            <div className="-mx-4 mb-4">
+                <NavigationBar
+                    category={category}
+                    subCategory={subCategory}
+                    brand={brand}
+                    modelStyle={modelStyle}
+                    gender={gender}
+                    searchQuery={searchQuery}
+                    productName={productName}
+                />
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
                     <ProductDetails product={mockProduct} />

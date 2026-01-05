@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import type { SubCategoryProps } from '@/types/productListingTypes';
+import { categoryLabels } from '@/data/productListingData';
 
 const SubCategoryCard: React.FC<SubCategoryProps> = ({ category }) => {
+  const categoryTitle = categoryLabels[category.category] || category.category;
+
   return (
     <Link
-      to={`/product-list?category=${encodeURIComponent(category.category)}&subcategory=${encodeURIComponent(category.slug)}`}
+      to={`/product-list?q=${encodeURIComponent(categoryTitle)}`}
       className="shrink-0 w-80 cursor-pointer group sm:w-52 md:w-48 lg:w-44 xl:w-40"
     >
       <div className="relative overflow-hidden rounded-lg shadow-sm border border-border">

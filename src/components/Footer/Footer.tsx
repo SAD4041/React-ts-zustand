@@ -28,13 +28,13 @@ const Footer = () => {
             <h3 className="text-xl font-semibold mb-3 mt-2">خرید از باک گالری</h3>
             <ul className="space-y-2 text-lg mt-2">
               <li className="cursor-pointer hover:font-semibold">
-                <Link to="/product-list?gender=female" className="block">زنانه</Link>
+                <Link to="/product-list?q=زنانه" className="block">زنانه</Link>
               </li>
               <li className="cursor-pointer hover:font-semibold">
-                <Link to="/product-list?gender=male" className="block">مردانه</Link>
+                <Link to="/product-list?q=مردانه" className="block">مردانه</Link>
               </li>
               <li className="cursor-pointer hover:font-semibold">
-                <Link to="/product-list?gender=kids" className="block">بچگانه</Link>
+                <Link to="/product-list?q=بچگانه" className="block">بچگانه</Link>
               </li>
             </ul>
           </div>

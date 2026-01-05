@@ -13,9 +13,10 @@ import {
   subCategoryLabels,
   modelStyleLabels,
   genderLabels,
+  currentCategory,
 } from "@/data/productListingData";
-import { getMockProducts } from "@/data/productList.mock";
 import { X } from "lucide-react";
+import NavigationBar from "./productListingComponents/NavigationBar";
 import {
   Dialog,
   DialogContent,
@@ -25,6 +26,7 @@ import {
 import { sorts } from "@/data/productListingData";
 import sortIcon from "@/assets/Group 63.png";
 import filterIcon from "@/assets/Group 64.png";
+import { getData } from "@/services/services";
 
 const ProductListing: React.FC<ProductListingProps> = ({
   category: categoryProp = null,
@@ -61,14 +63,70 @@ const ProductListing: React.FC<ProductListingProps> = ({
   const productsPerGroup = 20;
   const pagesPerGroup = 10;
 
+  const resolveEndPoint = () => {
+    if (searchQuery) return `/api/product/SE/${encodeURIComponent(searchQuery)}`;
+    if (normalizedModelStyle) return `/api/product/CM/${encodeURIComponent(normalizedModelStyle)}`;
+    if (normalizedBrand) return `/api/product/BR/${encodeURIComponent(normalizedBrand)}`;
+    const chosenCategory = normalizedCategory || currentCategory;
+    return `/api/product/CA/${encodeURIComponent(chosenCategory)}`;
+  };
+
+  const adaptProductFromApi = (apiProduct: any): Product => {
+    const price = Number(apiProduct?.price ?? 0);
+    const discount = 0; // فعلاً محصول تخفیف‌دار نداریم
+    const hasDiscount = false;
+    const discountedPrice = price;
+
+    const colorsRaw = apiProduct?.color ?? [];
+    const sizesRaw = apiProduct?.size ?? [];
+    const categoryModel = apiProduct?.category_model ?? "";
+
+    return {
+      id: apiProduct?.id ?? apiProduct?._id ?? "",
+      name: apiProduct?.name ?? "",
+      model: apiProduct?.brand ?? "",
+      brandSlug: (apiProduct?.brand || "").toLowerCase(),
+      category: apiProduct?.category ?? "",
+      subCategory: categoryModel || "",
+      modelStyle: categoryModel || "",
+      gender: apiProduct?.gender ?? "",
+      image: apiProduct?.image ?? "",
+      price,
+      discount,
+      hasDiscount,
+      discountedPrice,
+      rating: Number(apiProduct?.rating ?? 0),
+      ratingCount: Number(apiProduct?.rating_count ?? 0),
+      stock: Number(apiProduct?.inventory_count ?? 0),
+      sales: Number(apiProduct?.sales ?? 0),
+      colors: Array.isArray(colorsRaw)
+        ? colorsRaw.map((c: any) =>
+          typeof c === "string" ? { hex: c, label: c } : c
+        )
+        : [],
+      sizes: Array.isArray(sizesRaw)
+        ? sizesRaw.map((s: any) =>
+          typeof s === "string" ? { label: s } : s
+        )
+        : [],
+    };
+  };
+
   useEffect(() => {
     const loadProducts = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const data = getMockProducts();
-        setProducts(data);
+        const endPoint = resolveEndPoint();
+        const apiResponse = await getData({ endPoint, skipAuth: true });
+        const apiProducts: any[] = Array.isArray(apiResponse)
+          ? apiResponse
+          : Array.isArray(apiResponse?.data)
+            ? apiResponse.data
+            : [];
+        const adapted = apiProducts.map(adaptProductFromApi);
+        setProducts(adapted);
       } catch (err) {
         setError("خطا در دریافت محصولات");
         setProducts([]);
@@ -78,7 +136,7 @@ const ProductListing: React.FC<ProductListingProps> = ({
     };
 
     loadProducts();
-  }, []);
+  }, [normalizedBrand, normalizedCategory, normalizedModelStyle, searchQuery]);
 
   useEffect(() => {
     setSelectedBrands(normalizedBrand ? [normalizedBrand] : []);
@@ -260,6 +318,17 @@ const ProductListing: React.FC<ProductListingProps> = ({
 
   return (
     <div dir="rtl" className="container mx-auto px-4 py-6 font-vazir">
+      <div className="-mx-4">
+        <NavigationBar
+          category={normalizedCategory}
+          subCategory={normalizedSubCategory}
+          brand={normalizedBrand}
+          modelStyle={normalizedModelStyle}
+          gender={normalizedGender}
+          searchQuery={searchQuery}
+        />
+      </div>
+
       <SubCategorySlider category={normalizedCategory} />
 
       <hr className="my-6 border-border" />
