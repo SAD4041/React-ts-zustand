@@ -7,18 +7,18 @@ export const getOrderStatusVariant = (
 ): VariantProps<typeof badgeVariants>["variant"] => {
   const normalized = status?.trim().toLowerCase();
 
-  switch (normalized) {
-    case "processing":
-    case "در حال پردازش":
-      return "secondary";
-    case "delivered":
-    case "تحویل شده":
-      return "default";
-    case "cancelled":
-    case "لغو شده":
-      return "destructive";
-    default:
-      // keep badge colored so text (white) stays visible
-      return "secondary";
+  if (!normalized) return "secondary";
+  if (normalized.includes("لغو") || normalized.includes("cancel")) return "destructive";
+  if (normalized.includes("تکمیل") || normalized.includes("deliver")) return "default";
+  if (
+    normalized.includes("در حال پردازش") ||
+    normalized.includes("در حال ارسال") ||
+    normalized.includes("processing") ||
+    normalized.includes("ship") ||
+    normalized.includes("ارسال") ||
+    normalized.includes("پردازش")
+  ) {
+    return "secondary";
   }
+  return "secondary";
 };

@@ -1,5 +1,7 @@
 import { X } from 'lucide-react';
 import { ImageWithFallback } from "@/components/ui/ImageWithFallback.tsx";
+import { formatPersianDate } from "@/utils/formatPersianDate";
+import { formatPrice } from "@/utils/toLocalPrice";
 // 🌟 ایمپورت کردن Typeهای مرکزی
 import type { OrderDetailsType } from "@/types/orderTypes"; 
 // import type { OrderItem } from "@/types/orderTypes"; 
