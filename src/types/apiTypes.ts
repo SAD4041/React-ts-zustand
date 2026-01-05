@@ -7,6 +7,7 @@ export interface BaseParams {
 // ---- GET ----
 export interface GetParams extends BaseParams {
   params?: Record<string, any>;
+  data?: any;
 }
 
 // ---- POST ----

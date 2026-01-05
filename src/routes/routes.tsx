@@ -121,15 +121,15 @@ export const router = createBrowserRouter([
             {
                 path: "/dash/brand/product-management",
                 element: (
-                    <ProtectedRoute allowedRoles={['brand']}>
+                    // <ProtectedRoute allowedRoles={['brand']}>
                         <ProductManagementPage />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
                 path: "/dash/brand/order-management",
                 element: (
-                    <ProtectedRoute allowedRoles={['user']}>
+                    <ProtectedRoute allowedRoles={['brand']}>
                         <OrderManagementPage />
                     </ProtectedRoute>
                 ),
@@ -137,7 +137,7 @@ export const router = createBrowserRouter([
             {
                 path: "/dash/brand/settings",
                 element: (
-                    <ProtectedRoute>
+                    <ProtectedRoute allowedRoles={['brand']}>
                         <SettingsPage />
                     </ProtectedRoute>
                 ),
@@ -145,9 +145,9 @@ export const router = createBrowserRouter([
             {
                 path: "/dash/brand/profile-edit",
                 element: (
-                    <ProtectedRoute allowedRoles={['brand']}>
+                    // <ProtectedRoute allowedRoles={['brand']}>
                         <BrandProfileEditPage />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {

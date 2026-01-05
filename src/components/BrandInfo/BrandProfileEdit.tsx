@@ -1,5 +1,5 @@
 import { useFormik, FormikProvider } from "formik";
-import { uploadProfileImage, uploadBannerImage } from "@/services/brandUpload.mock";
+import { uploadProfileImage, uploadBannerImage } from "@/services/brandUpload";
 import type { BrandFormValues, BrandProfileEditProps } from "@/types/brandProfileTypes";
 import { ValidationSchema } from "@/schemas/brandValidationSchema";
 import { Input } from "@/components/ui/input";
@@ -19,8 +19,12 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
     initialValues: brandData,
     enableReinitialize: true,
     validationSchema: ValidationSchema,
-    onSubmit: (values) => {
-      onSave(values);
+    onSubmit: async (values) => {
+      const shouldSave = window.confirm("Save changes to your brand profile?");
+      if (!shouldSave) {
+        return;
+      }
+      await onSave(values);
     },
   });
 
@@ -38,8 +42,11 @@ const BrandProfileEdit = ({ brandData, onSave }: BrandProfileEditProps) => {
           ? await uploadProfileImage(file)
           : await uploadBannerImage(file);
 
+      const response = res?.data ?? res;
       const nextUrl =
-        type === "logo" ? res.logo ?? res.url : res.baner ?? res.banner ?? res.url;
+        type === "logo"
+          ? response?.logo ?? response?.url
+          : response?.baner ?? response?.banner ?? response?.url;
       const resolvedUrl = resolveImageUrl(nextUrl);
 
       if (resolvedUrl) {

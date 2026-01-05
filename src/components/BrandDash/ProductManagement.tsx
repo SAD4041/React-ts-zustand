@@ -57,8 +57,9 @@ export function ProductManagement() {
     name: "",
     brand: "",
     category: "",
-    color: "",
-    sex: "",
+    color: [],
+    size: "",
+    gender: "",
     model: "",
     sku: "",
     price: 0,
@@ -78,6 +79,15 @@ export function ProductManagement() {
       reader.onerror = () => reject(reader.error);
       reader.readAsDataURL(file);
     });
+
+  const toListInputValue = (items?: string[]) =>
+    items && items.length ? items.join(", ") : "";
+
+  const parseListInputValue = (value: string) =>
+    value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
 
   const appendImages = async (
     files: FileList | null,
@@ -168,8 +178,9 @@ export function ProductManagement() {
     name: product.name ?? "",
     brand: product.brand ?? "",
     category: normalizeCategoryValue(product.category ?? ""),
-    color: product.color ?? "",
-    sex: product.sex ?? "",
+    color: product.color ?? [],
+    size: product.size ?? "",
+    gender: product.gender ?? "",
     model: product.model ?? "",
     sku: product.sku ?? "",
     price: product.price ?? 0,
@@ -194,7 +205,8 @@ export function ProductManagement() {
           categoryLabels[product.category],
           product.sku,
           product.brand,
-          product.color,
+          product.color?.join(", "),
+          product.size,
           product.price,
           product.stock,
         ];
@@ -255,7 +267,7 @@ export function ProductManagement() {
                   setIsDialogOpen(false);
                 }}
               >
-                {({ setFieldValue, values }) => (
+                {({ setFieldValue, values, handleBlur }) => (
                   <Form id="create-product-form">
                     <Tabs defaultValue="details" className="w-full" dir="rtl">
                       <TabsList className="grid w-full grid-cols-3">
@@ -269,7 +281,19 @@ export function ProductManagement() {
                           <Input name="brand" label="برند" placeholder="نام برند را وارد کنید" />
                         </div>
                         <div className="space-y-2">
-                          <Input name="color" label="رنگ‌ها" placeholder="لیست رنگ‌ها را وارد کنید" />
+                          <Input
+                            name="color"
+                            label="رنگ‌ها"
+                            placeholder="لیست رنگ‌ها را وارد کنید"
+                            value={toListInputValue(values.color)}
+                            onChange={(event) =>
+                              setFieldValue("color", parseListInputValue(event.target.value))
+                            }
+                            onBlur={handleBlur}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Input name="size" label="سایز ها" placeholder="S, M, L" />
                         </div>
                         <div className="space-y-2">
                           <Input name="name" label="نام محصول" placeholder="نام محصول را وارد کنید" forceRTL />
@@ -294,7 +318,7 @@ export function ProductManagement() {
                           <Label>جنسیت</Label>
                           <Field
                             as="select"
-                            name="sex"
+                            name="gender"
                             dir="rtl"
                             className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
                           >
@@ -342,13 +366,15 @@ export function ProductManagement() {
                             accept="image/*"
                             multiple
                             className="hidden"
-                            onChange={async (event) => {
-                              await appendImages(
-                                event.currentTarget.files,
-                                setFieldValue,
-                                values
+                            onChange={(event) => {
+                              const input = event.currentTarget;
+                              const files = input.files;
+                              if (!files || files.length === 0) return;
+                              void appendImages(files, setFieldValue, values).finally(
+                                () => {
+                                  input.value = "";
+                                }
                               );
-                              event.currentTarget.value = "";
                             }}
                           />
                           <p className="text-muted-foreground mb-4">
@@ -477,7 +503,7 @@ export function ProductManagement() {
                   setEditingProduct(null);
                 }}
               >
-                {({ setFieldValue, values }) => (
+                {({ setFieldValue, values, handleBlur }) => (
                   <Form id="edit-product-form">
                     <Tabs defaultValue="details" className="w-full" dir="rtl">
                       <TabsList className="grid w-full grid-cols-3">
@@ -499,7 +525,19 @@ export function ProductManagement() {
                               <Input name="brand" label="برند" placeholder="نام برند را وارد کنید" />
                             </div>
                             <div className="space-y-2">
-                              <Input name="color" label="Color" placeholder="رنگ‌ها را وارد کنید" />
+                              <Input
+                                name="color"
+                                label="Color"
+                                placeholder="رنگ‌ها را وارد کنید"
+                                value={toListInputValue(values.color)}
+                                onChange={(event) =>
+                                  setFieldValue("color", parseListInputValue(event.target.value))
+                                }
+                                onBlur={handleBlur}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Input name="size" label="سایز ها" placeholder="S, M, L" />
                             </div>
                             <div className="space-y-2">
                               <Label>دسته‌بندی</Label>
@@ -522,7 +560,7 @@ export function ProductManagement() {
                                 <Label>جنسیت</Label>
                                 <Field
                                     as="select"
-                                    name="sex"
+                                    name="gender"
                                     dir="rtl"
                                     className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
                                 >
@@ -590,13 +628,15 @@ export function ProductManagement() {
                             accept="image/*"
                             multiple
                             className="hidden"
-                            onChange={async (event) => {
-                              await appendImages(
-                                event.currentTarget.files,
-                                setFieldValue,
-                                values
+                            onChange={(event) => {
+                              const input = event.currentTarget;
+                              const files = input.files;
+                              if (!files || files.length === 0) return;
+                              void appendImages(files, setFieldValue, values).finally(
+                                () => {
+                                  input.value = "";
+                                }
                               );
-                              event.currentTarget.value = "";
                             }}
                           />
                           <p className="text-muted-foreground mb-4">تصاویر محصول را بکشید و رها کنید</p>
