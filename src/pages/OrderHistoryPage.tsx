@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 // import { getOrderHistory } from "@/services/orderService";
 
 // ✅ فقط این را ایمپورت کن (Switcher خودش انتخاب می‌کند Mock یا API)
-import { getOrderHistory } from "@/services/orderService.api.mock";
+import { getOrderHistory } from "@/services/orderService.api";
 
 import { OrderHistory } from "@/components/OrderHistory/OrderHistory";
 import { Spinner } from "@/components/ui/Spinner.tsx";
