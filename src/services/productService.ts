@@ -17,7 +17,7 @@ const normalizeListArray = (value: unknown) => {
   }
   if (typeof value === "string") {
     return value
-      .split(",")
+      .split("،")
       .map((item) => item.trim())
       .filter(Boolean);
   }
@@ -26,7 +26,32 @@ const normalizeListArray = (value: unknown) => {
   return normalized ? [normalized] : [];
 };
 
+const normalizeStatus = (value: unknown): "active" | "inactive" => {
+  if (value === undefined || value === null) return "active";
+  if (value === false || value === 0) return "inactive";
+  if (value === true || value === 1) return "active";
+  const normalized = String(value).trim().toLowerCase();
+  if (
+    normalized === "غیرفعال" ||
+    normalized === "0"
+  ) {
+    return "inactive";
+  }
+  if (
+    normalized === "فعال" ||
+    normalized === "1"
+  ) {
+    return "active";
+  }
+  return "active";
+};
+
 const normalizeProduct = (product: any): Product => {
+  const rawStatus =
+    product?.status ??
+    product?.is_active ??
+    product?.isActive ??
+    product?.active;
   const imageSource =
     product?.images ??
     product?.picture ??
@@ -58,7 +83,7 @@ const normalizeProduct = (product: any): Product => {
     sku: product?.product_serial ?? product?.sku ?? "",
     stock: Number.isNaN(stock) ? 0 : stock,
     price: Number.isNaN(price) ? 0 : price,
-    status: product?.status === "inactive" ? "inactive" : "active",
+    status: normalizeStatus(rawStatus),
     description: product?.description ?? "",
     brand: product?.brand ?? "",
     color: color.length ? color : undefined,
@@ -180,6 +205,21 @@ const appendFormValue = (
   formData.append(key, String(value));
 };
 
+const appendStatusFields = (
+  formData: FormData,
+  status: UpdateProductPayload["status"]
+) => {
+  if (status === undefined) return;
+
+  // FIX: Map internal English status to the Persian string expected by the backend
+  const backendStatus = status === "active" ? "فعال" : "غیرفعال";
+
+  appendFormValue(formData, "status", backendStatus);
+  
+  // Keep is_active just in case the backend uses it as a fallback
+  appendFormValue(formData, "is_active", status === "active" ? 1 : 0);
+};
+
 const normalizeListInput = (value: unknown) => {
   if (Array.isArray(value)) {
     return value
@@ -188,7 +228,7 @@ const normalizeListInput = (value: unknown) => {
   }
   if (typeof value === "string") {
     return value
-      .split(",")
+      .split("،")
       .map((item) => item.trim())
       .filter(Boolean);
   }
@@ -235,6 +275,7 @@ const buildProductFormData = (
     payload.gender ?? (payload as { sex?: string }).sex
   );
   appendFormValue(formData, "inventory_count", payload.stock);
+  appendStatusFields(formData, payload.status);
   appendImageFiles(formData, payload.imageFiles);
 
   return formData;

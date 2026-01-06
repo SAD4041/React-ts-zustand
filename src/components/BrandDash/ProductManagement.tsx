@@ -15,7 +15,7 @@ import type {
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { Input } from "../ui/input"; 
+import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../Custom/CustomTextArea";
 import {
@@ -68,7 +68,7 @@ export function ProductManagement() {
     images: [],
     imageFiles: [],
     imageFilePreviews: [],
-    status: "active", // Default status for new products
+    status: "active",
   };
 
   const readFileAsDataUrl = (file: File) =>
@@ -104,8 +104,14 @@ export function ProductManagement() {
     const valid = uploaded.filter((item) => item.preview);
     if (valid.length === 0) return;
 
-    const nextImages = [...(values.images ?? []), ...valid.map((item) => item.preview)];
-    const nextFiles = [...(values.imageFiles ?? []), ...valid.map((item) => item.file)];
+    const nextImages = [
+      ...(values.images ?? []),
+      ...valid.map((item) => item.preview),
+    ];
+    const nextFiles = [
+      ...(values.imageFiles ?? []),
+      ...valid.map((item) => item.file),
+    ];
     const nextFilePreviews = [
       ...(values.imageFilePreviews ?? []),
       ...valid.map((item) => item.preview),
@@ -131,7 +137,9 @@ export function ProductManagement() {
     const fileIndex = filePreviews.indexOf(removedPreview);
     if (fileIndex === -1) return;
 
-    const nextFiles = (values.imageFiles ?? []).filter((_, i) => i !== fileIndex);
+    const nextFiles = (values.imageFiles ?? []).filter(
+      (_, i) => i !== fileIndex
+    );
     const nextFilePreviews = filePreviews.filter((_, i) => i !== fileIndex);
     setFieldValue("imageFiles", nextFiles);
     setFieldValue("imageFilePreviews", nextFilePreviews);
@@ -173,7 +181,6 @@ export function ProductManagement() {
     return match ? match[0] : category;
   };
 
-  // ✅ UPDATED: Now includes status
   const getEditInitialValues = (product: Product): CreateProductPayload => ({
     name: product.name ?? "",
     brand: product.brand ?? "",
@@ -189,7 +196,7 @@ export function ProductManagement() {
     images: product.images ?? [],
     imageFiles: [],
     imageFilePreviews: [],
-    status: product.status ?? "active", 
+    status: product.status ?? "active",
   });
 
   useEffect(() => {
@@ -211,11 +218,13 @@ export function ProductManagement() {
           product.stock,
         ];
         return fields.some((field) =>
-          String(field ?? "").toLowerCase().includes(normalizedSearch)
+          String(field ?? "")
+            .toLowerCase()
+            .includes(normalizedSearch)
         );
       })
     : products;
-    
+
   const categoryOptions = Object.entries(categoryLabels);
   const getCategoryLabel = (category: string) =>
     categoryLabels[category] ?? category;
@@ -223,7 +232,6 @@ export function ProductManagement() {
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-6 sm:px-6 py-8 lg:px-8 py-10">
       <div className="space-y-6">
-        
         {/* Header Section */}
         <div className="mb-4 flex items-center gap-3" dir="rtl">
           <img
@@ -241,7 +249,6 @@ export function ProductManagement() {
 
         {/* Action Bar: Add Product & Search */}
         <div className="flex flex-col mb-4 items-end justify-between">
-          
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button className="bg-primary hover:bg-primary/90 text-white">
@@ -265,6 +272,7 @@ export function ProductManagement() {
                   setProducts((prev) => [res.product, ...prev]);
                   resetForm();
                   setIsDialogOpen(false);
+                  window.location.reload();
                 }}
               >
                 {({ setFieldValue, values, handleBlur }) => (
@@ -276,82 +284,141 @@ export function ProductManagement() {
                         <TabsTrigger value="inventory">موجودی</TabsTrigger>
                       </TabsList>
 
-                      <TabsContent value="details" className="space-y-4 mt-4" dir="rtl">
-                        <div className="space-y-2">
-                          <Input name="brand" label="برند" placeholder="نام برند را وارد کنید" />
-                        </div>
-                        <div className="space-y-2">
-                          <Input
-                            name="color"
-                            label="رنگ‌ها"
-                            placeholder="لیست رنگ‌ها را وارد کنید"
-                            value={toListInputValue(values.color)}
-                            onChange={(event) =>
-                              setFieldValue("color", parseListInputValue(event.target.value))
-                            }
-                            onBlur={handleBlur}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Input name="size" label="سایز ها" placeholder="S, M, L" />
-                        </div>
-                        <div className="space-y-2">
-                          <Input name="name" label="نام محصول" placeholder="نام محصول را وارد کنید" forceRTL />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>دسته‌بندی</Label>
-                          <Field
-                            as="select"
-                            name="category"
-                            dir="rtl"
-                            className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
-                          >
-                            <option value="" disabled>دسته‌بندی</option>
-                            {categoryOptions.map(([value, label]) => (
-                              <option key={value} value={value}>
-                                {label}
-                              </option>
-                            ))}
-                          </Field>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>جنسیت</Label>
-                          <Field
-                            as="select"
-                            name="gender"
-                            dir="rtl"
-                            className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
-                          >
-                            <option value="" disabled>جنسیت را انتخاب کنید</option>
-                            <option value="male">مردانه</option>
-                            <option value="female">زنانه</option>
-                            <option value="unisex">یونیسکس</option>
-                          </Field>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>استایل</Label>
-                          <Field
-                            as="select"
-                            name="model"
-                            dir="rtl"
-                            className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
-                          >
-                            <option value="" disabled>استایل را انتخاب کنید</option>
-                            <option value="casual">کژوال</option>
-                            <option value="formal">رسمی</option>
-                            <option value="classic">کلاسیک</option>
-                            <option value="street">استریت</option>
-                          </Field>
-                        </div>
-                        <div className="space-y-2">
-                          <Input name="sku" label="کد محصول (SKU)" placeholder="مثال: WD-001" forceRTL />
-                        </div>
-                        <div className="space-y-2">
-                          <Input name="price" label="قیمت (تومان)" type="text" onlyNumbers />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>توضیحات</Label>
-                          <Textarea name="description" placeholder="توضیحات محصول..." />
+                      <TabsContent value="details" className="mt-4" dir="rtl">
+                        <div className="space-y-4">
+                          {/* Name - Full width */}
+                          <div className="space-y-2">
+                            <Input
+                              name="name"
+                              label="نام محصول"
+                              placeholder="نام محصول را وارد کنید"
+                              forceRTL
+                            />
+                          </div>
+
+                          {/* Responsive Grid for other fields */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Input
+                                name="brand"
+                                label="برند"
+                                placeholder="برند را وارد کنید"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Input
+                                name="color"
+                                label="رنگ‌ها"
+                                value={toListInputValue(values.color)}
+                                onChange={(event) =>
+                                  setFieldValue(
+                                    "color",
+                                    parseListInputValue(event.target.value)
+                                  )
+                                }
+                                onBlur={handleBlur}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Input
+                                name="size"
+                                label="سایز ها"
+                                placeholder="S, M, L"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label>دسته‌بندی</Label>
+                              <Field
+                                as="select"
+                                name="category"
+                                dir="rtl"
+                                className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
+                              >
+                                <option value="" disabled>
+                                  دسته‌بندی
+                                </option>
+                                {categoryOptions.map(([value, label]) => (
+                                  <option key={value} value={value}>
+                                    {label}
+                                  </option>
+                                ))}
+                              </Field>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label>جنسیت</Label>
+                              <Field
+                                as="select"
+                                name="gender"
+                                dir="rtl"
+                                className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
+                              >
+                                <option value="" disabled>
+                                  جنسیت را انتخاب کنید
+                                </option>
+                                <option value="male">مردانه</option>
+                                <option value="female">زنانه</option>
+                                <option value="unisex">یونیسکس</option>
+                              </Field>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label>استایل</Label>
+                              <Field
+                                as="select"
+                                name="model"
+                                dir="rtl"
+                                className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
+                              >
+                                <option value="" disabled>
+                                  استایل را انتخاب کنید
+                                </option>
+                                <option value="casual">کژوال</option>
+                                <option value="formal">رسمی</option>
+                                <option value="classic">کلاسیک</option>
+                                <option value="street">استریت</option>
+                              </Field>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label>وضعیت</Label>
+                              <Field
+                                as="select"
+                                name="status"
+                                dir="rtl"
+                                className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
+                              >
+                                <option value="active">فعال</option>
+                                <option value="inactive">غیرفعال</option>
+                              </Field>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Input
+                                name="sku"
+                                label="کد محصول (SKU)"
+                                placeholder="مثال: WD-001"
+                                forceRTL
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Input
+                                name="price"
+                                label="قیمت (تومان)"
+                                type="text"
+                                onlyNumbers
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label>توضیحات</Label>
+                            <Textarea
+                              name="description"
+                              placeholder="توضیحات محصول..."
+                            />
+                          </div>
                         </div>
                       </TabsContent>
 
@@ -370,22 +437,24 @@ export function ProductManagement() {
                               const input = event.currentTarget;
                               const files = input.files;
                               if (!files || files.length === 0) return;
-                              void appendImages(files, setFieldValue, values).finally(
-                                () => {
-                                  input.value = "";
-                                }
-                              );
+                              void appendImages(
+                                files,
+                                setFieldValue,
+                                values
+                              ).finally(() => {
+                                input.value = "";
+                              });
                             }}
                           />
                           <p className="text-muted-foreground mb-4">
                             تصاویر محصول را بکشید و رها کنید
                           </p>
-                          <Button 
-                            type="button" 
-                            variant="outline" 
+                          <Button
+                            type="button"
+                            variant="outline"
                             onClick={(e) => {
-                                e.stopPropagation();
-                                addImageInputRef.current?.click();
+                              e.stopPropagation();
+                              addImageInputRef.current?.click();
                             }}
                           >
                             انتخاب فایل
@@ -395,8 +464,15 @@ export function ProductManagement() {
                         {values.images.length > 0 && (
                           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                             {values.images.map((image, index) => (
-                              <div key={`${image}-${index}`} className="relative overflow-hidden rounded-lg border border-border">
-                                <img src={image} alt={`upload-${index}`} className="h-28 w-full object-cover" />
+                              <div
+                                key={`${image}-${index}`}
+                                className="relative overflow-hidden rounded-lg border border-border"
+                              >
+                                <img
+                                  src={image}
+                                  alt={`upload-${index}`}
+                                  className="h-28 w-full object-cover"
+                                />
                                 <button
                                   type="button"
                                   className="absolute right-2 top-2 rounded-full bg-black/70 px-2 py-1 text-xs text-white"
@@ -413,21 +489,37 @@ export function ProductManagement() {
                         )}
                       </TabsContent>
 
-                      <TabsContent value="inventory" className="space-y-4 mt-4" dir="rtl">
+                      <TabsContent
+                        value="inventory"
+                        className="space-y-4 mt-4"
+                        dir="rtl"
+                      >
                         <div className="space-y-2">
-                          <Input name="stock" label="تعداد موجودی" type="number" placeholder="۰" />
+                          <Input
+                            name="stock"
+                            label="تعداد موجودی"
+                            type="text"
+                            onlyNumbers
+                          />
                         </div>
                       </TabsContent>
-                    </Tabs>
 
-                    <div className="flex justify-end gap-2 mt-6">
-                      <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                        انصراف
-                      </Button>
-                      <Button type="submit" className="bg-primary hover:bg-primary/90">
-                        ذخیره محصول
-                      </Button>
-                    </div>
+                      <div className="flex justify-end gap-2 mt-6">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setIsDialogOpen(false)}
+                        >
+                          انصراف
+                        </Button>
+                        <Button
+                          type="submit"
+                          className="bg-primary hover:bg-primary/90"
+                        >
+                          ذخیره محصول
+                        </Button>
+                      </div>
+                    </Tabs>
                   </Form>
                 )}
               </Formik>
@@ -491,7 +583,9 @@ export function ProductManagement() {
             <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>ویرایش محصول</DialogTitle>
-                <DialogDescription>اطلاعات محصول را ویرایش کنید</DialogDescription>
+                <DialogDescription>
+                  اطلاعات محصول را ویرایش کنید
+                </DialogDescription>
               </DialogHeader>
 
               <Formik
@@ -499,6 +593,7 @@ export function ProductManagement() {
                 initialValues={getEditInitialValues(editingProduct)}
                 onSubmit={async (values) => {
                   await handleUpdateProduct(editingProduct.id, values);
+                  await fetchProducts();
                   setIsEditOpen(false);
                   setEditingProduct(null);
                 }}
@@ -516,28 +611,43 @@ export function ProductManagement() {
                         <div className="space-y-4">
                           {/* Name - Full width */}
                           <div className="space-y-2">
-                            <Input name="name" label="نام محصول" placeholder="نام محصول را وارد کنید" forceRTL />
+                            <Input
+                              name="name"
+                              label="نام محصول"
+                              placeholder="نام محصول را وارد کنید"
+                              forceRTL
+                            />
                           </div>
 
                           {/* Responsive Grid for other fields */}
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                              <Input name="brand" label="برند" placeholder="نام برند را وارد کنید" />
+                              <Input
+                                name="brand"
+                                label="برند"
+                                placeholder="برند را وارد کنید"
+                              />
                             </div>
                             <div className="space-y-2">
                               <Input
                                 name="color"
-                                label="Color"
-                                placeholder="رنگ‌ها را وارد کنید"
+                                label="رنگ‌ها"
                                 value={toListInputValue(values.color)}
                                 onChange={(event) =>
-                                  setFieldValue("color", parseListInputValue(event.target.value))
+                                  setFieldValue(
+                                    "color",
+                                    parseListInputValue(event.target.value)
+                                  )
                                 }
                                 onBlur={handleBlur}
                               />
                             </div>
                             <div className="space-y-2">
-                              <Input name="size" label="سایز ها" placeholder="S, M, L" />
+                              <Input
+                                name="size"
+                                label="سایز ها"
+                                placeholder="S, M, L"
+                              />
                             </div>
                             <div className="space-y-2">
                               <Label>دسته‌بندی</Label>
@@ -547,7 +657,9 @@ export function ProductManagement() {
                                 dir="rtl"
                                 className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
                               >
-                                <option value="" disabled>دسته‌بندی</option>
+                                <option value="" disabled>
+                                  دسته‌بندی
+                                </option>
                                 {categoryOptions.map(([value, label]) => (
                                   <option key={value} value={value}>
                                     {label}
@@ -557,62 +669,78 @@ export function ProductManagement() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label>جنسیت</Label>
-                                <Field
-                                    as="select"
-                                    name="gender"
-                                    dir="rtl"
-                                    className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
-                                >
-                                    <option value="" disabled>جنسیت را انتخاب کنید</option>
-                                    <option value="male">مردانه</option>
-                                    <option value="female">زنانه</option>
-                                    <option value="unisex">یونیسکس</option>
-                                </Field>
+                              <Label>جنسیت</Label>
+                              <Field
+                                as="select"
+                                name="gender"
+                                dir="rtl"
+                                className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
+                              >
+                                <option value="" disabled>
+                                  جنسیت را انتخاب کنید
+                                </option>
+                                <option value="male">مردانه</option>
+                                <option value="female">زنانه</option>
+                                <option value="unisex">یونیسکس</option>
+                              </Field>
                             </div>
 
                             <div className="space-y-2">
-                                <Label>استایل</Label>
-                                <Field
-                                    as="select"
-                                    name="model"
-                                    dir="rtl"
-                                    className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
-                                >
-                                    <option value="" disabled>استایل را انتخاب کنید</option>
-                                    <option value="casual">کژوال</option>
-                                    <option value="formal">رسمی</option>
-                                    <option value="classic">کلاسیک</option>
-                                    <option value="street">استریت</option>
-                                </Field>
-                            </div>
-
-                            {/* ✅ NEW: Status Field (Responsive) */}
-                            <div className="space-y-2">
-                                <Label>وضعیت</Label>
-                                <Field
-                                    as="select"
-                                    name="status"
-                                    dir="rtl"
-                                    className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
-                                >
-                                    <option value="active">فعال</option>
-                                    <option value="inactive">غیرفعال</option>
-                                </Field>
+                              <Label>استایل</Label>
+                              <Field
+                                as="select"
+                                name="model"
+                                dir="rtl"
+                                className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
+                              >
+                                <option value="" disabled>
+                                  استایل را انتخاب کنید
+                                </option>
+                                <option value="casual">کژوال</option>
+                                <option value="formal">رسمی</option>
+                                <option value="classic">کلاسیک</option>
+                                <option value="street">استریت</option>
+                              </Field>
                             </div>
 
                             <div className="space-y-2">
-                              <Input name="sku" label="کد محصول (SKU)" placeholder="مثال: WD-001" forceRTL />
+                              <Label>وضعیت</Label>
+                              <Field
+                                as="select"
+                                name="status"
+                                dir="rtl"
+                                className="w-full px-4 py-2 rounded-md border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-primary transition text-right"
+                              >
+                                <option value="active">فعال</option>
+                                <option value="inactive">غیرفعال</option>
+                              </Field>
                             </div>
 
                             <div className="space-y-2">
-                              <Input name="price" label="قیمت (تومان)" type="text" onlyNumbers />
+                              <Input
+                                name="sku"
+                                label="کد محصول (SKU)"
+                                placeholder="مثال: WD-001"
+                                forceRTL
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Input
+                                name="price"
+                                label="قیمت (تومان)"
+                                type="text"
+                                onlyNumbers
+                              />
                             </div>
                           </div>
 
                           <div className="space-y-2">
                             <Label>توضیحات</Label>
-                            <Textarea name="description" placeholder="توضیحات محصول..." />
+                            <Textarea
+                              name="description"
+                              placeholder="توضیحات محصول..."
+                            />
                           </div>
                         </div>
                       </TabsContent>
@@ -632,20 +760,24 @@ export function ProductManagement() {
                               const input = event.currentTarget;
                               const files = input.files;
                               if (!files || files.length === 0) return;
-                              void appendImages(files, setFieldValue, values).finally(
-                                () => {
-                                  input.value = "";
-                                }
-                              );
+                              void appendImages(
+                                files,
+                                setFieldValue,
+                                values
+                              ).finally(() => {
+                                input.value = "";
+                              });
                             }}
                           />
-                          <p className="text-muted-foreground mb-4">تصاویر محصول را بکشید و رها کنید</p>
-                          <Button 
-                            type="button" 
-                            variant="outline" 
+                          <p className="text-muted-foreground mb-4">
+                            تصاویر محصول را بکشید و رها کنید
+                          </p>
+                          <Button
+                            type="button"
+                            variant="outline"
                             onClick={(e) => {
-                                e.stopPropagation(); 
-                                editImageInputRef.current?.click();
+                              e.stopPropagation();
+                              editImageInputRef.current?.click();
                             }}
                           >
                             انتخاب فایل
@@ -655,8 +787,15 @@ export function ProductManagement() {
                         {values.images.length > 0 && (
                           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                             {values.images.map((image, index) => (
-                              <div key={`${image}-${index}`} className="relative overflow-hidden rounded-lg border border-border">
-                                <img src={image} alt={`upload-${index}`} className="h-28 w-full object-cover" />
+                              <div
+                                key={`${image}-${index}`}
+                                className="relative overflow-hidden rounded-lg border border-border"
+                              >
+                                <img
+                                  src={image}
+                                  alt={`upload-${index}`}
+                                  className="h-28 w-full object-cover"
+                                />
                                 <button
                                   type="button"
                                   className="absolute right-2 top-2 rounded-full bg-black/70 px-2 py-1 text-xs text-white"
@@ -673,21 +812,40 @@ export function ProductManagement() {
                         )}
                       </TabsContent>
 
-                      <TabsContent value="inventory" className="space-y-4 mt-4" dir="rtl">
+                      <TabsContent
+                        value="inventory"
+                        className="space-y-4 mt-4"
+                        dir="rtl"
+                      >
                         <div className="space-y-2">
-                          <Input name="stock" label="تعداد موجودی" type="number" placeholder="۰" />
+                          <Input
+                            name="stock"
+                            label="تعداد موجودی"
+                            type="text"
+                            onlyNumbers
+                          />
                         </div>
                       </TabsContent>
-                    </Tabs>
 
-                    <div className="flex justify-end gap-2 mt-6">
-                      <Button type="button" variant="outline" onClick={() => { setIsEditOpen(false); setEditingProduct(null); }}>
-                        انصراف
-                      </Button>
-                      <Button type="submit" className="bg-primary hover:bg-primary/90">
-                        ذخیره تغییرات
-                      </Button>
-                    </div>
+                      <div className="flex justify-end gap-2 mt-6">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => {
+                            setIsEditOpen(false);
+                            setEditingProduct(null);
+                          }}
+                        >
+                          انصراف
+                        </Button>
+                        <Button
+                          type="submit"
+                          className="bg-primary hover:bg-primary/90"
+                        >
+                          ذخیره تغییرات
+                        </Button>
+                      </div>
+                    </Tabs>
                   </Form>
                 )}
               </Formik>
@@ -724,18 +882,36 @@ export function ProductManagement() {
                     </TableCell>
                     <TableCell>{getCategoryLabel(product.category)}</TableCell>
                     <TableCell>{product.sku}</TableCell>
-                    <TableCell>{product.stock.toLocaleString("fa-IR")}</TableCell>
-                    <TableCell>{product.price.toLocaleString("fa-IR")}</TableCell>
                     <TableCell>
-                      <Badge className={product.status === "active" ? "bg-green-500 text-white rounded-full px-4" : "bg-red-500 text-white rounded-full px-4"}>
+                      {product.stock.toLocaleString("fa-IR")}
+                    </TableCell>
+                    <TableCell>
+                      {product.price.toLocaleString("fa-IR")}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        className={
+                          product.status === "active"
+                            ? "bg-green-500 text-white rounded-full px-4"
+                            : "bg-red-500 text-white rounded-full px-4"
+                        }
+                      >
                         {product.status === "active" ? "فعال" : "غیرفعال"}
                       </Badge>
                     </TableCell>
                     <TableCell className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => openEditModal(product)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openEditModal(product)}
+                      >
                         <Edit2 className="w-4 h-4" />
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleDeleteProduct(product.id)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDeleteProduct(product.id)}
+                      >
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </TableCell>
@@ -743,26 +919,52 @@ export function ProductManagement() {
                 ))}
               </TableBody>
             </Table>
-            {loading && <div className="p-4 text-center text-muted-foreground">در حال بارگذاری...</div>}
+            {loading && (
+              <div className="p-4 text-center text-muted-foreground">
+                در حال بارگذاری...
+              </div>
+            )}
           </Card>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {filteredProducts.map((product) => (
               <Card key={product.id} className="p-4 space-y-3">
-                <ImageWithFallback src={product.images?.[0] || "/placeholder.png"} alt={product.name} className="w-full h-40 object-cover rounded" />
+                <ImageWithFallback
+                  src={product.images?.[0] || "/placeholder.png"}
+                  alt={product.name}
+                  className="w-full h-40 object-cover rounded"
+                />
                 <div className="font-bold">{product.name}</div>
                 <div className="text-sm text-muted-foreground">
                   {getCategoryLabel(product.category)}
                 </div>
                 <div className="flex justify-between items-center">
                   <span>{product.price.toLocaleString("fa-IR")} ت</span>
-                  <Badge className={product.status === "active" ? "bg-green-500 text-white" : "bg-red-500 text-white"}>
+                  <Badge
+                    className={
+                      product.status === "active"
+                        ? "bg-green-500 text-white"
+                        : "bg-red-500 text-white"
+                    }
+                  >
                     {product.status === "active" ? "فعال" : "غیرفعال"}
                   </Badge>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => openEditModal(product)}><Edit2 className="w-4 h-4" /></Button>
-                  <Button size="sm" variant="outline" onClick={() => handleDeleteProduct(product.id)}><Trash2 className="w-4 h-4" /></Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => openEditModal(product)}
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleDeleteProduct(product.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </div>
               </Card>
             ))}
