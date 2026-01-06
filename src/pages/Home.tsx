@@ -105,7 +105,38 @@ export default function Home() {
         <h2 className="text-xl font-bold mb-6 text-right">
           خرید بر اساس دسته‌بندی
         </h2>
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
+
+        {/* Container for horizontal scroll on mobile */}
+        <div dir="rtl" className="md:hidden overflow-x-auto pb-4 hide-scrollbar flex gap-4 px-4">
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              to={`/category/${cat.slug}`}
+              className="flex-shrink-0 w-20 flex flex-col items-center gap-1.5 group cursor-pointer"
+              onClick={() =>
+                logUserAction({
+                  action: "click",
+                  target_type: "category",
+                  target_id: cat.id,
+                })
+              }
+            >
+              <div className="w-16 h-16 rounded-full p-1.5 flex items-center justify-center transition-colors bg-bg-section1 border border-border">
+                <img
+                  src={cat.image_url || bannerFallback}
+                  alt={cat.name}
+                  className="w-[85%] h-[85%] object-contain rounded-full transition-transform group-hover:scale-105"
+                />
+              </div>
+              <span className="text-[10px] text-bg-section1 font-medium text-center group-hover:text-black transition-colors whitespace-nowrap">
+                {cat.name}
+              </span>
+            </Link>
+          ))}
+        </div>
+
+        {/* Desktop/Tablet Grid (unchanged) */}
+        <div className="hidden md:grid grid-cols-3 sm:grid-cols-6 gap-4">
           {categories.map((cat) => (
             <Link
               key={cat.id}
@@ -138,10 +169,10 @@ export default function Home() {
 
       <div className="py-12 px-4 mb-10 bg-white">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-2">
+          <h2 className="text-2xl sm:text-4xl font-bold mb-2">
             !استایل خود را، مجازی پرو کنید
           </h2>
-          <p className="text-xl text-text mb-6">
+          <p className="text-sm sm:text-xl text-text mb-6">
             .تجربه‌ی خرید از آینده. لباس‌ها را قبل از خرید، آنلاین استایل کنید
           </p>
           <Link to="/style-pro">

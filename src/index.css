@@ -280,3 +280,11 @@ body {
 .contact-pill {
   background-color: var(--contact-pill);
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
