@@ -26,6 +26,7 @@ import BrandHomePage from "@/pages/BrandDash/Home";
 import BrandProfile from "@/pages/BrandProfile";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
+
 export const router = createBrowserRouter([
     {
         path: "/",
