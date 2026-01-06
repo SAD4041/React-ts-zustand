@@ -27,7 +27,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { getOrdersService } from "@/services/orderService.mock";
+import { getOrdersService } from "@/services/orderService";
 import type { Order, OrderStatus, OrderStats } from "@/types/orderType";
 import { translateNumber } from "@/utils/translateNumber";
 

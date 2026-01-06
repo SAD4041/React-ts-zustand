@@ -190,7 +190,7 @@ export function BrandHome({ brandId, brandSlug }: BrandHomeProps) {
     <div dir="rtl" className="w-full bg-gray-50/30 font-vazirmatn min-h-screen">
       <div className="mx-auto w-full max-w-7xl px-4 md:px-6 py-8 space-y-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row items-center justify-end gap-4 mb-8">
+        <div className="flex flex-col md:flex-row items-center justify-end gap-4 mb-8" dir="ltr">
           <div className="flex items-center gap-3 text-right">
             <div className="flex flex-col items-end">
               <h1 className="text-xl font-bold text-gray-900">{brandName}</h1>

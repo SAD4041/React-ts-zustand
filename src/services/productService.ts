@@ -298,8 +298,15 @@ export const updateProductService = async (
 ): Promise<Product> => {
   await ensureMarketId();
   const formData = buildProductFormData(payload);
-  if (!payload.sku && productId) {
-    formData.append("product_serial", String(productId));
+  const normalizedId = String(productId ?? "").trim();
+  if (normalizedId) {
+    formData.append("id", normalizedId);
+    const numericId = Number(normalizedId);
+    if (!Number.isNaN(numericId)) {
+      formData.append("product_id", String(numericId));
+    } else if (!payload.sku) {
+      formData.append("product_serial", normalizedId);
+    }
   }
   const product = await postImageData({
     endPoint: "/api/manager/Uproduct",

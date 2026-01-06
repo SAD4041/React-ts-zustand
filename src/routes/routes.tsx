@@ -113,9 +113,9 @@ export const router = createBrowserRouter([
             {
                 path: "/dash/brand/home",
                 element: (
-                    <ProtectedRoute>
+                    // <ProtectedRoute>
                         <BrandHomePage />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
@@ -129,9 +129,9 @@ export const router = createBrowserRouter([
             {
                 path: "/dash/brand/order-management",
                 element: (
-                    <ProtectedRoute allowedRoles={['brand']}>
+                    // <ProtectedRoute allowedRoles={['brand']}>
                         <OrderManagementPage />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 ),
             },
             {
