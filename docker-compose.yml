@@ -1,0 +1,14 @@
+services:
+  frontend:
+    build: .
+    image: ghcr.io/hona-tahlil/frontend:latest
+    container_name: frontend
+    expose:
+      - "3000"
+    restart: always
+    networks:
+      - web
+
+networks:
+  web:
+    external: true

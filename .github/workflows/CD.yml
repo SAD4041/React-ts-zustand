@@ -1,0 +1,180 @@
+name: CD
+
+on:
+  push:
+    branches:
+      #- feat/CD
+      - develop
+
+permissions:
+  pull-requests: write
+  issues: write
+  contents: read
+  packages: write
+
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT }}
+
+      - name: Build Docker image
+        id: docker_build
+        continue-on-error: true
+        run: |
+          touch /tmp/build_output.log
+          docker compose build 2>&1 | sed -n '/Checking validity of types/,$p' | sed -r "s/\x1B\[[0-9;]*[JKmsu]//g" | sed '/^------$/q' > /tmp/build_output.log
+          status=${PIPESTATUS[0]}
+
+          echo "build_output<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$(cat /tmp/build_output.log)" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+          if [ $status -ne 0 ]; then
+            exit $status
+          fi
+
+      - name: Send Build Error Report to Telegram
+        continue-on-error: true
+        if: steps.docker_build.outcome == 'failure'
+        run: |
+          COMMIT_SHA="${{ github.sha }}"
+          COMMIT_SHA_SHORT="${COMMIT_SHA:0:7}"
+          escape_md() {
+            sed -e 's/\\/\\\\/g' -e 's/_/\\_/g' -e 's/\*/\\*/g' -e 's/\[/\\[/g' -e 's/\]/\\]/g' \
+                -e 's/(/\\(/g' -e 's/)/\\)/g' -e 's/~ /\\~/g' -e 's/`/\\`/g' -e 's/>/\\>/g' \
+                -e 's/#/\\#/g' -e 's/\+/\\+/g' -e 's/-/\\-/g' -e 's/=\\/\\=/g' -e 's/{/\\{/g' \
+                -e 's/}/\\}/g' -e 's/\./\\./g' -e 's/!/\\!/g'
+          }
+
+          MESSAGE=$(escape_md < /tmp/build_output.log)
+
+          TEXT="*❌ Build Failed*
+          *🎯 PR:* $(escape_md <<<\"${{ github.event.pull_request.title || 'Direct Push' }}\")
+          *🌿 Branch:* $(escape_md <<<\"${{ github.head_ref || github.ref_name }}\")
+          *👤 Author:* $(escape_md <<<\"${{ github.actor }}\")
+          *📦 Commit:* \`${COMMIT_SHA_SHORT}\`
+          *Error details:*
+          \`\`\`${MESSAGE}\`\`\`"
+
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "message_thread_id=${{ secrets.TELEGRAM_BUILD_THREAD_ID }}" \
+            --data-urlencode "text=$TEXT" \
+            -d "parse_mode=MarkdownV2" \
+            -d "disable_web_page_preview=true" > /dev/null 2>&1
+
+          echo "Notification sent to Telegram"
+
+      - name: Send Build Success Report to Telegram
+        continue-on-error: true
+        if: steps.docker_build.outcome == 'success'
+        run: |
+          COMMIT_SHA="${{ github.sha }}"
+          COMMIT_SHA_SHORT="${COMMIT_SHA:0:7}"
+          escape_md() {
+            sed -e 's/\\/\\\\/g' -e 's/_/\\_/g' -e 's/\*/\\*/g' -e 's/\[/\\[/g' -e 's/\]/\\]/g' \
+                -e 's/(/\\(/g' -e 's/)/\\)/g' -e 's/~ /\\~/g' -e 's/`/\\`/g' -e 's/>/\\>/g' \
+                -e 's/#/\\#/g' -e 's/\+/\\+/g' -e 's/-/\\-/g' -e 's/=\\/\\=/g' -e 's/{/\\{/g' \
+                -e 's/}/\\}/g' -e 's/\./\\./g' -e 's/!/\\!/g'
+          }
+
+          TEXT="*✅ Build Successful*
+          *🎯 PR:* $(escape_md <<<\"${{ github.event.pull_request.title || 'Direct Push' }}\")
+          *🌿 Branch:* $(escape_md <<<\"${{ github.head_ref || github.ref_name }}\")
+          *👤 Author:* $(escape_md <<<\"${{ github.actor }}\")
+          *📦 Commit:* \`${COMMIT_SHA_SHORT}\`"
+
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "message_thread_id=${{ secrets.TELEGRAM_BUILD_THREAD_ID }}" \
+            --data-urlencode "text=$TEXT" \
+            -d "parse_mode=MarkdownV2" \
+            -d "disable_web_page_preview=true" > /dev/null 2>&1
+
+          echo "Notification sent to Telegram"
+
+      - name: Handle Build Failure
+        if: ${{ steps.docker_build.outcome == 'failure' && github.event_name == 'pull_request' }}
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const { owner, repo, number } = context.issue;
+
+            let errorMessage = `❌ Build failed!\n\nError details:\n\`\`\`\n${fs.readFileSync('/tmp/build_output.log', 'utf8')}\n\`\`\``;
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: number,
+              body: errorMessage
+            });
+
+            await github.rest.pulls.update({
+              owner,
+              repo,
+              pull_number: number,
+              state: 'closed'
+            });
+
+      - name: Push Docker image
+        if: success() && steps.docker_build.outcome == 'success'
+        continue-on-error: true
+        run: docker compose push
+
+      - name: Set up SSH key
+        if: steps.docker_build.outcome == 'success'
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Copy configuration files via SCP
+        if: steps.docker_build.outcome == 'success'
+        run: |
+          scp -i ~/.ssh/id_rsa \
+            -o StrictHostKeyChecking=no \
+            docker-compose.yml \
+            root@${{ secrets.SERVER_HOST }}:/root/front
+
+      - name: Deploy via SSH through Cloudflare Tunnel
+        if: steps.docker_build.outcome == 'success'
+        id: deploy_prod
+        run: |
+          ssh -i ~/.ssh/id_rsa \
+            -o StrictHostKeyChecking=no \
+            root@${{ secrets.SERVER_HOST }} \
+            "cd /root/front && \
+             docker logout ghcr.io && \
+             docker login ghcr.io -u '${{ secrets.USERNAME }}' -p '${{ secrets.PAT }}' && \
+             docker compose pull && \
+             docker compose down --remove-orphans && \
+             docker compose up -d && \
+             docker image prune -f"
+
+      - name: Send Push On Prod Report to Telegram
+        continue-on-error: true
+        if: steps.deploy_prod.outcome == 'success'
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "message_thread_id=${{ secrets.TELEGRAM_BUILD_THREAD_ID }}" \
+            --data-urlencode "text=✅ *Deploy was successful*" \
+            -d "parse_mode=MarkdownV2" \
+            -d "disable_web_page_preview=true" > /dev/null 2>&1
+
+          echo "Notification sent to Telegram"
