@@ -306,7 +306,7 @@ export const fetchBrandDashboard = async ({
 
   try {
     const data = await getData({
-      endPoint: "/api/brand/dashboard",
+      endPoint: "/api/manager/dashboard",
       params: Object.keys(params).length ? params : undefined,
       headers: { "Cache-Control": "no-cache", Pragma: "no-cache", Accept: "*/*" },
     });
