@@ -60,13 +60,14 @@ const AddressSection: React.FC<AddressSectionProps> = ({
     };
 
     return (
-        <Card dir="rtl">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 px-6">
-                <CardTitle className="text-right">آدرس‌ها</CardTitle>
+        <Card dir="rtl" className="max-w-full min-w-[320px]">
+            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 space-y-0 pb-4 px-6">
+                <CardTitle className="text-right w-full sm:w-auto">آدرس‌ها</CardTitle>
                 <Button
                     variant='default'
                     size="sm"
-                    onClick={handleAddClick}>
+                    onClick={handleAddClick}
+                    className="w-full sm:w-auto justify-center min-w-[150px] min-h-10">
                     <Plus className="w-4 h-4 ml-2" />
                     آدرس جدید
                 </Button>
@@ -88,14 +89,14 @@ const AddressSection: React.FC<AddressSectionProps> = ({
 
                 {showDeleteConfirm && (
                     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                        <div className="bg-background p-6 rounded-lg shadow-lg max-w-sm w-full text-right border">
+                        <div className="bg-background p-6 rounded-lg shadow-lg max-w-sm min-w-[280px] w-full text-right border">
                             <h4 className="font-semibold mb-3">آیا مطمئن هستید؟</h4>
                             <div className="flex justify-end gap-2">
-                                <Button variant="outline" size="sm" onClick={() => setShowDeleteConfirm(null)}>
+                                <Button variant="outline" size="sm" onClick={() => setShowDeleteConfirm(null)} className="min-w-[110px] min-h-9">
                                     لغو
                                 </Button>
-                                <Button variant="destructive" size="sm" onClick={() => confirmDelete(showDeleteConfirm)}>
-                                    بله
+                                <Button variant="destructive" size="sm" onClick={() => confirmDelete(showDeleteConfirm)} className="min-w-[110px] min-h-9">
+                                    حذف
                                 </Button>
                             </div>
                         </div>

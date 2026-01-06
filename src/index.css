@@ -80,7 +80,7 @@ body {
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
 
-  --secondary: #ed775a;
+  --secondary: rgba(228, 0, 75, 1);
   --secondary-foreground: oklch(0.145 0 0);
 
   --contact-pill: #e4004b;
@@ -152,7 +152,6 @@ body {
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

@@ -18,7 +18,7 @@ export const baseURL = "http://185.60.136.225";
 const TEST_TOKEN = "21|WyyucFOUWGa7pAnkHmTfKVXkMNSGTeTEt31LJ4DC47be1255";
 
 const apiClient: AxiosInstance = axios.create({
-  baseURL,
+  baseURL: "/",
   timeout: 20000,
   headers: {
     "Content-Type": "application/json",

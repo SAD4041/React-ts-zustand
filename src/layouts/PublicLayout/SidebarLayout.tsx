@@ -1,4 +1,5 @@
 // src/layouts/PublicLayout/SidebarLayout.tsx
+import { useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import {
@@ -9,11 +10,13 @@ import type { NavItem } from "@/types/sidebarTypes";
 import useUserStore from "@/store/userStore/userStore";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import ExitModal from "@/components/ExitComponent/exitComponent";
 
 export default function SidebarLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const clearAuth = useUserStore((state) => state.clearAuth);
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
 
   const isBrandDashboard =
     location.pathname.includes("/brand/");
@@ -26,14 +29,19 @@ export default function SidebarLayout() {
     ...item,
     onClick: () => {
       if (item.id === "logout") {
-        clearAuth();
-        navigate("/login");
+        setIsExitModalOpen(true);
         return;
       }
 
       navigate(item.path);
     },
   }));
+
+  const handleLogoutConfirm = () => {
+    setIsExitModalOpen(false);
+    clearAuth();
+    navigate("/login");
+  };
 
   return (
     <div className="min-h-screen bg-background grid grid-rows-[auto_1fr_auto]">
@@ -50,6 +58,11 @@ export default function SidebarLayout() {
       <aside className="fixed inset-x-0 bottom-0 z-30 md:hidden">
         <Sidebar items={items} className="rounded-none" />
       </aside>
+      <ExitModal
+        open={isExitModalOpen}
+        onOpenChange={setIsExitModalOpen}
+        onConfirm={handleLogoutConfirm}
+      />
     </div>
   );
 }

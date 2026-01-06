@@ -18,19 +18,19 @@ const BrandFilter: React.FC<BrandFilterProps> = ({ brands, selectedBrands, onTog
             <span
               onClick={(e) => {
                 e.stopPropagation();
-                onToggleBrand(brand.name);
+                onToggleBrand(brand.slug);
               }}
-              className={`w-4 h-4 border rounded flex items-center justify-center mr-2 transition ${selectedBrands.includes(brand.name)
+              className={`w-4 h-4 border rounded flex items-center justify-center mr-2 transition ${selectedBrands.includes(brand.slug)
                 ? 'bg-primary border-primary'
                 : 'border-border hover:border-primary-border-hover'
                 }`}
             >
-              {selectedBrands.includes(brand.name) && (
+              {selectedBrands.includes(brand.slug) && (
                 <FillIcon />
               )}
             </span>
-            <span className="text-sm ml-auto mr-1">{brand.slug}</span>
-            <span className="text-xs text-muted-foreground mr-2">{brand.name}</span>
+            <span className="text-sm ml-auto mr-1">{brand.name}</span>
+            <span className="text-xs text-muted-foreground mr-2">{brand.slug}</span>
           </label>
         ))}
       </div>

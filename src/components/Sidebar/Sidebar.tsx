@@ -68,7 +68,8 @@ export default function Sidebar({ items, className }: SidebarProps) {
     const curveWidth = 118; // The total width of the curve opening
     const curveDepth = 36; // How deep the dip goes
 
-    if (x === 0) return "";
+    // Fallback to a rectangle until we have a measured position to avoid invalid SVG path
+    if (x <= 0) return `M 0 0 L ${width} 0 L ${width} ${height} L 0 ${height} Z`;
 
     return `
       M 0 0
@@ -89,26 +90,24 @@ export default function Sidebar({ items, className }: SidebarProps) {
       onMouseLeave={() => setIsHovered(false)}
       style={{ fontFamily: "vazirmatn, sans-serif" }}
     >
-      {/* Mobile Bottom Bar */}
-      <nav 
+      <nav
         className="fixed bottom-0 left-0 right-0 z-50 flex h-24 items-end justify-center md:hidden pointer-events-none"
       >
-        <div ref={navRef} className="pointer-events-auto relative w-full h-[80px]">
-          
-          {/* SVG Background Shape */}
-          <div className="absolute bottom-0 left-0 right-0 h-[80px] w-full overflow-hidden drop-shadow-md">
-             <svg 
-               className="h-full w-full text-gray-200 transition-all duration-300 ease-out" 
-               preserveAspectRatio="none"
-               viewBox={`0 0 ${navRef.current?.offsetWidth || 100} 80`}
-             >
-               <motion.path 
-                 d={curvePath} 
-                 fill="currentColor"
-                 animate={{ d: curvePath }}
-                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-               />
-             </svg>
+        <div ref={navRef} className="pointer-events-auto relative w-full h-20">
+
+          <div className="absolute bottom-0 left-0 right-0 h-20 w-full overflow-hidden drop-shadow-md">
+            <svg
+              className="h-full w-full text-gray-200 transition-all duration-300 ease-out"
+              preserveAspectRatio="none"
+              viewBox={`0 0 ${navRef.current?.offsetWidth || 100} 80`}
+            >
+              <motion.path
+                d={curvePath}
+                fill="currentColor"
+                animate={{ d: curvePath }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              />
+            </svg>
           </div>
 
           {/* Floating Action Bubble */}
@@ -135,7 +134,7 @@ export default function Sidebar({ items, className }: SidebarProps) {
                   }}
                   type="button"
                   onClick={() => handleClick(item)}
-                  className="group relative flex min-w-[60px] flex-1 flex-col items-center justify-end pb-3 gap-1"
+                  className="group relative flex min-w-15 flex-1 flex-col items-center justify-end pb-3 gap-1"
                 >
                   {/* Icon Container */}
                   <div className={`relative flex h-8 w-8 items-center justify-center transition-all duration-300 
@@ -148,14 +147,14 @@ export default function Sidebar({ items, className }: SidebarProps) {
                   {/* Text Label */}
                   <div className="h-5 overflow-hidden flex items-center justify-center">
                     {isActive && (
-                        <motion.span
+                      <motion.span
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
                         className="text-sm font-medium text-gray-700"
-                        >
+                      >
                         {item.label}
-                        </motion.span>
+                      </motion.span>
                     )}
                   </div>
                 </button>

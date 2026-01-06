@@ -26,6 +26,7 @@ import BrandHomePage from "@/pages/BrandDash/Home";
 import BrandProfile from "@/pages/BrandProfile";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
+
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -91,7 +92,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/product-page",
+                path: "/product-page/:id",
                 element: (
                     <ProtectedRoute>
                         <ProductPages />
@@ -104,7 +105,7 @@ export const router = createBrowserRouter([
         path: "/dash",
         element: <SidebarLayout />,
         errorElement: <Error404 />,
-        
+
         children: [
             // {
             //     index: true,

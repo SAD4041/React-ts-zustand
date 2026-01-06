@@ -6,7 +6,7 @@ import ColorSelector from "./productCardComponents/ColorSelector";
 import { toPersianDigits } from "../../utils/PersianDigits";
 import type { ProductCardProps } from "@/types/productCardTypes";
 import { Heart } from "lucide-react";
-import type { Product } from "@/types/productCardTypes";
+import { Link } from "react-router-dom";
 
 const ProductCard: React.FC<ProductCardProps> = ({ Product }) => {
     const [isWishlisted, setIsWishlisted] = useState(false);
@@ -64,6 +64,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ Product }) => {
                     </p>
                 )}
             </div>
+
+            <Link
+                to={`/product-page/${Product.id}`}
+                className="block w-full"
+            >
+                <button
+                    className="mt-2 w-full rounded-md bg-primary text-primary-foreground py-2 text-sm font-semibold hover:bg-primary/90 transition"
+                    type="button"
+                >
+                    مشاهده محصول
+                </button>
+            </Link>
         </div>
     );
 };

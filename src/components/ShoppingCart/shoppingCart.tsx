@@ -1,13 +1,10 @@
-// src/pages/ShoppingCartPage.tsx
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ShoppingBag from "@/assets/Shopping bag.png"
 import { translateNumber } from '@/utils/translateNumber';
-// کامپوننت‌های ما
 import CartItemsSection from './ItemSection';
 import OrderSummarySection from './OrderSummerySection';
 
-// داده‌های نمونه سبد خرید
 export const mockCartItems = [
     {
         id: '1',
@@ -56,11 +53,10 @@ export const mockCartItems = [
     },
 ];
 
-// محاسبه خلاصه سفارش
 const calculateSummary = (items: any[]) => {
     const totalItemsPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const shippingCost = 30000; // ثابت برای مثال
-    const tax = Math.round(totalItemsPrice * 0.1); // ۱۰٪
+    const shippingCost = 30000;
+    const tax = Math.round(totalItemsPrice * 0.1);
     const finalTotal = totalItemsPrice + shippingCost + tax;
     return { totalItemsPrice, shippingCost, tax, finalTotal };
 };
@@ -84,17 +80,17 @@ const ShoppingCartPage: React.FC = () => {
     const summary = calculateSummary(cartItems);
 
     return (
-        <div className="max-w-6xl mx-auto px-6 md:px-8 py-8 space-y-8 w-full">
+        <div className="max-w-6xl mx-auto px-6 md:px-8 py-8 space-y-8 w-full min-w-[320px]">
             <div dir="rtl" className="flex">
-                <img src={ShoppingBag} alt="سبد خرید" className="h-6 w-6 ml-2" />
+                <img src={ShoppingBag} className="h-6 w-6 ml-2" />
                 <h1 className="text-xl font-bold">تسویه حساب</h1>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
-                    <Card dir="rtl">
+                    <Card dir="rtl" className="max-w-full min-w-[320px]">
                         <CardHeader>
-                            <CardTitle className="text-right"> ({translateNumber(cartItems.length)} محصول)</CardTitle>
+                            <CardTitle className="text-right font-bold text-xl"> ({translateNumber(cartItems.length)} محصول)</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <CartItemsSection
@@ -106,7 +102,6 @@ const ShoppingCartPage: React.FC = () => {
                     </Card>
                 </div>
 
-                {/* سمت راست: خلاصه سفارش */}
                 <div className="lg:col-span-1">
                     <OrderSummarySection summary={summary} />
                 </div>

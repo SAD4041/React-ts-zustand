@@ -7,6 +7,8 @@ export interface SubCategory {
   id: number;
   title: string;
   image: string;
+  category: string;
+  slug: string;
 }
 
 export interface Brand {
@@ -35,6 +37,21 @@ export interface Filters {
 } */
 
 export type SortOption = 'newest' | 'cheapest' | 'expensive' | 'most-salled' | 'most-revelent';
+
+export interface Product extends AdaptedProduct {
+  brandSlug: string;
+  subCategory?: string;
+  modelStyle?: string;
+  gender?: string;
+}
+
+export interface ProductListingProps {
+  category?: string | null;
+  brand?: string | null;
+  subcategory?: string | null;
+  modelStyle?: string | null;
+  gender?: string | null;
+}
 
 export interface SortOptionsProps {
   currentSort: SortOption | null;
