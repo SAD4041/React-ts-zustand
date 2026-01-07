@@ -311,7 +311,7 @@ export function ProductManagement() {
                               <Input
                                 name="color"
                                 label="رنگ‌ها"
-                                placeholder="Red, Blue"
+                                placeholder="قرمز, آبی"
                               />
                             </div>
                             <div className="space-y-2">
@@ -627,7 +627,7 @@ export function ProductManagement() {
                               <Input
                                 name="color"
                                 label="رنگ‌ها"
-                                placeholder="Red, Blue"
+                                placeholder="قرمز, آبی"
                               />
                             </div>
                             <div className="space-y-2">
