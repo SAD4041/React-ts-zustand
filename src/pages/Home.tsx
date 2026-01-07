@@ -14,6 +14,7 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import StyleSection from "@/components/Home/StyleSection";
 import CompleteProfileDialog from "@/components/Home/CompleteProfileDialog";
 import useUserStore from "@/store/userStore/userStore";
+// import useUserStore from "@/store/userStore/userStore";
 
 export default function Home() {
   const location = useLocation();
