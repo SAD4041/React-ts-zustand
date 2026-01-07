@@ -246,7 +246,7 @@ const appendImageFiles = (formData: FormData, files?: File[]) => {
   if (!files || files.length === 0) return;
   files.forEach((file) => {
     if (file) {
-      formData.append("picture[]", file);
+      formData.append("image[]", file);
     }
   });
 };
@@ -338,14 +338,18 @@ export const updateProductService = async (
   payload: UpdateProductPayload
 ): Promise<Product> => {
   await ensureMarketId();
-  const formData = buildProductFormData(payload);
+  const requestPayload =
+    payload.sku === undefined || payload.sku === null
+      ? { ...payload, sku: productId ? String(productId) : payload.sku }
+      : payload;
+  const formData = buildProductFormData(requestPayload);
   const normalizedId = String(productId ?? "").trim();
   if (normalizedId) {
     formData.append("id", normalizedId);
     const numericId = Number(normalizedId);
     if (!Number.isNaN(numericId)) {
       formData.append("product_id", String(numericId));
-    } else if (!payload.sku) {
+    } else {
       formData.append("product_serial", normalizedId);
     }
   }
