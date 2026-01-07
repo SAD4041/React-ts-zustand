@@ -70,7 +70,6 @@ export const getUserProfile = async (): Promise<UserInfo> => {
 export const updateUserProfile = async (data: Partial<UserInfo>): Promise<UserInfo> => {
   try {
     const birthday = normalizeBirthdayForApi(data.birthDate);
-    const isFirstTime = !data.id;
 
     // آماده‌سازی payload مطابق با UserUpdateProfileRequest در بک‌اند
     const payload: Record<string, string> = {
@@ -88,7 +87,7 @@ export const updateUserProfile = async (data: Partial<UserInfo>): Promise<UserIn
     }
 
     await putData({
-      endPoint: isFirstTime ? "/api/user/profile" : "/api/user/profile/update",
+      endPoint: "/api/user/profile/update",
       data: payload,
     });
 

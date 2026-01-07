@@ -13,7 +13,7 @@ const ProfileIcon = () => {
     .replace("market", "brand")
     .replace("brand", "brand");
   const isBrandRole = normalizedRole === "brand";
-  const profilePath = isBrandRole ? "/dash/brand/home" : "/dash/brand/profile-edit";
+  const profilePath = isBrandRole ? "/dash/brand/profile-edit" : "/dash/profile";
 
   return (
     <Link
