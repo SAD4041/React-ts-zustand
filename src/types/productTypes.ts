@@ -31,7 +31,7 @@ export interface CreateProductPayload {
   imageFiles: File[];
   imageFilePreviews: string[];
   brand?: string;
-  color?: string[];
+  color?: string;
   size?: string;
   gender?: string;
   model?: string;

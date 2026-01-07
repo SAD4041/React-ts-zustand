@@ -38,7 +38,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Plus, Edit2, Trash2, Grid, List, Search } from "lucide-react";
 import { ImageWithFallback } from "../ui/ImageWithFallback";
 import { Formik, Form, Field } from "formik";
-import { categoryLabels } from "@/data/productListingData";
 
 export function ProductManagement() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -53,11 +52,20 @@ export function ProductManagement() {
   const addImageInputRef = useRef<HTMLInputElement>(null);
   const editImageInputRef = useRef<HTMLInputElement>(null);
 
+  const categoryLabels: Record<string, string> = {
+    tshirt: "تیشرت",
+    shirts: "پیراهن",
+    shoes: "کفش",
+    pants: "شلوار",
+    dress: "لباس مجلسی",
+    bag: "کیف",
+  };
+
   const initialValues: CreateProductPayload = {
     name: "",
     brand: "",
     category: "",
-    color: [],
+    color: "",
     size: "",
     gender: "",
     model: "",
@@ -82,12 +90,6 @@ export function ProductManagement() {
 
   const toListInputValue = (items?: string[]) =>
     items && items.length ? items.join(", ") : "";
-
-  const parseListInputValue = (value: string) =>
-    value
-      .split(",")
-      .map((item) => item.trim())
-      .filter(Boolean);
 
   const appendImages = async (
     files: FileList | null,
@@ -185,7 +187,7 @@ export function ProductManagement() {
     name: product.name ?? "",
     brand: product.brand ?? "",
     category: normalizeCategoryValue(product.category ?? ""),
-    color: product.color ?? [],
+    color: toListInputValue(product.color),
     size: product.size ?? "",
     gender: product.gender ?? "",
     model: product.model ?? "",
@@ -275,7 +277,7 @@ export function ProductManagement() {
                   window.location.reload();
                 }}
               >
-                {({ setFieldValue, values, handleBlur }) => (
+                {({ setFieldValue, values }) => (
                   <Form id="create-product-form">
                     <Tabs defaultValue="details" className="w-full" dir="rtl">
                       <TabsList className="grid w-full grid-cols-3">
@@ -309,14 +311,7 @@ export function ProductManagement() {
                               <Input
                                 name="color"
                                 label="رنگ‌ها"
-                                value={toListInputValue(values.color)}
-                                onChange={(event) =>
-                                  setFieldValue(
-                                    "color",
-                                    parseListInputValue(event.target.value)
-                                  )
-                                }
-                                onBlur={handleBlur}
+                                placeholder="Red, Blue"
                               />
                             </div>
                             <div className="space-y-2">
@@ -376,7 +371,7 @@ export function ProductManagement() {
                                 <option value="casual">کژوال</option>
                                 <option value="formal">رسمی</option>
                                 <option value="classic">کلاسیک</option>
-                                <option value="street">استریت</option>
+                                <option value="sport">اسپرت</option>
                               </Field>
                             </div>
 
@@ -598,7 +593,7 @@ export function ProductManagement() {
                   setEditingProduct(null);
                 }}
               >
-                {({ setFieldValue, values, handleBlur }) => (
+                {({ setFieldValue, values }) => (
                   <Form id="edit-product-form">
                     <Tabs defaultValue="details" className="w-full" dir="rtl">
                       <TabsList className="grid w-full grid-cols-3">
@@ -632,14 +627,7 @@ export function ProductManagement() {
                               <Input
                                 name="color"
                                 label="رنگ‌ها"
-                                value={toListInputValue(values.color)}
-                                onChange={(event) =>
-                                  setFieldValue(
-                                    "color",
-                                    parseListInputValue(event.target.value)
-                                  )
-                                }
-                                onBlur={handleBlur}
+                                placeholder="Red, Blue"
                               />
                             </div>
                             <div className="space-y-2">
@@ -699,7 +687,7 @@ export function ProductManagement() {
                                 <option value="casual">کژوال</option>
                                 <option value="formal">رسمی</option>
                                 <option value="classic">کلاسیک</option>
-                                <option value="street">استریت</option>
+                                <option value="sport">اسپرت</option>
                               </Field>
                             </div>
 

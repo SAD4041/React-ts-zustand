@@ -17,7 +17,7 @@ const normalizeListArray = (value: unknown) => {
   }
   if (typeof value === "string") {
     return value
-      .split("،")
+      .split(",")
       .map((item) => item.trim())
       .filter(Boolean);
   }
@@ -228,7 +228,7 @@ const normalizeListInput = (value: unknown) => {
   }
   if (typeof value === "string") {
     return value
-      .split("،")
+      .split(",")
       .map((item) => item.trim())
       .filter(Boolean);
   }
@@ -268,7 +268,7 @@ const buildProductFormData = (
   appendFormValue(formData, "category", payload.category);
   appendFormValue(formData, "category_model", payload.model);
   appendListValues(formData, "color", normalizeListInput(payload.color));
-  appendFormValue(formData, "size", payload.size);
+  appendListValues(formData, "size", normalizeListInput(payload.size));
   appendFormValue(
     formData,
     "gender",
