@@ -45,18 +45,20 @@ export const getUserProfile = async (): Promise<UserInfo> => {
 
   } catch (error: any) {
     console.error("Failed to fetch user profile", error);
+
+    const emptyProfile: UserInfo = {
+      id: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      avatar: null,
+      birthDate: "",
+    };
     
     // در صورت خطای 404 (عدم یافتن کاربر به هر دلیل)
-    if (error.response?.status === 404) {
-      return {
-        id: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        avatar: null,
-        birthDate: "",
-      };
+    if (error.response?.status === 404 || error.response?.status === 500) {
+      return emptyProfile;
     }
     throw new Error("خطای ناشناخته هنگام دریافت اطلاعات پروفایل");
   }
