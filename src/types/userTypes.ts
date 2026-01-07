@@ -6,7 +6,7 @@ export interface User {
   username?: string;
   name?: string;
   avatar?: string;
-  role: 'user' | 'brand' ;
+  role: 'C' | 'M' ;
   isBrand: boolean; // آیا این کاربر برند هست یا نه
   // هر فیلد دیگه‌ای که از بک میاد
 }
@@ -25,6 +25,6 @@ export interface UserState {
   
   // Helper getters
   getUserId: () => string | null;
-  getRole: () => 'user' | 'brand' | 'admin' | null;
+  getRole: () => 'C' | 'M' | 'admin' | null;
   isBrand: () => boolean;
 }

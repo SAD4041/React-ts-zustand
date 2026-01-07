@@ -190,7 +190,7 @@ export function BrandHome({ brandId, brandSlug }: BrandHomeProps) {
     <div dir="rtl" className="w-full bg-gray-50/30 font-vazirmatn min-h-screen">
       <div className="mx-auto w-full max-w-7xl px-4 md:px-6 py-8 space-y-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row items-center justify-end gap-4 mb-8">
+        <div className="flex flex-col md:flex-row items-center justify-end gap-4 mb-8" dir="ltr">
           <div className="flex items-center gap-3 text-right">
             <div className="flex flex-col items-end">
               <h1 className="text-xl font-bold text-gray-900">{brandName}</h1>
@@ -533,21 +533,21 @@ export function BrandHome({ brandId, brandSlug }: BrandHomeProps) {
           </Card>
           <Card className="p-8 text-center shadow-sm border-gray-100">
             <p className="text-gray-500 text-sm font-medium">
-              تعداد بازدیدکنندگان
+              سفارشات در انتظار
             </p>
             <p className="text-3xl font-bold mt-4 text-gray-900">
-              {formatCount(summary.total_visitors)}
+              {formatCount(summary.pending_orders)}
             </p>
-            {summary.total_visitors_change_percent !== undefined && (
+            {summary.pending_orders_change_percent !== undefined && (
               <p
                 className={`text-xs mt-3 font-medium ${
-                  summary.total_visitors_change_percent >= 0
+                  summary.pending_orders_change_percent >= 0
                     ? "text-green-600"
                     : "text-red-600"
                 }`}
               >
-                {formatPercent(Math.abs(summary.total_visitors_change_percent))}{" "}
-                {summary.total_visitors_change_percent >= 0 ? "افزایش" : "کاهش"}
+                {formatPercent(Math.abs(summary.pending_orders_change_percent))}{" "}
+                {summary.pending_orders_change_percent >= 0 ? "افزایش" : "کاهش"}
               </p>
             )}
           </Card>

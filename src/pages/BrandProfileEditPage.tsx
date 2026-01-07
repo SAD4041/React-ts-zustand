@@ -4,12 +4,12 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import BrandProfileEdit from "@/components/BrandInfo/BrandProfileEdit";
 import { getBrandProfile, updateBrandProfile } from "@/services/brandService";
-import type { BrandData } from "@/types/brandProfileTypes";
+import type { BrandFormValues, BrandProfilePayload } from "@/types/brandProfileTypes";
 import { resolveImageUrl } from "@/utils/imageUrl";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const BrandProfileEditPage = () => {
-  const [brand, setBrand] = useState<BrandData | null>(null);
+  const [brand, setBrand] = useState<BrandFormValues | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -29,17 +29,19 @@ const BrandProfileEditPage = () => {
         localStorage.setItem("marketId", String(res.id));
       }
 
+      const baseProfile = (res as { managerdata?: typeof res })?.managerdata ?? res;
       const logoUrl =
-        resolveImageUrl(res.logo) || "/placeholder-logo.png";
+        resolveImageUrl(baseProfile?.logo ?? res?.logo) || "/placeholder-logo.png";
       const bannerUrl =
-        resolveImageUrl(res.baner || res.banner) || "/placeholder-banner.png";
+        resolveImageUrl(baseProfile?.baner ?? baseProfile?.banner ?? res?.baner ?? res?.banner) ||
+        "/placeholder-banner.png";
 
       setBrand({
-        brand: res.brand || "",
-        description: res.description || "",
-        mobile: res.mobile || "",
-        email: res.email || "",
-        address: res.address || "",
+        brand: baseProfile?.brand ?? "",
+        description: baseProfile?.description ?? "",
+        mobile: baseProfile?.mobile ?? "",
+        email: baseProfile?.email ?? "",
+        address: baseProfile?.address ?? "",
         logoUrl,
         bannerUrl,
       });
@@ -55,9 +57,10 @@ const BrandProfileEditPage = () => {
     fetchBrandProfile();
   }, [fetchBrandProfile]);
 
-  const handleSave = async (updatedData: BrandData) => {
+  const handleSave = async (updatedData: BrandFormValues) => {
+    setError(null);
     try {
-      const payload = {
+      const payload: BrandProfilePayload = {
         brand: updatedData.brand,
         description: updatedData.description,
         mobile: updatedData.mobile,
@@ -67,12 +70,7 @@ const BrandProfileEditPage = () => {
 
       await updateBrandProfile(payload);
 
-      setBrand({
-        ...updatedData,
-        logoUrl: updatedData.logoUrl,
-        bannerUrl: updatedData.bannerUrl,
-      });
-
+      setBrand(updatedData);
     } catch (err) {
       console.error("Error saving brand profile:", err);
       setError("خطا در ذخیره تغییرات. لطفاً دوباره تلاش کنید.");

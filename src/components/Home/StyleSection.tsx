@@ -11,7 +11,7 @@ const StyleSection = () => {
         <div className="flex flex-col md:flex-row gap-4">
           {/* بخش کلاسیک */}
           <div className="md:w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
-            <Link to={`/style/${encodeURIComponent("classic")}`} className="block aspect-[3/4]">
+            <Link to={`/modelStyle/${encodeURIComponent("classic")}`} className="block aspect-[3/4]">
               <div className="absolute inset-0 z-0">
                 <img
                   src={style_palettes[0]?.image_url || style1}
@@ -37,7 +37,7 @@ const StyleSection = () => {
             <div className="flex gap-4">
               {/* اسپرت */}
               <div className="w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
-                <Link to={`/style/${encodeURIComponent("sport")}`} className="block aspect-square">
+                <Link to={`/modelStyle/${encodeURIComponent("sport")}`} className="block aspect-square">
                   <div className="absolute inset-0 z-0">
                     <img
                       src={style_palettes[1]?.image_url || style2}
@@ -60,7 +60,7 @@ const StyleSection = () => {
 
               {/* استریت */}
               <div className="w-1/2 relative group cursor-pointer overflow-hidden rounded-xl">
-                <Link to={`/style/${encodeURIComponent("street")}`} className="block aspect-square">
+                <Link to={`/modelStyle/${encodeURIComponent("street")}`} className="block aspect-square">
                   <div className="absolute inset-0 z-0">
                     <img
                       src={style_palettes[2]?.image_url || style3}
@@ -84,7 +84,7 @@ const StyleSection = () => {
 
             {/* وینتیج */}
             <div className="relative group cursor-pointer overflow-hidden rounded-xl">
-              <Link to={`/style/${encodeURIComponent("vintage")}`} className="block aspect-square">
+              <Link to={`/modelStyle/${encodeURIComponent("vintage")}`} className="block aspect-square">
                 <div className="absolute inset-0 z-0">
                   <img
                     src={style_palettes[3]?.image_url || style4}

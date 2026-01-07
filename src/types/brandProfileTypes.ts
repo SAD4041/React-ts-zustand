@@ -1,6 +1,6 @@
 // src/types/brandProfileTypes.ts
 
-import type { ProductData as BaseProductData } from './productCardTypes';
+import type { Product as BaseProductData } from './productCardTypes';
 
 export interface BrandProduct extends BaseProductData {
   category: string;

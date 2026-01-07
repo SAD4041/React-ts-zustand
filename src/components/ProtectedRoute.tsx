@@ -5,6 +5,13 @@ import useUserStore from '@/store/userStore/userStore';
 import type { ProtectedRouteProps } from '@/types/protectedRoute';
 
 
+const normalizeRole = (role?: string | null) => {
+  if (!role) return undefined;
+  if (role === "M" || role === "brand") return "M";
+  if (role === "C" || role === "user") return "C";
+  return role;
+};
+
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   allowedRoles,
@@ -17,7 +24,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   if (Array.isArray(allowedRoles) && allowedRoles.length > 0) {
-    if (!userRole || !allowedRoles.includes(userRole)) {
+    const normalizedUserRole = normalizeRole(userRole);
+    const normalizedAllowed = allowedRoles.map((role) => normalizeRole(role));
+    if (!normalizedUserRole || !normalizedAllowed.includes(normalizedUserRole)) {
       return <Navigate to="/" replace />;
     }
   }

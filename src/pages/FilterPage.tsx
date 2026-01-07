@@ -19,7 +19,7 @@ const FilterPage = () => {
     case "category":
       props.category = value;
       break;
-    case "style":
+    case "modelStyle":
       props.modelStyle = value; // چون در ProductListing نام پراپ `modelStyle` است
       break;
     case "brand":

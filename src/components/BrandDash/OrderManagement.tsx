@@ -27,7 +27,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { getOrdersService } from "@/services/orderService.mock";
+import { getOrdersService } from "@/services/orderService";
 import type { Order, OrderStatus, OrderStats } from "@/types/orderType";
 import { translateNumber } from "@/utils/translateNumber";
 
@@ -190,9 +190,7 @@ export function OrderManagement() {
         });
 
         return (
-          <Form
-            className="p-6 bg-gray-50/50 min-h-screen font-sans"
-          >
+          <Form className="p-6 pb-24 md:pb-32 bg-gray-50/50 min-h-screen font-sans">
             {/* Reverted to original inner container max-width and spacing */}
             <div className="max-w-6xl mx-auto space-y-8">
               

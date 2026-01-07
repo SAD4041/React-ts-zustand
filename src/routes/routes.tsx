@@ -102,71 +102,79 @@ export const router = createBrowserRouter([
             // },
             {
                 path: "/dash/brand/home",
-                element: (
-                    <ProtectedRoute>
-                        <BrandHomePage />
-                    </ProtectedRoute>
-                ),
+                element: <BrandHomePage />,
+                // element: (
+                //     <ProtectedRoute>
+                //     <BrandHomePage />
+                //     </ProtectedRoute>
+                // ),
             },
             {
                 path: "/dash/brand/product-management",
-                element: (
-                    <ProtectedRoute allowedRoles={['brand']}>
-                        <ProductManagementPage />
-                    </ProtectedRoute>
-                ),
+                element: <ProductManagementPage />,
+                // element: (
+                //     <ProtectedRoute allowedRoles={['M']}>
+                //         <ProductManagementPage />
+                //     </ProtectedRoute>
+                // ),
             },
             {
                 path: "/dash/brand/order-management",
-                element: (
-                    <ProtectedRoute allowedRoles={['user']}>
-                        <OrderManagementPage />
-                    </ProtectedRoute>
-                ),
+                element: <OrderManagementPage />,
+                // element: (
+                //     <ProtectedRoute allowedRoles={['M']}>
+                //     <OrderManagementPage />
+                //     </ProtectedRoute>
+                // ),
             },
             {
                 path: "/dash/brand/settings",
-                element: (
-                    <ProtectedRoute>
-                        <SettingsPage />
-                    </ProtectedRoute>
-                ),
+                element: <SettingsPage />,
+                // element: (
+                //     <ProtectedRoute allowedRoles={['M']}>
+                //         <SettingsPage />
+                //     </ProtectedRoute>
+                // ),
             },
             {
                 path: "/dash/brand/profile-edit",
-                element: <BrandProfileEditPage />,
+                element: <BrandProfileEditPage />
             },
             {
                 path: "/dash/brand/profile/:brandId",
-                element: (
-                    <ProtectedRoute>
-                        <ProductPages />
-                    </ProtectedRoute>
-                ),
+                element: <ProductPages />,
+                // element: (
+                //     <ProtectedRoute>
+                //         <ProductPages />
+                //     </ProtectedRoute>
+                // ),
             },
             {
                 path: "/dash/home",
-                element: (
-                    <ProtectedRoute allowedRoles={['user']}>
-                        <OrderHistoryPage />
-                    </ProtectedRoute>
-                ),
+                element: <OrderHistoryPage />,
+                // element: (
+                //     <ProtectedRoute allowedRoles={['C']}>
+                //         <OrderHistoryPage />
+                //     </ProtectedRoute>
+                // ),
             },
             {
                 path: "/dash/wish-list",
-                element: (
-                    <ProtectedRoute allowedRoles={['user']}>
-                        <WishlistPage />
-                    </ProtectedRoute>
-                ),
+                element: <WishlistPage />,
+                // element: (
+                //     <ProtectedRoute allowedRoles={['C']}>
+                //         <WishlistPage />
+                //     </ProtectedRoute>
+                // ),
             },
             {
                 path: "/dash/profile",
-                element: (
-                    <ProtectedRoute allowedRoles={['user']}>
-                        <UserDashInformation />
-                    </ProtectedRoute>
-                ),
+                element: <UserDashInformation />,
+                // element: (
+                //     <ProtectedRoute allowedRoles={['C']}>
+                //         <UserDashInformation />
+                //     </ProtectedRoute>
+                // ),
             },
         ],
     },

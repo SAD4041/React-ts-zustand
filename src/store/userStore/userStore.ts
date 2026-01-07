@@ -35,7 +35,7 @@ const useUserStore = create<UserState>()(
 			// Helper getters
 			getUserId: () => get().user?.id || null,
 			getRole: () => get().user?.role || null,
-			isBrand: () => get().user?.role === 'brand',
+			isBrand: () => get().user?.role === 'M',
 		}),
 		{
 			name: "user-storage",

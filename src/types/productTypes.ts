@@ -9,9 +9,10 @@ export interface Product {
   status: "active" | "inactive";
   description?: string;
   brand?: string;
-  color?: string;
+  color?: string[];
+  size?: string;
   marketId?: number;
-  sex?: string;
+  gender?: string;
   model?: string;
 }
 
@@ -31,7 +32,8 @@ export interface CreateProductPayload {
   imageFilePreviews: string[];
   brand?: string;
   color?: string;
-  sex?: string;
+  size?: string;
+  gender?: string;
   model?: string;
   status: "active" | "inactive";
 }
