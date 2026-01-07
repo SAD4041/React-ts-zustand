@@ -4,7 +4,16 @@ import useUserStore from "@/store/userStore/userStore";
 
 const ProfileIcon = () => {
   const role = useUserStore((state) => state.user?.role);
-  const profilePath = role === "brand" ? "/dash/brand/profile-edit" : "/dash/profile";
+  const normalizedRole = String(role || "")
+    .trim()
+    .toLowerCase()
+    .replace("consumer", "user")
+    .replace("c", "user")
+    .replace("m", "brand")
+    .replace("market", "brand")
+    .replace("brand", "brand");
+  const isBrandRole = normalizedRole === "brand";
+  const profilePath = isBrandRole ? "/dash/brand/home" : "/dash/brand/profile-edit";
 
   return (
     <Link
