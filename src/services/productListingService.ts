@@ -1,36 +1,18 @@
-// services/productListingServices.ts
-
 import { getData } from "@/services/services";
-import type { Product as RawProduct } from "@/types/productCardTypes";
-import type { Product as AdaptedProduct } from "@/types/productCardTypes";
-import { transformProducts } from "@/utils/transformproduct";
+import type { Product } from "@/types/productCardTypes";
 
-export const fetchProductsByCategory = async (
-  categorySlug: string
-): Promise<AdaptedProduct[]> => {
-  const data: RawProduct[] = await getData({
-    endPoint: "/api/category/",
-    params: { category: categorySlug },
-  });
-  return transformProducts(data);
-};
+const END_POINT = "/products";
 
-export const fetchProductsByBrand = async (
-  brandSlug: string
-): Promise<AdaptedProduct[]> => {
-  const data: RawProduct[] = await getData({
-    endPoint: "/api/brand/",
-    params: { brand: brandSlug },
-  });
-  return transformProducts(data);
-};
+export const fetchAllProducts = async (): Promise<Product[]> => {
+  try {
+    const data = await getData({
+      endPoint: END_POINT,
+    });
+    console.log("✅ MOCK API DATA ✅", data);
 
-export const fetchProductsBySearch = async (
-  query: string
-): Promise<AdaptedProduct[]> => {
-  const data: RawProduct[] = await getData({
-    endPoint: "/api/search/",
-    params: { q: query },
-  });
-  return transformProducts(data);
+    return data;
+  } catch (error) {
+    console.error("⚠️ Error fetching products:", error);
+    return [];
+  }
 };

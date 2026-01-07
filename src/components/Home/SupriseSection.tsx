@@ -88,7 +88,7 @@ const SurpriseSection: React.FC<SurpriseSectionProps> = ({ products = [] }) => {
       </div>
       <div className="mt-4 text-center">
           <Button
-            onClick={() => window.location.href = '/products-list'}
+            onClick={() => window.location.href = '/product-list'}
             variant='slider'
             className="inline-flex items-center gap-2 px-4 py-2 text-sm cursor-pointer"
           >

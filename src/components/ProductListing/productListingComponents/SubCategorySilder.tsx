@@ -4,11 +4,14 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 
 import SubCategoryCard from './SubCategoryCard';
-import { subCategories } from '@/data/productListingData';
+import { subCategoriesByCategory } from '@/data/productListingData';
 import LeftScroll from '../icon loader/leftscroll';
 import RightScroll from '../icon loader/rightscroll';
 
-const SubCategorySlider: React.FC = () => {
+const SubCategorySlider: React.FC<{ category?: string | null }> = ({ category }) => {
+  const allSubs = Object.values(subCategoriesByCategory).flat();
+  const items = category ? subCategoriesByCategory[category] ?? allSubs : allSubs;
+
   return (
     <div className="relative mb-6">
       <Swiper
@@ -23,7 +26,7 @@ const SubCategorySlider: React.FC = () => {
         }}
         className="py-3 px-4"
       >
-        {subCategories.map((cat) => (
+        {items.map((cat) => (
           <SwiperSlide
             key={cat.id}
             className="!w-auto"

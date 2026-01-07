@@ -74,7 +74,7 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({ initialData, on
     };
 
     return (
-        <Card dir="rtl">
+        <Card dir="rtl" className="max-w-full min-w-[320px]">
             <CardHeader>
                 <CardTitle className="text-right">اطلاعات تماس</CardTitle>
             </CardHeader>
@@ -88,7 +88,7 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({ initialData, on
                             value={formData.fullName}
                             onChange={handleChange}
                             placeholder="نام خود را وارد کنید..."
-                            className="text-right w-full"
+                            className="text-right w-full min-h-10 max-h-12 min-w-[240px]"
                         />
                         {errors.fullName && <p className="text-sm text-destructive text-right">{errors.fullName}</p>}
                     </div>
@@ -101,7 +101,7 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({ initialData, on
                             value={translateNumber(formData.phone)} // نمایش فارسی
                             onChange={handleChange}
                             placeholder="۰۹۰۰۰۰۰۰۰۰۰"
-                            className="text-right w-full"
+                            className="text-right w-full min-h-10 max-h-12 min-w-[240px]"
                         />
                         {errors.phone && <p className="text-sm text-destructive text-right">{errors.phone}</p>}
                     </div>
@@ -115,7 +115,7 @@ const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({ initialData, on
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="example@gmail.com"
-                            className="text-left dir-ltr w-full"
+                            className="text-left dir-ltr w-full min-h-10 max-h-12 min-w-[240px]"
                         />
                         {errors.email && <p className="text-sm text-destructive text-right">{errors.email}</p>}
                     </div>

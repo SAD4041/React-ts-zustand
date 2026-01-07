@@ -1,42 +1,66 @@
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, FreeMode } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/free-mode';
-import { brands } from "@/data/homePageData";
+import React, { useEffect, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { brands } from '@/data/homePageData';
 
 const BrandSlider = () => {
-  
+  const containerRef = useRef<HTMLDivElement>(null);
+  const controls = useAnimation();
+  const duplicatedBrands = [...brands, ...brands]; // برای اطمینان از پوشش کامل viewport
+
+  useEffect(() => {
+    const animate = () => {
+      if (!containerRef.current) return;
+
+      const container = containerRef.current;
+      const containerWidth = container.scrollWidth / 2; // فقط نیمی از عرض کل (یک دور کامل)
+
+      // انیمیشن بی‌پایان با جهش نرم
+      controls.start({
+        x: [0, containerWidth],
+        transition: {
+          duration: 15, // می‌توانید تنظیم کنید
+          ease: 'linear',
+          repeat: Infinity,
+          repeatType: 'loop',
+        },
+      });
+    };
+
+    animate();
+
+    return () => controls.stop();
+  }, [controls]);
 
   return (
-    <div className="py-6">
-      <div className="bg-gradient-to-r from-background-color via-bg-section1 to-background-color rounded-lg p-4">
-        <Swiper
-          dir="rtl"
-          modules={[Navigation, FreeMode]}
-          spaceBetween={5}
-          slidesPerView={5}
-          slidesPerGroup={1}
-          freeMode={{ enabled: true, momentum: true }}
-          navigation={true}
-          className="brand-swiper"
-        >
-          {brands.map((brand, index) => (
-            <SwiperSlide key={index} className="flex justify-center px-20">
-              <a
-                href={`brands/${brand.name}`}
-                className="block cursor-pointer"
-              >
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="h-14 sm:h-16 md:h-17 object-contain"
-                />
-              </a>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+    <div className="py-4 md:py-6 overflow-hidden">
+      <div className="h-32 md:h-40 bg-gradient-to-r from-background-color via-bg-section1 to-background-color rounded-lg">
+        <div className="relative overflow-hidden h-full">
+          {/* 👇 فقط نیمه چپ را در موبایل نمایش دهیم */}
+          <div className="absolute inset-0 flex items-center justify-start">
+            <motion.div
+              ref={containerRef}
+              className="flex items-center gap-6 md:gap-8 whitespace-nowrap"
+              dir="rtl"
+              animate={controls}
+              style={{ display: 'inline-flex' }}
+            >
+              {duplicatedBrands.map((brand, index) => (
+                <a
+                  key={`${brand.name}-${index}`}
+                  href={`brands/${brand.name}`}
+                  className="flex-shrink-0 flex items-center justify-center h-full px-2"
+                  aria-label={`برند ${brand.name}`}
+                >
+                  <img
+                    src={brand.logo}
+                    alt={brand.name}
+                    className="h-12 w-auto md:h-16 lg:h-20 max-h-full object-contain"
+                  />
+                </a>
+              ))}
+            </motion.div>
+          </div>
+        </div>
       </div>
     </div>
   );

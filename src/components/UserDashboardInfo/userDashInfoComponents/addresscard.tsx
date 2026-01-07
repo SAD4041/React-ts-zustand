@@ -5,7 +5,7 @@ import type { AddressCardProps } from '@/types/UserDashInfoTypes';
 
 const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete }) => {
   return (
-    <div dir="rtl" className="p-4 rounded-md border border-border">
+    <div dir="rtl" className="p-4 rounded-md border border-border min-w-[260px] max-w-full min-h-[180px] flex flex-col">
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2">
           <MapPin className="w-4 h-4 text-brand-light" />
@@ -24,8 +24,8 @@ const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete }) 
         {address.province !== address.city && `، ${address.city}`}، {address.fullAddress}
       </p>
 
-      <div className="flex gap-2">
-        <Button variant="outline" size="sm" onClick={onEdit}>
+      <div className="flex flex-col sm:flex-row gap-2 sm:justify-end mt-auto pt-3">
+        <Button variant="outline" size="sm" onClick={onEdit} className="min-w-[140px] min-h-10">
           <Edit2 className="w-3 h-3 ml-1" />
           ویرایش
         </Button>
@@ -33,7 +33,7 @@ const AddressCard: React.FC<AddressCardProps> = ({ address, onEdit, onDelete }) 
           variant="outline"
           size="sm"
           onClick={() => onDelete(address.id)}
-          className="hover:bg-destructive hover:text-destructive-foreground"
+          className="hover:bg-destructive hover:text-destructive-foreground min-w-[140px] min-h-10"
         >
           <Trash2 className="w-3 h-3 ml-1" />
           حذف

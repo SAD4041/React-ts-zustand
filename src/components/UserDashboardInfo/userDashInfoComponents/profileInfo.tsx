@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import { Card } from '@/components/ui/userDashInfo/card';
 import { Button } from '@/components/ui/userDashInfo/button';
 import { Input } from '@/components/ui/userDashInfo/input';
@@ -7,26 +7,36 @@ import * as yup from 'yup';
 import type { UserInfo, ProfileInfoProps } from '@/types/UserDashInfoTypes';
 import Separator from '@/components/ui/userDashInfo/separator';
 import { translateNumber } from '@/utils/translateNumber';
+import { untranslateNumber } from '@/utils/untranslateNumber';
 
 const personalInfoSchema = yup.object({
   firstName: yup.string().required('نام نباید خالی باشد.'),
   lastName: yup.string().required('نام خانوادگی نباید خالی باشد.'),
   email: yup.string().email('فرمت ایمیل نامعتبر است.').required('ایمیل نباید خالی باشد.'),
-  phone: yup.string().matches(/^09\d{9}$/, 'شماره تلفن باید ۱۱ رقمی و با 09 شروع شود.').required('شماره تلفن نباید خالی باشد.'),
-  birthDate: yup.string().matches(/^\d{4}\/\d{2}\/\d{2}$/, 'فرمت تاریخ باید YYYY/MM/DD باشد.').required('تاریخ تولد نباید خالی باشد.'),
+  phone: yup
+    .string()
+    .matches(/^09\d{9}$/, 'شماره تلفن باید ۱۱ رقمی و با 09 شروع شود.')
+    .required('شماره تلفن نباید خالی باشد.'),
+  birthDate: yup
+    .string()
+    .matches(/^\d{4}\/\d{2}\/\d{2}$/, 'فرمت تاریخ باید YYYY/MM/DD باشد.')
+    .required('تاریخ تولد نباید خالی باشد.'),
 });
 
 type FormData = Omit<UserInfo, 'password'>;
 type FormErrors = Partial<Record<keyof FormData, string>>;
 
 const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
+  const normalizeBirthDateInput = (value: string) =>
+    untranslateNumber(value).replace(/-/g, '/');
+
   const [formData, setFormData] = useState<FormData>({
     firstName: initialData.firstName,
     lastName: initialData.lastName,
     avatar: initialData.avatar,
     email: initialData.email,
     phone: initialData.phone,
-    birthDate: initialData.birthDate,
+    birthDate: normalizeBirthDateInput(initialData.birthDate),
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -41,7 +51,14 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
   }, [formData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target as { name: keyof FormData; value: string };
+    let { name, value } = e.target as { name: keyof FormData; value: string };
+
+    // Normalize Persian digits to English for validation/storage
+    if (name === 'phone') {
+      value = untranslateNumber(value);
+    } else if (name === 'birthDate') {
+      value = normalizeBirthDateInput(value);
+    }
 
     const newFormData = { ...formData, [name]: value };
     setFormData(newFormData);
@@ -64,7 +81,8 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
 
   const handleSave = () => {
     if (isValid) {
-      onSave({ ...formData });
+      const birthDateForApi = normalizeBirthDateInput(formData.birthDate).replace(/\//g, '-');
+      onSave({ ...formData, birthDate: birthDateForApi });
     }
   };
 
@@ -75,7 +93,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
           <h3 className="text-lg font-semibold">اطلاعات شخصی</h3>
         </div>
         <Separator className="mb-3" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 gap-x-20 px-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 gap-x-20 px-4 md:px-10">
           <div className="space-y-2 text-right">
             <Label className="block">نام</Label>
             <Input
@@ -130,7 +148,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ initialData, onSave }) => {
         </div>
       </div>
 
-      <div className="mt-6 px-10">
+      <div className="mt-6 px-4 md:px-10">
         <Button onClick={handleSave} disabled={!isValid} variant="brand">
           ذخیره تغییرات
         </Button>

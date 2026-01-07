@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import useUserStore from "@/store/userStore/userStore";
 import type { Address, AddressFormData, UserInfo } from "@/types/UserDashInfoTypes";
 import ProfileHeader from "./userDashInfoComponents/profileHeader";
 import ProfileInfo from "./userDashInfoComponents/profileInfo";
@@ -25,6 +26,7 @@ const Spinner = () => (
 
 
 const UserDashInfo: React.FC = () => {
+  const token = useUserStore((state) => state.token);
   const [userData, setUserData] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,12 +34,11 @@ const UserDashInfo: React.FC = () => {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    //if (!localStorage.getItem("authToken")) {
-    localStorage.setItem(
-      "authToken",
-      "7|BjkRZcsnGWmq4r0VPwa8eTP7NeihXbKmF3zOS5Hi8752c75e");
-    //}
-  }, []);
+    if (!token) {
+      setError("برای مشاهده پروفایل ابتدا وارد شوید.");
+      setLoading(false);
+    }
+  }, [token]);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -66,12 +67,16 @@ const UserDashInfo: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (token) {
+      fetchData();
+    }
+  }, [fetchData, token]);
 
   useEffect(() => {
-    fetchAddresses();
-  }, [fetchAddresses]);
+    if (token) {
+      fetchAddresses();
+    }
+  }, [fetchAddresses, token]);
 
   if (loading) return <Spinner />;
   if (hasError) return <Error500 />;
@@ -152,7 +157,7 @@ const UserDashInfo: React.FC = () => {
 
 
   return (
-    <div className="space-y-6 py-6 px-6 max-w-6xl mx-auto bg-background">
+    <div className="space-y-6 py-6 px-6 max-w-6xl mx-auto bg-background min-w-[320px] w-full">
       <div className="text-right mb-4">
         <h1 className="text-xl font-bold">پروفایل کاربری</h1>
         <p className="text-muted-foreground text-sm">

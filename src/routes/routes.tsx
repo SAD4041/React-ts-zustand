@@ -25,6 +25,8 @@ import OrderManagementPage from "@/pages/BrandDash/OrderManagementPage";
 import BrandHomePage from "@/pages/BrandDash/Home";
 import BrandProfile from "@/pages/BrandProfile";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import FilterPage from "@/pages/FilterPage";
+
 
 export const router = createBrowserRouter([
     {
@@ -44,35 +46,23 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/product-list",
-                element: (
-                    <ProtectedRoute>
-                        <ProductListing />
-                    </ProtectedRoute>
-                ),
+                element: <ProductListing />,
+            },
+            {
+                path: "/:type/:value",
+                element: <FilterPage />,
             },
             {
                 path: "/faq",
-                element: (
-                    <ProtectedRoute>
-                        <FAQ />
-                    </ProtectedRoute>
-                ),
+                element: <FAQ />,
             },
             {
                 path: "/about-us",
-                element: (
-                    <ProtectedRoute>
-                        <AboutUs />
-                    </ProtectedRoute>
-                ),
+                element: <AboutUs />,
             },
             {
                 path: "contact-us",
-                element: (
-                    <ProtectedRoute>
-                        <ContactUs />
-                    </ProtectedRoute>
-                ),
+                element: <ContactUs />,
             },
             {
                 path: "/payment",
@@ -91,7 +81,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/product-page",
+                path: "/product-page/:id",
                 element: (
                     <ProtectedRoute>
                         <ProductPages />
@@ -104,7 +94,7 @@ export const router = createBrowserRouter([
         path: "/dash",
         element: <SidebarLayout />,
         errorElement: <Error404 />,
-        
+
         children: [
             // {
             //     index: true,

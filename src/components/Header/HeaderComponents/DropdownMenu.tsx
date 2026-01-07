@@ -1,14 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
 import type { DropdownItem, DropdownMenuProps } from '@/types/headerTypes';
 import Icon from './nextIcon';
+import { useNavigate } from 'react-router-dom';
 
 
 const DropdownMenu = ({ item }: DropdownMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [hoveredItem, setHoveredItem] = useState<DropdownItem | null>(null);
   const triggerRef = useRef<HTMLSpanElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  const makeKey = (cat: DropdownItem) =>
+    `${cat.categorySlug || cat.brandSlug || cat.name}-${item.title}`;
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -27,8 +32,25 @@ const DropdownMenu = ({ item }: DropdownMenuProps) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  const firstColumn = item.category.itemsList.slice(0, 6);
-  const secondColumn = item.category.itemsList.slice(6);
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const detail = (event as CustomEvent<string>).detail;
+      setSelectedKey(detail);
+    };
+    window.addEventListener("header-category-select", handler);
+    return () => window.removeEventListener("header-category-select", handler);
+  }, []);
+
+  const handleNavigate = (categorySlug?: string, brandSlug?: string) => {
+    if (!categorySlug && !brandSlug) return;
+    const params = new URLSearchParams();
+    if (categorySlug) params.set('category', categorySlug);
+    if (brandSlug) params.set('brand', brandSlug);
+    navigate(`/product-list?${params.toString()}`);
+    setIsOpen(false);
+  };
+
+  const items = item.category.itemsList;
 
   return (
     <div
@@ -88,44 +110,26 @@ const DropdownMenu = ({ item }: DropdownMenuProps) => {
               </div>
               <div className="w-px bg-border"></div>
               <div className="flex-1 min-w-0 mt-2">
-                <div className="flex gap-1">
-                  <div className="flex-1 space-y-2">
-                    {secondColumn.map((cat, idx) => (
-                      <button
-                        key={`second-${idx}`}
-                        onClick={() => setSelectedCategory(cat.name)}
-                        onMouseEnter={() => setHoveredItem(cat)}
-                        onMouseLeave={() => setHoveredItem(null)}
-                        className={`block w-full text-right px-4 py-2 rounded-lg text-sm transition-colors ${selectedCategory === cat.name
-                          ? 'bg-dropdown-selected-bg text-primary border border-dropdown-selected-border'
-                          : 'text-foreground hover:bg-dropdown-hover-bg hover:border hover:border-border'
-                          }`}
-                      >
-                        {cat.name}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="w-px bg-border"></div>
-                  <div className="flex-1 min-w-0 mt-2">
-                    <div className="flex gap-1">
-                      <div className="flex-1 space-y-2">
-                        {firstColumn.map((cat, idx) => (
-                          <button
-                            key={`first-${idx}`}
-                            onClick={() => setSelectedCategory(cat.name)}
-                            onMouseEnter={() => setHoveredItem(cat)}
-                            onMouseLeave={() => setHoveredItem(null)}
-                            className={`block w-full text-right px-4 py-2 rounded-lg text-sm transition-colors ${selectedCategory === cat.name
-                              ? 'bg-primary/10 text-primary font-medium border border-primary/20'
-                              : 'text-foreground hover:bg-muted hover:border hover:border-border'
-                              }`}
-                          >
-                            {cat.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                <div className="space-y-2">
+                  {items.map((cat, idx) => (
+                    <button
+                      key={`single-${idx}`}
+                      onClick={() => {
+                        const key = makeKey(cat);
+                        setSelectedKey(key);
+                        window.dispatchEvent(new CustomEvent("header-category-select", { detail: key }));
+                        handleNavigate(cat.categorySlug, cat.brandSlug);
+                      }}
+                      onMouseEnter={() => setHoveredItem(cat)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      className={`block w-full text-right px-4 py-2 rounded-lg text-sm transition-colors ${selectedKey === makeKey(cat)
+                        ? 'bg-primary/10 text-primary font-medium border border-primary/20'
+                        : 'text-foreground hover:bg-muted hover:border hover:border-border'
+                        }`}
+                    >
+                      {cat.name}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>

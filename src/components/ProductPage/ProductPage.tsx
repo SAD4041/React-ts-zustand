@@ -1,6 +1,7 @@
 // src/pages/ProductPage.tsx
 
 import React, { useState, useEffect } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,19 +9,20 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { StarIcon, HeartIcon, ChevronLeftIcon, ChevronRightIcon, ShoppingCartIcon, CheckIcon, RepeatIcon, ShieldIcon, MessageSquareIcon, ThumbsUpIcon, ThumbsDownIcon } from 'lucide-react';
+import NavigationBar from '@/components/ProductListing/productListingComponents/NavigationBar';
 
 // Mock Data
 const mockProduct = {
     id: 1,
     name: "پیراهن بهاره آستین بلند",
     images: [
-        "https://via.placeholder.com/600x800?text=Image+1",
-        "https://via.placeholder.com/600x800?text=Image+2",
-        "https://via.placeholder.com/600x800?text=Image+3"
+        "https://via.placeholder.com/600x800?text=Image+1  ",
+        "https://via.placeholder.com/600x800?text=Image+2  ",
+        "https://via.placeholder.com/600x800?text=Image+3  "
     ],
     brand: {
         name: "برند مدآوران",
-        logo: "https://via.placeholder.com/50x50?text=Brand",
+        logo: "https://via.placeholder.com/50x50?text=Brand  ",
         isOfficial: true,
         description: "مد امروز، سبک فردا"
     },
@@ -55,17 +57,17 @@ const mockProduct = {
         season: "بهار و تابستان"
     },
     relatedProducts: [
-        { id: 2, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+1", colors: ["#FF6B6B", "#008000", "#000000"] },
-        { id: 3, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+2", colors: ["#FF6B6B", "#008000", "#000000"] },
-        { id: 4, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+3", colors: ["#FF6B6B", "#008000", "#000000"] },
-        { id: 5, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+4", colors: ["#FF6B6B", "#008000", "#000000"] },
-        { id: 6, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+5", colors: ["#FF6B6B", "#008000", "#000000"] },
+        { id: 2, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+1  ", colors: ["#FF6B6B", "#008000", "#000000"] },
+        { id: 3, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+2  ", colors: ["#FF6B6B", "#008000", "#000000"] },
+        { id: 4, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+3  ", colors: ["#FF6B6B", "#008000", "#000000"] },
+        { id: 5, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+4  ", colors: ["#FF6B6B", "#008000", "#000000"] },
+        { id: 6, name: "CATWAREHOUSE Bussiness Not Boomin مدل", price: 531999, originalPrice: 699999, discount: 24, image: "https://via.placeholder.com/200x250?text=Related+5  ", colors: ["#FF6B6B", "#008000", "#000000"] },
     ],
     reviews: [
         {
             id: 1,
             user: "ایلیا موسوی",
-            avatar: "https://via.placeholder.com/40x40?text=U1",
+            avatar: "https://via.placeholder.com/40x40?text=U1  ",
             rating: 5,
             text: "کیفیت محصولات این برند واقعاً عالیه. پارچه‌ها مرغوب هستند و دوخت محصولات بسیار تمیز و حرفه‌ای است.",
             helpful: 29,
@@ -74,7 +76,7 @@ const mockProduct = {
         {
             id: 2,
             user: "ریحانه کردگاری",
-            avatar: "https://via.placeholder.com/40x40?text=U2",
+            avatar: "https://via.placeholder.com/40x40?text=U2  ",
             rating: 5,
             text: "بسته‌بندی محصولات خیلی شیک بود و ارسال هم سریع انجام شد. مانتوی که خریدم دقیقاً مطابق تصویر بود.",
             helpful: 36,
@@ -178,7 +180,7 @@ const ProductImageGallery: React.FC<{
                     <ChevronRightIcon className="w-6 h-6 text-gray-700" />
                 </button>
             </div>
-            <div className="flex space-x-2 overflow-x-auto">
+            <div className="flex space-x-2 space-x-reverse overflow-x-auto">
                 {images.map((image, index) => (
                     <button
                         key={index}
@@ -237,7 +239,7 @@ const ProductDetails: React.FC<{
         <div className="bg-white rounded-xl shadow-md p-6">
             {/* Header with Favorite */}
             <div className="flex justify-between items-start mb-4">
-                <h1 className="text-2xl font-bold">{product.name}</h1>
+                <h1 className="text-2xl font-bold text-right">{product.name}</h1>
                 <button
                     onClick={toggleFavorite}
                     className={`p-2 rounded-full transition-colors ${isFavorite ? 'text-red-500 bg-red-100' : 'text-gray-500 hover:text-red-500'
@@ -326,7 +328,7 @@ const ProductDetails: React.FC<{
             {/* Selection Options */}
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <Label className="block mb-2">رنگ: سفید</Label>
+                    <Label className="block mb-2 text-right">رنگ: سفید</Label>
                     <div className="flex gap-2">
                         {product.colors.map((color) => (
                             <button
@@ -348,7 +350,7 @@ const ProductDetails: React.FC<{
                 </div>
 
                 <div>
-                    <Label className="block mb-2">انتخاب سایز</Label>
+                    <Label className="block mb-2 text-right">انتخاب سایز</Label>
                     <div className="flex gap-2">
                         {product.sizes.map((size) => (
                             <button
@@ -364,7 +366,7 @@ const ProductDetails: React.FC<{
                 </div>
 
                 <div>
-                    <Label className="block mb-2">تعداد</Label>
+                    <Label className="block mb-2 text-right">تعداد</Label>
                     <div className="flex items-center gap-2">
                         <Button variant="outline" size="icon" onClick={decreaseQuantity} disabled={quantity <= 1}>
                             -
@@ -442,7 +444,7 @@ const ProductTabs: React.FC<{
     return (
         <div className="mt-6 bg-white rounded-xl shadow-md">
             <div className="border-b">
-                <div className="flex">
+                <div className="flex space-x-0 space-x-reverse">
                     <button
                         onClick={() => setActiveTab('description')}
                         className={`px-6 py-3 font-medium transition-colors ${activeTab === 'description'
@@ -482,7 +484,7 @@ const ProductTabs: React.FC<{
                 </div>
             </div>
 
-            <div className="p-6">
+            <div className="p-6 text-right">
                 {activeTab === 'description' && (
                     <div>
                         <h2 className="text-xl font-bold mb-4">درباره این محصول</h2>
@@ -673,7 +675,7 @@ const RelatedProducts: React.FC<{
 
     return (
         <div className="mt-6">
-            <h2 className="text-xl font-bold mb-4">محصولات مرتبط</h2>
+            <h2 className="text-xl font-bold mb-4 text-right">محصولات مرتبط</h2>
             <div className="relative">
                 <div className="flex gap-4">
                     {visibleProducts.map((product) => (
@@ -695,7 +697,7 @@ const RelatedProducts: React.FC<{
                                     </button>
                                 </div>
                             </div>
-                            <CardContent className="p-3">
+                            <CardContent className="p-3 text-right">
                                 <div className="text-xs text-gray-500 mb-1">{product.name}</div>
                                 <div className="flex items-center gap-1 mb-2">
                                     <span className="text-sm font-bold text-pink-600">{product.price.toLocaleString()}</span>
@@ -742,8 +744,30 @@ const ClockIcon: React.FC<{ className?: string }> = ({ className }) => (
 
 // Main Product Page Component
 const ProductPage: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const [searchParams] = useSearchParams();
+    const category = searchParams.get("category");
+    const brand = searchParams.get("brand");
+    const subCategory = searchParams.get("subcategory");
+    const modelStyle = searchParams.get("modelStyle");
+    const gender = searchParams.get("gender");
+    const searchQuery = searchParams.get("q");
+    const productName = mockProduct.name;
+
+    // TODO: replace mockProduct with real fetch using `id`
     return (
         <div className="container mx-auto px-4 py-8">
+            <div className="-mx-4 mb-4">
+                <NavigationBar
+                    category={category}
+                    subCategory={subCategory}
+                    brand={brand}
+                    modelStyle={modelStyle}
+                    gender={gender}
+                    searchQuery={searchQuery}
+                    productName={productName}
+                />
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
                     <ProductDetails product={mockProduct} />
