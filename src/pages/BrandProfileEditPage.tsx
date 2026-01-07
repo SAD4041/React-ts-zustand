@@ -29,17 +29,19 @@ const BrandProfileEditPage = () => {
         localStorage.setItem("marketId", String(res.id));
       }
 
+      const baseProfile = (res as { managerdata?: typeof res })?.managerdata ?? res;
       const logoUrl =
-        resolveImageUrl(res?.logo) || "/placeholder-logo.png";
+        resolveImageUrl(baseProfile?.logo ?? res?.logo) || "/placeholder-logo.png";
       const bannerUrl =
-        resolveImageUrl(res?.baner || res?.banner) || "/placeholder-banner.png";
+        resolveImageUrl(baseProfile?.baner ?? baseProfile?.banner ?? res?.baner ?? res?.banner) ||
+        "/placeholder-banner.png";
 
       setBrand({
-        brand: res?.brand ?? "",
-        description: res?.description ?? "",
-        mobile: res?.mobile ?? "",
-        email: res?.email ?? "",
-        address: res?.address ?? "",
+        brand: baseProfile?.brand ?? "",
+        description: baseProfile?.description ?? "",
+        mobile: baseProfile?.mobile ?? "",
+        email: baseProfile?.email ?? "",
+        address: baseProfile?.address ?? "",
         logoUrl,
         bannerUrl,
       });
