@@ -106,13 +106,13 @@ export default function Home() {
           خرید بر اساس دسته‌بندی
         </h2>
 
-        {/* Container for horizontal scroll on mobile */}
-        <div dir="rtl" className="md:hidden overflow-x-auto pb-4 hide-scrollbar flex gap-4 px-4">
+        {/* Mobile: Horizontal scroll with centered items */}
+        <div className="md:hidden overflow-x-auto pb-4 hide-scrollbar flex gap-4 px-2">
           {categories.map((cat) => (
             <Link
               key={cat.id}
-              to={`/category/${cat.slug}`}
-              className="flex-shrink-0 w-20 flex flex-col items-center gap-1.5 group cursor-pointer"
+              to={`/products?category=${encodeURIComponent(cat.slug)}`}
+              className="flex-shrink-0 w-20 flex flex-col items-center justify-center gap-1.5 group cursor-pointer"
               onClick={() =>
                 logUserAction({
                   action: "click",
@@ -135,12 +135,12 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Desktop/Tablet Grid (unchanged) */}
+        {/* Desktop/Tablet Grid */}
         <div className="hidden md:grid grid-cols-3 sm:grid-cols-6 gap-4">
           {categories.map((cat) => (
             <Link
               key={cat.id}
-              to={`/category/${cat.slug}`}
+              to={`/products?category=${encodeURIComponent(cat.slug)}`}
               className="flex flex-col items-center gap-2 group cursor-pointer"
               onClick={() =>
                 logUserAction({

@@ -61,7 +61,7 @@ const BestBrandsSection: React.FC<BestBrandsSectionProps> = ({ brands = [], onBr
           <h2 className="text-xl font-bold text-text text-right">برند‌ها</h2>
           <Button
             onClick={() => window.location.href = '/brands'}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-destructive hover:text-card-text border border-destructive hover:border-border rounded-full hover:bg-bg-section1 transition cursor-pointer"
+            className="inline-flex items-center bg-background gap-2 px-4 py-2 text-sm font-medium text-destructive hover:text-card-text border border-destructive hover:border-border rounded-full hover:bg-bg-section1 transition cursor-pointer"
           >
             <ToLeft />
             مشاهده همه
