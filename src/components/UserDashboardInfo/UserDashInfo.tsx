@@ -87,7 +87,7 @@ const UserDashInfo: React.FC = () => {
 
   const handleSavePersonal = async (updatedData: UserInfo) => {
     try {
-      const dataWithId = { ...updatedData, id: userData.id || "1" };
+      const dataWithId = { ...updatedData, id: userData?.id };
       const updated = await updateUserProfile(dataWithId);
       setUserData(updated);
       alert("اطلاعات شخصی با موفقیت ذخیره شد!");

@@ -134,11 +134,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/dash/brand/profile-edit",
-                element: (
-                    <ProtectedRoute allowedRoles={['brand']}>
-                        <BrandProfileEditPage />
-                    </ProtectedRoute>
-                ),
+                element: <BrandProfileEditPage />,
             },
             {
                 path: "/dash/brand/profile/:brandId",
