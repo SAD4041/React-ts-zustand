@@ -112,7 +112,7 @@ export default function Home() {
           {categories.map((cat) => (
             <Link
               key={cat.id}
-              to={`/products?category=${encodeURIComponent(cat.slug)}`}
+              to={`/category/${encodeURIComponent(cat.slug)}`}
               className="flex-shrink-0 w-20 flex flex-col items-center justify-center gap-1.5 group cursor-pointer"
               onClick={() =>
                 logUserAction({
@@ -141,7 +141,7 @@ export default function Home() {
           {categories.map((cat) => (
             <Link
               key={cat.id}
-              to={`/products?category=${encodeURIComponent(cat.slug)}`}
+              to={`/category/${encodeURIComponent(cat.slug)}`}
               className="flex flex-col items-center gap-2 group cursor-pointer"
               onClick={() =>
                 logUserAction({
