@@ -12,8 +12,10 @@ import type {
 	PostParams,
 	PutParams,
 } from "../types/apiTypes";
+import useUserStore from "@/store/userStore/userStore";
 
-export const baseURL = "http://1.2.3.4:8000"; // backend URL
+export const baseURL = "http://localhost:8080"; // backend URL
+export const AUTH_BASE = "/api/v1";
 
 const apiClient: AxiosInstance = axios.create({
 	baseURL,
@@ -23,12 +25,18 @@ const apiClient: AxiosInstance = axios.create({
 	},
 });
 
+// const token = useUserStore.getState().token; // ✅ این درسته و باید جایگزین بشه
+
 apiClient.interceptors.request.use(
-	(config: InternalAxiosRequestConfig) => {
-		// const token = getTokenFromStore();
-		// if (token) config.headers.Authorization = `Bearer ${token}`;
-		return config;
-	},
+  (config: InternalAxiosRequestConfig) => {
+    // const token = localStorage.getItem("token"); // get JWT from localStorage
+	const token = useUserStore.getState().token;
+	
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`; // attach token
+    }
+    return config;
+  },
 	(error) => Promise.reject(error)
 );
 
