@@ -1,0 +1,51 @@
+.rmdp-wrapper {
+	background: white !important;
+	border-radius: 12px !important;
+	border: 1px solid #ddd !important;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+}
+
+.rmdp-container {
+	width: 100% !important;
+}
+
+.rmdp-day {
+	border-radius: 8px !important;
+}
+
+.rmdp-day.rmdp-selected {
+	color: white !important;
+}
+
+.rmdp-day.rmdp-selected span {
+	background-color: var(--color-primary) !important;
+}
+
+.rmdp-day span:hover {
+	background-color: var(--color-primary-200) !important;
+	color: black !important;
+}
+
+.rmdp-day.rmdp-today span {
+	background-color: white !important;
+	color: black !important;
+	border: 1px solid var(--color-primary);
+}
+
+.rmdp-day.rmdp-today span:hover {
+	background-color: var(--color-primary-300) !important;
+	color: white !important;
+}
+
+.rmdp-week-day {
+	color: var(--color-primary) !important;
+	font-weight: 600;
+}
+
+.rmdp-week .rmdp-week-day {
+	font-weight: bold;
+}
+
+.rmdp-week .rmdp-week-day:nth-child(7) {
+	color: #ef4444 !important;
+}

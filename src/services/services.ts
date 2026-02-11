@@ -13,7 +13,7 @@ import type {
 	PutParams,
 } from "../types/apiTypes";
 
-export const baseURL = "http://1.2.3.4:8000"; // backend URL
+export const baseURL = "http://185.60.136.50:8080"; // backend URL
 
 const apiClient: AxiosInstance = axios.create({
 	baseURL,
@@ -29,7 +29,7 @@ apiClient.interceptors.request.use(
 		// if (token) config.headers.Authorization = `Bearer ${token}`;
 		return config;
 	},
-	(error) => Promise.reject(error)
+	(error) => Promise.reject(error),
 );
 
 apiClient.interceptors.response.use(
@@ -37,7 +37,7 @@ apiClient.interceptors.response.use(
 	(error) => {
 		console.error(error);
 		return Promise.reject(error);
-	}
+	},
 );
 
 // ✅ GET
